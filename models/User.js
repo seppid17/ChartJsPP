@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
   lastName: {
     type: String,
     required: true,
+  },
+  active: {
+    type: Boolean,
+    required: true,
   }
 });
 const User = mongoose.model("User", UserSchema);

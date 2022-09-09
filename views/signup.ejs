@@ -9,10 +9,6 @@
                 <input type="email" name="email" id="email" />
             </div>
             <div>
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" />
-            </div>
-            <div>
                 <label for="firstName">First Name</label>
                 <input type="text" name="firstName" id="firstName" />
             </div>
@@ -21,10 +17,20 @@
                 <input type="text" name="lastName" id="lastName" />
             </div>
             <div>
-                <input type="submit" value="Login" />
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" />
+            </div>
+            <div>
+                <label for="cnfPassword">Password</label>
+                <input type="password" id="cnfPassword" />
+            </div>
+            <div>
+                <input id="submitBtn" type="button" value="Login" />
             </div>
         </form>
     </div>
+    <script src="/scripts/common.js"></script>
+    <script src="/scripts/signup.js"></script>
 </body>
 
 </html>
