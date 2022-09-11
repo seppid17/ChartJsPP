@@ -1,5 +1,5 @@
 const express = require('express');
-const { signupView, loginView, addUser, loginUser } = require('../controllers/loginController');
+const { signupView, loginView, requestUser, loginUser } = require('../controllers/loginController');
 const router = express.Router();
 router.get('/', (req, res) => {
     res.render("home", {});
@@ -12,5 +12,5 @@ router.get('/logout', (req, res) => {
 router.get('/login', loginView);
 router.get('/signup', signupView);
 router.post('/login', loginUser);
-router.post('/signup', addUser);
+router.post('/signup', requestUser);
 module.exports = router;

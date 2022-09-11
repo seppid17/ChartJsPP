@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const { User, SignupRequest } = require("../models/User");
 const bcrypt = require("bcrypt");
 
 const changePasswd = (req, res) => {
@@ -33,4 +33,4 @@ const changePasswd = (req, res) => {
     });
 };
 
-module.exports = {changePasswd}
+module.exports = { changePasswd }

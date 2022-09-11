@@ -1,5 +1,7 @@
-const User = require("../models/User");
+const { User, SignupRequest } = require("../models/User");
+const Mailer = require("../utils/mail");
 const bcrypt = require("bcrypt");
+const crypto = require('crypto');
 
 const signupView = (req, res) => {
     res.render("signup", {});
@@ -37,7 +39,7 @@ const loginUser = (req, res) => {
     });
 };
 
-const addUser = (req, res) => {
+const requestUser = (req, res) => {
     const { email, password, firstName, lastName } = req.body;
     if (!email || !password || !firstName || !lastName) {
         console.log("Fill empty fields");
@@ -50,25 +52,38 @@ const addUser = (req, res) => {
             res.json({ 'success': false, 'reason': "This email already exists" });
             return;
         }
-        const newUser = new User({
+        let token = crypto.randomBytes(16).toString('hex');
+        let timestamp = Math.floor(Date.now() / 1000) + 3600;
+        const signupRequest = new SignupRequest({
             email: email,
             password: password,
             firstName: firstName,
             lastName: lastName,
-            active: true
+            token: token,
+            expiry: timestamp
         });
         //Password Hashing
-        bcrypt.hash(newUser.password, 12, (err, hash) => {
+        bcrypt.hash(signupRequest.password, 12, (err, hash) => {
             if (err) throw err;
-            newUser.password = hash;
-            newUser.save()
-                .then(res.json({ 'success': true }))
+            signupRequest.password = hash;
+            signupRequest.save()
+                .then(() => {
+                    Mailer.sendMail(email, token, (error, info) => {
+                        if (error) {
+                            console.log(error);
+                            res.json({ 'success': false, 'reason': 'Error sending email' });
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                            res.json({ 'success': true });
+                        }
+                    });
+                })
                 .catch((err) => {
                     console.log(err);
-                    res.json({ 'success': true });
+                    res.json({ 'success': false });
                 });
         });
     });
 };
 
-module.exports = { signupView, loginView, addUser, loginUser }
+module.exports = { signupView, loginView, requestUser, loginUser }

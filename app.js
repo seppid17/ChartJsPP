@@ -1,7 +1,11 @@
 const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const fs = require('fs');
 require("dotenv").config({ path: "./.env" });
+const Mailer = require('./utils/mail');
+let mailTemplate = fs.readFileSync('utils/mailTemplate.html', { encoding: 'utf8', flag: 'r' });
+Mailer.init(process.env.GMAIL_SENDER, process.env.GMAIL_PASSWORD, "ChartJS++ Account Activation", mailTemplate);
 const database = process.env.MONGO_URI;
 mongoose.connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => console.log('connected to MongoDB'))
