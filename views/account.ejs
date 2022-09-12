@@ -2,20 +2,33 @@
 
 <body>
     <div>
-        <h3>Account Controll</h3>
-        <form id="accountForm" method="post">
-            <div>
-                <label for="curPassword">Current Password</label>
-                <input type="password" name="curPassword" id="curPassword" />
-            </div>
-            <div>
-                <label for="newPassword">New Password</label>
-                <input type="password" name="newPassword" id="newPassword" />
-            </div>
-            <div>
-                <input type="submit" value="Update" />
-            </div>
-        </form>
+        <h3>Account Control</h3>
+        <div>
+            <form id="accountForm" action="/account/password" method="post">
+                <div>
+                    <label for="curPassword">Current Password</label>
+                    <input type="password" name="curPassword" id="curPassword" />
+                </div>
+                <div>
+                    <label for="newPassword">New Password</label>
+                    <input type="password" name="newPassword" id="newPassword" />
+                </div>
+                <div>
+                    <input type="submit" value="Update" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <form id="accountForm" action="/account/delete" method="post">
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" />
+                </div>
+                <div>
+                    <input type="submit" value="Delete" />
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 

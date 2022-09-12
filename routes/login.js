@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
 });
 router.get('/logout', (req, res) => {
     req.session.loggedIn = false;
-    req.session.user = false;
+    req.session.user = null;
     res.redirect('/');
 });
 router.get('/login', loginView);
@@ -15,8 +15,5 @@ router.get(/\/activate\/.*\/.*/, activateView);
 router.post('/login', loginUser);
 router.post('/signup', requestUser);
 router.post('/activate/:email/:token', activateAccount);
-router.get('/test', (req, res) => {
-    let msg= req.path;
-    res.json(msg);
-});
+
 module.exports = router;
