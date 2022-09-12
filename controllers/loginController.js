@@ -11,6 +11,10 @@ const loginView = (req, res) => {
     res.render("login", {});
 }
 
+const activateView = (req, res) => {
+    res.render("activate", {});
+}
+
 const loginUser = (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -18,6 +22,7 @@ const loginUser = (req, res) => {
         res.redirect('/login');
         return;
     }
+    // TODO : validate
     User.findOne({ email: email, active: true }).then((user) => {
         if (!user) {
             console.log("email does not exist");
@@ -68,7 +73,10 @@ const requestUser = (req, res) => {
             signupRequest.password = hash;
             signupRequest.save()
                 .then(() => {
-                    Mailer.sendMail(email, token, (error, info) => {
+                    const proxyHost = req.headers["x-forwarded-host"];
+                    const host = proxyHost ? proxyHost : req.headers.host;
+                    let link = req.protocol + '://' + host + '/activate/' + email + '/' + token;
+                    Mailer.sendMail(email, link, (error, info) => {
                         if (error) {
                             console.log(error);
                             res.json({ 'success': false, 'reason': 'Error sending email' });
@@ -86,4 +94,52 @@ const requestUser = (req, res) => {
     });
 };
 
-module.exports = { signupView, loginView, requestUser, loginUser }
+const activateAccount = (req, res) => {
+    const { password } = req.body;
+    const { email, token } = req.params;
+    if (!email || !password || !token) {
+        console.log("Fill empty fields");
+        res.redirect(req.path);
+        return;
+    }
+    SignupRequest.findOne({ email: email, token: token }).then((requestUser) => {
+        if (!requestUser) {
+            console.log("email and token do not match");
+            res.redirect(req.path);
+            return;
+        }
+        let timestampNow = Math.floor(Date.now() / 1000);
+        if (requestUser.expiry < timestampNow) {
+            console.log("expired");
+            res.redirect('/signup');
+            return;
+        }
+        bcrypt.compare(password, requestUser.password).then(matching => {
+            if (matching) {
+                const user = new User({
+                    email: requestUser.email,
+                    password: requestUser.password,
+                    firstName: requestUser.firstName,
+                    lastName: requestUser.lastName,
+                    active: true
+                });
+                User.findOneAndUpdate({ email: email }, user, { upsert: true }, (err, doc) => {
+                    if (err) {
+                        console.log(err);
+                        res.redirect(req.path);
+                        return;
+                    }
+                    console.log('success');
+                    res.redirect('/dashboard');
+                })
+            } else {
+                res.redirect(req.path);
+            }
+        }).catch(err => {
+            console.log(err);
+            res.redirect('/login');
+        });
+    });
+};
+
+module.exports = { signupView, loginView, activateView, requestUser, loginUser, activateAccount };

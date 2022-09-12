@@ -14,12 +14,12 @@ class Mailer {
         Mailer.template = template;
     }
 
-    static sendMail(to, token, cb) {
+    static sendMail(to, link, cb) {
         var mailOptions = {
             from: Mailer.sender,
             to: to,
             subject: Mailer.subject,
-            html: Mailer.template.replaceAll("#token", token)
+            html: Mailer.template.replaceAll("#LINK", link)
         };
         Mailer.transporter.sendMail(mailOptions, cb);
     }
