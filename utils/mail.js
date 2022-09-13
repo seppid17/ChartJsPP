@@ -1,7 +1,7 @@
 let nodemailer = require('nodemailer');
 
 class Mailer {
-    static init(sender, password, subject, template) {
+    static init(sender, password, templates) {
         Mailer.sender = sender;
         Mailer.transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -10,16 +10,16 @@ class Mailer {
                 pass: password
             }
         });
-        Mailer.subject = subject;
-        Mailer.template = template;
+        Mailer.templates = templates;
     }
 
-    static sendMail(to, link, cb) {
+    static sendMail(templateName, to, link, cb) {
+        let template = Mailer.templates[templateName];
         var mailOptions = {
             from: Mailer.sender,
             to: to,
-            subject: Mailer.subject,
-            html: Mailer.template.replaceAll("#LINK", link)
+            subject: template.subject,
+            html: template.body.replaceAll("#LINK", link)
         };
         Mailer.transporter.sendMail(mailOptions, cb);
     }
