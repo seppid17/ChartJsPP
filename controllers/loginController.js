@@ -123,8 +123,8 @@ const activateAccount = (req, res) => {
                     lastName: requestUser.lastName,
                     active: true
                 });
-                User.findOneAndUpdate({ email: email }, user, { upsert: true }, (err, doc) => {
-                    if (err) {
+                User.findOneAndUpdate({ email: email, active: true }, { $setOnInsert: user }, { upsert: true }, (err, doc) => {
+                    if (err || (doc && !doc.isNew)) {
                         console.log(err);
                         res.redirect(req.path);
                         return;
