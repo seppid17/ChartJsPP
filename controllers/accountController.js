@@ -5,7 +5,7 @@ const changePasswd = (req, res) => {
     const { curPassword, newPassword } = req.body;
     if (!curPassword || !newPassword) {
         console.log("Fill empty fields");
-        res.json({ 'success': false });
+        res.json({ 'success': false, 'reason':'Some required fields are empty' });
         return;
     }
     let user = req.session.user;
@@ -36,7 +36,7 @@ const deleteAccount = (req, res) => {
     const { password } = req.body;
     if (!password) {
         console.log("Fill empty fields");
-        res.json({ 'success': false });
+        res.json({ 'success': false, 'reason':'Some required fields are empty' });
         return;
     }
     let user = req.session.user;
@@ -45,13 +45,13 @@ const deleteAccount = (req, res) => {
             User.updateMany({ email: user.email, active: true }, { active: false }).then(users => {
                 req.session.loggedIn = false;
                 req.session.user = null;
-                res.redirect('/');
+                res.json({ 'success': true });
             }).catch(err => {
                 console.log(err);
                 res.json({ 'success': false });
             });
         } else {
-            res.json({ 'success': false, reason: 'Invalid current password' });
+            res.json({ 'success': false, reason: 'Invalid password' });
         }
     }).catch(err => {
         console.log(err);

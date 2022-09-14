@@ -114,19 +114,19 @@ const activateAccount = (req, res) => {
     const { email, token } = req.params;
     if (!email || !password || !token) {
         console.log("Fill empty fields");
-        res.redirect(req.path);
+        res.json({ 'success': false, 'reason':'Some required fields are empty' });
         return;
     }
     SignupRequest.findOne({ email: email, token: token }).then((requestUser) => {
         if (!requestUser) {
             console.log("email and token do not match");
-            res.redirect(req.path);
+            res.json({ 'success': false, 'reason':'Invalid token' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (requestUser.expiry < timestampNow) {
             console.log("expired");
-            res.redirect('/signup');
+            res.json({ 'success': false, 'reason':'Token is expired' });
             return;
         }
         bcrypt.compare(password, requestUser.password).then(matching => {
@@ -141,22 +141,22 @@ const activateAccount = (req, res) => {
                 User.findOneAndUpdate({ email: email, active: true }, { $setOnInsert: user }, { upsert: true }, (err, doc) => {
                     if (err || (doc && !doc.isNew)) {
                         console.log(err);
-                        res.redirect(req.path);
+                        res.json({ 'success': false });
                         return;
                     }
                     console.log('success');
-                    res.redirect('/dashboard');
+                    res.json({ 'success': true });
                 });
             } else {
-                res.redirect(req.path);
+                res.json({ 'success': false });
             }
         }).catch(err => {
             console.log(err);
-            res.redirect('/login');
+            res.json({ 'success': false });
         });
     }).catch(err => {
         console.log(err);
-        res.redirect('/login');
+        res.json({ 'success': false });
     });
 };
 
@@ -212,19 +212,19 @@ const resetPassword = (req, res) => {
     const { email, token } = req.params;
     if (!email || !password || !token) {
         console.log("Fill empty fields");
-        res.redirect(req.path);
+        res.json({ 'success': false, 'reason':'Some required fields are empty' });
         return;
     }
     ResetPasswordRequest.findOne({ email: email, token: token, used: false }).then((resetPasswordRequest) => {
         if (!resetPasswordRequest) {
             console.log("invalid or expired token");
-            res.redirect(req.path);
+            res.json({ 'success': false, 'reason':'Invalid token' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (resetPasswordRequest.expiry < timestampNow) {
             console.log("expired");
-            res.redirect('/forgotPassword');
+            res.json({ 'success': false, 'reason':'Token is expired' });
             return;
         }
         bcrypt.hash(password, 12, (err, hash) => {
@@ -235,20 +235,20 @@ const resetPassword = (req, res) => {
                     User.findOneAndUpdate({ email: email, active: true }, { password: hash }, (err, user) => {
                         if (err || !user) {
                             console.log(err);
-                            res.redirect(req.path);
+                            res.json({ 'success': false});
                             return;
                         }
                         console.log('success');
-                        res.redirect('/dashboard');
+                        res.json({ 'success': true});
                     });
                 }).catch(err => {
                     console.log(err);
-                    res.redirect(req.path);
+                    res.json({ 'success': false});
                 });
         });
     }).catch(err => {
         console.log(err);
-        res.redirect(req.path);
+        res.json({ 'success': false});
     });
 };
 

@@ -33,3 +33,36 @@ class XHRSender {
 const email_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const name_pattern = /^[A-Za-z]{2,30}$/;
 const password_pattern = /^[\x21-\x7E]{8,15}$/;
+
+/**
+ * Prevents a form from submittiog when enter key is pressed. Instead,
+ * it sets the keyboard focus to next form input field if the current field is valid.
+ * If the field is the last input field of the form, triggers the onclick
+ * of the submit button.
+ */
+function keyPressFn(e, pattern, nxt, btn = null) {
+    if (e.keyCode === 13) {
+        e.preventDefault();
+        let value = e.target.value.trim();
+        if (!pattern.test(value)) {
+            return;
+        }
+        if (nxt == null) {
+            btn.click();
+        } else {
+            let nextElem = nxt;
+            if (nextElem) {
+                nextElem.focus();
+            }
+        }
+    }
+}
+
+/**
+ * Check if a string is empty
+ * 
+ * Returns true if string is empty, and false otherwise.
+ */
+function isEmpty(str) {
+    return (!str || str.length === 0);
+}

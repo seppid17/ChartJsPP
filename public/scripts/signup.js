@@ -4,46 +4,21 @@ let firstNameInput = document.getElementById('firstName');
 let lastNameInput = document.getElementById('lastName');
 let passwdInput = document.getElementById('password');
 let cnfpasswdInput = document.getElementById('cnfPassword');
-let msgDiv = document.getElementById('msgDiv');
-
-/**
- * Prevents a form from submittiog when enter key is pressed. Instead,
- * it sets the keyboard focus to next form input field if the current field is valid.
- * If the field is the last input field of the form, triggers the onclick
- * of the submit button.
- */
-function keyPressFn(e, pattern, nxt) {
-    if (e.keyCode === 13) {
-        e.preventDefault();
-        let value = e.target.value.trim();
-        if (!pattern.test(value)) {
-            return;
-        }
-        if (nxt == '') {
-            document.getElementById("submitBtn").click();
-        } else {
-            let nextElem = document.getElementById(nxt);
-            if (nextElem) {
-                nextElem.focus();
-            }
-        }
-    }
-}
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, 'firstName');
+    keyPressFn(event, email_pattern, firstNameInput);
 }
 firstNameInput.onkeydown = event => {
-    keyPressFn(event, name_pattern, 'lastName');
+    keyPressFn(event, name_pattern, lastNameInput);
 }
 lastNameInput.onkeydown = event => {
-    keyPressFn(event, name_pattern, 'password');
+    keyPressFn(event, name_pattern, passwdInput);
 }
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, 'cnfPassword');
+    keyPressFn(event, password_pattern, cnfpasswdInput);
 }
 cnfpasswdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, '');
+    keyPressFn(event, password_pattern, null, submitBtn);
 }
 
 /**
@@ -53,26 +28,6 @@ cnfpasswdInput.onkeydown = event => {
  */
 function showMsg(msg, success = false) {
     alert(msg);
-    return;
-    msgDiv.classList.remove('wrapper-error');
-    msgDiv.classList.remove('wrapper-success');
-    msgDiv.hidden = false;
-    msgDiv.innerText = msg;
-    if (success) {
-        msgDiv.classList.add('wrapper-success');
-    } else {
-        msgDiv.classList.add('wrapper-error');
-    }
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
-}
-
-/**
- * Check if a string is empty
- * 
- * Returns true if string is empty, and false otherwise.
- */
-function isEmpty(str) {
-    return (!str || str.length === 0);
 }
 
 submitBtn.onclick = e => {
@@ -83,7 +38,7 @@ submitBtn.onclick = e => {
     let passwd = passwdInput.value;
     let cnfpasswd = cnfpasswdInput.value;
     if (isEmpty(email) || isEmpty(firstName) || isEmpty(lastName) || isEmpty(passwd) || isEmpty(cnfpasswd)) {
-        showMsg("Some fileds are empty");
+        showMsg("Some required fields are empty");
         return;
     }
     if (!email_pattern.test(email)) {
