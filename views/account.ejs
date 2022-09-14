@@ -4,7 +4,25 @@
     <div>
         <h3>Account Control</h3>
         <div>
-            <form id="accountForm" action="/account/password" method="post">
+            <form id="nameForm" action="/account/name" method="post">
+                <div>
+                    <label for="firstName">First Name</label>
+                    <input type="text" name="firstName" id="firstName" value="<%= firstName %>"/>
+                </div>
+                <div>
+                    <label for="lastName">Last Name</label>
+                    <input type="text" name="lastName" id="lastName" value="<%= lastName %>" />
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" />
+                </div>
+                <div>
+                    <input id="changeNameBtn" type="submit" value="Update" />
+                </div>
+            </form>
+        </div><div>
+            <form id="passwordForm" action="/account/password" method="post">
                 <div>
                     <label for="curPassword">Current Password</label>
                     <input type="password" name="curPassword" id="curPassword" />
@@ -18,7 +36,7 @@
                     <input type="password" id="cnfPassword" />
                 </div>
                 <div>
-                    <input id="updateBtn" type="submit" value="Update" />
+                    <input id="changePasswdBtn" type="submit" value="Update" />
                 </div>
             </form>
         </div>
@@ -26,7 +44,7 @@
             <form id="accountForm" action="/account/delete" method="post">
                 <div>
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" />
+                    <input type="password" name="password" id="delPassword" />
                 </div>
                 <div>
                     <input id="deleteBtn" type="submit" value="Delete" />

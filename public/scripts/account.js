@@ -1,10 +1,25 @@
+let firstNameInput = document.getElementById('firstName');
+let lastNameInput = document.getElementById('lastName');
+let passwdInput = document.getElementById('password');
+let changeNameBtn = document.getElementById('changeNameBtn');
+
 let curPasswdInput = document.getElementById('curPassword');
 let newPasswdInput = document.getElementById('newPassword');
 let cnfPasswdInput = document.getElementById('cnfPassword');
-let updateBtn = document.getElementById('updateBtn');
+let changePasswdBtn = document.getElementById('changePasswdBtn');
 
-let passwdInput = document.getElementById('password');
+let delPasswdInput = document.getElementById('delPassword');
 let deleteBtn = document.getElementById('deleteBtn');
+
+firstNameInput.onkeydown = event => {
+    keyPressFn(event, name_pattern, lastNameInput);
+}
+lastNameInput.onkeydown = event => {
+    keyPressFn(event, name_pattern, passwdInput);
+}
+passwdInput.onkeydown = event => {
+    keyPressFn(event, password_pattern, null, changeNameBtn);
+}
 
 curPasswdInput.onkeydown = event => {
     keyPressFn(event, password_pattern, newPasswdInput);
@@ -13,10 +28,10 @@ newPasswdInput.onkeydown = event => {
     keyPressFn(event, password_pattern, cnfPasswdInput);
 }
 cnfPasswdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, updateBtn);
+    keyPressFn(event, password_pattern, null, changePasswdBtn);
 }
 
-passwdInput.onkeydown = event => {
+delPasswdInput.onkeydown = event => {
     keyPressFn(event, password_pattern, null, deleteBtn);
 }
 
@@ -29,7 +44,51 @@ function showMsg(msg, success = false) {
     alert(msg);
 }
 
-updateBtn.onclick = e => {
+changeNameBtn.onclick = e => {
+    e.preventDefault();
+    let firstName = firstNameInput.value;
+    let lastName = lastNameInput.value;
+    let passwd = passwdInput.value;
+    if (isEmpty(firstName) || isEmpty(lastName) || isEmpty(passwd)) {
+        showMsg("Some required fields are empty");
+        return;
+    }
+    if (!name_pattern.test(firstName)) {
+        showMsg("Invalid first name");
+        return;
+    }
+    if (!name_pattern.test(lastName)) {
+        showMsg("Invalid last name");
+        return;
+    }
+    if (!password_pattern.test(passwd)) {
+        showMsg("Invalid password");
+        return;
+    }
+    
+    let xhrSender = new XHRSender();
+    xhrSender.addField('firstName', firstName);
+    xhrSender.addField('lastName', lastName);
+    xhrSender.addField('password', passwd);
+    xhrSender.send('/account/name', function (xhr) {
+        try {
+            let data = JSON.parse(xhr.responseText);
+            if (!data.hasOwnProperty('success') || data['success'] !== true) {
+                if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
+                    showMsg(data['reason']);
+                } else {
+                    showMsg('Change name failed!');
+                }
+                return;
+            }
+            showMsg('Name changed', true);
+        } catch (error) {
+            showMsg('Something went wrong! Please try again.');
+        }
+    });
+}
+
+changePasswdBtn.onclick = e => {
     e.preventDefault();
     let curPasswd = curPasswdInput.value;
     let newPasswd = newPasswdInput.value;
@@ -73,7 +132,7 @@ updateBtn.onclick = e => {
 
 deleteBtn.onclick = e => {
     e.preventDefault();
-    let passwd = passwdInput.value;
+    let passwd = delPasswdInput.value;
     if (isEmpty(passwd)) {
         showMsg("Some required fields are empty");
         return;
