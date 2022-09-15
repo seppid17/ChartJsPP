@@ -56,100 +56,57 @@
             <div class="col-md-12 col-lg-10">
                 <div class="wrapper d-md-flex">
                     <div class="img-area">
-                        <div class="row">
+                        <div class="row brand-row">
                             <div class="col-1">
-                                <img src="/images/icon.png" alt="Avatar Logo" class="pill">
+                                <img src="/images/icon.png" alt="logo" class="pill">
                             </div>
                             <div class="col">
-                                <h1 class="name-chartjs">&nbsp;&nbsp;&nbsp;Chart.js++</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="login-wrap p-4 p-md-5">
-                        <div class="d-flex">
-                            <div>
-                                <h1>Hello! Welcome Back</h1>
-                                <p class="login-text">Login to your account</p>
+                                <h1 class="text-chartjs">&nbsp;&nbsp;Chart.js++</h1>
                             </div>
                         </div>
 
-                        <form id="loginForm" method="post">
+                        <img src="/images/chart.png" class="image-chart" alt="Image">
+
+                    </div>
+                    <div class="login-wrapper p-4">
+                        <p class="text-end text-new-signup">Dont have an account?&nbsp;<a class="btn btn-signup"
+                                data-toggle="tab" href="/signup">SIGN UP</a></p>
+                        <div class="d-flex">
+                            <div>
+                                <h1 class="text-hello">Hello! Welcome Back</h1>
+                                <p class="text-login">Login to your account</p>
+                            </div>
+                        </div>
+
+                        <form id="loginForm" method="post" class="form" onsubmit="return checkInputs()">
 
                             <div class="form-control form-outline form-input">
                                 <label class="form-label" for="username">Email</label>
                                 <input type="email" name="email" id="email" class="form-control"
                                     placeholder="johndoe@gmail.com" />
+                                <small>Error message</small>
                             </div>
 
                             <div class="form-control form-outline form-input">
                                 <label class="form-label" for="password">Password</label>
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="Password" />
+                                <small>Error message</small>
                             </div>
 
-                            <a href="/forgotPassword">Forgot Password</a>
+                            <a class="btn btn-frogot" data-toggle="tab" href="/forgotPassword">Forgot Password?</a>
 
                             <div>
-                                <input type="submit" value="Login" />
+                                <button class="btn btn-submit" type="submit" id="submit" value="Login">Login</button>
                             </div>
                         </form>
-                        <p class="text-center">Not a member? <a data-toggle="tab" href="#signup">Sign Up</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- <div>
-        <div class="container">
-            <div class="wrapper">
-                <div class="row d-flex align-items-center">
-                    <div class="col-5 col-md-9 col-lg-6 col-xl-5">
-
-                        <div class="row">
-                            <div class="col-1">
-                                <img src="/images/icon.png" alt="Avatar Logo" class="pill">
-                            </div>
-                            <div class="col">
-                                <h1>&nbsp;&nbsp;Chart.js++</h1>
-                            </div>
-                        </div>
-
-                        <img src="/images/chart.png" class="img-fluid" alt="Sample image">
-
-                    </div>
-
-                    <div class="col-md-6 col-lg-6 col-xl-4 offset-xl-1">
-                        <form id="loginForm" method="post">
-
-                            <h1>Hello! Welcome Back</h1>
-                            <p class="login-text">Login to your account</p>
-
-                            <div class="form-control form-outline form-input">
-                                <label class="form-label" for="username">Email</label>
-                                <input type="email" name="email" id="email" class="form-control"
-                                    placeholder="johndoe@gmail.com" />
-                            </div>
-
-                            <div class="form-control form-outline form-input">
-                                <label class="form-label" for="password">Password</label>
-                                <input type="password" name="password" id="password" class="form-control"
-                                    placeholder="Password" />
-                            </div>
-
-                            <a href="/forgotPassword">Forgot Password</a>
-
-                            <div>
-                                <input type="submit" value="Login" />
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    <script src="/scripts/common.js"></script>
+    <script src="/scripts/login.js"></script>
 </body>
 
 </html>
