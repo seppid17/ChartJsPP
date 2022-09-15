@@ -16,7 +16,7 @@ function showMsg(msg, success = false) {
 
 submitBtn.onclick = e => {
     e.preventDefault();
-    let passwd = passwdInput.value;
+    let passwd = passwdInput.value.trim();
     if (isEmpty(passwd)) {
         showMsg("Some required fields are empty");
         return;

@@ -16,7 +16,7 @@ function showMsg(msg, success = false) {
 
 submitBtn.onclick = e => {
     e.preventDefault();
-    let email = emailInput.value;
+    let email = emailInput.value.trim();
     if (isEmpty(email)) {
         showMsg("Some required fields are empty");
         return;

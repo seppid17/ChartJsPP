@@ -4,16 +4,10 @@ let emailInput = document.getElementById('email');
 let passwdInput = document.getElementById('password');
 
 emailInput.onkeydown = event => {
-    setClear(emailInput);
-    keyPressFn(event, email_pattern, passwdInput, null, ()=>{
-        setErrorFor(emailInput, 'Invalid email');
-    });
+    keyPressFn(event, email_pattern, passwdInput, null, 'Invalid email');
 }
 passwdInput.onkeydown = event => {
-    setClear(passwdInput);
-    keyPressFn(event, password_pattern, null, submitBtn, ()=>{
-        setErrorFor(passwdInput, 'Invalid Password');
-    });
+    keyPressFn(event, password_pattern, null, submitBtn, 'Invalid Password');
 }
 
 /**
@@ -27,8 +21,8 @@ function showMsg(msg, success = false) {
 
 submitBtn.onclick = e => {
     e.preventDefault();
-    let email = emailInput.value;
-    let passwd = passwdInput.value;
+    let email = emailInput.value.trim();
+    let passwd = passwdInput.value.trim();
 
     setClear(emailInput);
     setClear(passwdInput);
@@ -73,16 +67,4 @@ submitBtn.onclick = e => {
             showMsg('Something went wrong!');
         }
     });
-}
-
-function setErrorFor(input, message) {
-    const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
-    formControl.className = 'form-control form-outline form-input error';
-    small.innerText = message;
-}
-
-function setClear(input) {
-    const formControl = input.parentElement;
-    formControl.className = 'form-control form-outline form-input';
 }

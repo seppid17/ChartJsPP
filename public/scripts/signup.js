@@ -32,11 +32,11 @@ function showMsg(msg, success = false) {
 
 submitBtn.onclick = e => {
     e.preventDefault();
-    let email = emailInput.value;
-    let firstName = firstNameInput.value;
-    let lastName = lastNameInput.value;
-    let passwd = passwdInput.value;
-    let cnfpasswd = cnfpasswdInput.value;
+    let email = emailInput.value.trim();
+    let firstName = firstNameInput.value.trim();
+    let lastName = lastNameInput.value.trim();
+    let passwd = passwdInput.value.trim();
+    let cnfpasswd = cnfpasswdInput.value.trim();
     if (isEmpty(email) || isEmpty(firstName) || isEmpty(lastName) || isEmpty(passwd) || isEmpty(cnfpasswd)) {
         showMsg("Some required fields are empty");
         return;

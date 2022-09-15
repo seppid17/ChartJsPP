@@ -46,9 +46,9 @@ function showMsg(msg, success = false) {
 
 changeNameBtn.onclick = e => {
     e.preventDefault();
-    let firstName = firstNameInput.value;
-    let lastName = lastNameInput.value;
-    let passwd = passwdInput.value;
+    let firstName = firstNameInput.value.trim();
+    let lastName = lastNameInput.value.trim();
+    let passwd = passwdInput.value.trim();
     if (isEmpty(firstName) || isEmpty(lastName) || isEmpty(passwd)) {
         showMsg("Some required fields are empty");
         return;
@@ -90,9 +90,9 @@ changeNameBtn.onclick = e => {
 
 changePasswdBtn.onclick = e => {
     e.preventDefault();
-    let curPasswd = curPasswdInput.value;
-    let newPasswd = newPasswdInput.value;
-    let cnfPasswd = cnfPasswdInput.value;
+    let curPasswd = curPasswdInput.value.trim();
+    let newPasswd = newPasswdInput.value.trim();
+    let cnfPasswd = cnfPasswdInput.value.trim();
     if (isEmpty(curPasswd) || isEmpty(newPasswd) || isEmpty(cnfPasswd)) {
         showMsg("Some required fields are empty");
         return;
@@ -132,7 +132,7 @@ changePasswdBtn.onclick = e => {
 
 deleteBtn.onclick = e => {
     e.preventDefault();
-    let passwd = delPasswdInput.value;
+    let passwd = delPasswdInput.value.trim();
     if (isEmpty(passwd)) {
         showMsg("Some required fields are empty");
         return;
