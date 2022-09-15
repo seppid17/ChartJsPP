@@ -40,17 +40,17 @@ const password_pattern = /^[\x21-\x7E]{8,15}$/;
  * If the field is the last input field of the form, triggers the onclick
  * of the submit button.
  */
-function keyPressFn(e, pattern, nxt, btn = null) {
+function keyPressFn(e, pattern, nextElem, btn = null, onfail = () => { }) {
     if (e.keyCode === 13) {
         e.preventDefault();
         let value = e.target.value.trim();
         if (!pattern.test(value)) {
+            onfail();
             return;
         }
-        if (nxt == null) {
-            btn.click();
+        if (nextElem == null) {
+            if (btn != null) btn.click();
         } else {
-            let nextElem = nxt;
             if (nextElem) {
                 nextElem.focus();
             }

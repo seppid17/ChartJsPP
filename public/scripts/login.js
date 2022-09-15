@@ -4,10 +4,16 @@ let emailInput = document.getElementById('email');
 let passwdInput = document.getElementById('password');
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, passwdInput);
+    setClear(emailInput);
+    keyPressFn(event, email_pattern, passwdInput, null, ()=>{
+        setErrorFor(emailInput, 'Invalid email');
+    });
 }
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, submitBtn);
+    setClear(passwdInput);
+    keyPressFn(event, password_pattern, null, submitBtn, ()=>{
+        setErrorFor(passwdInput, 'Invalid Password');
+    });
 }
 
 /**
@@ -15,12 +21,12 @@ passwdInput.onkeydown = event => {
  * 
  * If success is true, shows a success message. Otherwise, shows an error message
  */
-// function showMsg(msg, success = false) {
-//     alert(msg);
-// }
+function showMsg(msg, success = false) {
+    alert(msg);
+}
 
-function checkInputs() {
-    // e.preventDefault();
+submitBtn.onclick = e => {
+    e.preventDefault();
     let email = emailInput.value;
     let passwd = passwdInput.value;
 
@@ -48,7 +54,25 @@ function checkInputs() {
         return false;
     }
 
-    return true
+    let xhrSender = new XHRSender();
+    xhrSender.addField('email', email);
+    xhrSender.addField('password', passwd);
+    xhrSender.send(document.URL, function (xhr) {
+        try {
+            let data = JSON.parse(xhr.responseText);
+            if (!data.hasOwnProperty('success') || data['success'] !== true) {
+                if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
+                    showMsg(data['reason']);
+                } else {
+                    showMsg('Login failed!');
+                }
+                return;
+            }
+            window.location = '/dashboard';
+        } catch (error) {
+            showMsg('Something went wrong!');
+        }
+    });
 }
 
 function setErrorFor(input, message) {
