@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
 app.use('/', require('./routes/login'));
+app.use('/chart', require('./routes/chart'));
 app.use('/', require('./routes/auth'));
 app.use('/dashboard', require('./routes/dashboard'));
 app.use('/account', require('./routes/account'));
