@@ -22,16 +22,24 @@ submitBtn.onclick = e => {
     e.preventDefault();
     let passwd = passwdInput.value.trim();
     let cnfPasswd = cnfPasswdInput.value.trim();
-    if (isEmpty(passwd) || isEmpty(cnfPasswd)) {
-        showMsg("Some required fields are empty");
+
+    setClear(passwdInput);
+    setClear(cnfPasswdInput);
+
+    if (isEmpty(passwd)) {
+        setErrorFor(passwdInput, "Password cannot be empty");
         return;
     }
     if (!password_pattern.test(passwd)) {
-        showMsg("Invalid password");
+        setErrorFor(passwdInput, "Invalid password");
+        return;
+    }
+    if (isEmpty(cnfPasswd)) {
+        setErrorFor(cnfPasswdInput, "Password cannot be empty");
         return;
     }
     if (passwd !== cnfPasswd) {
-        showMsg("Passwords doesn't match");
+        setErrorFor(cnfPasswdInput, "Passwords doesn't match");
         return;
     }
     let xhrSender = new XHRSender();

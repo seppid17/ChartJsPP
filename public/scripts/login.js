@@ -56,7 +56,13 @@ submitBtn.onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    showMsg(data['reason']);
+                    if (data['reason'] === 'This email does not have an account') {
+                        setErrorFor(emailInput, data['reason']);
+                    } else if (data['reason'] === 'Incorrect password') {
+                        setErrorFor(passwdInput, data['reason']);
+                    } else {
+                        showMsg(data['reason']);
+                    }
                 } else {
                     showMsg('Login failed!');
                 }

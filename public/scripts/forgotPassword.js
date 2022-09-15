@@ -17,13 +17,16 @@ function showMsg(msg, success = false) {
 submitBtn.onclick = e => {
     e.preventDefault();
     let email = emailInput.value.trim();
+
+    setClear(emailInput);
+
     if (isEmpty(email)) {
-        showMsg("Some required fields are empty");
-        return;
+        setErrorFor(emailInput, 'Email cannot be empty');
+        return false;
     }
     if (!email_pattern.test(email)) {
-        showMsg("Invalid password");
-        return;
+        setErrorFor(emailInput, 'Invalid email');
+        return false;
     }
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
@@ -32,7 +35,11 @@ submitBtn.onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    showMsg(data['reason']);
+                    if (data['reason'] === 'This email does not exist') {
+                        setErrorFor(emailInput, data['reason']);
+                    } else {
+                        showMsg(data['reason']);
+                    }
                 } else {
                     showMsg('Password reset request failed!');
                 }
