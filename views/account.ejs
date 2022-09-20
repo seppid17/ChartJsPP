@@ -89,147 +89,105 @@
                         <div style="display: block;" id="AccountDetailsDiv" class="p-1">
                             <form id="nameForm" action="/account/name" method="post">
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="username">Email</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="email" name="email" id="email" class="form-control"/>
-                                        </div>
-                                    </div>  
+                                    <label class="form-label" for="username">Email</label>
+                                    <input type="email" name="email" id="email" class="form-control"/>
                                 </div>
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="firstName">First Name</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="text" name="firstName" id="firstName" value="<%= firstName %>" class="form-control"/>
-                                        </div>
-                                    </div>
+                                    <label class="form-label" for="firstName">First Name</label>
+                                    <input type="text" name="firstName" id="firstName" value="<%= firstName %>" class="form-control"/>
                                 </div>
                                 
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="lastName">Last Name</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="text" name="lastName" id="lastName" value="<%= lastName %>" class="form-control"/>
-                                        </div>
-                                    </div>
+                                    <label class="form-label" for="lastName">Last Name</label>
+                                    <input type="text" name="lastName" id="lastName" value="<%= lastName %>" class="form-control"/>
                                 </div>
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="password">Password</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="password" id="password" class="form-control"/>
-                                        </div>
-                                    </div>
+                                    <label class="form-label" for="password">Password</label>
+                                    <input type="password" id="password" class="form-control"/>
                                 </div>
                                 <div >
-                                    <div class="row">
-                                        <div class="col-3">
-                                        </div>
-                                        <div class="col">
-                                            <input class="btn btn-submit" id="changeNameBtn" type="submit" value="Update" />
-                                        </div>
-                                    </div>
+                                    <input class="btn btn-submit" id="changeNameBtn" type="submit" value="Update" />
                                 </div>
                             </form>
                         </div>
                         <div style="display: none;" id="ChangePasswordDiv" class="p-1">
                             <form id="passwordForm" action="/account/password" method="post" class="form">
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="curPassword">Current Password</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="password" name="curPassword" id="curPassword"  class="form-control"/>
-                                        </div>
-                                    </div>   
+                                    <!-- <div class="row">
+                                        <table >
+                                                <thead>
+                                                  <tr>
+                                                    <th class="col-4"> <label class="form-label" for="curPassword">Current Password</label></th>
+                                                    <th class="col-8"><input type="password" name="curPassword" id="curPassword"  class="form-control"/></th>
+                                                  </tr>
+                                                </thead>
+                                        </table>
+                                    </div>    -->
+                                    <label class="form-label" for="curPassword">Current Password</label>
+                                    <input type="password" name="curPassword" id="curPassword"  class="form-control"/>
+                                                 
                                 </div>
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="newPassword">New Password</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="password" name="newPassword" id="newPassword"  class="form-control"/>
-                                        </div>
-                                    </div>
+                                    <!-- <div class="row">
+                                        <table >
+                                            <thead>
+                                              <tr>
+                                                <th class="col-4"> <label class="form-label" for="newPassword">New Password</label></th>
+                                                <th class="col-8"><input type="password" name="newPassword" id="newPassword"  class="form-control"/></th>
+                                              </tr>
+                                            </thead>
+                                        </table>
+                                    </div> -->
+                                   <label class="form-label" for="newPassword">New Password</label>
+                                    <input type="password" name="newPassword" id="newPassword"  class="form-control"/>
+                                            
                                 </div>
                                 <div class="form-control form-outline form-input">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label class="form-label" for="cnfPassword">Confirm Password</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="password" id="cnfPassword"  class="form-control"/>
-                                        </div>
-                                    </div>  
+                                    <!-- <div class="row">
+                                        <table >
+                                            <thead>
+                                              <tr>
+                                                <th class="col-4"> <label class="form-label" for="cnfPassword">Confirm Password</label></th>
+                                                <th class="col-8"><input type="password" id="cnfPassword"  class="form-control"/></th>
+                                              </tr>
+                                            </thead>
+                                        </table>
+                                    </div>   -->
+                                    <label class="form-label" for="cnfPassword">Confirm Password</label>
+                                    <input type="password" id="cnfPassword"  class="form-control"/>
+                                             
                                 </div>
                                 <div >
-                                    <div class="row">
-                                        <div class="col-3">
-                                        </div>
-                                        <div class="col">
-                                            <input id="changePasswdBtn" class="btn btn-submit" type="submit" value="Update" />
-                                        </div>
-                                    </div>  
-                                    
+                                    <!-- <div class="row">
+                                        <table >
+                                            <thead>
+                                              <tr>
+                                                <th class="col-4"></th>
+                                                <th class="col-8"><input id="changePasswdBtn" class="btn btn-submit" type="submit" value="Update" /></th>
+                                              </tr>
+                                            </thead>
+                                        </table>
+                                    </div>   -->
+                                    <input id="changePasswdBtn" class="btn btn-submit" type="submit" value="Update" />
                                 </div>
                             </form>
                         </div>
                         <div style="display: none;" id="DeleteAccountDiv">
-                            
-
-
                             <div class="card text-center" style="background-color:#FFDBDB; border-radius: 15px;">
-                                <!-- <div class="card-header">
-                                    
-                                </div> -->
                                 <div class="card-body">
                                     <h5 class="card-title">Permanently Delete Your Account</h5>
                                 <p class="card-text" style="color:#F41515 ;">This action cannot be undone</p>
                                 <form id="accountForm" action="/account/delete" method="post" class="form" >
                                     <div class="form-control form-outline form-input" style="background-color:#FFDBDB">
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label class="form-label" for="password">Password</label>
-                                            </div>
-                                            <div class="col" >
-                                                <input type="password" name="password" id="delPassword" class="form-control" placeholder="Password"  />
-                                            </div>
-                                        </div>      
+                                        <label class="form-label" for="password">Password</label>
+                                        <input type="password" name="password" id="delPassword" class="form-control" placeholder="Password"  />      
                                     </div>
                                     <div >
-                                        <div class="row" >
-                                            <div class="col">
-                                                
-                                            </div>
-                                            <div class="col-11" >
-                                                <input id="deleteBtn" class="btn  w-50" type="submit" value="Delete" style="background-color:#F70707 ;" />
-                                            </div>
-                                        </div>    
-                                        
+                                        <input id="deleteBtn" class="btn  w-50" type="submit" value="Delete" style="background-color:#F70707 ;" />
                                     </div>
                                 </form>
                                 </div>
-                                <!-- <div class="card-footer text-muted">
-                                    2 days ago
-                                </div> -->
-                            </div>                       
-                            
-
-
-
-
-
-                            
+                            </div>      
                         </div>
                     </div>
                 </div>
