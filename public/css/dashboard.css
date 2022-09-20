@@ -1,0 +1,163 @@
+body {
+    background-color: #F9FCFF;
+}
+
+.btn {
+    width: fit-content;
+    padding: 3px 15px 3px 15px;
+    border-radius: 20px;
+    border: 1px solid gray;
+}
+
+.btn-signup {
+    font-weight: bold;
+    color: gray;
+    font-size: small;
+}
+
+.btn-frogot {
+    color: gray;
+    padding: 0 0 0 0;
+    border: none;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.btn-submit {
+    background-color: #d862ff;
+    color: white;
+    font-weight: bold;
+    font-size: large;
+    padding: 3px 15px 2px 5px;
+    border: none;
+    box-shadow: 8px 8px 15px #a7aaa7;
+}
+
+.btn-submit:hover {
+    color: #373737;
+}
+
+
+.title-saved {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.text-chartjs {
+    color: #ffffff;
+}
+
+.text-chart-name {
+    margin-bottom: 0;
+}
+
+.text-details {
+    color: gray;
+    margin-bottom: 0;
+}
+
+.wrapper {
+    max-width: 100%;
+    min-height: 550px;
+    margin: 50px auto;
+    padding: 20px 40px;
+    padding-bottom: 45px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    max-width: 90%;
+    margin-bottom: 20px;
+    min-height: 92%;
+}
+
+.card-col {
+    margin-bottom: 40px;
+}
+
+.name {
+    padding: 2px 2px 2px 0;
+    color: #000000;
+}
+
+.pill {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.form-control {
+    padding-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    border: none;
+}
+
+.form-control label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control input {
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-control.error input {
+	border-color: #e74c3c;
+}
+
+.form-control small {
+	color: #e74c3c;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	visibility: hidden;
+}
+
+.form-control.error small {
+	visibility: visible;
+}
+
+.card {
+    margin: 10px auto;
+}
+
+.fa-circle-plus {
+    color: white;
+}
+
+.fa-trash-can {
+    color: gray;
+    float: right;
+}
+
+.fa-user-gear {
+    color: gray;
+}
+
+.fa-circle-plus:hover {
+    color: #373737;
+}
+
+.fa-trash-can:hover {
+    color: #373737;
+}
+
+.fa-user-gear:hover {
+    color: #373737;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 0 0;
+}

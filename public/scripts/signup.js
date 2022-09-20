@@ -32,35 +32,68 @@ function showMsg(msg, success = false) {
 
 submitBtn.onclick = e => {
     e.preventDefault();
-    let email = emailInput.value;
-    let firstName = firstNameInput.value;
-    let lastName = lastNameInput.value;
-    let passwd = passwdInput.value;
-    let cnfpasswd = cnfpasswdInput.value;
-    if (isEmpty(email) || isEmpty(firstName) || isEmpty(lastName) || isEmpty(passwd) || isEmpty(cnfpasswd)) {
-        showMsg("Some required fields are empty");
+    let email = emailInput.value.trim();
+    let firstName = firstNameInput.value.trim();
+    let lastName = lastNameInput.value.trim();
+    let passwd = passwdInput.value.trim();
+    let cnfpasswd = cnfpasswdInput.value.trim();
+
+    setClear(emailInput);
+    setClear(firstNameInput);
+    setClear(lastNameInput);
+    setClear(passwdInput);
+    setClear(cnfpasswdInput);
+
+    if (isEmpty(email)) {
+        setErrorFor(emailInput, "Email cannot be empty");
         return;
     }
+
     if (!email_pattern.test(email)) {
-        showMsg("Invalid email");
+        setErrorFor(emailInput, "Invalid email");
         return;
     }
+
+    if (isEmpty(firstName)) {
+        setErrorFor(firstNameInput, "Name cannot be empty");
+        return;
+    }
+
     if (!name_pattern.test(firstName)) {
-        showMsg("Invalid email");
+        setErrorFor(firstNameInput, "Invalid name");
         return;
     }
+
+    if (isEmpty(lastName)) {
+        setErrorFor(lastNameInput, "Name cannot be empty");
+        return;
+    }
+
     if (!name_pattern.test(lastName)) {
-        showMsg("Invalid email");
+        setErrorFor(lastNameInput, "Invalid name");
         return;
     }
+
+    if (isEmpty(passwd)) {
+        setErrorFor(passwdInput, "Password cannot be empty");
+        return;
+    }
+
     if (!password_pattern.test(passwd)) {
-        showMsg("Invalid password");
+        setErrorFor(passwdInput, "Invalid password");
         return;
     }
+
+    if (isEmpty(cnfpasswd)) {
+        setErrorFor(cnfpasswdInput, "Password cannot be empty");
+        return;
+    }
+
     if (passwd !== cnfpasswd) {
-        showMsg("Passwords doesn't match");
+        setErrorFor(cnfpasswdInput, "Passwords doesn't match");
         return;
     }
+
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
     xhrSender.addField('firstName', firstName);
@@ -71,7 +104,11 @@ submitBtn.onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    showMsg(data['reason']);
+                    if (data['reason'] === "This email already exists") {
+                        setErrorFor(emailInput, data['reason']);
+                    } else {
+                        showMsg(data['reason']);
+                    }
                 } else {
                     showMsg('Account creation failed!');
                 }
