@@ -5,7 +5,7 @@
         <a class="navbar-brand" href="">
             <img src="/images/icon.webp" alt="Avatar Logo" class="nav-pill">&nbsp;Chart.js++
         </a>
-        <%= pageName %>
+        <!-- <%= pageName %> -->
         <button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarcontent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -17,35 +17,48 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="">Dashboard</a>
-                </li>
+                <% if (pageName == "chart" || pageName == "account" || pageName == "home") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                <% } %>
+                
 
-                <li class="nav-item">
-                    <a class="nav-link" href="">Chart</a>
-                </li>
+                <% if (pageName == "dashboard" || pageName == "account" || pageName == "home") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Chart</a>
+                    </li>
+                <% } %>
 
             </ul>
 
             <ul class="navbar-nav ms-auto">
+                
+                <% if (pageName == "chart" || pageName == "dashboard" || pageName == "home") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </a>
+                    </li>
+                <% } %>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/account">
-                        <i class="fa-solid fa-user-gear"></i>
-                    </a>
-                </li>
+                <% if (pageName == "chart" || pageName == "account" || pageName == "dashboard") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Sign Out</a>
+                    </li>
+                <% } %>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="">Sign Out</a>
-                </li>
+                <% if (pageName == "signup" || pageName == "home" || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Sign In</a>
+                    </li>
+                <% } %>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Sign In</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/signup">Sign Up</a>
-                </li>
+                <% if (pageName == "login" || pageName == "home"  || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
+                <% } %>
             </ul>
         </div>
     </div>
