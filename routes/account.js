@@ -3,7 +3,7 @@ const { changeName, changePasswd, deleteAccount } = require('../controllers/acco
 const router = express.Router();
 router.get('/', (req, res) => {
     let user = req.session.user;
-    res.render("account", { "firstName": user.firstName, "lastName": user.lastName });
+    res.render("account", { "email": user.email, "firstName": user.firstName, "lastName": user.lastName });
 });
 router.post('/name', changeName);
 router.post('/password', changePasswd);
