@@ -28,31 +28,31 @@ const loginUser = (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         console.log("Fill empty fields");
-        res.redirect(req.path);
+        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
         return;
     }
     // TODO : validate
     User.findOne({ email: email, active: true }).then((user) => {
         if (!user) {
             console.log("email does not exist");
-            res.redirect(req.path);
+            res.json({ 'success': false, 'reason': 'This email does not have an account' });
             return;
         }
         bcrypt.compare(password, user.password).then(matching => {
             if (matching) {
                 req.session.loggedIn = true;
                 req.session.user = user;
-                res.redirect('/dashboard');
+                res.json({ 'success': true });
             } else {
-                res.redirect(req.path);
+                res.json({ 'success': false, 'reason': 'Incorrect password' });
             }
         }).catch(err => {
             console.log(err);
-            res.redirect(req.path);
+            res.json({ 'success': false });
         });
     }).catch(err => {
         console.log(err);
-        res.redirect(req.path);
+        res.json({ 'success': false });
     });
 };
 
@@ -60,7 +60,7 @@ const requestUser = (req, res) => {
     const { email, password, firstName, lastName } = req.body;
     if (!email || !password || !firstName || !lastName) {
         console.log("Fill empty fields");
-        res.json({ 'success': false });
+        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
         return;
     }
     User.findOne({ email: email, active: true }).then(user => {
@@ -114,19 +114,19 @@ const activateAccount = (req, res) => {
     const { email, token } = req.params;
     if (!email || !password || !token) {
         console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason':'Some required fields are empty' });
+        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
         return;
     }
     SignupRequest.findOne({ email: email, token: token }).then((requestUser) => {
         if (!requestUser) {
             console.log("email and token do not match");
-            res.json({ 'success': false, 'reason':'Invalid token' });
+            res.json({ 'success': false, 'reason': 'Invalid token' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (requestUser.expiry < timestampNow) {
             console.log("expired");
-            res.json({ 'success': false, 'reason':'Token is expired' });
+            res.json({ 'success': false, 'reason': 'Token is expired' });
             return;
         }
         bcrypt.compare(password, requestUser.password).then(matching => {
@@ -212,19 +212,19 @@ const resetPassword = (req, res) => {
     const { email, token } = req.params;
     if (!email || !password || !token) {
         console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason':'Some required fields are empty' });
+        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
         return;
     }
     ResetPasswordRequest.findOne({ email: email, token: token, used: false }).then((resetPasswordRequest) => {
         if (!resetPasswordRequest) {
             console.log("invalid or expired token");
-            res.json({ 'success': false, 'reason':'Invalid token' });
+            res.json({ 'success': false, 'reason': 'Invalid token' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (resetPasswordRequest.expiry < timestampNow) {
             console.log("expired");
-            res.json({ 'success': false, 'reason':'Token is expired' });
+            res.json({ 'success': false, 'reason': 'Token is expired' });
             return;
         }
         bcrypt.hash(password, 12, (err, hash) => {
@@ -235,20 +235,20 @@ const resetPassword = (req, res) => {
                     User.findOneAndUpdate({ email: email, active: true }, { password: hash }, (err, user) => {
                         if (err || !user) {
                             console.log(err);
-                            res.json({ 'success': false});
+                            res.json({ 'success': false });
                             return;
                         }
                         console.log('success');
-                        res.json({ 'success': true});
+                        res.json({ 'success': true });
                     });
                 }).catch(err => {
                     console.log(err);
-                    res.json({ 'success': false});
+                    res.json({ 'success': false });
                 });
         });
     }).catch(err => {
         console.log(err);
-        res.json({ 'success': false});
+        res.json({ 'success': false });
     });
 };
 

@@ -16,13 +16,16 @@ function showMsg(msg, success = false) {
 
 submitBtn.onclick = e => {
     e.preventDefault();
-    let passwd = passwdInput.value;
+    let passwd = passwdInput.value.trim();
+
+    setClear(passwdInput);
+    
     if (isEmpty(passwd)) {
-        showMsg("Some required fields are empty");
+        setErrorFor(passwdInput, 'Password cannot be empty');
         return;
     }
     if (!password_pattern.test(passwd)) {
-        showMsg("Invalid password");
+        setErrorFor(passwdInput, "Invalid password");
         return;
     }
     let xhrSender = new XHRSender();

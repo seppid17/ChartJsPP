@@ -39,18 +39,25 @@ const password_pattern = /^[\x21-\x7E]{8,15}$/;
  * it sets the keyboard focus to next form input field if the current field is valid.
  * If the field is the last input field of the form, triggers the onclick
  * of the submit button.
+ * @param {KeyboardEvent} e the keypress event
+ * @param {RegExp} pattern pattern to check the input
+ * @param {HTMLElement} nextElem next element to set focus
+ * @param {HTMLElement} [btn] button to press on success
+ * @param {string} [errorMsg] error message to show on error
+ * @return {void}
  */
-function keyPressFn(e, pattern, nxt, btn = null) {
+function keyPressFn(e, pattern, nextElem, btn = null, errorMsg = null) {
     if (e.keyCode === 13) {
+        setClear(e.target);
         e.preventDefault();
         let value = e.target.value.trim();
         if (!pattern.test(value)) {
+            if (errorMsg != null) setErrorFor(e.target, errorMsg);
             return;
         }
-        if (nxt == null) {
-            btn.click();
+        if (nextElem == null) {
+            if (btn != null) btn.click();
         } else {
-            let nextElem = nxt;
             if (nextElem) {
                 nextElem.focus();
             }
@@ -65,4 +72,18 @@ function keyPressFn(e, pattern, nxt, btn = null) {
  */
 function isEmpty(str) {
     return (!str || str.length === 0);
+}
+
+function setErrorFor(input, message) {
+    const formControl = input.parentElement;
+    const small = formControl.querySelector('small');
+    if (small != null) {
+        formControl.className = 'form-control form-outline form-input error';
+        small.innerText = message;
+    }
+}
+
+function setClear(input) {
+    const formControl = input.parentElement;
+    formControl.className = 'form-control form-outline form-input';
 }
