@@ -10,6 +10,30 @@ let changePasswdBtn = document.getElementById('changePasswdBtn');
 
 let delPasswdInput = document.getElementById('delPassword');
 let deleteBtn = document.getElementById('deleteBtn');
+/**Display relevent account 
+details and operations to the user
+**/
+function AccountOperation(div1,div2,div3){
+    div1.style.display='none';
+    div2.style.display='none';
+    div3.style.display='block';
+}
+let AccountDetailsDiv = document.getElementById('AccountDetailsDiv');
+let ChangePasswordDiv = document.getElementById('ChangePasswordDiv');
+let DeleteAccountDiv = document.getElementById('DeleteAccountDiv');
+
+let AccountDetailsBtn = document.getElementById('AccountDetails');
+let ChangePasswordBtn = document.getElementById('ChangePassword');
+let DeleteAccountBtn = document.getElementById('DeleteAccount');
+AccountDetailsBtn.onclick = e => {
+    AccountOperation(ChangePasswordDiv,DeleteAccountDiv,AccountDetailsDiv);
+}
+ChangePasswordBtn.onclick = e => {
+    AccountOperation(DeleteAccountDiv,AccountDetailsDiv,ChangePasswordDiv);
+}
+DeleteAccountBtn.onclick = e => {
+    AccountOperation(ChangePasswordDiv,AccountDetailsDiv,DeleteAccountDiv);
+}
 
 firstNameInput.onkeydown = event => {
     keyPressFn(event, name_pattern, lastNameInput);
