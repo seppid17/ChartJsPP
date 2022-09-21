@@ -8,21 +8,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <title>Chart</title>
     <style>
-        #drop-area {
+        #dropDiv {
             border: 2px dashed #ccc;
             border-radius: 20px;
-            width: 480px;
+            width: 80%;
             font-family: sans-serif;
-            margin: 100px auto;
+            margin: 50px;
+            margin-top: 10px;
             padding: 20px;
         }
 
-        #drop-area.highlight {
+        #dropDiv.highlight {
             border-color: purple;
         }
 
         p {
-            margin-top: 0;
+            margin: 50px auto;
         }
     </style>
 </head>
@@ -32,6 +33,16 @@
         <canvas id="myChart"></canvas>
     </div>
     <button id="downloadImgBtn">Download Image</button>
+    <div>
+        <input type="radio" name="charttype" value="bar">Bar<br>
+        <input type="radio" name="charttype" value="pie">Pie<br>
+        <input type="radio" name="charttype" value="line">Line<br>
+    </div>
+    <div id="dropDiv">
+        <p>Upload CSV file by dragging and dropping onto the dashed region</p>
+    </div>
+    <script src="/scripts/parseData.js"></script>
+    <script src="/scripts/dragDrop.js"></script>
     <script src="/scripts/chart.js"></script>
 </body>
 
