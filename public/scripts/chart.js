@@ -1,5 +1,18 @@
+const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 
+window.onload = () => {
+    let height = window.innerHeight;
+    let width = window.innerWidth;
+    let size = Math.min(height, width);
+    chartDiv.style.width = size+'px';
+    chartDiv.style.height = size+'px';
+    canvas.style.width = size+'px';
+    canvas.style.height = size+'px';
+}
+
+Chart.defaults.font.size = 18;
+const chartName = 'Dataset_1'
 const labels = ['A', 'B', 'C', 'D', 'E'];
 const data = [5, 9, 2, 3, 7];
 const colors = [
@@ -13,7 +26,7 @@ const colors = [
 const dataConf = {
     labels: labels,
     datasets: [{
-        label: 'Dataset_1',
+        label: chartName,
         data: data,
         backgroundColor: colors,
         borderColor: colors,
@@ -26,7 +39,7 @@ const config = {
     data: dataConf,
     options: {
         maintainAspectRatio: false,
-        responsive: false,
+        responsive: true,
         layout: {
             autoPadding: false
         },
@@ -46,13 +59,39 @@ const config = {
 const myChart = new Chart(canvas, config);
 
 canvas.onclick = evt => {
-    var points = myChart.getActiveElements();
+    let points = myChart.getActiveElements();
     if (points.length) {
         const firstPoint = points[points.length - 1];
-        console.log(firstPoint);
         colors[firstPoint.index] = '#000';
         dataConf.datasets[0].backgroundColor = colors;
         dataConf.datasets[0].borderColor = colors;
         myChart.update();
     }
+};
+
+chartDiv.onresize = e => {
+    let width = chartDiv.style.width;
+    let height = chartDiv.style.height;
+    canvas.style.width = width;
+    canvas.style.height = height;
+};
+
+window.onresize = e => {
+    let height = window.innerHeight;
+    let width = window.innerWidth;
+    let size = Math.min(height, width);
+    chartDiv.style.width = size+'px';
+    chartDiv.style.height = size+'px';
+    chartDiv.onresize(e);
+};
+
+document.getElementById('downloadImgBtn').onclick = e => {
+    let canvasUrl = canvas.toDataURL();
+
+    const downLinkTmp = document.createElement('a');
+    downLinkTmp.href = canvasUrl;
+    downLinkTmp.download = chartName;
+
+    downLinkTmp.click();
+    downLinkTmp.remove();
 };
