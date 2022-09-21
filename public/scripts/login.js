@@ -68,7 +68,11 @@ submitBtn.onclick = e => {
                 }
                 return;
             }
-            window.location = '/dashboard';
+            let target = '/dashboard';
+            if (data.hasOwnProperty('target') && typeof (data['target']) === "string") {
+                target = data['target'];
+            }
+            window.location = target;
         } catch (error) {
             showMsg('Something went wrong!');
         }

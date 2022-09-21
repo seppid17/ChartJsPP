@@ -1,5 +1,10 @@
-const { User, SignupRequest } = require("../models/User");
+const User = require("../models/User");
 const bcrypt = require("bcrypt");
+
+const accountView = (req, res) => {
+    let user = req.session.user;
+    res.render("account", { "email": user.email, "firstName": user.firstName, "lastName": user.lastName });
+}
 
 const changeName = (req, res) => {
     const { firstName, lastName, password } = req.body;
@@ -13,8 +18,9 @@ const changeName = (req, res) => {
         if (matching) {
             user.firstName = firstName;
             user.lastName = lastName;
-            User.findOneAndUpdate({ email: user.email, active: true }, { firstName: firstName, lastName: lastName }).then(newUser => {
-                res.json({ 'success': true });
+            User.findOneAndUpdate({ email: user.email, active: true }, { firstName: firstName, lastName: lastName }).then(oldUser => {
+                if (oldUser) res.json({ 'success': true });
+                else res.json({ 'success': false });
             }).catch(err => {
                 console.log(err);
                 res.json({ 'success': false });
@@ -86,4 +92,4 @@ const deleteAccount = (req, res) => {
     });
 };
 
-module.exports = { changeName, changePasswd, deleteAccount }
+module.exports = { accountView, changeName, changePasswd, deleteAccount }

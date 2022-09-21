@@ -19,4 +19,4 @@ const ResetPasswordSchema = new mongoose.Schema({
 });
 
 const ResetPasswordRequest = mongoose.model("ResetPassword", ResetPasswordSchema, 'reset_password_requests');
-module.exports = { ResetPasswordRequest };
+module.exports = ResetPasswordRequest;

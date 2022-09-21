@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const UserSchema = new mongoose.Schema({
+
+const SignupRequestSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -16,11 +17,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  active: {
+  token: {
+    type: String,
+    required: true,
+  },
+  expiry: {
+    type: Number,
+    required: true,
+  },
+  used:{
     type: Boolean,
     required: true,
   }
 });
-
-const User = mongoose.model("User", UserSchema, 'users');
-module.exports = User;
+const SignupRequest = mongoose.model("UserRequest", SignupRequestSchema, 'signup_requests');
+module.exports = SignupRequest;
