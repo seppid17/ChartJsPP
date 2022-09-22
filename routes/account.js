@@ -1,10 +1,7 @@
 const express = require('express');
-const { changeName, changePasswd, deleteAccount } = require('../controllers/accountController');
+const { accountView, changeName, changePasswd, deleteAccount } = require('../controllers/accountController');
 const router = express.Router();
-router.get('/', (req, res) => {
-    let user = req.session.user;
-    res.render("account", { "email": user.email, "firstName": user.firstName, "lastName": user.lastName });
-});
+router.get('/', accountView);
 router.post('/name', changeName);
 router.post('/password', changePasswd);
 router.post('/delete', deleteAccount);

@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+
+        <!-- navbar brand -->
+        <a class="navbar-brand" href="">
+            <img src="/images/icon.webp" alt="Avatar Logo" class="nav-pill">&nbsp;Chart.js++
+        </a>
+        <!-- <%= pageName %> -->
+        <button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarcontent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="toggler-icon top-bar"></span>
+            <span class="toggler-icon middle-bar"></span>
+            <span class="toggler-icon bottom-bar"></span>
+
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+
+                <% if (pageName == "chart" || pageName == "account" || pageName == "home") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                <% } %>
+                
+
+                <% if (pageName == "dashboard" || pageName == "account" || pageName == "home") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chart">Chart</a>
+                    </li>
+                <% } %>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                
+                <% if (pageName == "chart" || pageName == "dashboard" || pageName == "home") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </a>
+                    </li>
+                <% } %>
+
+                <% if (pageName == "chart" || pageName == "account" || pageName == "dashboard") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Sign Out</a>
+                    </li>
+                <% } %>
+
+                <% if (pageName == "signup" || pageName == "home" || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Sign In</a>
+                    </li>
+                <% } %>
+
+                <% if (pageName == "login" || pageName == "home"  || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>

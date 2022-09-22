@@ -1,23 +1,18 @@
 const express = require('express');
-const loginController = require('../controllers/loginController');
+const { loginView, logout, loginUser } = require('../controllers/loginController');
 const router = express.Router();
 router.get('/', (req, res) => {
     res.render("home", {});
 });
-router.get('/logout', (req, res) => {
-    req.session.loggedIn = false;
-    req.session.user = null;
-    res.redirect('/');
-});
-router.get('/login', loginController.loginView);
-router.get('/signup', loginController.signupView);
-router.get(/\/activate\/.*\/.*/, loginController.activateView);
-router.get('/forgotPassword', loginController.forgotPasswordView);
-router.get(/\/resetPassword\/.*\/.*/, loginController.resetPasswordView);
-router.post('/login', loginController.loginUser);
-router.post('/signup', loginController.requestUser);
-router.post('/activate/:email/:token', loginController.activateAccount);
-router.post('/forgotPassword', loginController.forgotPassword);
-router.post('/resetPassword/:email/:token', loginController.resetPassword);
+router.get('/logout', logout);
+router.all('/login', (req, res, next) => {
+    if (req.session.loggedIn === true && req.session.user) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }
+})
+router.get('/login', loginView);
+router.post('/login', loginUser);
 
 module.exports = router;

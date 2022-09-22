@@ -27,12 +27,21 @@ let ChangePasswordBtn = document.getElementById('ChangePassword');
 let DeleteAccountBtn = document.getElementById('DeleteAccount');
 AccountDetailsBtn.onclick = e => {
     AccountOperation(ChangePasswordDiv,DeleteAccountDiv,AccountDetailsDiv);
+    setSelect(AccountDetailsBtn);
+    setUnselect(ChangePasswordBtn);
+    setUnselect(DeleteAccountBtn);
 }
 ChangePasswordBtn.onclick = e => {
     AccountOperation(DeleteAccountDiv,AccountDetailsDiv,ChangePasswordDiv);
+    setUnselect(AccountDetailsBtn);
+    setSelect(ChangePasswordBtn);
+    setUnselect(DeleteAccountBtn);
 }
 DeleteAccountBtn.onclick = e => {
     AccountOperation(ChangePasswordDiv,AccountDetailsDiv,DeleteAccountDiv);
+    setUnselect(AccountDetailsBtn);
+    setUnselect(ChangePasswordBtn);
+    setSelect(DeleteAccountBtn);
 }
 
 firstNameInput.onkeydown = event => {
@@ -186,4 +195,12 @@ deleteBtn.onclick = e => {
             showMsg('Something went wrong! Please try again.');
         }
     });
+}
+
+function setSelect(btn) {
+    btn.className = 'btn btn-opt btn-opt-selected';
+}
+
+function setUnselect(btn) {
+    btn.className = 'btn btn-opt';
 }

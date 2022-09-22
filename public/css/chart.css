@@ -1,18 +1,63 @@
 body {
     background-color: #F9FCFF;
 }
+.con-pad{
+    padding: 20px;
+    padding-top: 0px;
+
+}
+.title-saved {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.cus-select{
+    width: fit-content;
+    /* padding: 3px 15px 3px 15px; */
+    border-radius: 4px;
+    border: 1px solid gray;
+    color: #eae6e6;
+    height: 30px;
+    background-color: #6b6b6c;
+}
+.cus-select option{
+    font-weight: bold;
+}
 
 .btn {
-    width: fit-content;
+    /* width: fit-content; */
     padding: 3px 15px 3px 15px;
     border-radius: 20px;
     border: 1px solid gray;
+}
+.btn-icon1 {
+    border-radius: 6px;
+    background-color: #6b6b6c;
+}
+.btn-icon-hov1{
+    color: white;
+}
+.btn-icon-hov1:hover {
+    color: #060505;
+}
+
+.btn-icon {
+    border-radius: 6px;
+    background-color: #d862ff;
+}
+.btn-icon-hov{
+    color: white;
+}
+.btn-icon-hov:hover {
+    color: #373737;
 }
 
 .btn-signup {
     font-weight: bold;
     color: gray;
     font-size: small;
+}
+.btn-align{
+    float: right;
 }
 
 .btn-frogot {
@@ -55,10 +100,11 @@ body {
 }
 
 .wrapper {
-    max-width: 900px;
+    max-width: 100%;
     min-height: 550px;
     margin: 50px auto;
-    /* padding: 20px 20px; */
+    padding: 20px 40px;
+    padding-bottom: 45px;
     background-color: #ffffff;
     box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
 }
@@ -135,4 +181,25 @@ body {
 
 .form-control.error small {
 	visibility: visible;
+}
+.fa-user-gear {
+    color: gray;
+}
+
+.fa-user-gear:hover {
+    color: #373737;
+}
+.fa-circle-plus {
+    color: white;
+}
+.fa-circle-plus:hover {
+    color: #373737;
+}
+.table-bord{
+    border-color: #373737;
+    padding: 0px;
+}
+.chart-sty{
+    
+    max-height: 80vh;
 }
