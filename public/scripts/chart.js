@@ -95,3 +95,11 @@ document.getElementById('downloadImgBtn').onclick = e => {
     downLinkTmp.click();
     downLinkTmp.remove();
 };
+
+document.getElementById('CloseEdit').onclick = e =>{
+    document.getElementById('EditChartOption').style.display='none';
+}
+
+document.getElementById('DisplayEdit').onclick = e =>{
+    document.getElementById('EditChartOption').style.display='block';
+}
