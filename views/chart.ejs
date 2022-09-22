@@ -86,16 +86,16 @@
                         <h3 class="text-saved">Chart title</h3>
                     </div>
                     <div class="col-md-auto pt-2 text-end">
-                        <a class="btn btn-submit w-100" data-toggle="tab" href="">
+                        <a class="btn btn-submit" data-toggle="tab" href="">
                             <i class="fa-solid fa-circle-plus"></i>
                             <span>Create New</span>
                         </a>
                     </div>
                     <div class="col col-lg-2  pt-2">
-                        <div class="row">
-                            <table >
+                        <!-- <div class="row"> -->
+                            <table class="table-bord">
                                 <thead >
-                                    <th class="table-bord">
+                                    <th >
                                         <button class="btn-icon">
                                             <i class="fa-solid fa-share-nodes btn-icon-hov"></i>
                                         </button>    
@@ -122,7 +122,7 @@
                                     </th>
                                 </thead>
                             </table>
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </div>
                 <div class="row">
@@ -144,21 +144,29 @@
                                 <div class="form-control form-outline form-input">
                                     <label class="form-label" for="textName">Text</label>
                                     <div class="row">
-                                        <div class="col-9">
+                                        <div class="input-group">
+                                            <input type="text" name="" id="textName" class="form-control" placeholder="" />
+                                            <div class="input-group-prepend">
+                                                <button class="btn-icon" style="height: 47px;">
+                                                    <i class="fa-regular fa-circle-check btn-icon-hov"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-9">
                                             <input type="text" name="" id="textName" class="form-control" placeholder="" />
                                         </div>
                                         <div class="col-2">
                                          <button class="btn-icon">
                                             <i class="fa-regular fa-circle-check btn-icon-hov"></i>
                                          </button>
-                                        </div>
-                                      </div>
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <table class="table table-bord">
+                                <table class="table-bord">
                                     <thead>
                                         <th>
                                             <button class="btn-icon1">
@@ -209,6 +217,9 @@
             <!-- </div> -->
         </div>
     </div>
+    <div style="display: block;">
+
+   
     <div>
         <input type="radio" name="charttype" value="bar" checked>Bar<br>
         <input type="radio" name="charttype" value="pie">Pie<br>
@@ -216,6 +227,7 @@
     </div>
     <div id="dropDiv">
         <p>Upload CSV file by dragging and dropping onto the dashed region</p>
+    </div>
     </div>
     <script src="/scripts/parseData.js"></script>
     <script src="/scripts/dragDrop.js"></script>
