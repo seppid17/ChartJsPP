@@ -36,22 +36,19 @@
                 <div class="col-md-3 col-opt">
                     <div class="row align-items-start">
                         <div class="col">
-                            <button type="button" class="btn btn-opt btn-opt-selected" id="AccountDetails"><b>Account
-                                    Details</b></button>
+                            <button type="button" class="btn btn-opt btn-opt-selected" id="AccountDetails"><b>Account Details</b></button>
                         </div>
                     </div>
                     <br>
                     <div class="row align-items-center">
                         <div class="col">
-                            <button type="button" class="btn btn-opt" id="ChangePassword"><b>Change
-                                    Password</b></button>
+                            <button type="button" class="btn btn-opt" id="ChangePassword"><b>Change Password</b></button>
                         </div>
                     </div>
                     <br>
                     <div class="row align-items-end">
                         <div class="col">
-                            <button type="button" class="btn btn-opt" id="DeleteAccount"><b>Delete
-                                    Account</b></button>
+                            <button type="button" class="btn btn-opt" id="DeleteAccount"><b>Delete Account</b></button>
                         </div>
                     </div>
                 </div>
@@ -69,44 +66,59 @@
                                         <label class="form-label">Email</label>
                                     </div>
                                     <div class="col">
-                                        <label class="form-lable form-label-email">
+                                        <span class="form-label-email">
                                             <%= email %>
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-control form-outline form-input">
-                                <div class="row">
-                                    <div class="col-3 d-flex justify-content-start align-items-center">
-                                        <label class="form-label" for="firstName">First Name</label>
+                            <!-- <div class="row">
+                                <div class="col-3 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label input-name" for="email">Email</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
+                                        <input type="email" name="email" id="email" value="<%= email %>"
+                                            class="form-control" />
                                     </div>
-                                    <div class="col">
+                                </div>
+                            </div> -->
+
+                            <div class="row">
+                                <div class="col-3 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label" for="firstName">First Name</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
                                         <input type="text" name="firstName" id="firstName" value="<%= firstName %>"
                                             class="form-control" />
+                                        <small>Error message</small>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-control form-outline form-input">
-                                <div class="row">
-                                    <div class="col-3 d-flex justify-content-start align-items-center">
-                                        <label class="form-label" for="lastName">Last Name</label>
-                                    </div>
-                                    <div class="col">
+                            <div class="row">
+                                <div class="col-3 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label" for="lastName">Last Name</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
                                         <input type="text" name="lastName" id="lastName" value="<%= lastName %>"
                                             class="form-control" />
+                                        <small>Error message</small>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-control form-outline form-input">
-                                <div class="row">
-                                    <div class="col-3 d-flex justify-content-start align-items-center">
-                                        <label class="form-label" for="password">Password</label>
-                                    </div>
-                                    <div class="col">
+                            <div class="row">
+                                <div class="col-3 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label" for="password">Password</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
                                         <input type="password" id="password" class="form-control" />
+                                        <small>Error message</small>
                                     </div>
                                 </div>
                             </div>
@@ -127,37 +139,40 @@
                     <div style="display: none;" id="ChangePasswordDiv" class="p-1">
                         <form id="passwordForm" action="/account/password" method="post" class="form">
 
-                            <div class="form-control form-outline form-input">
-                                <div class="row">
-                                    <div class="col-5 d-flex justify-content-start align-items-center">
-                                        <label class="form-label" for="curPassword">Current Password</label>
-                                    </div>
-                                    <div class="col">
+                            <div class="row">
+                                <div class="col-5 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label" for="curPassword">Current Password</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
                                         <input type="password" name="curPassword" id="curPassword"
                                             class="form-control" />
+                                        <small>Error message</small>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-control form-outline form-input">
-                                <div class="row">
-                                    <div class="col-5 d-flex justify-content-start align-items-center">
-                                        <label class="form-label" for="newPassword">New Password</label>
-                                    </div>
-                                    <div class="col">
+                            <div class="row">
+                                <div class="col-5 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label" for="newPassword">New Password</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
                                         <input type="password" name="newPassword" id="newPassword"
                                             class="form-control" />
+                                        <small>Error message</small>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-control form-outline form-input">
-                                <div class="row">
-                                    <div class="col-5 d-flex justify-content-start align-items-center">
-                                        <label class="form-label" for="cnfPassword">Confirm New Password</label>
-                                    </div>
-                                    <div class="col">
+                            <div class="row">
+                                <div class="col-5 d-flex justify-content-start align-items-center input-name">
+                                    <label class="form-label" for="cnfPassword">Confirm New Password</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-control form-outline form-input">
                                         <input type="password" id="cnfPassword" class="form-control" />
+                                        <small>Error message</small>
                                     </div>
                                 </div>
                             </div>
@@ -182,14 +197,15 @@
                                 <h5 class="card-title">Permanently Delete Your Account</h5>
                                 <p class="card-text">This action cannot be undone</p>
                                 <form id="accountForm" action="/account/delete" method="post" class="form">
-                                    <div class="form-control form-outline form-input" style="background-color:#FFEBEB">
-                                        <div class="row delete-password">
-                                            <div class="col-3 d-flex justify-content-start align-items-center">
-                                                <label class="form-label" for="password">Password</label>
-                                            </div>
-                                            <div class="col">
+                                    <div class="row delete-password">
+                                        <div class="col-3 d-flex justify-content-start align-items-center">
+                                            <label class="form-label" for="password">Password</label>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-control form-outline form-input" style="background-color:#FFEBEB">
                                                 <input type="password" name="password" id="delPassword"
                                                     class="form-control" placeholder="Password" />
+                                                <small>Error message</small>
                                             </div>
                                         </div>
                                     </div>

@@ -71,7 +71,8 @@ body {
 }
 
 .email-row {
-    padding-bottom: 6px;
+    padding-top: 11px;
+    padding-bottom: 10px;
 }
 
 .card {
@@ -91,6 +92,12 @@ body {
     padding-right: 50px;
 }
 
+.input-name {
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
 .form-control {
     padding-bottom: 20px;
     padding-left: 0;
@@ -107,9 +114,6 @@ body {
     font-weight: bold;
 }
 
-.form-label-email {
-    font-weight: normal;
-}
 
 .form-control input {
     border: 2px solid #f0f0f0;
@@ -135,4 +139,9 @@ body {
 
 .form-control.error small {
     visibility: visible;
+}
+
+.form-label-email {
+    font-weight: normal;
+    padding-left: 12px;
 }
