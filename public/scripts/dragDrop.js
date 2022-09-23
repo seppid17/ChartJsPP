@@ -29,7 +29,7 @@ function preventDefaults(e) {
 }
 
 let dropArea = document.getElementById('dropDiv');
-let dropP = document.getElementById('dropP');
+let dropSpan = document.getElementById('dropSpan');
 
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false);
@@ -43,7 +43,7 @@ const extractFile = file => {
         let jsonData = csv2json(data);
         if (jsonData) {
             json = jsonData;
-            dropP.innerText = 'File selected. You can draw chart or upload different file'
+            dropSpan.innerText = 'File selected. You can draw chart or upload different file'
         }
     }
 }
@@ -66,12 +66,12 @@ function handleDrop(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 document.getElementById('drawBtn').onclick = e => {
-    uploadViewDiv.style.display='none';
     chartViewDiv.style.display='block';
     let labels = getLabels();
     let values = getValues();
     if (labels==null || values==null) return;
     cb(labels, values);
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 document.getElementById('selectFileBtn').onclick = e => {

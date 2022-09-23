@@ -92,4 +92,4 @@ const deleteAccount = (req, res) => {
     });
 };
 
-module.exports = { accountView, changeName, changePasswd, deleteAccount }
+module.exports = { accountView, changeName, changePasswd, deleteAccount };
