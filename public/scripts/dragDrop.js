@@ -64,6 +64,8 @@ function handleDrop(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 document.getElementById('drawBtn').onclick = e => {
+    uploadViewDiv.style.display='none';
+    chartViewDiv.style.display='block';
     let labels = getLabels();
     let values = getValues();
     if (labels==null || values==null) return;

@@ -1,5 +1,9 @@
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
+const chartBtn = document.getElementById('drawBtn');
+
+const uploadViewDiv = document.getElementById('uploadViewDiv');
+const chartViewDiv = document.getElementById('chartViewDiv');
 
 window.onload = () => {
     let height = window.innerHeight;
