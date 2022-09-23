@@ -29,12 +29,13 @@ function preventDefaults(e) {
 }
 
 let dropArea = document.getElementById('dropDiv');
+let dropP = document.getElementById('dropP');
 
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false);
 });
 
-const previewFile = file => {
+const extractFile = file => {
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onloadend = function () {
@@ -42,6 +43,7 @@ const previewFile = file => {
         let jsonData = csv2json(data);
         if (jsonData) {
             json = jsonData;
+            dropP.innerText = 'File selected. You can draw chart or upload different file'
         }
     }
 }
@@ -52,7 +54,7 @@ const handleFiles = files => {
         console.log("Put only one file");
         return;
     }
-    previewFile(files[0]);
+    extractFile(files[0]);
 }
 
 function handleDrop(e) {
@@ -70,4 +72,16 @@ document.getElementById('drawBtn').onclick = e => {
     let values = getValues();
     if (labels==null || values==null) return;
     cb(labels, values);
+}
+
+document.getElementById('selectFileBtn').onclick = e => {
+    var input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = e => {
+        var file = e.target.files[0];
+        extractFile(file);
+    }
+
+    input.click();
 }

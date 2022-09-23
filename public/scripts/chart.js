@@ -26,11 +26,11 @@ const colors = [
 ];
 
 let myChart = null;
-const drawChart = (labels, data)=>{
+const drawChart = (labels, data) => {
     var types = document.getElementsByName('charttype');
     let type = 'bar';
-    for(i = 0; i < types.length; i++) {
-        if(types[i].checked){
+    for (i = 0; i < types.length; i++) {
+        if (types[i].checked) {
             type = types[i].value;
         }
     }
@@ -67,7 +67,7 @@ const drawChart = (labels, data)=>{
         },
     };
 
-    if (myChart != null){
+    if (myChart != null) {
         myChart.destroy();
     }
     myChart = new Chart(canvas, config);
@@ -113,12 +113,12 @@ document.getElementById('downloadImgBtn').onclick = e => {
     downLinkTmp.remove();
 };
 
-document.getElementById('CloseEdit').onclick = e =>{
-    document.getElementById('EditChartOption').style.display='none';
+document.getElementById('CloseEdit').onclick = e => {
+    document.getElementById('EditChartOption').style.display = 'none';
 }
 
-document.getElementById('DisplayEdit').onclick = e =>{
-    document.getElementById('EditChartOption').style.display='block';
+document.getElementById('DisplayEdit').onclick = e => {
+    document.getElementById('EditChartOption').style.display = 'block';
 }
 
 setCallback(drawChart);
