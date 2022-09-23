@@ -1,3 +1,146 @@
+class ChartConfig {
+    static canvasChartMap = {}
+    constructor(canvas, type) {
+        this.canvas = canvas;
+        this.config = {};
+        this.config.type = type;
+        this.name = '';
+        canvas.onclick = evt => {
+            let myChart = ChartConfig.canvasChartMap[this.canvas];
+            if (!myChart){
+                return;
+            }
+            let points = myChart.getActiveElements();
+            if (points.length) {
+                const firstPoint = points[points.length - 1];
+                colors[firstPoint.index] = '#f00';
+                dataConf.datasets[0].backgroundColor = colors;
+                dataConf.datasets[0].borderColor = colors;
+                myChart.update();
+            }
+        };
+    }
+
+    setData(data) {
+        if (this.config) {
+            this.config.data = data;
+        }
+    }
+
+    setName(name) {
+        this.name = name;
+    }
+
+    setOptions(options) {
+        this.config.options = options;
+    }
+
+    draw() {
+        if (this.config == null || this.canvas == null) {
+            return;
+        }
+        if (ChartConfig.canvasChartMap[this.canvas] instanceof Chart) {
+            ChartConfig.canvasChartMap[this.canvas].destroy();
+        }
+        ChartConfig.canvasChartMap[this.canvas] = new Chart(this.canvas, this.config);
+    }
+}
+
+class BasicChartConfig extends ChartConfig {
+    constructor(canvas, type) {
+        super(canvas, type);
+        var dataConf = {
+            labels: [],
+            datasets: [{
+                label: this.name,
+                data: [],
+                backgroundColor: colors,
+                borderColor: colors,
+                borderWidth: 1
+            }]
+        };
+        this.config.data = dataConf;
+    }
+
+    setName(name) {
+        super.setName(name);
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].label = name;
+        }
+    }
+
+    setLabels(labels) {
+        if (this.config) {
+            this.config.data.labels = labels;
+        }
+    }
+
+    setData(data) {
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].data = data;
+        }
+    }
+}
+
+class BarChartConfig extends BasicChartConfig {
+    constructor(canvas) {
+        super(canvas, 'bar');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        font: { size: 20 }
+                    }
+                }
+            }
+        });
+    }
+}
+
+class PieChartConfig extends BasicChartConfig {
+    constructor(canvas) {
+        super(canvas, 'pie');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            }
+        });
+    }
+}
+
+class LineChartConfig extends BasicChartConfig {
+    constructor(canvas) {
+        super(canvas, 'line');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        font: { size: 20 }
+                    }
+                }
+            }
+        });
+    }
+}
+
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 
@@ -21,7 +164,7 @@ const colors = [
     'rgba(201, 203, 207, 1)'
 ];
 
-let myChart = null;
+/*let myChart = null;
 const drawChart = (labels, data) => {
     var types = document.getElementsByName('charttype');
     let type = 'bar';
@@ -67,20 +210,42 @@ const drawChart = (labels, data) => {
         myChart.destroy();
     }
     myChart = new Chart(canvas, config);
-
-    canvas.onclick = evt => {
-        let points = myChart.getActiveElements();
-        if (points.length) {
-            const firstPoint = points[points.length - 1];
-            colors[firstPoint.index] = '#000';
-            dataConf.datasets[0].backgroundColor = colors;
-            dataConf.datasets[0].borderColor = colors;
-            myChart.update();
-        }
-    };
 }
 // const labels = ['A', 'B', 'C', 'D', 'E'];
 // const data = [5, 9, 2, 3, 7];
+*/
+
+const drawChart = (labels, data) => {
+    var types = document.getElementsByName('charttype');
+    let type = 'bar';
+    for (i = 0; i < types.length; i++) {
+        if (types[i].checked) {
+            type = types[i].value;
+        }
+    }
+    let myChart;
+    switch (type) {
+        case 'bar': {
+            myChart = new BarChartConfig(canvas);
+            break;
+        }
+        case 'pie': {
+            myChart = new PieChartConfig(canvas);
+            break;
+        }
+        case 'line': {
+            myChart = new LineChartConfig(canvas);
+            break;
+        }
+        default:
+            return;
+            break;
+    }
+    myChart.setName(chartName);
+    myChart.setLabels(labels);
+    myChart.setData(data);
+    myChart.draw();
+};
 
 chartDiv.onresize = e => {
     let width = chartDiv.style.width;
