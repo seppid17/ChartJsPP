@@ -7,7 +7,7 @@ class ChartConfig {
         this.name = '';
         canvas.onclick = evt => {
             let myChart = ChartConfig.canvasChartMap[this.canvas];
-            if (!myChart){
+            if (!myChart) {
                 return;
             }
             let points = myChart.getActiveElements();
@@ -141,6 +141,32 @@ class LineChartConfig extends BasicChartConfig {
     }
 }
 
+class DoughnutChartConfig extends BasicChartConfig {
+    constructor(canvas) {
+        super(canvas, 'doughnut');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            }
+        });
+    }
+}
+
+class PolarAreaChartConfig extends BasicChartConfig {
+    constructor(canvas) {
+        super(canvas, 'polarArea');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            }
+        });
+    }
+}
+
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 
@@ -215,8 +241,12 @@ const drawChart = (labels, data) => {
 // const data = [5, 9, 2, 3, 7];
 */
 
+let types = document.getElementsByName('charttype');
 const drawChart = (labels, data) => {
-    var types = document.getElementsByName('charttype');
+    if (!(data instanceof Array) || data.length <= 0) {
+        console.log('invalid data', data);
+        return;
+    }
     let type = 'bar';
     for (i = 0; i < types.length; i++) {
         if (types[i].checked) {
@@ -224,17 +254,61 @@ const drawChart = (labels, data) => {
         }
     }
     let myChart;
+    let values = [];
     switch (type) {
         case 'bar': {
+            data.forEach(val => {
+                if (val.length !== 1){
+                    console.log('invalid data for', type, val);
+                    return;
+                }
+                values.push(val[0]);
+            });
             myChart = new BarChartConfig(canvas);
             break;
         }
         case 'pie': {
+            data.forEach(val => {
+                if (val.length !== 1){
+                    console.log('invalid data for', type);
+                    return;
+                }
+                values.push(val[0]);
+            });
             myChart = new PieChartConfig(canvas);
             break;
         }
         case 'line': {
+            data.forEach(val => {
+                if (val.length !== 1){
+                    console.log('invalid data for', type);
+                    return;
+                }
+                values.push(val[0]);
+            });
             myChart = new LineChartConfig(canvas);
+            break;
+        }
+        case 'doughnut': {
+            data.forEach(val => {
+                if (val.length !== 1){
+                    console.log('invalid data for', type);
+                    return;
+                }
+                values.push(val[0]);
+            });
+            myChart = new DoughnutChartConfig(canvas);
+            break;
+        }
+        case 'polarArea': {
+            data.forEach(val => {
+                if (val.length !== 1){
+                    console.log('invalid data for', type);
+                    return;
+                }
+                values.push(val[0]);
+            });
+            myChart = new PolarAreaChartConfig(canvas);
             break;
         }
         default:
@@ -243,7 +317,7 @@ const drawChart = (labels, data) => {
     }
     myChart.setName(chartName);
     myChart.setLabels(labels);
-    myChart.setData(data);
+    myChart.setData(values);
     myChart.draw();
 };
 
