@@ -9,9 +9,9 @@
     <title>Chart</title>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet"
-     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/default.css">
@@ -62,7 +62,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
-                    
+
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -81,145 +81,148 @@
     <div class="container-fluid con-pad shadow-lg p-1 mb-5 bg-white rounded">
         <div class="row justify-content-center">
             <!-- <div class="wrapper"> -->
-                <div class="row title-saved">
-                    <div class="col pt-2 d-flex justify-content-center">
-                        <h3 class="text-saved">Chart title</h3>
-                    </div>
-                    <div class="col-md-auto pt-2 d-flex justify-content-center">
-                        <a class="btn btn-submit" data-toggle="tab" href="">
-                            <i class="fa-solid fa-circle-plus"></i>
-                            <span>Create New</span>
-                        </a>
-                    </div>
-                    <div class="col col-lg-2  pt-2 d-flex justify-content-center">
-                        <!-- <div class="row"> -->
-                            <table class="table-bord">
-                                <thead >
-                                    <th >
-                                        <button class="btn-icon">
-                                            <i class="fa-solid fa-share-nodes btn-icon-hov"></i>
-                                        </button>    
-                                    </th>
-                                    <th>
-                                        <button class="btn-icon">
-                                            <i class="fa-sharp fa-solid fa-download btn-icon-hov" id="downloadImgBtn"></i>
-                                        </button>   
-                                    </th>
-                                    <th>
-                                        <button class="btn-icon">
-                                            <i class="fa-solid fa-trash-can btn-icon-hov"></i>
-                                        </button>    
-                                    </th>
-                                    <th>
-                                        <button class="btn-icon">
-                                            <i class="fa-solid fa-floppy-disk btn-icon-hov"></i>
-                                        </button>    
-                                    </th>
-                                    <th>
-                                        <button class="btn-icon" id="DisplayEdit">
-                                            <i class="fa-solid fa-pen-to-square btn-icon-hov"></i>
-                                        </button>    
-                                    </th>
-                                </thead>
-                            </table>
-                        <!-- </div> -->
-                    </div>
+            <div class="row title-saved">
+                <div class="col pt-2 d-flex justify-content-center">
+                    <h3 class="text-saved">Chart title</h3>
                 </div>
-                <div class="row">
-                    <div class="col chart-sty shadow-lg p-3 mb-5 bg-white rounded" id="chartDiv">
-                        <!-- <div id="chartDiv"> -->
-                            <canvas id="myChart"></canvas>
-                        <!-- </div> -->
-                    </div>
-                    <div class="col col-lg-3 shadow-sm p-3 mb-5 bg-white rounded" style="display:block;" id="EditChartOption">
-                        <div class="row">
-                            <div class="col d-flex justify-content-end" >
-                                <button class="btn-icon" id="CloseEdit">
-                                    <i class="fa-solid fa-x btn-icon-hov"></i>
-                                </button> 
-                            </div>
+                <div class="col-md-auto pt-2 d-flex justify-content-center">
+                    <a class="btn btn-submit" data-toggle="tab" href="">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Create New</span>
+                    </a>
+                </div>
+                <div class="col col-lg-2  pt-2 d-flex justify-content-center">
+                    <!-- <div class="row"> -->
+                    <table class="table-bord">
+                        <thead>
+                            <th>
+                                <button class="btn-icon">
+                                    <i class="fa-solid fa-share-nodes btn-icon-hov"></i>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="btn-icon">
+                                    <i class="fa-sharp fa-solid fa-download btn-icon-hov" id="downloadImgBtn"></i>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="btn-icon">
+                                    <i class="fa-solid fa-trash-can btn-icon-hov"></i>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="btn-icon">
+                                    <i class="fa-solid fa-floppy-disk btn-icon-hov"></i>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="btn-icon" id="DisplayEdit">
+                                    <i class="fa-solid fa-pen-to-square btn-icon-hov"></i>
+                                </button>
+                            </th>
+                        </thead>
+                    </table>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col chart-sty shadow-lg p-3 mb-5 bg-white rounded" id="chartDiv">
+                    <!-- <div id="chartDiv"> -->
+                    <canvas id="myChart"></canvas>
+                    <!-- </div> -->
+                </div>
+                <div class="col col-lg-3 shadow-sm p-3 mb-5 bg-white rounded" style="display:block;"
+                    id="EditChartOption">
+                    <div class="row">
+                        <div class="col d-flex justify-content-end">
+                            <button class="btn-icon" id="CloseEdit">
+                                <i class="fa-solid fa-x btn-icon-hov"></i>
+                            </button>
                         </div>
-                        <div class="row">
-                            <div class="col d-flex justify-content-center">
-                                <div class="form-control form-outline form-input">
-                                    <label class="form-label" for="textName">Text</label>
-                                    <div class="row">
-                                        <div class="input-group">
-                                            <input type="text" name="" id="textName" class="form-control" placeholder="" />
-                                            <div class="input-group-prepend">
-                                                <button class="btn-icon" style="height: 47px;">
-                                                    <i class="fa-regular fa-circle-check btn-icon-hov"></i>
-                                                </button>
-                                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex justify-content-center">
+                            <div class="form-control form-outline form-input">
+                                <label class="form-label" for="textName">Text</label>
+                                <div class="row">
+                                    <div class="input-group">
+                                        <input type="text" name="" id="textName" class="form-control" placeholder="" />
+                                        <div class="input-group-prepend">
+                                            <button class="btn-icon" style="height: 47px;">
+                                                <i class="fa-regular fa-circle-check btn-icon-hov"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col d-flex justify-content-start">
-                                <table class="table-bord">
-                                    <thead>
-                                        <th>
-                                            <button class="btn-icon1">
-                                                <i class="fa-solid fa-bold btn-icon-hov1"></i>
-                                            </button>    
-                                        </th>
-                                        <th>
-                                            <button class="btn-icon1">
-                                                <i class="fa-solid fa-underline  btn-icon-hov1"></i>
-                                            </button>   
-                                        </th>
-                                        <th>
-                                            <button class="btn-icon1">
-                                                <i class="fa-solid fa-italic btn-icon-hov1"></i>
-                                            </button>    
-                                        </th>
-                                        <th>
-                                            <select class="cus-select" id="inputGroupSelect01">
-                                                <option selected>size</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                              </select>   
-                                        </th>
-                                    </thead>
-                                </table>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex justify-content-start">
+                            <table class="table-bord">
+                                <thead>
+                                    <th>
+                                        <button class="btn-icon1">
+                                            <i class="fa-solid fa-bold btn-icon-hov1"></i>
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button class="btn-icon1">
+                                            <i class="fa-solid fa-underline  btn-icon-hov1"></i>
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button class="btn-icon1">
+                                            <i class="fa-solid fa-italic btn-icon-hov1"></i>
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <select class="cus-select" id="inputGroupSelect01">
+                                            <option selected>size</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </th>
+                                </thead>
+                            </table>
                         </div>
-                        <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <div class="col">
-                                <div class="col">
-                                    <div class="form-control form-outline form-input">
-                                        <label class="form-label" for="textName">Select colour</label>   
-                                    </div>
+                                <div class="form-control form-outline form-input">
+                                    <label class="form-label" for="textName">Select colour</label>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
+
                 </div>
+            </div>
             <!-- </div> -->
         </div>
     </div>
     <div style="display: block;">
 
-   
-    <div>
-        <input type="radio" name="charttype" value="bar" checked>Bar<br>
-        <input type="radio" name="charttype" value="pie">Pie<br>
-        <input type="radio" name="charttype" value="line">Line<br>
-    </div>
-    <div id="dropDiv">
-        <p>Upload CSV file by dragging and dropping onto the dashed region</p>
-    </div>
+        <div>
+            <button id="drawBtn">Draw</button>
+        </div>
+        <div>
+            <input type="radio" name="charttype" value="bar" checked>Bar<br>
+            <input type="radio" name="charttype" value="pie">Pie<br>
+            <input type="radio" name="charttype" value="line">Line<br>
+        </div>
+        <div id="dropDiv">
+            <p>Upload CSV file by dragging and dropping onto the dashed region</p>
+        </div>
     </div>
     <script src="/scripts/parseData.js"></script>
     <script src="/scripts/dragDrop.js"></script>

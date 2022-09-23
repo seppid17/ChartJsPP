@@ -42,9 +42,6 @@ const previewFile = file => {
         let jsonData = csv2json(data);
         if (jsonData) {
             json = jsonData;
-            let labels = getLabels();
-            let values = getValues();
-            cb(labels, values);
         }
     }
 }
@@ -65,3 +62,10 @@ function handleDrop(e) {
     handleFiles(files);
 }
 dropArea.addEventListener('drop', handleDrop, false);
+
+document.getElementById('drawBtn').onclick = e => {
+    let labels = getLabels();
+    let values = getValues();
+    if (labels==null || values==null) return;
+    cb(labels, values);
+}
