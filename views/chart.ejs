@@ -220,8 +220,13 @@
             <input type="radio" name="charttype" value="pie">Pie<br>
             <input type="radio" name="charttype" value="line">Line<br>
         </div>
-        <div id="dropDiv">
-            <p>Upload CSV file by dragging and dropping onto the dashed region</p>
+        <div>
+            <div>
+                <button id="selectFileBtn">Select file</button>
+            </div>
+            <div id="dropDiv">
+                <p id="dropP">Upload CSV file by dragging and dropping onto the dashed region</p>
+            </div>
         </div>
     </div>
     <script src="/scripts/parseData.js"></script>
