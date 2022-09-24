@@ -1,4 +1,4 @@
-function csv2json(csv) {
+function extractCSV(csv) {
     try {
         let lines = csv.split(/\r?\n|\r|\n/g);
         let json = {};
@@ -81,6 +81,27 @@ function csv2json(csv) {
             parent.c[id] = data;
         }
         return json;
+    } catch (ex) {
+        console.log(ex);
+        return null;
+    }
+}
+
+function removeIDs(json, list) {
+    Object.keys(json).forEach(id => {
+        var data = json[id];
+        var children = [];
+        data.c = removeIDs(data.c, children);
+        list.push(data);
+    });
+    return list;
+}
+
+function parseCSV(csv) {
+    try {
+        let json = extractCSV(csv);
+        let dataList = [];
+        return removeIDs(json, dataList);
     } catch (ex) {
         console.log(ex);
         return null;

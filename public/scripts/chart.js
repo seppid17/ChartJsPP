@@ -358,7 +358,8 @@ const drawChart = (labels, data) => {
     let values = [];
     switch (type) {
         case 'bar': {
-            data.forEach(val => {
+            data.forEach(item => {
+                var val = item.v;
                 if (val.length !== 1) {
                     console.log('invalid data for', type, val);
                     return;
@@ -369,7 +370,8 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'pie': {
-            data.forEach(val => {
+            data.forEach(item => {
+                var val = item.v;
                 if (val.length !== 1) {
                     console.log('invalid data for', type);
                     return;
@@ -380,7 +382,8 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'line': {
-            data.forEach(val => {
+            data.forEach(item => {
+                var val = item.v;
                 if (val.length !== 1) {
                     console.log('invalid data for', type);
                     return;
@@ -391,7 +394,8 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'doughnut': {
-            data.forEach(val => {
+            data.forEach(item => {
+                var val = item.v;
                 if (val.length !== 1) {
                     console.log('invalid data for', type);
                     return;
@@ -402,7 +406,8 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'polarArea': {
-            data.forEach(val => {
+            data.forEach(item => {
+                var val = item.v;
                 if (val.length !== 1) {
                     console.log('invalid data for', type);
                     return;
@@ -413,7 +418,8 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'scatter': {
-            data.forEach(val => {
+            data.forEach(item => {
+                var val = item.v;
                 if (val.length !== 2) {
                     console.log('invalid data for', type);
                     return;
@@ -424,7 +430,26 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'sunburst': {
-            values = data;
+            let unlist = (list, out) => {
+                var success = true;
+                list.forEach(item => {
+                    var unlistC = [];
+                    if (!unlist(item.c, unlistC)){
+                        success = false;
+                        return;
+                    }
+                    if (item.v.length !== 1) {
+                        success = false;
+                        console.log('invalid list', item);
+                        return;
+                    }
+                    unlistItem = { v: item.v[0], c: unlistC };
+                    out.push(unlistItem);
+                });
+                return success;
+            }
+            values = [];
+            unlist(data, values);
             myChart = new SunburstChartConfig(canvas);
             break;
         }

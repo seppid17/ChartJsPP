@@ -1,4 +1,4 @@
-let json = null;
+let extractedData = null;
 let cb = (labels, values) => { };
 
 const setCallback = callback => {
@@ -6,19 +6,19 @@ const setCallback = callback => {
 }
 
 function getLabels() {
-    if (json == null) return null;
+    if (extractedData == null) return null;
     let labels = [];
-    Object.keys(json).forEach(id => {
-        labels.push(json[id].n);
+    extractedData.forEach(item => {
+        labels.push(item.n);
     });
     return labels;
 }
 
 function getValues() {
-    if (json == null) return null;
+    if (extractedData == null) return null;
     let values = [];
-    Object.keys(json).forEach(id => {
-        values.push(json[id].v);
+    extractedData.forEach(item => {
+        values.push({ v: item.v, c: item.c });
     });
     return values;
 }
@@ -40,9 +40,9 @@ const extractFile = file => {
     reader.readAsText(file);
     reader.onloadend = function () {
         let data = reader.result;
-        let jsonData = csv2json(data);
-        if (jsonData) {
-            json = jsonData;
+        let parsedData = parseCSV(data);
+        if (parsedData) {
+            extractedData = parsedData;
             dropSpan.innerText = 'File selected. You can draw chart or upload different file'
         }
     }
@@ -66,10 +66,10 @@ function handleDrop(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 document.getElementById('drawBtn').onclick = e => {
-    chartViewDiv.style.display='block';
+    chartViewDiv.style.display = 'block';
     let labels = getLabels();
     let values = getValues();
-    if (labels==null || values==null) return;
+    if (labels == null || values == null) return;
     cb(labels, values);
     document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
