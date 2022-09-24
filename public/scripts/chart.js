@@ -11,11 +11,10 @@ class ChartConfig {
                 return;
             }
             let points = myChart.getActiveElements();
+            var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const firstPoint = points[points.length - 1];
                 colors[firstPoint.index] = '#f00';
-                dataConf.datasets[0].backgroundColor = colors;
-                dataConf.datasets[0].borderColor = colors;
                 myChart.update();
             }
         };
@@ -49,6 +48,7 @@ class ChartConfig {
 class BasicChartConfig extends ChartConfig {
     constructor(canvas, type) {
         super(canvas, type);
+        var colors = [];
         var dataConf = {
             labels: [],
             datasets: [{
@@ -77,6 +77,15 @@ class BasicChartConfig extends ChartConfig {
 
     setData(data) {
         if (this.config && this.config.data.datasets.length > 0) {
+            var clr = [];
+            data.forEach((d, i) => {
+                var r = ((i + ~~d) * 93) % 256;
+                var g = (i * ((2 * i) - ~~d) * 3) % 256;
+                var b = (384 - r - g) % 256;
+                clr.push(`rgba(${r}, ${g}, ${b}, 1)`);
+            });
+            this.config.data.datasets[0].backgroundColor = clr;
+            this.config.data.datasets[0].borderColor = clr;
             this.config.data.datasets[0].data = data;
         }
     }
@@ -171,10 +180,73 @@ class ScatterChartConfig extends BasicChartConfig {
     constructor(canvas) {
         super(canvas, 'scatter');
         super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            },
             scales: {
                 x: {
                     type: 'linear',
                     position: 'bottom'
+                }
+            }
+        });
+    }
+}
+
+class HierarchicalChartConfig extends ChartConfig {
+    constructor(canvas, type) {
+        super(canvas, type);
+        var colors = [];
+        var dataConf = {
+            labels: [],
+            datasets: [{
+                label: this.name,
+                data: [],
+                backgroundColor: colors,
+                borderColor: colors,
+                borderWidth: 1
+            }]
+        };
+        this.config.data = dataConf;
+    }
+
+    setName(name) {
+        super.setName(name);
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].label = name;
+        }
+    }
+
+    setLabels(labels) {
+        if (this.config && this.config.data) {
+            this.config.data.labels = labels;
+        }
+    }
+
+    setData(data) {
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].data = data;
+        }
+    }
+}
+
+class SunburstChartConfig extends HierarchicalChartConfig {
+    constructor(canvas) {
+        super(canvas, 'sunburst');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
                 }
             }
         });
@@ -200,13 +272,24 @@ window.onload = () => {
 
 Chart.defaults.font.size = 18;
 const chartName = 'Dataset_1'
-const colors = [
+/*const colors = [
     'rgba(255, 99, 132, 1)',
     'rgba(255, 159, 64, 1)',
     'rgba(255, 205, 86, 1)',
     'rgba(75, 192, 192, 1)',
     'rgba(201, 203, 207, 1)'
-];
+];*/
+
+Chart.register({
+    id: "legendColorUpdate",
+    afterRender: function (c) {
+        var legends = c.legend.legendItems;
+        var colors = c.data.datasets[0].backgroundColor;
+        legends.forEach((e, i) => {
+            e.fillStyle = colors[i % colors.length];
+        });
+    }
+});
 
 /*let myChart = null;
 const drawChart = (labels, data) => {
@@ -338,6 +421,11 @@ const drawChart = (labels, data) => {
                 values.push({ x: val[0], y: val[1] });
             });
             myChart = new ScatterChartConfig(canvas);
+            break;
+        }
+        case 'sunburst': {
+            values = data;
+            myChart = new SunburstChartConfig(canvas);
             break;
         }
         default:
