@@ -10,7 +10,7 @@ class ChartConfig {
             if (!myChart) {
                 return;
             }
-            let points = myChart.getActiveElements();
+            let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const firstPoint = points[points.length - 1];
