@@ -65,13 +65,27 @@ function handleDrop(e) {
 }
 dropArea.addEventListener('drop', handleDrop, false);
 
+let selectChartType = document.getElementById('selectChartType');
+
 document.getElementById('drawBtn').onclick = e => {
-    chartViewDiv.style.display = 'block';
-    let labels = getLabels();
-    let values = getValues();
-    if (labels == null || values == null) return;
-    cb(labels, values);
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    selectChartType.className = 'chart-type';
+    let found = false;
+    for (i = 0; i < types.length; i++) {
+        if (types[i].checked) {
+            found = true;
+        }
+    }
+    if (found) {
+        chartViewDiv.style.display = 'block';
+        let labels = getLabels();
+        let values = getValues();
+        if (labels == null || values == null) return;
+        cb(labels, values);
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+    } else {
+        selectChartType.className = 'chart-type error';
+        selectChartType.querySelector('small').innerText = "You didn't have selected a chart type. Please select one first";
+    }
 }
 
 document.getElementById('selectFileBtn').onclick = e => {

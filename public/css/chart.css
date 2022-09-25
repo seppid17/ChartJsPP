@@ -2,7 +2,7 @@ body {
     background-color: #ffffff;
 }
 
-.con-pad{
+.con-pad {
     padding: 20px;
     padding-top: 0px;
 
@@ -13,7 +13,7 @@ body {
     margin-bottom: 10px;
 }
 
-.cus-select{
+.cus-select {
     width: fit-content;
     padding: 3px 5px 3px 5px;
     border-radius: 5px;
@@ -23,7 +23,8 @@ body {
     background-color: #ffffff;
     text-align: center;
 }
-.cus-select option{
+
+.cus-select option {
     font-weight: normal;
 }
 
@@ -82,7 +83,8 @@ body {
     color: gray;
     font-size: small;
 }
-.btn-align{
+
+.btn-align {
     float: right;
 }
 
@@ -170,7 +172,7 @@ body {
     padding-left: 30px;
     padding-right: 30px;
     margin: 30px auto;
-    max-width: 700px; 
+    max-width: 700px;
 }
 
 #dropDiv {
@@ -238,6 +240,24 @@ body {
     border-color: purple;
 }
 
+.chart-type {
+    margin-top: 20px;
+    padding-bottom: 5px;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    border: none;
+}
+
+.chart-type small {
+    color: #e74c3c;
+    visibility: hidden;
+}
+
+.chart-type.error small {
+    visibility: visible;
+}
+
 .form-control {
     padding-bottom: 20px;
     padding-left: 0;
@@ -252,6 +272,10 @@ body {
     font-weight: bold;
 }
 
+.chart-type-select {
+    font-size: medium;
+}
+
 .form-control input {
     border: 2px solid #f0f0f0;
     border-radius: 4px;
@@ -263,19 +287,19 @@ body {
 }
 
 .form-control.error input {
-	border-color: #e74c3c;
+    border-color: #e74c3c;
 }
 
 .form-control small {
-	color: #e74c3c;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	visibility: hidden;
+    color: #e74c3c;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
 }
 
 .form-control.error small {
-	visibility: visible;
+    visibility: visible;
 }
 
 .fa-user-gear {
@@ -294,20 +318,22 @@ body {
     color: #373737;
 }
 
-.table-bord{
+.table-bord {
     border-color: #373737;
     padding: 0px;
 }
 
-.chart-sty{
+.chart-sty {
     max-width: 100%;
     max-height: 80vh;
 }
+
 .a {
     text-decoration: none;
 }
-.edit-sty{
-    border-color:#d862ff;
+
+.edit-sty {
+    border-color: #d862ff;
     border-style: solid;
     padding-left: 4px;
 }
