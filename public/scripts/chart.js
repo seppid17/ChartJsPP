@@ -195,6 +195,19 @@ class ScatterChartConfig extends BasicChartConfig {
     }
 }
 
+class BubbleChartConfig extends BasicChartConfig {
+    constructor(canvas) {
+        super(canvas, 'bubble');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            }
+        });
+    }
+}
+
 class HierarchicalChartConfig extends ChartConfig {
     constructor(canvas, type) {
         super(canvas, type);
@@ -284,11 +297,10 @@ const chartViewDiv = document.getElementById('chartViewDiv');
 window.onload = () => {
     let height = window.innerHeight;
     let width = window.innerWidth;
-    let size = Math.min(height, width);
-    chartDiv.style.width = size + 'px';
-    chartDiv.style.height = size + 'px';
-    canvas.style.width = size + 'px';
-    canvas.style.height = size + 'px';
+    chartDiv.style.width = width + 'px';
+    chartDiv.style.height = height + 'px';
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
 }
 
 Chart.defaults.font.size = 18;
@@ -367,7 +379,7 @@ let unlist = (list, out) => {
     var success = true;
     list.forEach(item => {
         var unlistC = [];
-        if (!unlist(item.c, unlistC)){
+        if (!unlist(item.c, unlistC)) {
             success = false;
             return;
         }
@@ -469,6 +481,18 @@ const drawChart = (labels, data) => {
             myChart = new ScatterChartConfig(canvas);
             break;
         }
+        case 'bubble': {
+            data.forEach(item => {
+                var val = item.v;
+                if (val.length !== 3) {
+                    console.log('invalid data for', type);
+                    return;
+                }
+                values.push({ x: val[0], y: val[1], r: val[2] });
+            });
+            myChart = new BubbleChartConfig(canvas);
+            break;
+        }
         case 'sunburst': {
             values = [];
             unlist(data, values);
@@ -502,7 +526,7 @@ chartDiv.onresize = e => {
 window.onresize = e => {
     let height = window.innerHeight;
     let width = window.innerWidth;
-    let size = Math.min(height, width);
+    // let size = Math.min(height, width);
     chartDiv.style.width = width + 'px';
     chartDiv.style.height = height + 'px';
     // chartDiv.onresize(e);
