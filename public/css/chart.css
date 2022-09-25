@@ -108,6 +108,29 @@ body {
     padding: 3px 15px 2px 5px;
 }
 
+.btn-chart-type {
+    background-color: white;
+    color: #000000;
+    width: 100%;
+    max-width: 200px;
+    padding: 3px auto;
+    border-color: gray;
+}
+
+.btn-chart-type:hover {
+    background-color: #d862ff;
+}
+
+.btn-check:active+.btn-outline-success,
+.btn-check:checked+.btn-outline-success,
+.btn-outline-success.active,
+.btn-outline-success.dropdown-toggle.show,
+.btn-outline-success:active {
+    color: #ffffff;
+    background-color: #d862ff;
+    border-color: #d862ff;
+}
+
 .btn-submit:hover {
     color: #373737;
 }
@@ -144,9 +167,10 @@ body {
 }
 
 .gen-main-div {
-    margin: 70px auto;
-    margin-bottom: 20px;
-    width: 45%; 
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: 30px auto;
+    max-width: 700px; 
 }
 
 #dropDiv {

@@ -33,7 +33,7 @@
 
                 <div class="row">
 
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <!-- name -->
                         <div class="row title-saved">
                             <div class="col">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <!-- options -->
                         <div class="row title-saved">
                             <div class="text-end">
@@ -166,92 +166,70 @@
 
             <div class="gen-main-div">
                 <div class="col">
-                    <h2 class="text-saved">Generate chart</h2>
+                    <h3 class="text-saved">Generate a new chart</h3>
                 </div>
 
                 <div class="text-center">
-                    <h3>Select chart type:</h3>
+                    <h5>Select chart type:</h5>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="row">
-                                <div>
-                                    <div class="col-12">
-                                        <h4>Basic Chart</h4>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <h6>Basic chart types</h6>
                             </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                        <ul>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype"  value="bar" autocomplete="off" id="r1">
-                                                <label class="btn btn-outline-success w-75" for="r1">Bar Chart</label>
-                                        
-                                            </li>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype" id="r2" value="pie" autocomplete="off">
-                                                <label class="btn btn-outline-success w-75" for="r2">Pie Chart</label>
-                                        
-                                            </li>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype" id="r3" value="line" autocomplete="off">
-                                                <label class="btn btn-outline-success w-75" for="r3">Line Chart</label>
-                                        
-                                            </li>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype" id="r4" value="doughnut" autocomplete="off">
-                                                <label class="btn btn-outline-success w-75"  for="r4">Doughnut Chart</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype" id="r5"  value="polarArea" autocomplete="off">
-                                                <label class="btn btn-outline-success w-75"  for="r5">Polar Area</label>
-                                        
-                                            </li>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype" id="r6" value="scatter" autocomplete="off">
-                                                <label class="btn btn-outline-success w-75"  for="r6">Scatter</label>
-                                        
-                                            </li>
-                                            <li>
-                                                <input type="radio" class="btn-check" name="charttype" id="r7" value="bubble" autocomplete="off">
-                                                <label class="btn btn-outline-success w-75"  for="r7">Bubble</label>
-                                        
-                                            </li>
-                                        </ul>
-                                </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r1" value="bar"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r1">Bar Chart</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r2" value="pie"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r2">Pie Chart</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r3" value="line"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r3">Line Chart</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r4" value="doughnut"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r4">Doughnut Chart</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r5" value="polarArea"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r5">Polar Area</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r6" value="scatter"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r6">Scatter</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r7" value="bubble"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type"  for="r7">Bubble</label>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="row">
-                                <div>
-                                    <div class="col-12">
-                                        <h4>Advance Chart</h4>
-                                    </div>
-                                </div>
-
+                            <div class="mb-3">
+                                <h6>Advance chart types</h6>
                             </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <ul>
-                                        <li>
-                                            <input type="radio" class="btn-check" name="charttype" id="r9" value="sunburst" autocomplete="off">
-                                            <label class="btn btn-outline-success w-75"  for="r9">Sunburst</label>
-                                    
-                                        </li>
-                                        <li>
-                                            <input type="radio" class="btn-check" name="charttype" id="r10" value="treemap" autocomplete="off">
-                                            <label class="btn btn-outline-success w-75"  for="r10">Tree map</label>
-                                    
-                                        </li>
-                                        <li>
-                                            <input type="radio" class="btn-check" name="charttype" id="r11" value="icicle" autocomplete="off">
-                                            <label class="btn btn-outline-success w-75"  for="r11">Icicle</label>
-                                    
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r9" value="sunburst"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r9">Sunburst</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r10" value="treemap"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r10">Tree Map</label>
+                            </div>
+                            <div class="mb-1">
+                                <input type="radio" class="btn-check" name="charttype" id="r11" value="icicle"
+                                    autocomplete="off" hidden>
+                                <label class="btn btn-outline-success btn-chart-type" for="r11">Icicle</label>
                             </div>
                         </div>
                     </div>
