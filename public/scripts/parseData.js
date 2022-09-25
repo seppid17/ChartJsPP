@@ -8,40 +8,61 @@ function extractCSV(csv) {
             let data = line.split(/\s*,\s*/);
             if (data.length < 4) {
                 console.log('len invalid', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Invalid length). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
 
             let id = data[0].trim();
             if (!/^\d+$/.test(id)) {
                 console.log('id invalid', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Invalid id). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
             id = parseInt(id);
             if (id <= 0) {
                 console.log('id invalid', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Invalid id). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
 
             let parent = data[1].trim();
             if (!/^\d+$/.test(parent)) {
                 console.log('par invalid', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Invalid parent). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
             parent = parseInt(parent);
             if (parent >= id) {
                 console.log('parent > id', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Parent > id). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
 
             let name = data[2].trim();
             if (!/^[^\s]{1,32}$/.test(name)) {
                 console.log('name invalid', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Invalid name). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
 
             let vals = data.slice(3);
             if (vals.length < 1) {
                 console.log('no values', line);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (No values). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
             let values = new Array();
@@ -49,6 +70,9 @@ function extractCSV(csv) {
                 val = val.trim();
                 if (isNaN(val)) {
                     console.log('value invalid', line);
+                    dropSpan.className = 'drop-span error'
+                    dropSpan.innerText = 'Error in data (Invalid values). Please check and upload again'
+                    fileSelectedNoError = false;
                     return null;
                 }
                 let value = parseFloat(val);
@@ -57,6 +81,9 @@ function extractCSV(csv) {
 
             if (json[id] !== undefined) {
                 console.log('duplicate id', id);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Duplicate ids). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
 
@@ -76,6 +103,9 @@ function extractCSV(csv) {
             let parent = json[parentId];
             if (!parent) {
                 console.log('missing parent', data);
+                dropSpan.className = 'drop-span error'
+                dropSpan.innerText = 'Error in data (Missing parent). Please check and upload again'
+                fileSelectedNoError = false;
                 return null;
             }
             parent.c[id] = data;

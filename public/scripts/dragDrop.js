@@ -35,15 +35,20 @@ let dropSpan = document.getElementById('dropSpan');
     dropArea.addEventListener(eventName, preventDefaults, false);
 });
 
+let fileSelectedNoError = false;
+
 const extractFile = file => {
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onloadend = function () {
+        extractedData = null;
         let data = reader.result;
         let parsedData = parseCSV(data);
         if (parsedData) {
             extractedData = parsedData;
+            dropSpan.className = 'drop-span'
             dropSpan.innerText = 'File selected. You can draw chart or upload different file'
+            fileSelectedNoError = true;
         }
     }
 }
@@ -52,6 +57,9 @@ const handleFiles = files => {
     files = [...files];
     if (files.length != 1) {
         console.log("Put only one file");
+        dropSpan.className = 'drop-span error'
+        dropSpan.innerText = 'Multiple files were selected. Please select only one file';
+        fileSelectedNoError = false;
         return;
     }
     extractFile(files[0]);
@@ -63,6 +71,7 @@ function handleDrop(e) {
 
     handleFiles(files);
 }
+
 dropArea.addEventListener('drop', handleDrop, false);
 
 let selectChartType = document.getElementById('selectChartType');
@@ -76,15 +85,21 @@ document.getElementById('drawBtn').onclick = e => {
         }
     }
     if (found) {
-        chartViewDiv.style.display = 'block';
-        let labels = getLabels();
-        let values = getValues();
-        if (labels == null || values == null) return;
-        cb(labels, values);
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        if (fileSelectedNoError) {
+            chartViewDiv.style.display = 'block';
+            let labels = getLabels();
+            let values = getValues();
+            if (labels == null || values == null) return;
+            cb(labels, values);
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        } else {
+            dropSpan.className = 'drop-span error'
+            dropSpan.innerText = 'No file selected. Please upload a file first'
+        }
     } else {
         selectChartType.className = 'chart-type error';
         selectChartType.querySelector('small').innerText = "You didn't have selected a chart type. Please select one first";
+        document.getElementById('uploadViewDiv').scrollIntoView();
     }
 }
 
