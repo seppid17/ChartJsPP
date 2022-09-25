@@ -279,7 +279,11 @@ body {
     max-width: 100%;
     max-height: 80vh;
 }
-
 .a {
     text-decoration: none;
+}
+.edit-sty{
+    border-color:#d862ff;
+    border-style: solid;
+    padding-left: 4px;
 }

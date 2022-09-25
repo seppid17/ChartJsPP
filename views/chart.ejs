@@ -75,16 +75,16 @@
 
                 <div class="row">
 
-                    <div class="col-md-9">
+                    <div class="col-md-10 d-flex justify-content-center">
                         <!-- chart -->
                         <div class="chart-sty" id="chartDiv">
                             <canvas id="myChart"></canvas>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2" >
                         <!-- prop -->
-                        <div class="prop-div" style="display:block;" id="EditChartOption">
+                        <div class="prop-div edit-sty" style="display:block;" id="EditChartOption">
 
                             <div class="row">
                                 <!-- close button -->
@@ -140,13 +140,21 @@
                             </div>
 
                             <div class="row">
-                                <div class="col">
-                                    <div class="col">
+                                <!-- <div class="col"> -->
+                                    <div class="col d-flex justify-content-center">
                                         <div class="form-control form-outline form-input">
-                                            <label class="form-label" for="textName">Select colour</label>
+                                            <label for="ColorInput" class="form-label">Select color</label>
+                                            <div class="row">
+                                                <div class="input-group">
+                                                    <input type="color" class="form-control form-control-color text-input" id="ColorInput" value="#563d7c" title="Choose your color">
+                                                    <a>
+                                                        <i class="fa-solid fa-circle-check fa-2x"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                <!-- </div> -->
                             </div>
                         </div>
                     </div>
