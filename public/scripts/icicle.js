@@ -1,4 +1,4 @@
-class SunburstController extends Chart.PieController {
+class IcicleController extends Chart.PieController {
     _processedData = [];
     _uninitialized = true;
 
@@ -8,21 +8,12 @@ class SunburstController extends Chart.PieController {
         this.draw();
     }
 
-    _polarToRect(x0, y0, r, theta) {
-        return [x0 + r * Math.cos(theta), y0 + r * Math.sin(theta)];
-    }
-
-    _drawSector(ctx, x0, y0, r1, r2, theta1, theta2, color = 'black') {
+    _drawRect(ctx, x0, y0, width, height, color = 'black') {
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.fillStyle = color;
-        var p1 = this._polarToRect(x0, y0, r1, theta1);
-        ctx.moveTo(...p1);
-        ctx.arc(x0, y0, r2, theta1, theta2);
-        var p2 = this._polarToRect(x0, y0, r1, theta2);
-        ctx.lineTo(...p2);
-        ctx.arc(x0, y0, r1, theta2, theta1, true);
+        ctx.rect(x0, y0, width, height);
         ctx.fill();
         ctx.restore();
     }
@@ -46,45 +37,42 @@ class SunburstController extends Chart.PieController {
         return [newList, maxDepth + 1];
     }
 
-    _drawSubChart(ctx, data, x0, y0, start, end, r0, r, remaining) {
+    _drawSubChart(ctx, data, x0, y0, unitWidth, totHeight, remaining) {
         if (remaining <= 0) return;
-        var r2 = r0 + r;
-        var ang = end - start;
         var bgcols = this.$context.dataset.backgroundColor;
         data.forEach(item => {
             var weight = item.w;
-            var nextAng = start + ang * weight;
+            var height = totHeight * weight;
+            var y1 = y0 + height;
             var i = this._processedData.length + 1;
             var color = `rgba(${(167 * i) % 256},${(71 * i) % 256},${(203 * i) % 256},1)`;
             if (this._uninitialized) bgcols.push(color);
-            this._processedData.push({ v: item.v, r1: r0, r2: r2, th1: start, th2: nextAng });
-            this._drawSector(ctx, x0, y0, r0, r2, start, nextAng, color);
-            this._drawSubChart(ctx, item.c, x0, y0, start, nextAng, r2, r, remaining - 1);
-            start = nextAng;
+            this._processedData.push({ v: item.v, x: x0, y: y0, w:unitWidth, h:height });
+            this._drawRect(ctx, x0, y0, unitWidth, height, color);
+            this._drawSubChart(ctx, item.c, x0+unitWidth, y0, unitWidth, height, remaining - 1);
+            y0 = y1;
         });
     }
 
     draw() {
         var ctx = this.chart.ctx;
         var canvas = ctx.canvas;
-        var x0 = canvas.width / 2;
-        var y0 = canvas.height / 2;
-
+        
         if (this._processedData.length == 0) {
             var data = this._data;
             var [tree, maxDepth] = this._recurseTree(data);
-            maxDepth = Math.min(maxDepth, 4);
+            maxDepth = Math.min(maxDepth, 5);
 
             var hw = Math.min(canvas.width, canvas.height);
-            var r = hw / (2 * maxDepth + 1);
+            var unitWidth = canvas.width / maxDepth;
 
-            this._drawSubChart(ctx, tree, x0, y0, 0, 2 * Math.PI, r / 2, r, maxDepth);
+            this._drawSubChart(ctx, tree, 0, 0, unitWidth, canvas.height, maxDepth);
             this._uninitialized = false;
             this.chart.getActiveElements = this.getActiveElements;
         } else {
             var bgcols = this.$context.dataset.backgroundColor;
             this._processedData.forEach((item, index) => {
-                this._drawSector(ctx, x0, y0, item.r1, item.r2, item.th1, item.th2, bgcols[index]);
+                this._drawRect(ctx, item.x, item.y, item.w, item.h, bgcols[index]);
             });
         }
     }
@@ -92,20 +80,12 @@ class SunburstController extends Chart.PieController {
     getActiveElements = (evt) => {
         var ctx = this.chart.ctx;
         var canvas = ctx.canvas;
-        var x0 = canvas.width / 2;
-        var y0 = canvas.height / 2;
-
         var rect = canvas.getBoundingClientRect();
         var x = evt.clientX - rect.left;
         var y = evt.clientY - rect.top
-        var r = Math.sqrt((x - x0) * (x - x0) + (y - y0) * (y - y0));
-        var theta = Math.atan2((y - y0), (x - x0));
-        if (theta < 0) {
-            theta += 2 * Math.PI;
-        }
         var points = []
         this._processedData.every((item, index) => {
-            if (item.r1 < r && r < item.r2 && item.th1 < theta && theta < item.th2) {
+            if (item.x < x && x < item.x+item.w && item.y < y && y < item.y+item.h) {
                 points.push({ index: index });
                 return false;
             }
@@ -115,6 +95,6 @@ class SunburstController extends Chart.PieController {
     }
 }
 
-SunburstController.id = 'sunburst';
-SunburstController.defaults = Chart.PieController.defaults;
-Chart.register(SunburstController);
+IcicleController.id = 'icicle';
+IcicleController.defaults = Chart.PieController.defaults;
+Chart.register(IcicleController);

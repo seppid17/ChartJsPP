@@ -253,6 +253,27 @@ class SunburstChartConfig extends HierarchicalChartConfig {
     }
 }
 
+class IcicleChartConfig extends HierarchicalChartConfig {
+    constructor(canvas) {
+        super(canvas, 'icicle');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        });
+    }
+}
+
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 const chartBtn = document.getElementById('drawBtn');
@@ -342,6 +363,25 @@ const drawChart = (labels, data) => {
 // const data = [5, 9, 2, 3, 7];
 */
 
+let unlist = (list, out) => {
+    var success = true;
+    list.forEach(item => {
+        var unlistC = [];
+        if (!unlist(item.c, unlistC)){
+            success = false;
+            return;
+        }
+        if (item.v.length !== 1) {
+            success = false;
+            console.log('invalid list', item);
+            return;
+        }
+        unlistItem = { v: item.v[0], c: unlistC };
+        out.push(unlistItem);
+    });
+    return success;
+}
+
 let types = document.getElementsByName('charttype');
 const drawChart = (labels, data) => {
     if (!(data instanceof Array) || data.length <= 0) {
@@ -430,27 +470,16 @@ const drawChart = (labels, data) => {
             break;
         }
         case 'sunburst': {
-            let unlist = (list, out) => {
-                var success = true;
-                list.forEach(item => {
-                    var unlistC = [];
-                    if (!unlist(item.c, unlistC)){
-                        success = false;
-                        return;
-                    }
-                    if (item.v.length !== 1) {
-                        success = false;
-                        console.log('invalid list', item);
-                        return;
-                    }
-                    unlistItem = { v: item.v[0], c: unlistC };
-                    out.push(unlistItem);
-                });
-                return success;
-            }
             values = [];
             unlist(data, values);
             myChart = new SunburstChartConfig(canvas);
+            break;
+        }
+
+        case 'icicle': {
+            values = [];
+            unlist(data, values);
+            myChart = new IcicleChartConfig(canvas);
             break;
         }
         default:
@@ -474,9 +503,9 @@ window.onresize = e => {
     let height = window.innerHeight;
     let width = window.innerWidth;
     let size = Math.min(height, width);
-    chartDiv.style.width = size + 'px';
-    chartDiv.style.height = size + 'px';
-    chartDiv.onresize(e);
+    chartDiv.style.width = width + 'px';
+    chartDiv.style.height = height + 'px';
+    // chartDiv.onresize(e);
 };
 
 document.getElementById('downloadImgBtn').onclick = e => {
