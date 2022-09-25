@@ -305,13 +305,6 @@ window.onload = () => {
 
 Chart.defaults.font.size = 18;
 const chartName = 'Dataset_1'
-/*const colors = [
-    'rgba(255, 99, 132, 1)',
-    'rgba(255, 159, 64, 1)',
-    'rgba(255, 205, 86, 1)',
-    'rgba(75, 192, 192, 1)',
-    'rgba(201, 203, 207, 1)'
-];*/
 
 Chart.register({
     id: "legendColorUpdate",
@@ -323,57 +316,6 @@ Chart.register({
         });
     }
 });
-
-/*let myChart = null;
-const drawChart = (labels, data) => {
-    var types = document.getElementsByName('charttype');
-    let type = 'bar';
-    for (i = 0; i < types.length; i++) {
-        if (types[i].checked) {
-            type = types[i].value;
-        }
-    }
-    const dataConf = {
-        labels: labels,
-        datasets: [{
-            label: chartName,
-            data: data,
-            backgroundColor: colors,
-            borderColor: colors,
-            borderWidth: 1
-        }]
-    };
-
-    const config = {
-        type: type,
-        data: dataConf,
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                },
-                x: {
-                    ticks: {
-                        font: { size: 20 }
-                    }
-                }
-            }
-        },
-    };
-
-    if (myChart != null) {
-        myChart.destroy();
-    }
-    myChart = new Chart(canvas, config);
-}
-// const labels = ['A', 'B', 'C', 'D', 'E'];
-// const data = [5, 9, 2, 3, 7];
-*/
 
 let unlist = (list, out) => {
     var success = true;
