@@ -47,7 +47,7 @@ const extractFile = file => {
         if (parsedData) {
             extractedData = parsedData;
             dropSpan.className = 'drop-span'
-            dropSpan.innerText = 'File selected. You can draw chart or upload different file'
+            dropSpan.innerText = 'File selected (' + file.name + '). You can draw chart or upload different file'
             fileSelectedNoError = true;
         }
     }
