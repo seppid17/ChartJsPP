@@ -14,7 +14,7 @@ class ChartConfig {
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const firstPoint = points[points.length - 1];
-                colors[firstPoint.index] = '#f00';
+                colors[firstPoint.index] = color;
                 myChart.update();
             }
         };
@@ -491,6 +491,12 @@ document.getElementById('CloseEdit').onclick = e => {
 
 document.getElementById('DisplayEdit').onclick = e => {
     document.getElementById('EditChartOption').style.display = 'block';
+}
+
+const colorPicker = document.getElementById('ColorInput');
+let color = ColorInput.value;
+colorPicker.onchange = e =>{
+    color = ColorInput.value;
 }
 
 setCallback(drawChart);
