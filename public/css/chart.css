@@ -1,26 +1,30 @@
 body {
-    background-color: #F9FCFF;
+    background-color: #ffffff;
 }
+
 .con-pad{
     padding: 20px;
     padding-top: 0px;
 
 }
+
 .title-saved {
     margin-top: 20px;
     margin-bottom: 10px;
 }
+
 .cus-select{
     width: fit-content;
-    /* padding: 3px 15px 3px 15px; */
-    border-radius: 4px;
+    padding: 3px 5px 3px 5px;
+    border-radius: 5px;
     border: 1px solid gray;
-    color: #eae6e6;
+    color: #000000;
     height: 30px;
-    background-color: #6b6b6c;
+    background-color: #ffffff;
+    text-align: center;
 }
 .cus-select option{
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .btn {
@@ -29,26 +33,48 @@ body {
     border-radius: 20px;
     border: 1px solid gray;
 }
-.btn-icon1 {
-    border-radius: 6px;
-    background-color: #6b6b6c;
+
+.fa-pen-to-square,
+.fa-floppy-disk,
+.fa-trash-can,
+.fa-download,
+.fa-share-nodes,
+.fa-circle-check {
+    color: #d862ff;
 }
-.btn-icon-hov1{
-    color: white;
+
+.fa-pen-to-square:hover,
+.fa-floppy-disk:hover,
+.fa-trash-can:hover,
+.fa-download:hover,
+.fa-share-nodes:hover,
+.fa-circle-check:hover {
+    color: #20012a;
 }
-.btn-icon-hov1:hover {
-    color: #060505;
+
+.fa-x {
+    color: red;
+}
+
+.fa-italic,
+.fa-underline,
+.fa-bold {
+    color: black;
 }
 
 .btn-icon {
-    border-radius: 6px;
-    background-color: #d862ff;
+    padding: 1px 2px 1px 2px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin-left: 0;
+    margin-top: 0;
+    margin-right: 5px;
 }
-.btn-icon-hov{
-    color: white;
-}
-.btn-icon-hov:hover {
-    color: #373737;
+
+.btn-icon-selected {
+    background-color: #a7aaa7;
 }
 
 .btn-signup {
@@ -78,6 +104,10 @@ body {
     box-shadow: 8px 8px 15px #a7aaa7;
 }
 
+.btn-cn {
+    padding: 3px 15px 2px 5px;
+}
+
 .btn-submit:hover {
     color: #373737;
 }
@@ -99,6 +129,10 @@ body {
     color: #ffffff;
 }
 
+.text-input {
+    max-width: 80%;
+}
+
 .wrapper {
     max-width: 100%;
     min-height: 550px;
@@ -107,6 +141,30 @@ body {
     padding-bottom: 45px;
     background-color: #ffffff;
     box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+.gen-main-div {
+    margin: 70px auto;
+    margin-bottom: 20px;
+    width: 45%; 
+}
+
+#dropDiv {
+    border: 2px dashed rgb(92, 92, 92);
+    border-radius: 20px;
+    width: 100%;
+    font-family: sans-serif;
+    margin: 30px auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: #f7f7f7;
+}
+
+.fa-folder-open {
+    margin-bottom: 0;
+    width: 100%;
 }
 
 .name {
@@ -141,6 +199,19 @@ body {
 
 .login-wrapper {
     min-width: 55%;
+}
+
+.wrapper-chart {
+    margin: 0px 20px;
+}
+
+.prop-div {
+    width: 100%;
+    height: 100%;
+}
+
+#dropDiv.highlight {
+    border-color: purple;
 }
 
 .form-control {
@@ -182,6 +253,7 @@ body {
 .form-control.error small {
 	visibility: visible;
 }
+
 .fa-user-gear {
     color: gray;
 }
@@ -189,17 +261,25 @@ body {
 .fa-user-gear:hover {
     color: #373737;
 }
+
 .fa-circle-plus {
     color: white;
 }
+
 .fa-circle-plus:hover {
     color: #373737;
 }
+
 .table-bord{
     border-color: #373737;
     padding: 0px;
 }
+
 .chart-sty{
-    
+    max-width: 100%;
     max-height: 80vh;
+}
+
+.a {
+    text-decoration: none;
 }

@@ -1,4 +1,4 @@
-let json = null;
+let extractedData = null;
 let cb = (labels, values) => { };
 
 const setCallback = callback => {
@@ -6,19 +6,19 @@ const setCallback = callback => {
 }
 
 function getLabels() {
-    if (json == null) return null;
+    if (extractedData == null) return null;
     let labels = [];
-    Object.keys(json).forEach(id => {
-        labels.push(json[id].n);
+    extractedData.forEach(item => {
+        labels.push(item.n);
     });
     return labels;
 }
 
 function getValues() {
-    if (json == null) return null;
+    if (extractedData == null) return null;
     let values = [];
-    Object.keys(json).forEach(id => {
-        values.push(json[id].v);
+    extractedData.forEach(item => {
+        values.push({ v: item.v, c: item.c });
     });
     return values;
 }
@@ -29,22 +29,21 @@ function preventDefaults(e) {
 }
 
 let dropArea = document.getElementById('dropDiv');
+let dropSpan = document.getElementById('dropSpan');
 
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false);
 });
 
-const previewFile = file => {
+const extractFile = file => {
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onloadend = function () {
         let data = reader.result;
-        let jsonData = csv2json(data);
-        if (jsonData) {
-            json = jsonData;
-            let labels = getLabels();
-            let values = getValues();
-            cb(labels, values);
+        let parsedData = parseCSV(data);
+        if (parsedData) {
+            extractedData = parsedData;
+            dropSpan.innerText = 'File selected. You can draw chart or upload different file'
         }
     }
 }
@@ -55,7 +54,7 @@ const handleFiles = files => {
         console.log("Put only one file");
         return;
     }
-    previewFile(files[0]);
+    extractFile(files[0]);
 }
 
 function handleDrop(e) {
@@ -65,3 +64,24 @@ function handleDrop(e) {
     handleFiles(files);
 }
 dropArea.addEventListener('drop', handleDrop, false);
+
+document.getElementById('drawBtn').onclick = e => {
+    chartViewDiv.style.display = 'block';
+    let labels = getLabels();
+    let values = getValues();
+    if (labels == null || values == null) return;
+    cb(labels, values);
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+}
+
+document.getElementById('selectFileBtn').onclick = e => {
+    var input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = e => {
+        var file = e.target.files[0];
+        extractFile(file);
+    }
+
+    input.click();
+}
