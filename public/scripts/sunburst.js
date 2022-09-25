@@ -64,18 +64,25 @@ class SunburstController extends Chart.PieController {
         });
     }
 
-    draw() {
+    _getCenter(){
         var ctx = this.chart.ctx;
         var canvas = ctx.canvas;
-        var x0 = canvas.width / 2;
-        var y0 = canvas.height / 2;
+        var x0 = parseFloat(canvas.style.width)/2;
+        var y0 = parseFloat(canvas.style.height)/2;
+        return [x0,y0];
+    }
+
+    draw() {
+        var ctx = this.chart.ctx;
+        var x0,y0;
+        [x0,y0] = this._getCenter();
 
         if (this._processedData.length == 0) {
             var data = this._data;
             var [tree, maxDepth] = this._recurseTree(data);
             maxDepth = Math.min(maxDepth, 4);
 
-            var hw = Math.min(canvas.width, canvas.height);
+            var hw = Math.min(x0,y0)*2;
             var r = hw / (2 * maxDepth + 1);
 
             this._drawSubChart(ctx, tree, x0, y0, 0, 2 * Math.PI, r / 2, r, maxDepth);
@@ -92,8 +99,9 @@ class SunburstController extends Chart.PieController {
     getActiveElements = (evt) => {
         var ctx = this.chart.ctx;
         var canvas = ctx.canvas;
-        var x0 = canvas.width / 2;
-        var y0 = canvas.height / 2;
+        var x0,y0;
+        [x0,y0] = this._getCenter();
+        console.log(x0*2,y0*2);
 
         var rect = canvas.getBoundingClientRect();
         var x = evt.clientX - rect.left;

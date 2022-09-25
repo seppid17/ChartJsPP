@@ -109,6 +109,11 @@ class BarChartConfig extends BasicChartConfig {
                         font: { size: 20 }
                     }
                 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
             }
         });
     }
@@ -144,6 +149,11 @@ class LineChartConfig extends BasicChartConfig {
                     ticks: {
                         font: { size: 20 }
                     }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
         });
@@ -190,6 +200,11 @@ class ScatterChartConfig extends BasicChartConfig {
                     type: 'linear',
                     position: 'bottom'
                 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
             }
         });
     }
@@ -203,6 +218,11 @@ class BubbleChartConfig extends BasicChartConfig {
             responsive: true,
             layout: {
                 autoPadding: false
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
             }
         });
     }
