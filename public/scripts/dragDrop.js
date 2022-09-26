@@ -95,3 +95,9 @@ document.getElementById('selectFileBtn').onclick = e => {
 
     input.click();
 }
+
+function setErrorMsg(msg) {
+    dropSpan.className = 'drop-span error';
+    dropSpan.innerText = msg;
+    fileSelectedNoError = false;
+}
