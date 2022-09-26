@@ -22,6 +22,7 @@ body {
     height: 30px;
     background-color: #ffffff;
     text-align: center;
+    margin-top: 5px;
 }
 
 .cus-select option {
@@ -40,7 +41,8 @@ body {
 .fa-trash-can,
 .fa-download,
 .fa-share-nodes,
-.fa-circle-check {
+.fa-circle-check,
+.fa-check-circle {
     color: #d862ff;
 }
 
@@ -49,7 +51,8 @@ body {
 .fa-trash-can:hover,
 .fa-download:hover,
 .fa-share-nodes:hover,
-.fa-circle-check:hover {
+.fa-circle-check:hover,
+.fa-check-circle:hover {
     color: #20012a;
 }
 
@@ -156,6 +159,12 @@ body {
 
 .text-input {
     max-width: 80%;
+}
+
+.save-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .wrapper {
@@ -286,6 +295,27 @@ body {
     width: 100%;
 }
 
+.name-text-input {
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    font-size: 14px;
+    width: 85%;
+    padding: 5px;
+}
+
+.color-input {
+    padding: 3px;
+    height: 30px;
+    width: 30px;
+}
+
+.input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+.input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+    border-radius: 5px;
+    border-color: gray;
+}
+
 .form-control.error input {
     border-color: #e74c3c;
 }
@@ -336,4 +366,73 @@ body {
     border-color: #d862ff;
     border-style: solid;
     padding-left: 4px;
+}
+
+.form-label {
+    color: #000000;
+}
+
+/* Popup container - can be anything you want */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+    visibility: hidden;
+    background-color: #ffffff;
+    color: #fff;
+    padding: 10px 10px 20px 10px;
+    position: absolute;
+    z-index: 1;
+    top: 75%;
+    left: auto;
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #ffffff transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

@@ -6,6 +6,8 @@ class ChartConfig {
         this.config.type = type;
         this.name = '';
         canvas.onclick = evt => {
+            let popup = document.getElementById("myPopup");
+            popup.classList.remove("show");
             let myChart = ChartConfig.canvasChartMap[this.canvas];
             if (!myChart) {
                 return;
@@ -13,6 +15,8 @@ class ChartConfig {
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
+
+                popup.classList.toggle("show");
                 //set the current olor to colorPicker
                 const firstPoint = points[points.length - 1];
                 let crntColor = null;
@@ -518,7 +522,9 @@ document.getElementById('downloadImgBtn').onclick = e => {
 };
 
 document.getElementById('CloseEdit').onclick = e => {
-    document.getElementById('EditChartOption').style.display = 'none';
+    // document.getElementById('EditChartOption').style.display = 'none';
+    let popup = document.getElementById("myPopup");
+    popup.classList.remove("show");
 }
 
 document.getElementById('DisplayEdit').onclick = e => {
