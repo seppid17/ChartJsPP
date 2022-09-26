@@ -13,6 +13,13 @@ body {
     margin-bottom: 10px;
 }
 
+.prop-btns {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-right: 0;
+    padding-left: 0;
+}
+
 .cus-select {
     width: fit-content;
     padding: 3px 5px 3px 5px;
@@ -36,28 +43,48 @@ body {
     border: 1px solid gray;
 }
 
-.fa-pen-to-square,
 .fa-floppy-disk,
 .fa-trash-can,
 .fa-download,
 .fa-share-nodes,
 .fa-circle-check,
-.fa-check-circle {
+.fa-check-circle,
+.fa-edit {
     color: #d862ff;
 }
 
-.fa-pen-to-square:hover,
 .fa-floppy-disk:hover,
 .fa-trash-can:hover,
 .fa-download:hover,
 .fa-share-nodes:hover,
 .fa-circle-check:hover,
-.fa-check-circle:hover {
+.fa-check-circle:hover
+.fa-edit:hover {
     color: #20012a;
+}
+
+.fa-times-circle {
+    color: red;
+}
+
+.fa-times-circle:hover {
+    color: rgb(65, 1, 1);
+}
+
+.fa-check-circle {
+    color: rgb(30, 218, 30);
+}
+
+.fa-check-circle:hover {
+    color: rgb(0, 52, 0);
 }
 
 .fa-x {
     color: red;
+}
+
+.icon-hidden {
+    visibility: hidden;
 }
 
 .fa-italic,
@@ -111,6 +138,8 @@ body {
 
 .btn-cn {
     padding: 3px 15px 2px 5px;
+    width: fit-content;
+    align-items: flex-end;
 }
 
 .btn-chart-type {
@@ -201,6 +230,18 @@ body {
 .name {
     padding: 2px 2px 2px 0;
     color: #000000;
+}
+
+.text-saved {
+    font-weight: bold;
+}
+
+.name-input {
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    font-size: 14px;
+    padding: 5px;
 }
 
 .pill {
@@ -302,6 +343,13 @@ body {
     font-size: 14px;
     width: 85%;
     padding: 5px;
+}
+
+.chart-name-input {
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    width: fit-content;
 }
 
 .color-input {

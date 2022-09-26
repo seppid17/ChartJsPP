@@ -527,9 +527,27 @@ document.getElementById('CloseEdit').onclick = e => {
     popup.classList.remove("show");
 }
 
-document.getElementById('DisplayEdit').onclick = e => {
-    document.getElementById('EditChartOption').style.display = 'block';
-}
+let nameView = document.getElementById('nameView')
+let nameEdit = document.getElementById('nameEdit')
+
+document.getElementById('editName').onclick = e => {
+    console.log(document.getElementById('chartNameView').innerText);
+    nameView.style.display = 'none';
+    nameEdit.style.display = 'block';
+    let name = document.getElementById('chartNameView').innerText
+    document.getElementById('nameInput').value = name;
+    document.getElementById('saveName').onclick = e => {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+        name = document.getElementById('nameInput').value
+        document.getElementById('chartNameView').innerText = name
+    };
+    document.getElementById('cancellEditName').onclick = e => {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+    };
+};
+
 
 const colorPicker = document.getElementById('ColorInput');
 let color = ColorInput.value;
@@ -544,12 +562,5 @@ function rgb2hex(rgb) {
         ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
 }
-
-// document.getElementById('downbtn').onclick = e => {
-//     e.preventDefault();
-//     e.stopImmediatePropagation(); // prevents document.onclick()
-//     var popup = document.getElementById("myPopup");
-//     popup.classList.toggle("show");
-// };
 
 setCallback(drawChart);
