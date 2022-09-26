@@ -6,6 +6,8 @@ class ChartConfig {
         this.config.type = type;
         this.name = '';
         canvas.onclick = evt => {
+            let popup = document.getElementById("myPopup");
+            popup.classList.remove("show");
             let myChart = ChartConfig.canvasChartMap[this.canvas];
             if (!myChart) {
                 return;
@@ -13,9 +15,23 @@ class ChartConfig {
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
+
+                popup.classList.toggle("show");
+                //set the current olor to colorPicker
                 const firstPoint = points[points.length - 1];
-                colors[firstPoint.index] = color;
-                myChart.update();
+                let crntColor = null;
+                console.log(colors[firstPoint.index]);
+                if (/^#[0-9A-F]{6}$/i.test(colors[firstPoint.index])) {
+                    crntColor = colors[firstPoint.index];
+                } else {
+                    crntColor = rgb2hex(colors[firstPoint.index]);
+                }
+                colorPicker.value = crntColor;
+                console.log(crntColor);
+                colorPicker.onchange = e => {
+                    colors[firstPoint.index] = ColorInput.value;
+                    myChart.update();
+                }
             }
         };
     }
@@ -79,9 +95,9 @@ class BasicChartConfig extends ChartConfig {
         if (this.config && this.config.data.datasets.length > 0) {
             var clr = [];
             data.forEach((d, i) => {
-                var r = ((i + ~~d) * 93) % 256;
-                var g = (i * ((2 * i) - ~~d) * 3) % 256;
-                var b = (384 - r - g) % 256;
+                var r = Math.abs(((i + ~~d) * 93) % 256);
+                var g = Math.abs((i * ((2 * i) - ~~d) * 3) % 256);
+                var b = Math.abs((384 - r - g) % 256);
                 clr.push(`rgba(${r}, ${g}, ${b}, 1)`);
             });
             this.config.data.datasets[0].backgroundColor = clr;
@@ -529,17 +545,45 @@ document.getElementById('downloadImgBtn').onclick = e => {
 };
 
 document.getElementById('CloseEdit').onclick = e => {
-    document.getElementById('EditChartOption').style.display = 'none';
+    // document.getElementById('EditChartOption').style.display = 'none';
+    let popup = document.getElementById("myPopup");
+    popup.classList.remove("show");
 }
 
-document.getElementById('DisplayEdit').onclick = e => {
-    document.getElementById('EditChartOption').style.display = 'block';
-}
+let nameView = document.getElementById('nameView')
+let nameEdit = document.getElementById('nameEdit')
+
+document.getElementById('editName').onclick = e => {
+    console.log(document.getElementById('chartNameView').innerText);
+    nameView.style.display = 'none';
+    nameEdit.style.display = 'block';
+    let name = document.getElementById('chartNameView').innerText
+    document.getElementById('nameInput').value = name;
+    document.getElementById('saveName').onclick = e => {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+        name = document.getElementById('nameInput').value
+        document.getElementById('chartNameView').innerText = name
+    };
+    document.getElementById('cancellEditName').onclick = e => {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+    };
+};
+
 
 const colorPicker = document.getElementById('ColorInput');
 let color = ColorInput.value;
 colorPicker.onchange = e => {
     color = ColorInput.value;
+}
+
+function rgb2hex(rgb) {
+    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+    return (rgb && rgb.length === 4) ? "#" +
+        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
 }
 
 setCallback(drawChart);

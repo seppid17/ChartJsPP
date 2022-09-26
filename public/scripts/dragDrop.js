@@ -86,6 +86,7 @@ document.getElementById('drawBtn').onclick = e => {
 document.getElementById('selectFileBtn').onclick = e => {
     var input = document.createElement('input');
     input.type = 'file';
+    input.accept = '.csv';
 
     input.onchange = e => {
         var file = e.target.files[0];

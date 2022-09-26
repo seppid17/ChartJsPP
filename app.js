@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
-    cookie: { maxAge: 3600000 },
+    cookie: { maxAge: 5000 },
     resave: true
 }));
 app.use(express.urlencoded({ extended: false }));
