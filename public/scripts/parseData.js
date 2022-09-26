@@ -148,3 +148,4 @@ function parseCSV(csv) {
         return null;
     }
 }
+module.exports = {parseCSV};
