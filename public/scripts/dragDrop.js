@@ -57,7 +57,7 @@ function handleDrop(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 let selectChartType = document.getElementById('selectChartType');
-
+let alertDiv = document.getElementById('alertPop');
 document.getElementById('drawBtn').onclick = e => {
     selectChartType.className = 'chart-type';
     let found = false;
@@ -69,15 +69,18 @@ document.getElementById('drawBtn').onclick = e => {
     if (found) {
         if (fileSelectedNoError) {
             chartViewDiv.style.display = 'block';
+            alertDiv.style.display = 'none';
             if (extractedData==null || extractedData.length==0) return;
             cb(extractedData);
             document.body.scrollTop = document.documentElement.scrollTop = 0;
         } else {
+            alertDiv.style.display = 'none';
             dropSpan.className = 'drop-span error'
             dropSpan.innerText = 'No file selected. Please upload a file first'
         }
     } else {
         selectChartType.className = 'chart-type error';
+        alertDiv.style.display='block';
         selectChartType.querySelector('small').innerText = "You didn't have selected a chart type. Please select one first";
         document.getElementById('uploadViewDiv').scrollIntoView();
     }
@@ -100,4 +103,7 @@ function setErrorMsg(msg) {
     dropSpan.className = 'drop-span error';
     dropSpan.innerText = msg;
     fileSelectedNoError = false;
+}
+document.getElementById("closeAlert").onclick= e =>{
+    alertDiv.style.display='none';
 }
