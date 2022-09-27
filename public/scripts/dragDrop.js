@@ -5,24 +5,6 @@ const setCallback = callback => {
     cb = callback;
 }
 
-function getLabels() {
-    if (extractedData == null) return null;
-    let labels = [];
-    extractedData.forEach(item => {
-        labels.push(item.n);
-    });
-    return labels;
-}
-
-function getValues() {
-    if (extractedData == null) return null;
-    let values = [];
-    extractedData.forEach(item => {
-        values.push({ v: item.v, c: item.c });
-    });
-    return values;
-}
-
 function preventDefaults(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -87,10 +69,8 @@ document.getElementById('drawBtn').onclick = e => {
     if (found) {
         if (fileSelectedNoError) {
             chartViewDiv.style.display = 'block';
-            let labels = getLabels();
-            let values = getValues();
-            if (labels == null || values == null) return;
-            cb(labels, values);
+            if (extractedData==null || extractedData.length==0) return;
+            cb(extractedData);
             document.body.scrollTop = document.documentElement.scrollTop = 0;
         } else {
             dropSpan.className = 'drop-span error'
@@ -106,6 +86,7 @@ document.getElementById('drawBtn').onclick = e => {
 document.getElementById('selectFileBtn').onclick = e => {
     var input = document.createElement('input');
     input.type = 'file';
+    input.accept = '.csv';
 
     input.onchange = e => {
         var file = e.target.files[0];
@@ -113,4 +94,10 @@ document.getElementById('selectFileBtn').onclick = e => {
     }
 
     input.click();
+}
+
+function setErrorMsg(msg) {
+    dropSpan.className = 'drop-span error';
+    dropSpan.innerText = msg;
+    fileSelectedNoError = false;
 }
