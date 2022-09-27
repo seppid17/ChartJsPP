@@ -1,8 +1,5 @@
 class TreemapController extends HierarchicalController {
     _drawRect(ctx, x0, y0, width, height, backgroundColor = 'black', text = null) {
-        // if (backgroundColor=='black'){
-        //     throw new Error("Color error");
-        // }
         var textOptions = this.textOptions;
         var rect = new RectangleElement({
             x: x0,
@@ -27,6 +24,7 @@ class TreemapController extends HierarchicalController {
         this.getMeta().data[this._drawIndex] = rect;
         this._drawIndex += 1;
         rect.draw(ctx);
+        return rect;
     }
 
     _recurseTree(ctx, data, startX, startY, endX, endY) {
@@ -36,7 +34,7 @@ class TreemapController extends HierarchicalController {
         });
         var width = endX - startX;
         var height = endY - startY;
-        if (width < this.textOptions.font.size / 3 || height < this.textOptions.font.size / 3) return;
+        // if (width < this.textOptions.font.size / 3 || height < this.textOptions.font.size / 3) return;
         var bgcols = this.chart.$context.chart.data.datasets[0].backgroundColor;
         var labels = this.chart.$context.chart.data.labels;
         var chartData = this.getMeta()._parsed;//this.chart.$context.chart.data.datasets[0].data;
@@ -53,18 +51,21 @@ class TreemapController extends HierarchicalController {
                     color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
                     bgcols[this._drawIndex] = color;
                 }
-                this._drawRect(ctx, x0, startY, myWidth, height, color, labels[this._drawIndex]);
+                var rect = this._drawRect(ctx, x0, startY, myWidth, height, color, labels[this._drawIndex]);
                 var childStartX, childStartY, childEndX, childEndY;
                 if (myWidth > height) {
-                    childStartX = x0 + 4 * this.textOptions.font.size / 3;
-                    childStartY = startY + 4;
+                    childStartX = x0 + this.textOptions.font.size + rect.options.padding * 2;
+                    childStartY = startY + rect.options.padding;
                 } else {
-                    childStartX = x0 + 4;
-                    childStartY = startY + 4 * this.textOptions.font.size / 3;
+                    childStartX = x0 + rect.options.padding;
+                    childStartY = startY + this.textOptions.font.size + rect.options.padding * 2;
                 }
-                childEndX = x0 + myWidth - 4;
-                childEndY = startY + height - 4;
-                this._recurseTree(ctx, item.c, childStartX, childStartY, childEndX, childEndY);
+                childEndX = x0 + myWidth - rect.options.padding;
+                childEndY = startY + height - rect.options.padding;
+                if ((item.c.length > 0) && (childEndX - childStartX >= this.textOptions.font.size + rect.options.padding * 2) && (childEndY - childStartY >= this.textOptions.font.size + rect.options.padding * 2)) {
+                    rect.setChild();
+                    this._recurseTree(ctx, item.c, childStartX, childStartY, childEndX, childEndY);
+                }
                 x0 += myWidth;
             });
         } else {
@@ -80,18 +81,21 @@ class TreemapController extends HierarchicalController {
                     color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
                     bgcols[this._drawIndex] = color;
                 }
-                this._drawRect(ctx, startX, y0, width, myHeight, color, labels[this._drawIndex]);
+                var rect = this._drawRect(ctx, startX, y0, width, myHeight, color, labels[this._drawIndex]);
                 var childStartX, childStartY, childEndX, childEndY;
                 if (myHeight < width) {
-                    childStartX = startX + 4 * this.textOptions.font.size / 3;
-                    childStartY = y0 + 4;
+                    childStartX = startX + this.textOptions.font.size + rect.options.padding * 2;
+                    childStartY = y0 + rect.options.padding;
                 } else {
-                    childStartX = startX + 4;
-                    childStartY = y0 + 4 * this.textOptions.font.size / 3;
+                    childStartX = startX + rect.options.padding;
+                    childStartY = y0 + this.textOptions.font.size + rect.options.padding * 2;
                 }
-                childEndX = startX + width - 4;
-                childEndY = y0 + myHeight - 4;
-                this._recurseTree(ctx, item.c, childStartX, childStartY, childEndX, childEndY);
+                childEndX = startX + width - rect.options.padding;
+                childEndY = y0 + myHeight - rect.options.padding;
+                if ((item.c.length > 0) && (childEndX - childStartX >= this.textOptions.font.size + rect.options.padding * 2) && (childEndY - childStartY >= this.textOptions.font.size + rect.options.padding * 2)) {
+                    rect.setChild();
+                    this._recurseTree(ctx, item.c, childStartX, childStartY, childEndX, childEndY);
+                }
                 y0 += myHeight;
             });
         }
@@ -102,6 +106,8 @@ class TreemapController extends HierarchicalController {
         var data = meta._dataset.tree;
         var ctx = this.chart.ctx;
         this.textOptions = this.chart.$context.chart.config._config.options.text;
+        if (this.textOptions.font == undefined) this.textOptions.font = {};
+        if (this.textOptions.font.size == undefined) this.textOptions.font.size = 16;
         var labels = this.chart.$context.chart.data.labels;
         this._drawIndex = 0;
         this._recurseTree(ctx, data, this.startX, this.startY, this.endX, this.endY);
