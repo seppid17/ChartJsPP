@@ -8,63 +8,49 @@ function extractCSV(csv) {
             let data = line.split(/\s*,\s*/);
             if (data.length < 4) {
                 console.log('len invalid', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Insufficent data (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Insufficent data (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
             let id = data[0].trim();
             if (!/^\d+$/.test(id)) {
                 console.log('id invalid', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Invalid id (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Invalid id (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
             id = parseInt(id);
             if (id <= 0) {
                 console.log('id invalid', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Invalid id (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Invalid id (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
             let parent = data[1].trim();
             if (!/^\d+$/.test(parent)) {
                 console.log('par invalid', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Invalid parent (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Invalid parent (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
             parent = parseInt(parent);
             if (parent >= id) {
                 console.log('parent > id', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Invalid parent id (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Invalid parent id (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
             let name = data[2].trim();
             if (!/^[^\s]{1,32}$/.test(name)) {
                 console.log('name invalid', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Invalid name (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Invalid name (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
             let vals = data.slice(3);
             if (vals.length < 1) {
                 console.log('no values', line);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'No values (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('No values (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
@@ -73,9 +59,7 @@ function extractCSV(csv) {
                 val = val.trim();
                 if (val == '' || isNaN(val)) {
                     console.log('value invalid', line);
-                    dropSpan.className = 'drop-span error'
-                    dropSpan.innerText = 'Invalid values (line ' + i++ + '). Please check and upload again'
-                    fileSelectedNoError = false;
+                    setErrorMsg('Invalid values (line ' + i++ + '). Please check and upload again');
                     return false;
                 }
                 let value = parseFloat(val);
@@ -85,9 +69,7 @@ function extractCSV(csv) {
 
             if (json[id] !== undefined) {
                 console.log('duplicate id', id);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Duplicate ids (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Duplicate ids (line ' + i++ + '). Please check and upload again');
                 return null;
             }
 
@@ -107,9 +89,7 @@ function extractCSV(csv) {
             let parent = json[parentId];
             if (!parent) {
                 console.log('missing parent', data);
-                dropSpan.className = 'drop-span error'
-                dropSpan.innerText = 'Missing parent (line ' + i++ + '). Please check and upload again'
-                fileSelectedNoError = false;
+                setErrorMsg('Missing parent (line ' + i++ + '). Please check and upload again');
                 return null;
             }
             parent.c[id] = data;
@@ -117,9 +97,7 @@ function extractCSV(csv) {
         return json;
     } catch (ex) {
         console.log(ex);
-        dropSpan.className = 'drop-span error'
-        dropSpan.innerText = 'Error in data. Please check and upload again'
-        fileSelectedNoError = false;
+        setErrorMsg('Error in data. Please check and upload again');
         return null;
     }
 }
@@ -142,9 +120,7 @@ function parseCSV(csv) {
         return removeIDs(json, dataList);
     } catch (ex) {
         console.log(ex);
-        dropSpan.className = 'drop-span error'
-        dropSpan.innerText = 'Error in data. Please check and upload again'
-        fileSelectedNoError = false;
+        setErrorMsg('Error in data. Please check and upload again');
         return null;
     }
 }

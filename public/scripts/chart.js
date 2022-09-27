@@ -6,6 +6,8 @@ class ChartConfig {
         this.config.type = type;
         this.name = '';
         canvas.onclick = evt => {
+            let popup = document.getElementById("myPopup");
+            popup.classList.remove("show");
             let myChart = ChartConfig.canvasChartMap[this.canvas];
             if (!myChart) {
                 return;
@@ -13,9 +15,27 @@ class ChartConfig {
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
+                console.log(canvas.width);
+                console.log(evt.offsetX, evt.offsetY);
+                console.log(evt.clientX, evt.clientY);
+                // console.log(evt.layerX, evt.layerY);
+                // console.log(evt.screenX, evt.screenY);
+                setDivPos(popup, evt.offsetX, evt.offsetY, canvas.width/2.5)
+                popup.classList.toggle("show");
                 const firstPoint = points[points.length - 1];
-                colors[firstPoint.index] = color;
-                myChart.update();
+                let crntColor = null;
+                console.log(colors[firstPoint.index]);
+                if (/^#[0-9A-F]{6}$/i.test(colors[firstPoint.index])) {
+                    crntColor = colors[firstPoint.index];
+                } else {
+                    crntColor = rgb2hex(colors[firstPoint.index]);
+                }
+                colorPicker.value = crntColor;
+                console.log(crntColor);
+                colorPicker.onchange = e => {
+                    colors[firstPoint.index] = ColorInput.value;
+                    myChart.update();
+                }
             }
         };
     }
@@ -28,6 +48,9 @@ class ChartConfig {
 
     setName(name) {
         this.name = name;
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].label = name;
+        }
     }
 
     setOptions(options) {
@@ -62,15 +85,12 @@ class BasicChartConfig extends ChartConfig {
         this.config.data = dataConf;
     }
 
-    setName(name) {
-        super.setName(name);
-        if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].label = name;
-        }
-    }
-
-    setLabels(labels) {
+    setLabels(data) {
         if (this.config) {
+            let labels = [];
+            data.forEach(item => {
+                labels.push(item.n);
+            });
             this.config.data.labels = labels;
         }
     }
@@ -79,9 +99,9 @@ class BasicChartConfig extends ChartConfig {
         if (this.config && this.config.data.datasets.length > 0) {
             var clr = [];
             data.forEach((d, i) => {
-                var r = ((i + ~~d) * 93) % 256;
-                var g = (i * ((2 * i) - ~~d) * 3) % 256;
-                var b = (384 - r - g) % 256;
+                var r = Math.abs(((i + ~~d) * 93) % 256);
+                var g = Math.abs((i * ((2 * i) - ~~d) * 3) % 256);
+                var b = Math.abs((384 - r - g) % 256);
                 clr.push(`rgba(${r}, ${g}, ${b}, 1)`);
             });
             this.config.data.datasets[0].backgroundColor = clr;
@@ -229,7 +249,7 @@ class BubbleChartConfig extends BasicChartConfig {
 }
 
 class HierarchicalChartConfig extends ChartConfig {
-    constructor(canvas, type) {
+    constructor(canvas, type, maxLevels) {
         super(canvas, type);
         var colors = [];
         var dataConf = {
@@ -237,37 +257,61 @@ class HierarchicalChartConfig extends ChartConfig {
             datasets: [{
                 label: this.name,
                 data: [],
+                tree: [],
                 backgroundColor: colors,
                 borderColor: colors,
                 borderWidth: 1
             }]
         };
+        this.tree = [];
         this.config.data = dataConf;
+        this.maxLevels = maxLevels;
     }
 
-    setName(name) {
-        super.setName(name);
-        if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].label = name;
-        }
+    setLabels(data) {
     }
 
-    setLabels(labels) {
-        if (this.config && this.config.data) {
-            this.config.data.labels = labels;
+    _makeTree(data, levelIndex, parent) {
+        if (this.tree[levelIndex] == undefined) {
+            this.tree[levelIndex] = [];
         }
+        var level = this.tree[levelIndex];
+        data.forEach(item => {
+            var treeItem = {
+                n: item.n,
+                v: item.v,
+                p: parent
+            }
+            var myIndex = level.push(treeItem) - 1;
+            this._makeTree(item.c, levelIndex + 1, myIndex);
+        });
     }
 
     setData(data) {
+        this._makeTree(data, 0, 0);
+        if (this.tree[this.tree.length - 1].length == 0) this.tree.length -= 1;
         if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].data = data;
+            this.config.data.datasets[0].tree = data;
+            var datasetData = this.config.data.datasets[0].data;
+            var colors = this.config.data.datasets[0].backgroundColor;
+            var labels = this.config.data.labels;
+            for (let levelIndex = 0; levelIndex < this.maxLevels; levelIndex++) {
+                var level = this.tree[levelIndex];
+                if (level == undefined || level.length == 0) break;
+                level.forEach(item => {
+                    datasetData.push(item.v);
+                    var x = labels.push(item.n);
+                    var color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
+                    colors.push(color);
+                });
+            }
         }
     }
 }
 
 class SunburstChartConfig extends HierarchicalChartConfig {
     constructor(canvas) {
-        super(canvas, 'sunburst');
+        super(canvas, 'sunburst', 4);
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -276,10 +320,10 @@ class SunburstChartConfig extends HierarchicalChartConfig {
             },
             plugins: {
                 legend: {
-                    display: false
+                    display: true,
                 },
                 tooltip: {
-                    enabled: false
+                    enabled: true
                 }
             }
         });
@@ -288,10 +332,21 @@ class SunburstChartConfig extends HierarchicalChartConfig {
 
 class IcicleChartConfig extends HierarchicalChartConfig {
     constructor(canvas) {
-        super(canvas, 'icicle');
+        super(canvas, 'icicle', 5);
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
+            text:{
+                hAlign:'left',
+                vAlign:'top',
+                color:'#000000',
+                font:{
+                    size: 18,
+                    style: 'normal',
+                    weight: 'normal',
+                    family: 'Arial'
+                }
+            },
             layout: {
                 autoPadding: false
             },
@@ -300,7 +355,7 @@ class IcicleChartConfig extends HierarchicalChartConfig {
                     display: false
                 },
                 tooltip: {
-                    enabled: false
+                    enabled: true
                 }
             }
         });
@@ -350,14 +405,14 @@ let unlist = (list, out) => {
             console.log('invalid list', item);
             return;
         }
-        unlistItem = { v: item.v[0], c: unlistC };
+        unlistItem = { n: item.n, v: item.v[0], c: unlistC };
         out.push(unlistItem);
     });
     return success;
 }
 
 let types = document.getElementsByName('charttype');
-const drawChart = (labels, data) => {
+const drawChart = (data) => {
     if (!(data instanceof Array) || data.length <= 0) {
         console.log('invalid data', data);
         return;
@@ -473,7 +528,7 @@ const drawChart = (labels, data) => {
             break;
     }
     myChart.setName(chartName);
-    myChart.setLabels(labels);
+    myChart.setLabels(data);
     myChart.setData(values);
     myChart.draw();
 };
@@ -488,7 +543,6 @@ chartDiv.onresize = e => {
 window.onresize = e => {
     let height = window.innerHeight;
     let width = window.innerWidth;
-    // let size = Math.min(height, width);
     chartDiv.style.width = width + 'px';
     chartDiv.style.height = height + 'px';
     // chartDiv.onresize(e);
@@ -506,17 +560,54 @@ document.getElementById('downloadImgBtn').onclick = e => {
 };
 
 document.getElementById('CloseEdit').onclick = e => {
-    document.getElementById('EditChartOption').style.display = 'none';
+    // document.getElementById('EditChartOption').style.display = 'none';
+    let popup = document.getElementById("myPopup");
+    popup.classList.remove("show");
 }
 
-document.getElementById('DisplayEdit').onclick = e => {
-    document.getElementById('EditChartOption').style.display = 'block';
-}
+let nameView = document.getElementById('nameView')
+let nameEdit = document.getElementById('nameEdit')
+
+document.getElementById('editName').onclick = e => {
+    console.log(document.getElementById('chartNameView').innerText);
+    nameView.style.display = 'none';
+    nameEdit.style.display = 'block';
+    let name = document.getElementById('chartNameView').innerText
+    document.getElementById('nameInput').value = name;
+    document.getElementById('saveName').onclick = e => {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+        name = document.getElementById('nameInput').value
+        document.getElementById('chartNameView').innerText = name
+    };
+    document.getElementById('cancellEditName').onclick = e => {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+    };
+};
+
 
 const colorPicker = document.getElementById('ColorInput');
 let color = ColorInput.value;
-colorPicker.onchange = e =>{
+colorPicker.onchange = e => {
     color = ColorInput.value;
+}
+
+function rgb2hex(rgb) {
+    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+    return (rgb && rgb.length === 4) ? "#" +
+        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+}
+
+function setDivPos(d, x, y, mid) {
+    if (x > mid) {
+        d.style.left = (x-210)+'px';
+    } else {
+        d.style.left = x+'px';
+    }
+    d.style.top = y+'px';
 }
 
 setCallback(drawChart);
