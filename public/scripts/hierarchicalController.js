@@ -24,7 +24,7 @@ class HierarchicalController extends Chart.PieController {
     update(mode) {
         super.update(mode);
         this._setAreaCoordinates();
-        if (mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none')
+        if (mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none' || mode == undefined)
             this.draw();
     }
 

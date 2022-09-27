@@ -1,12 +1,22 @@
 class IcicleController extends HierarchicalController {
-    _drawRect(ctx, x0, y0, width, height, color = 'black') {
+    _drawRect(ctx, x0, y0, width, height, backgroundColor = 'black', text=null, textOptions={}) {
         var rect = new RectangleElement({
             x: x0,
             y: y0,
             width: width,
             height: height,
+            text:text,
             options: {
-                backgroundColor: color
+                backgroundColor: backgroundColor,
+                hAlign: textOptions.hAlign,
+                vAlign: textOptions.vAlign,
+                textColor: textOptions.color,
+                font: {
+                    style:textOptions.font.style,
+                    weight:textOptions.font.weight,
+                    size:textOptions.font.size,
+                    family:textOptions.font.family
+                }
             }
         });
         this.getMeta().data[this._drawIndex] = rect;
@@ -21,6 +31,8 @@ class IcicleController extends HierarchicalController {
         var unitWidth = (this.endX - this.startX) / maxDepth;
 
         var ctx = this.chart.ctx;
+        var textOptions = this.chart.$context.chart.config._config.options.text;
+        var labels = this.chart.$context.chart.data.labels;
 
         var maxDepth = this.tree[this.tree.length - 1].n + 1;
         var bgcols = this.$context.dataset.backgroundColor;
@@ -28,7 +40,7 @@ class IcicleController extends HierarchicalController {
             var x0 = this.startX + unitWidth * item.n;
             var y0 = item.s;
             var height = item.e - item.s;
-            this._drawRect(ctx, x0, y0, unitWidth, height, bgcols[index]);
+            this._drawRect(ctx, x0, y0, unitWidth, height, bgcols[index], labels[index], textOptions);
         });
     }
 }

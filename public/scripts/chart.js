@@ -332,6 +332,17 @@ class IcicleChartConfig extends HierarchicalChartConfig {
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
+            text:{
+                hAlign:'left',
+                vAlign:'top',
+                color:'#000000',
+                font:{
+                    size: 18,
+                    style: 'normal',
+                    weight: 'normal',
+                    family: 'Arial'
+                }
+            },
             layout: {
                 autoPadding: false
             },
