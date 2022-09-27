@@ -71,7 +71,7 @@ document.getElementById('drawBtn').onclick = e => {
             chartViewDiv.style.display = 'block';
             if (extractedData==null || extractedData.length==0) return;
             cb(extractedData);
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            document.getElementById('chartViewDiv').scrollIntoView();
         } else {
             dropSpan.className = 'drop-span error'
             dropSpan.innerText = 'No file selected. Please upload a file first'

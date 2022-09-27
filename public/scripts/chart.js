@@ -18,18 +18,16 @@ class ChartConfig {
 
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
-                const firstPoint = points[points.length - 1];
+                const point = points[points.length - 1];
                 let crntColor = null;
-                console.log(colors[firstPoint.index]);
-                if (/^#[0-9A-F]{6}$/i.test(colors[firstPoint.index])) {
-                    crntColor = colors[firstPoint.index];
+                if (/^#[0-9A-F]{6}$/i.test(colors[point.index])) {
+                    crntColor = colors[point.index];
                 } else {
-                    crntColor = rgb2hex(colors[firstPoint.index]);
+                    crntColor = rgb2hex(colors[point.index]);
                 }
                 colorPicker.value = crntColor;
-                console.log(crntColor);
                 colorPicker.onchange = e => {
-                    colors[firstPoint.index] = ColorInput.value;
+                    colors[point.index] = ColorInput.value;
                     myChart.update();
                 }
             }
@@ -326,6 +324,42 @@ class SunburstChartConfig extends HierarchicalChartConfig {
     }
 }
 
+class TreemapChartConfig extends HierarchicalChartConfig {
+    constructor(canvas) {
+        super(canvas, 'treemap', 5);
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            text:{
+                color:'#000000',
+                font:{
+                    size: 14,
+                    style: 'normal',
+                    weight: 'normal',
+                    family: 'Arial'
+                }
+            },
+            layout: {
+                autoPadding: false
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true
+                }
+            }
+        });
+    }
+
+    setData(data) {
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].tree = data;
+        }
+    }
+}
+
 class IcicleChartConfig extends HierarchicalChartConfig {
     constructor(canvas) {
         super(canvas, 'icicle', 5);
@@ -337,7 +371,7 @@ class IcicleChartConfig extends HierarchicalChartConfig {
                 vAlign:'top',
                 color:'#000000',
                 font:{
-                    size: 18,
+                    size: 14,
                     style: 'normal',
                     weight: 'normal',
                     family: 'Arial'
@@ -510,6 +544,13 @@ const drawChart = (data) => {
             values = [];
             unlist(data, values);
             myChart = new SunburstChartConfig(canvas);
+            break;
+        }
+
+        case 'treemap': {
+            values = [];
+            unlist(data, values);
+            myChart = new TreemapChartConfig(canvas);
             break;
         }
 
