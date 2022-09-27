@@ -119,9 +119,16 @@ function parseCSV(csv) {
         let dataList = [];
         return removeIDs(json, dataList);
     } catch (ex) {
-        console.log(ex);
-        setErrorMsg('Error in data. Please check and upload again');
-        return null;
+        try
+        {
+            console.log(ex);
+            setErrorMsg('Error in data. Please check and upload again');
+            return null;
+        }
+        catch(ex){
+            return null;
+        }
+        
     }
 }
 module.exports = {parseCSV};
