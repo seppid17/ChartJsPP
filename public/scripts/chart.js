@@ -15,9 +15,13 @@ class ChartConfig {
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
-
+                console.log(canvas.width);
+                console.log(evt.offsetX, evt.offsetY);
+                console.log(evt.clientX, evt.clientY);
+                // console.log(evt.layerX, evt.layerY);
+                // console.log(evt.screenX, evt.screenY);
+                setDivPos(popup, evt.offsetX, evt.offsetY, canvas.width/2.5)
                 popup.classList.toggle("show");
-                //set the current olor to colorPicker
                 const firstPoint = points[points.length - 1];
                 let crntColor = null;
                 console.log(colors[firstPoint.index]);
@@ -584,6 +588,15 @@ function rgb2hex(rgb) {
         ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+}
+
+function setDivPos(d, x, y, mid) {
+    if (x > mid) {
+        d.style.left = (x-210)+'px';
+    } else {
+        d.style.left = x+'px';
+    }
+    d.style.top = y+'px';
 }
 
 setCallback(drawChart);
