@@ -26,6 +26,9 @@ const extractFile = file => {
         extractedData = null;
         let data = reader.result;
         let parsedData = parseCSV(data);
+        if (err) {
+            setErrorMsg(err);
+        }
         if (parsedData) {
             extractedData = parsedData;
             dropSpan.className = 'drop-span'
