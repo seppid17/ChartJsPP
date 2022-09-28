@@ -61,4 +61,4 @@ test('Test 9: Missing parent',()=>{
 let str1 = '' // Empty string
 test('The emptiness of string',()=>{expect(function2.isEmpty(str1)).toBeTruthy()});
 let str2 = 'Not Empty string' // The sting is not empty
-test('The nmber string',()=>{expect(function2.isEmpty(str2)).toBeFalsy()});
+test('The not empty string',()=>{expect(function2.isEmpty(str2)).toBeFalsy()});
