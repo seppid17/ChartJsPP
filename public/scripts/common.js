@@ -72,6 +72,7 @@ function keyPressFn(e, pattern, nextElem, btn = null, errorMsg = null) {
  */
 function isEmpty(str) {
     return (!str || str.length === 0);
+    
 }
 
 function setErrorFor(input, message) {
@@ -87,3 +88,5 @@ function setClear(input) {
     const formControl = input.parentElement;
     formControl.className = 'form-control form-outline form-input';
 }
+
+module.exports = {isEmpty}
