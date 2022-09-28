@@ -606,7 +606,7 @@ function rgb2hex(rgb) {
 
 function setDivPos(d, x, y, mid) {
     if (x > mid) {
-        d.style.left = (x - 210) + 'px';
+        d.style.left = (x - 170) + 'px';
     } else {
         d.style.left = x + 'px';
     }

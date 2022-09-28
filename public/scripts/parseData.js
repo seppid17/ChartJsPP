@@ -8,43 +8,43 @@ function extractCSV(csv) {
             let data = line.split(/\s*,\s*/);
             if (data.length < 4) {
                 // console.log('len invalid', line);
-                throw 'Insufficent data (at line ' + i++ + '). Please check and upload again';
+                throw 'Insufficent data. Please check and upload again';
             }
 
             let id = data[0].trim();
             if (!/^\d+$/.test(id)) {
                 // console.log('id invalid', line);
-                throw 'Invalid id (non integer at line ' + i++ + '). Please check and upload again';
+                throw 'Invalid id. Please check and upload again';
             }
 
             id = parseInt(id);
             if (id <= 0) {
                 // console.log('id invalid', line);
-                throw 'Invalid id (negative id at line ' + i++ + '). Please check and upload again';
+                throw 'Invalid id. Please check and upload again';
             }
 
             let parent = data[1].trim();
             if (!/^\d+$/.test(parent)) {
                 // console.log('par invalid', line);
-                throw 'Invalid parent (line ' + i++ + '). Please check and upload again';
+                throw 'Invalid parent. Please check and upload again';
             }
 
             parent = parseInt(parent);
             if (parent >= id) {
                 // console.log('parent > id', line);
-                throw 'Invalid parent id (line ' + i++ + '). Please check and upload again';
+                throw 'Parent id equal or greater than its own id. Please check and upload again';
             }
 
             let name = data[2].trim();
             if (!/^[^\s]{1,32}$/.test(name)) {
                 // console.log('name invalid', line);
-                throw 'Invalid name (line ' + i++ + '). Please check and upload again';
+                throw 'Invalid name. Please check and upload again';
             }
 
             let vals = data.slice(3);
             if (vals.length < 1) {
                 // console.log('no values', line);
-                throw 'No values (line ' + i++ + '). Please check and upload again';
+                throw 'No values. Please check and upload again';
             }
 
             let values = new Array();
@@ -52,7 +52,7 @@ function extractCSV(csv) {
                 val = val.trim();
                 if (val == '' || isNaN(val)) {
                     // console.log('value invalid', line);
-                    throw 'Invalid values (line ' + i++ + '). Please check and upload again';
+                    throw 'Invalid values. Please check and upload again';
                 }
                 let value = parseFloat(val);
                 values.push(value);
@@ -61,7 +61,7 @@ function extractCSV(csv) {
 
             if (json[id] !== undefined) {
                 // console.log('duplicate id', id);
-                throw 'Duplicate ids (line ' + i++ + '). Please check and upload again';
+                throw 'Duplicate ids. Please check and upload again';
             }
 
             json[id] = { n: name, v: values, p: parent, c: {} };
@@ -80,7 +80,7 @@ function extractCSV(csv) {
             let parent = json[parentId];
             if (!parent) {
                 // console.log('missing parent', data);
-                throw 'Missing parent (line ' + i++ + '). Please check and upload again';
+                throw 'Missing parent. Please check and upload again';
             }
             parent.c[id] = data;
         }
@@ -111,7 +111,7 @@ function parseCSV(csv) {
         let dataList = [];
         return removeIDs(json, dataList);
     } catch (ex) {
-        throw ex;
+        throw new Error(ex);
     }
 }
 module.exports = {parseCSV};

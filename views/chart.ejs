@@ -79,21 +79,49 @@
                         </div>
                     </div>
 
-                    <div class="row text-end">
-                        <div class="row prop-btns">
-                            <div class="text-end">
-                                <a>
-                                    <i class="fa-solid fa-share-nodes fa-lg"></i>
-                                </a>
-                                <a id="downloadImgBtn">
-                                    <i class="fa-solid fa-download fa-lg"></i>
-                                </a>
-                                <a>
-                                    <i class="fa-solid fa-trash-can fa-lg"></i>
-                                </a>
-                                <a>
-                                    <i class="fa-solid fa-floppy-disk fa-lg"></i>
-                                </a>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row mb-3">
+                                <div clas="col">
+                                    <a class="btn btn-icon btn-icon-selected">
+                                        <i class="fa-solid fa-bold"></i>
+                                    </a>
+                                    <a class="btn btn-icon">
+                                        <i class="fa-solid fa-underline"></i>
+                                    </a>
+                                    <a class="btn btn-icon">
+                                        <i class="fa-solid fa-italic"></i>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <select name="sizeSelect" class="cus-select" id="inputGroupSelect01">
+                                        <option selected>size</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col text-end">
+                            <div class="row prop-btns">
+                                <div class="text-end">
+                                    <a>
+                                        <i class="fa-solid fa-share-nodes fa-lg"></i>
+                                    </a>
+                                    <a id="downloadImgBtn">
+                                        <i class="fa-solid fa-download fa-lg"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,15 +138,14 @@
                                         <div id="EditChartOption">
 
                                             <div class="row">
-                                                <!-- close button -->
                                                 <div class="text-end">
                                                     <a id="CloseEdit">
-                                                        <i class="fa-solid fa-x"></i>
+                                                        <i class="fa-solid fa-x fa-s"></i>
                                                     </a>
                                                 </div>
                                             </div>
 
-                                            <div class="row">
+                                            <!-- <div class="row">
                                                 <div class="col d-flex justify-content-center">
                                                     <div>
                                                         <label class="form-label" for="nameText">Text</label>
@@ -162,33 +189,22 @@
                                                         <option value="10">10</option>
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <div class="row">
-                                                <!-- <div class="col"> -->
-                                                <div class="col">
-                                                    <div class="input-group">
-                                                        <div class="row w-100">
-                                                            <div class="col-md-7">
-                                                                <label for="color-input"
-                                                                    class="form-label d-flex align-item-center">Color</label>
-                                                            </div>
-                                                            <div class="col-md-5 p-0">
-                                                                <div class="input-group mb-20">
-                                                                    <input type="color" class="color-input"
-                                                                        id="ColorInput" value="#000000"
-                                                                        title="Choose your color">
-                                                                    <div class="save-div">
-                                                                        <a>
-                                                                            <i class="far fa-check-circle fa-lg"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                <div class="input-group">
+                                                    <div class="row w-100">
+                                                        <div class="col">
+                                                            <label for="color-input" class="form-label">Color</label>
+                                                        </div>
+                                                        <div class="col text-end d-flex align-item-center">
+                                                            <input type="color" class="color-input" id="ColorInput" value="#000000" title="Choose your color">
+                                                            <a><i class="far fa-check-circle fa-lg"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </span>
