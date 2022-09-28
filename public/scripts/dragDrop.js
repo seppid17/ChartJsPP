@@ -25,15 +25,17 @@ const extractFile = file => {
     reader.onloadend = function () {
         extractedData = null;
         let data = reader.result;
-        let parsedData = parseCSV(data);
-        if (err) {
-            setErrorMsg(err);
-        }
-        if (parsedData) {
-            extractedData = parsedData;
-            dropSpan.className = 'drop-span'
-            dropSpan.innerText = 'File selected (' + file.name + '). You can draw chart or upload different file'
-            fileSelectedNoError = true;
+        try {
+            let parsedData = parseCSV(data);
+            if (parsedData) {
+                extractedData = parsedData;
+                dropSpan.className = 'drop-span'
+                dropSpan.innerText = 'File selected (' + file.name + '). You can draw chart or upload different file'
+                fileSelectedNoError = true;
+            }
+        } catch(ex) {
+            console.log(ex)
+            setErrorMsg(ex);
         }
     }
 }
