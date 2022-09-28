@@ -75,7 +75,7 @@ document.getElementById('drawBtn').onclick = e => {
             alertDiv.style.display = 'none';
             if (extractedData==null || extractedData.length==0) return;
             cb(extractedData);
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            document.getElementById('chartViewDiv').scrollIntoView();
         } else {
             alertDiv.style.display = 'none';
             dropSpan.className = 'drop-span error'

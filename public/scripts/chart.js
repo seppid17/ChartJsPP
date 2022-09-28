@@ -20,20 +20,19 @@ class ChartConfig {
                 console.log(evt.clientX, evt.clientY);
                 // console.log(evt.layerX, evt.layerY);
                 // console.log(evt.screenX, evt.screenY);
-                setDivPos(popup, evt.offsetX, evt.offsetY, canvas.width/2.5)
+                setDivPos(popup, evt.offsetX, evt.offsetY, canvas.width / 2.5)
                 popup.classList.toggle("show");
-                const firstPoint = points[points.length - 1];
+                //set the current olor to colorPicker
+                const point = points[points.length - 1];
                 let crntColor = null;
-                console.log(colors[firstPoint.index]);
-                if (/^#[0-9A-F]{6}$/i.test(colors[firstPoint.index])) {
-                    crntColor = colors[firstPoint.index];
+                if (/^#[0-9A-F]{6}$/i.test(colors[point.index])) {
+                    crntColor = colors[point.index];
                 } else {
-                    crntColor = rgb2hex(colors[firstPoint.index]);
+                    crntColor = rgb2hex(colors[point.index]);
                 }
                 colorPicker.value = crntColor;
-                console.log(crntColor);
                 colorPicker.onchange = e => {
-                    colors[firstPoint.index] = ColorInput.value;
+                    colors[point.index] = ColorInput.value;
                     myChart.update();
                 }
             }
@@ -271,25 +270,8 @@ class HierarchicalChartConfig extends ChartConfig {
     setLabels(data) {
     }
 
-    _makeTree(data, levelIndex, parent) {
-        if (this.tree[levelIndex] == undefined) {
-            this.tree[levelIndex] = [];
-        }
-        var level = this.tree[levelIndex];
-        data.forEach(item => {
-            var treeItem = {
-                n: item.n,
-                v: item.v,
-                p: parent
-            }
-            var myIndex = level.push(treeItem) - 1;
-            this._makeTree(item.c, levelIndex + 1, myIndex);
-        });
-    }
-
     setData(data) {
-        this._makeTree(data, 0, 0);
-        if (this.tree[this.tree.length - 1].length == 0) this.tree.length -= 1;
+        this.tree = DataFormatHelper.makeBFStree(data);
         if (this.config && this.config.data.datasets.length > 0) {
             this.config.data.datasets[0].tree = data;
             var datasetData = this.config.data.datasets[0].data;
@@ -330,18 +312,54 @@ class SunburstChartConfig extends HierarchicalChartConfig {
     }
 }
 
+class TreemapChartConfig extends HierarchicalChartConfig {
+    constructor(canvas) {
+        super(canvas, 'treemap', 5);
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            text: {
+                color: '#000000',
+                font: {
+                    size: 16,
+                    style: 'normal',
+                    weight: 'normal',
+                    family: 'Arial'
+                }
+            },
+            layout: {
+                autoPadding: false
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true
+                }
+            }
+        });
+    }
+
+    setData(data) {
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].tree = data;
+        }
+    }
+}
+
 class IcicleChartConfig extends HierarchicalChartConfig {
     constructor(canvas) {
         super(canvas, 'icicle', 5);
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
-            text:{
-                hAlign:'left',
-                vAlign:'top',
-                color:'#000000',
-                font:{
-                    size: 18,
+            text: {
+                hAlign: 'left',
+                vAlign: 'top',
+                color: '#000000',
+                font: {
+                    size: 14,
                     style: 'normal',
                     weight: 'normal',
                     family: 'Arial'
@@ -391,25 +409,6 @@ Chart.register({
         });
     }
 });
-
-let unlist = (list, out) => {
-    var success = true;
-    list.forEach(item => {
-        var unlistC = [];
-        if (!unlist(item.c, unlistC)) {
-            success = false;
-            return;
-        }
-        if (item.v.length !== 1) {
-            success = false;
-            console.log('invalid list', item);
-            return;
-        }
-        unlistItem = { n: item.n, v: item.v[0], c: unlistC };
-        out.push(unlistItem);
-    });
-    return success;
-}
 
 let types = document.getElementsByName('charttype');
 const drawChart = (data) => {
@@ -511,15 +510,19 @@ const drawChart = (data) => {
             break;
         }
         case 'sunburst': {
-            values = [];
-            unlist(data, values);
+            values = DataFormatHelper.unlist(data);
             myChart = new SunburstChartConfig(canvas);
             break;
         }
 
+        case 'treemap': {
+            values = DataFormatHelper.unlist(data);
+            myChart = new TreemapChartConfig(canvas);
+            break;
+        }
+
         case 'icicle': {
-            values = [];
-            unlist(data, values);
+            values = DataFormatHelper.unlist(data);
             myChart = new IcicleChartConfig(canvas);
             break;
         }
@@ -603,11 +606,11 @@ function rgb2hex(rgb) {
 
 function setDivPos(d, x, y, mid) {
     if (x > mid) {
-        d.style.left = (x-210)+'px';
+        d.style.left = (x - 210) + 'px';
     } else {
-        d.style.left = x+'px';
+        d.style.left = x + 'px';
     }
-    d.style.top = y+'px';
+    d.style.top = y + 'px';
 }
 
 setCallback(drawChart);

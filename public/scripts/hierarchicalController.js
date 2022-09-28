@@ -79,7 +79,7 @@ class HierarchicalController extends Chart.PieController {
     }
 
     draw() {
-        if (this.endX == undefined) {
+        if (this.endX == undefined || this.endX == 0) {
             this._setAreaCoordinates();
         }
         var meta = this.getMeta();
