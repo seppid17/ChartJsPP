@@ -270,25 +270,8 @@ class HierarchicalChartConfig extends ChartConfig {
     setLabels(data) {
     }
 
-    _makeTree(data, levelIndex, parent) {
-        if (this.tree[levelIndex] == undefined) {
-            this.tree[levelIndex] = [];
-        }
-        var level = this.tree[levelIndex];
-        data.forEach(item => {
-            var treeItem = {
-                n: item.n,
-                v: item.v,
-                p: parent
-            }
-            var myIndex = level.push(treeItem) - 1;
-            this._makeTree(item.c, levelIndex + 1, myIndex);
-        });
-    }
-
     setData(data) {
-        this._makeTree(data, 0, 0);
-        if (this.tree[this.tree.length - 1].length == 0) this.tree.length -= 1;
+        this.tree = DataFormatHelper.makeBFStree(data);
         if (this.config && this.config.data.datasets.length > 0) {
             this.config.data.datasets[0].tree = data;
             var datasetData = this.config.data.datasets[0].data;
@@ -427,25 +410,6 @@ Chart.register({
     }
 });
 
-let unlist = (list, out) => {
-    var success = true;
-    list.forEach(item => {
-        var unlistC = [];
-        if (!unlist(item.c, unlistC)) {
-            success = false;
-            return;
-        }
-        if (item.v.length !== 1) {
-            success = false;
-            console.log('invalid list', item);
-            return;
-        }
-        unlistItem = { n: item.n, v: item.v[0], c: unlistC };
-        out.push(unlistItem);
-    });
-    return success;
-}
-
 let types = document.getElementsByName('charttype');
 const drawChart = (data) => {
     if (!(data instanceof Array) || data.length <= 0) {
@@ -546,22 +510,19 @@ const drawChart = (data) => {
             break;
         }
         case 'sunburst': {
-            values = [];
-            unlist(data, values);
+            values = DataFormatHelper.unlist(data);
             myChart = new SunburstChartConfig(canvas);
             break;
         }
 
         case 'treemap': {
-            values = [];
-            unlist(data, values);
+            values = DataFormatHelper.unlist(data);
             myChart = new TreemapChartConfig(canvas);
             break;
         }
 
         case 'icicle': {
-            values = [];
-            unlist(data, values);
+            values = DataFormatHelper.unlist(data);
             myChart = new IcicleChartConfig(canvas);
             break;
         }
