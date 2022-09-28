@@ -8,50 +8,43 @@ function extractCSV(csv) {
             let data = line.split(/\s*,\s*/);
             if (data.length < 4) {
                 // console.log('len invalid', line);
-                err = 'Insufficent data (at line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Insufficent data (at line ' + i++ + '). Please check and upload again';
             }
 
             let id = data[0].trim();
             if (!/^\d+$/.test(id)) {
                 // console.log('id invalid', line);
-                err = 'Invalid id (non integer at line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Invalid id (non integer at line ' + i++ + '). Please check and upload again';
             }
 
             id = parseInt(id);
             if (id <= 0) {
                 // console.log('id invalid', line);
-                err = 'Invalid id (negative id at line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Invalid id (negative id at line ' + i++ + '). Please check and upload again';
             }
 
             let parent = data[1].trim();
             if (!/^\d+$/.test(parent)) {
                 // console.log('par invalid', line);
-                err = 'Invalid parent (line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Invalid parent (line ' + i++ + '). Please check and upload again';
             }
 
             parent = parseInt(parent);
             if (parent >= id) {
                 // console.log('parent > id', line);
-                err = 'Invalid parent id (line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Invalid parent id (line ' + i++ + '). Please check and upload again';
             }
 
             let name = data[2].trim();
             if (!/^[^\s]{1,32}$/.test(name)) {
                 // console.log('name invalid', line);
-                err = 'Invalid name (line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Invalid name (line ' + i++ + '). Please check and upload again';
             }
 
             let vals = data.slice(3);
             if (vals.length < 1) {
                 // console.log('no values', line);
-                err = 'No values (line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'No values (line ' + i++ + '). Please check and upload again';
             }
 
             let values = new Array();
@@ -59,18 +52,16 @@ function extractCSV(csv) {
                 val = val.trim();
                 if (val == '' || isNaN(val)) {
                     // console.log('value invalid', line);
-                    err = 'Invalid values (line ' + i++ + '). Please check and upload again';
-                    return false;
+                    throw 'Invalid values (line ' + i++ + '). Please check and upload again';
                 }
                 let value = parseFloat(val);
                 values.push(value);
                 return true;
-            })) return null;
+            })) throw null;
 
             if (json[id] !== undefined) {
                 // console.log('duplicate id', id);
-                err = 'Duplicate ids (line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Duplicate ids (line ' + i++ + '). Please check and upload again';
             }
 
             json[id] = { n: name, v: values, p: parent, c: {} };
@@ -89,16 +80,17 @@ function extractCSV(csv) {
             let parent = json[parentId];
             if (!parent) {
                 // console.log('missing parent', data);
-                err = 'Missing parent (line ' + i++ + '). Please check and upload again';
-                return null;
+                throw 'Missing parent (line ' + i++ + '). Please check and upload again';
             }
             parent.c[id] = data;
         }
         return json;
     } catch (ex) {
-        // console.log(ex);
-        err = 'Error in data. Please check and upload again';
-        return null;
+        if (ex) {
+            // console.log(ex);
+            throw ex;
+        }
+        throw 'Error in data. Please check and upload again';
     }
 }
 
@@ -113,21 +105,13 @@ function removeIDs(json, list) {
 }
 
 function parseCSV(csv) {
-    let err = null;
     try {
         let json = extractCSV(csv);
         if (json == null) { return null; }
         let dataList = [];
         return removeIDs(json, dataList);
     } catch (ex) {
-        try {
-            // console.log(ex);
-            err = 'Error in data. Please check and upload again';
-            return null;
-        }
-        catch(ex){
-            return null;
-        }
+        throw ex;
     }
 }
 module.exports = {parseCSV};
