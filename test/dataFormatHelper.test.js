@@ -4,7 +4,7 @@ const dataFormatHelper = require('../public/scripts/dataFormatHelper');
 Unit testing for dataFormatHelper class
 */
 /*
-This testing data ueses tocheck the makeBFStree method of the dataFormatHelper class
+This testing data uses to check the makeBFStree method of the dataFormatHelper class
 */
 
 const Test1Inputdata = [
@@ -40,17 +40,21 @@ const Test2InputData = [
                     ];
 
 const Test2OutputData = [
-                    { n: "A", v: 5, c: [] },
-                    { n: "B", v: 9, c: [
-                        { n: "C", v: 2, c: [{ n: "F", v: 6, c: [] }] },{ n: "D", v: 3, c: [] },{ n: "E", v: 7, c: [] }
-                    ] }
-]
+                    {n: 'A', v: 5, c: []},
+                    {n: 'B', v: 9, c: [
+                        {n: 'C', v: 2, c: [{n: 'F', v: 6, c: []}]},{n: 'D', v: 3, c: []} , {n: 'E', v: 7, c: []}
+                    ]},
+                    {n: 'G', v: 8, c: []},
+                    {n: 'H', v: 4, c:[
+                        { n: "I", v: 7, c: [] },{ n: "J", v: 4, c: [] }
+                    ]}
+];
 
 describe("data formater", () => {
 test('Test 1: data input1',()=>{
                 expect(dataFormatHelper.makeBFStree(Test1Inputdata)).toEqual(Test1OutputData);
             });
 test('Test 2: data input2',()=>{
-                expect(dataFormatHelper.unlist(Test2InputData)).toEqual(Test1Inputdata);
+                expect(dataFormatHelper.unlist(Test2InputData)).toEqual(Test2OutputData);
             });  
         });
