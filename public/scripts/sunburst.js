@@ -1,12 +1,14 @@
 class SunburstController extends HierarchicalController {
-    _drawSector(ctx, x0, y0, r1, r2, theta1, theta2, color = 'black') {
-        var arc = new Chart.elements.ArcElement({
+    static maxDepth = 4;
+    _drawSector(r1, r2, theta1, theta2, color = 'black', text = null) {
+        var arc = new LabeledArcElement({
             startAngle: theta1,
             endAngle: theta2,
-            x: x0,
-            y: y0,
+            x: this.x0,
+            y: this.y0,
             innerRadius: r1,
             outerRadius: r2,
+            text: text,
             options: {
                 backgroundColor: color,
                 circular: true,
@@ -16,33 +18,52 @@ class SunburstController extends HierarchicalController {
         });
         this.getMeta().data[this._drawIndex] = arc;
         this._drawIndex += 1;
-        arc.draw(ctx);
+        arc.draw(this.chart.ctx);
     }
 
-    _getCenter() {
-        var x0 = (this.endX + this.startX) / 2;
-        var y0 = (this.endY + this.startY) / 2;
-        return [x0, y0];
+    _setCenter() {
+        this.x0 = (this.endX + this.startX) / 2;
+        this.y0 = (this.endY + this.startY) / 2;
+    }
+
+    _drawChart(data, start, end, r0, r, remaining) {
+        if (remaining <= 0) return;
+        var chartData = this.getMeta()._parsed;
+        var labels = this.chart.$context.chart.data.labels;
+        var bgcols = this.chart.$context.chart.data.datasets[0].backgroundColor;
+        var ang = end - start;
+        let startAngle = start;
+        var r1 = r0 + r;
+        data.forEach(item => {
+            let x = this._drawIndex;
+            chartData[x] = item.v;
+            labels[x] = item.n;
+            if (bgcols[x] == undefined) bgcols[x] = `rgba(${(167 * x + 51) % 256},${(71 * x + 203) % 256},${(203 * x + 67) % 256},1)`;
+            let color = bgcols[x];
+            let endAngle = startAngle + ang * item.w;
+            this._drawSector(r0, r1, startAngle, endAngle, color, item.n);
+            // this._drawIndex += 1;
+            this._drawChart(item.c, startAngle, endAngle, r1, r, remaining - 1);
+            startAngle = endAngle;
+        });
     }
 
     draw() {
-        super.draw();
-        this._processTree(0, 2 * Math.PI);
-
-        var ctx = this.chart.ctx;
-        var x0, y0;
-        [x0, y0] = this._getCenter();
-        var maxDepth = this.tree[this.tree.length - 1].n + 1;
-
+        if (typeof this.endX == 'undefined' || this.endX == 0) {
+            this._setAreaCoordinates();
+        }
+        this._setCenter();
+        var meta = this.getMeta();
+        var data = meta._dataset.tree;
+        var maxDepth = Math.min(data.d, SunburstController.maxDepth);
         var hwMin = Math.min(this.endX - this.startX, this.endY - this.startY);
         var r = hwMin / (2 * maxDepth + 1);
-        var bgcols = this.$context.dataset.backgroundColor;
-        this.tree.forEach((item, index) => {
-            this._drawSector(ctx, x0, y0, r / 2 + r * item.n, r / 2 + r * (1 + item.n), item.s, item.e, bgcols[index]);
-        });
+        this._drawIndex = 0;
+        this._drawChart(data.c, 0, 2 * Math.PI, r / 2, r, maxDepth);
     }
 }
 
 SunburstController.id = 'sunburst';
 SunburstController.defaults = Chart.PieController.defaults;
+Chart.register(SunburstController, LabeledArcElement);
 Chart.register(SunburstController);

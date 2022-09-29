@@ -108,7 +108,6 @@ class TreemapController extends HierarchicalController {
         this.textOptions = this.chart.$context.chart.config._config.options.text;
         if (typeof this.textOptions.font == 'undefined') this.textOptions.font = {};
         this.textOptions.font.size = Chart.defaults.font.size;
-        var labels = this.chart.$context.chart.data.labels;
         this._drawIndex = 0;
         this._recurseTree(ctx, data, this.startX, this.startY, this.endX, this.endY);
     }
