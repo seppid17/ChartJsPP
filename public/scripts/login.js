@@ -1,3 +1,5 @@
+const { isPassword } = require("./common");
+
 let form = document.getElementById('loginForm');
 let submitBtn = document.getElementById('submit');
 let emailInput = document.getElementById('email');
@@ -29,22 +31,18 @@ submitBtn.onclick = e => {
 
     if (isEmpty(email)) {
         setErrorFor(emailInput, 'Email cannot be empty');
-        // showMsg("Email cannot be empty");
         return false;
     }
-    if (!email_pattern.test(email)) {
+    if (!isEmail(email)) {
         setErrorFor(emailInput, 'Invalid email');
-        // showMsg("Invalid email");
         return false;
     }
     if (isEmpty(passwd)) {
         setErrorFor(passwdInput, 'Password cannot be empty');
-        // showMsg("Password cannot be empty");
         return false;
     }
-    if (!password_pattern.test(passwd)) {
+    if (!isPassword(passwd)) {
         setErrorFor(passwdInput, 'Invalid Password');
-        // showMsg("Invalid password");
         return false;
     }
 

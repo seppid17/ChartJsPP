@@ -1,3 +1,5 @@
+const { isEmail, isName, isPassword } = require("./common");
+
 let submitBtn = document.getElementById('submitBtn');
 let emailInput = document.getElementById('email');
 let firstNameInput = document.getElementById('firstName');
@@ -49,7 +51,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    if (!email_pattern.test(email)) {
+    if (!isEmail(email)) {
         setErrorFor(emailInput, "Invalid email");
         return;
     }
@@ -59,7 +61,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    if (!name_pattern.test(firstName)) {
+    if (!isName(firstName)) {
         setErrorFor(firstNameInput, "Invalid name");
         return;
     }
@@ -69,7 +71,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    if (!name_pattern.test(lastName)) {
+    if (!isName(lastName)) {
         setErrorFor(lastNameInput, "Invalid name");
         return;
     }
@@ -79,7 +81,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    if (!password_pattern.test(passwd)) {
+    if (!isPassword(passwd)) {
         setErrorFor(passwdInput, "Invalid password");
         return;
     }
@@ -89,7 +91,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    if (passwd !== cnfpasswd) {
+    if (!isEqual(passwd, cnfpasswd)) {
         setErrorFor(cnfpasswdInput, "Passwords doesn't match");
         return;
     }
