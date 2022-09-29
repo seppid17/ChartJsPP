@@ -6,11 +6,10 @@ const functions =require('../public/scripts/parseData');
 Function name : parseCSV(csv);
 There are two functions inside this, extractCSV(csv) and removeIDs(json, list).
 This functions are also checked.
-    testing 1 
+    Test1 
     valid data input, const data = '1,0,A,5\n2,0,B,6\n3,0,A,5\n4,0,B,6';
     
-    testing 2
-    Invalid data input, const err_data = '1,A,5\n2,0,B,6';
+    Other data sets are used to test the invalid data inputs
  */
 const data = '1,0,A,5\n2,0,B,6\n3,0,A,5\n4,0,B,6';
 const obj =[{n:'A',v:[5],c:[]},{n:'B',v:[6],c:[]},{n:'A',v:[5],c:[]},{n:'B',v:[6],c:[]}];
