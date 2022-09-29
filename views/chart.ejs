@@ -83,24 +83,22 @@
                         <div class="col">
                             <div class="row mb-3">
                                 <div clas="col">
-                                    <a class="btn btn-icon btn-icon-selected">
+                                    <a class="btn btn-icon" id="boldBtn">
                                         <i class="fa-solid fa-bold"></i>
                                     </a>
-                                    <a class="btn btn-icon">
-                                        <i class="fa-solid fa-underline"></i>
-                                    </a>
-                                    <a class="btn btn-icon">
+                                    <a class="btn btn-icon" id="italicBtn">
                                         <i class="fa-solid fa-italic"></i>
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <select name="sizeSelect" class="cus-select" id="inputGroupSelect01">
+                                    <select name="sizeSelect" class="cus-select" id="fontSize">
                                         <option selected>size</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="12">12</option>
+                                        <option value="14">14</option>
+                                        <option value="18">18</option>
+                                        <option value="24">24</option>
+                                        <option value="32">32</option>
                                     </select>
                                 </div>
                             </div>
@@ -198,7 +196,8 @@
                                                             <label for="color-input" class="form-label">Color</label>
                                                         </div>
                                                         <div class="col text-end d-flex align-item-center">
-                                                            <input type="color" class="color-input" id="ColorInput" value="#000000" title="Choose your color">
+                                                            <input type="color" class="color-input" id="ColorInput"
+                                                                value="#000000" title="Choose your color">
                                                             <a><i class="far fa-check-circle fa-lg"></i></a>
                                                         </div>
                                                     </div>
@@ -220,9 +219,9 @@
                         <div class="text-center">
                             <div class="chart-type" id="selectChartType">
                                 <h5 class="mb-0">Select chart type:</h5>
-                                
+
                                 <div id="alertPop" style="display: none;" class="alert alert-danger" role="alert">
-                                    <big><small >Error message</small>
+                                    <big><small>Error message</small>
                                         <a><i class="fa-solid fa-x" id="closeAlert"></i></a>
                                     </big>
                                 </div>

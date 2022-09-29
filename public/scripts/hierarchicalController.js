@@ -24,12 +24,12 @@ class HierarchicalController extends Chart.PieController {
     update(mode) {
         super.update(mode);
         this._setAreaCoordinates();
-        if (mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none' || mode == undefined)
+        if (typeof mode == 'undefined' || mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none')
             this.draw();
     }
 
     _makeTree(data, levelIndex, parent) {
-        if (this.tree[levelIndex] == undefined) {
+        if (typeof this.tree[levelIndex] == 'undefined') {
             this.tree[levelIndex] = [];
         }
         var level = this.tree[levelIndex];
@@ -79,7 +79,7 @@ class HierarchicalController extends Chart.PieController {
     }
 
     draw() {
-        if (this.endX == undefined || this.endX == 0) {
+        if (typeof this.endX == 'undefined' || this.endX == 0) {
             this._setAreaCoordinates();
         }
         var meta = this.getMeta();

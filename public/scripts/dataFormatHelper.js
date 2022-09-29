@@ -1,6 +1,6 @@
 class DataFormatHelper {
     static _recursesBFStree(data, tree, levelIndex, parent) {
-        if (tree[levelIndex] == undefined) {
+        if (typeof tree[levelIndex] == 'undefined') {
             tree[levelIndex] = [];
         }
         var level = tree[levelIndex];

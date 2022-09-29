@@ -47,7 +47,7 @@ class TreemapController extends HierarchicalController {
                 labels[this._drawIndex] = item.n;
                 var x = this._drawIndex + 1;
                 var color = bgcols[this._drawIndex];
-                if (color == undefined) {
+                if (typeof color == 'undefined') {
                     color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
                     bgcols[this._drawIndex] = color;
                 }
@@ -77,7 +77,7 @@ class TreemapController extends HierarchicalController {
                 labels[this._drawIndex] = item.n;
                 var x = this._drawIndex + 1;
                 var color = bgcols[this._drawIndex];
-                if (color == undefined) {
+                if (typeof color == 'undefined') {
                     color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
                     bgcols[this._drawIndex] = color;
                 }
@@ -106,8 +106,8 @@ class TreemapController extends HierarchicalController {
         var data = meta._dataset.tree;
         var ctx = this.chart.ctx;
         this.textOptions = this.chart.$context.chart.config._config.options.text;
-        if (this.textOptions.font == undefined) this.textOptions.font = {};
-        if (this.textOptions.font.size == undefined) this.textOptions.font.size = 16;
+        if (typeof this.textOptions.font == 'undefined') this.textOptions.font = {};
+        this.textOptions.font.size = Chart.defaults.font.size;
         var labels = this.chart.$context.chart.data.labels;
         this._drawIndex = 0;
         this._recurseTree(ctx, data, this.startX, this.startY, this.endX, this.endY);
