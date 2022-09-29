@@ -1,26 +1,22 @@
 class ChartConfig {
-    static canvasChartMap = {}
-    constructor(canvas, type) {
-        this.canvas = canvas;
+    static chart = null;
+    static canvas = null;
+    constructor(type) {
+        if (ChartConfig.canvas == null) throw new Error('No canvas selected');
         this.config = {};
         this.config.type = type;
         this.name = '';
-        canvas.onclick = evt => {
+        ChartConfig.canvas.onclick = evt => {
             let popup = document.getElementById("myPopup");
             popup.classList.remove("show");
-            let myChart = ChartConfig.canvasChartMap[this.canvas];
+            let myChart = ChartConfig.chart;
             if (!myChart) {
                 return;
             }
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
-                console.log(canvas.width);
-                console.log(evt.offsetX, evt.offsetY);
-                console.log(evt.clientX, evt.clientY);
-                // console.log(evt.layerX, evt.layerY);
-                // console.log(evt.screenX, evt.screenY);
-                setDivPos(popup, evt.offsetX, evt.offsetY, canvas.width / 2.5)
+                setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
                 const point = points[points.length - 1];
@@ -57,19 +53,28 @@ class ChartConfig {
     }
 
     draw() {
-        if (this.config == null || this.canvas == null) {
+        if (this.config == null || ChartConfig.canvas == null) {
             return;
         }
-        if (ChartConfig.canvasChartMap[this.canvas] instanceof Chart) {
-            ChartConfig.canvasChartMap[this.canvas].destroy();
+        if (ChartConfig.chart instanceof Chart) {
+            ChartConfig.chart.destroy();
         }
-        ChartConfig.canvasChartMap[this.canvas] = new Chart(this.canvas, this.config);
+        ChartConfig.chart = new Chart(ChartConfig.canvas, this.config);
+    }
+
+    static update(mode) {
+        if (ChartConfig.canvas == null) {
+            return;
+        }
+        if (ChartConfig.chart instanceof Chart) {
+            ChartConfig.chart.update(mode);
+        }
     }
 }
 
 class BasicChartConfig extends ChartConfig {
-    constructor(canvas, type) {
-        super(canvas, type);
+    constructor(type) {
+        super(type);
         var colors = [];
         var dataConf = {
             labels: [],
@@ -111,15 +116,15 @@ class BasicChartConfig extends ChartConfig {
 }
 
 class BarChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'bar');
+    constructor() {
+        super('bar');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
                 autoPadding: false
             },
-            scales: {
+            /*scales: {
                 y: {
                     beginAtZero: true
                 },
@@ -128,7 +133,7 @@ class BarChartConfig extends BasicChartConfig {
                         font: { size: 20 }
                     }
                 }
-            },
+            },*/
             plugins: {
                 legend: {
                     display: false
@@ -139,8 +144,8 @@ class BarChartConfig extends BasicChartConfig {
 }
 
 class PieChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'pie');
+    constructor() {
+        super('pie');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -152,15 +157,15 @@ class PieChartConfig extends BasicChartConfig {
 }
 
 class LineChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'line');
+    constructor() {
+        super('line');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
                 autoPadding: false
             },
-            scales: {
+            /*scales: {
                 y: {
                     beginAtZero: true
                 },
@@ -169,7 +174,7 @@ class LineChartConfig extends BasicChartConfig {
                         font: { size: 20 }
                     }
                 }
-            },
+            },*/
             plugins: {
                 legend: {
                     display: false
@@ -180,8 +185,8 @@ class LineChartConfig extends BasicChartConfig {
 }
 
 class DoughnutChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'doughnut');
+    constructor() {
+        super('doughnut');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -193,8 +198,8 @@ class DoughnutChartConfig extends BasicChartConfig {
 }
 
 class PolarAreaChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'polarArea');
+    constructor() {
+        super('polarArea');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -206,8 +211,8 @@ class PolarAreaChartConfig extends BasicChartConfig {
 }
 
 class ScatterChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'scatter');
+    constructor() {
+        super('scatter');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -230,8 +235,8 @@ class ScatterChartConfig extends BasicChartConfig {
 }
 
 class BubbleChartConfig extends BasicChartConfig {
-    constructor(canvas) {
-        super(canvas, 'bubble');
+    constructor() {
+        super('bubble');
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -248,8 +253,8 @@ class BubbleChartConfig extends BasicChartConfig {
 }
 
 class HierarchicalChartConfig extends ChartConfig {
-    constructor(canvas, type, maxLevels) {
-        super(canvas, type);
+    constructor(type, maxLevels) {
+        super(type);
         var colors = [];
         var dataConf = {
             labels: [],
@@ -279,7 +284,7 @@ class HierarchicalChartConfig extends ChartConfig {
             var labels = this.config.data.labels;
             for (let levelIndex = 0; levelIndex < this.maxLevels; levelIndex++) {
                 var level = this.tree[levelIndex];
-                if (level == undefined || level.length == 0) break;
+                if (typeof level == 'undefined' || level.length == 0) break;
                 level.forEach(item => {
                     datasetData.push(item.v);
                     var x = labels.push(item.n);
@@ -292,8 +297,8 @@ class HierarchicalChartConfig extends ChartConfig {
 }
 
 class SunburstChartConfig extends HierarchicalChartConfig {
-    constructor(canvas) {
-        super(canvas, 'sunburst', 4);
+    constructor() {
+        super('sunburst', 4);
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -313,17 +318,14 @@ class SunburstChartConfig extends HierarchicalChartConfig {
 }
 
 class TreemapChartConfig extends HierarchicalChartConfig {
-    constructor(canvas) {
-        super(canvas, 'treemap', 5);
+    constructor() {
+        super('treemap', 5);
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
             text: {
                 color: '#000000',
                 font: {
-                    size: 16,
-                    style: 'normal',
-                    weight: 'normal',
                     family: 'Arial'
                 }
             },
@@ -349,8 +351,8 @@ class TreemapChartConfig extends HierarchicalChartConfig {
 }
 
 class IcicleChartConfig extends HierarchicalChartConfig {
-    constructor(canvas) {
-        super(canvas, 'icicle', 5);
+    constructor() {
+        super('icicle', 5);
         super.setOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -359,9 +361,6 @@ class IcicleChartConfig extends HierarchicalChartConfig {
                 vAlign: 'top',
                 color: '#000000',
                 font: {
-                    size: 14,
-                    style: 'normal',
-                    weight: 'normal',
                     family: 'Arial'
                 }
             },
@@ -382,6 +381,7 @@ class IcicleChartConfig extends HierarchicalChartConfig {
 
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
+ChartConfig.canvas = canvas;
 const chartBtn = document.getElementById('drawBtn');
 
 const uploadViewDiv = document.getElementById('uploadViewDiv');
@@ -397,6 +397,8 @@ window.onload = () => {
 }
 
 Chart.defaults.font.size = 18;
+Chart.defaults.font.style = 'normal';
+Chart.defaults.font.weight = 'normal';
 const chartName = 'Dataset_1'
 
 Chart.register({
@@ -429,12 +431,12 @@ const drawChart = (data) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type, val);
+                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
             });
-            myChart = new BarChartConfig(canvas);
+            myChart = new BarChartConfig();
             break;
         }
         case 'pie': {
@@ -446,7 +448,7 @@ const drawChart = (data) => {
                 }
                 values.push(val[0]);
             });
-            myChart = new PieChartConfig(canvas);
+            myChart = new PieChartConfig();
             break;
         }
         case 'line': {
@@ -458,7 +460,7 @@ const drawChart = (data) => {
                 }
                 values.push(val[0]);
             });
-            myChart = new LineChartConfig(canvas);
+            myChart = new LineChartConfig();
             break;
         }
         case 'doughnut': {
@@ -470,7 +472,7 @@ const drawChart = (data) => {
                 }
                 values.push(val[0]);
             });
-            myChart = new DoughnutChartConfig(canvas);
+            myChart = new DoughnutChartConfig();
             break;
         }
         case 'polarArea': {
@@ -482,7 +484,7 @@ const drawChart = (data) => {
                 }
                 values.push(val[0]);
             });
-            myChart = new PolarAreaChartConfig(canvas);
+            myChart = new PolarAreaChartConfig();
             break;
         }
         case 'scatter': {
@@ -494,7 +496,7 @@ const drawChart = (data) => {
                 }
                 values.push({ x: val[0], y: val[1] });
             });
-            myChart = new ScatterChartConfig(canvas);
+            myChart = new ScatterChartConfig();
             break;
         }
         case 'bubble': {
@@ -511,19 +513,19 @@ const drawChart = (data) => {
         }
         case 'sunburst': {
             values = DataFormatHelper.unlist(data);
-            myChart = new SunburstChartConfig(canvas);
+            myChart = new SunburstChartConfig();
             break;
         }
 
         case 'treemap': {
             values = DataFormatHelper.unlist(data);
-            myChart = new TreemapChartConfig(canvas);
+            myChart = new TreemapChartConfig();
             break;
         }
 
         case 'icicle': {
             values = DataFormatHelper.unlist(data);
-            myChart = new IcicleChartConfig(canvas);
+            myChart = new IcicleChartConfig();
             break;
         }
         default:
@@ -572,7 +574,6 @@ let nameView = document.getElementById('nameView')
 let nameEdit = document.getElementById('nameEdit')
 
 document.getElementById('editName').onclick = e => {
-    console.log(document.getElementById('chartNameView').innerText);
     nameView.style.display = 'none';
     nameEdit.style.display = 'block';
     let name = document.getElementById('chartNameView').innerText
@@ -589,6 +590,40 @@ document.getElementById('editName').onclick = e => {
     };
 };
 
+var fontSizeSelect = document.getElementById('fontSize');
+fontSizeSelect.onchange = e => {
+    var size = fontSizeSelect.value;
+    if (/^\d{1,3}$/.test(size)) {
+        Chart.defaults.font.size = parseInt(size);
+        ChartConfig.update();
+    }
+};
+
+var fontStyleBtn = document.getElementById('italicBtn');
+fontStyleBtn.onclick = e => {
+    var style = Chart.defaults.font.style;
+    if (style=='normal') {
+        Chart.defaults.font.style = 'italic';
+        fontStyleBtn.classList.add('btn-icon-selected');
+    }else if(style=='italic'){
+        Chart.defaults.font.style = 'normal';
+        fontStyleBtn.classList.remove('btn-icon-selected');
+    }
+    ChartConfig.update();
+};
+
+var fontWeightBtn = document.getElementById('boldBtn');
+fontWeightBtn.onclick = e => {
+    var weight = Chart.defaults.font.weight;
+    if (weight=='normal') {
+        Chart.defaults.font.weight = 'bold';
+        fontWeightBtn.classList.add('btn-icon-selected');
+    }else if(weight=='bold'){
+        Chart.defaults.font.weight = 'normal';
+        fontWeightBtn.classList.remove('btn-icon-selected');
+    }
+    ChartConfig.update();
+};
 
 const colorPicker = document.getElementById('ColorInput');
 let color = ColorInput.value;

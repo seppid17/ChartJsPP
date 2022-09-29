@@ -7,27 +7,27 @@ class RectangleElement extends Chart.Element {
         this.y = cfg.y;
         this.width = cfg.width;
         this.height = cfg.height;
-        this.text = cfg.text != undefined ? cfg.text : null;
+        this.text = typeof cfg.text != 'undefined' ? cfg.text : null;
         this.options = {};
 
         var options = cfg.options;
-        this.options.backgroundColor = options.backgroundColor != undefined ? options.backgroundColor : '#000000';
-        this.options.hAlign = options.hAlign != undefined ? options.hAlign : 'left'; // 'left' | 'center' | 'right'
-        this.options.vAlign = options.vAlign != undefined ? options.vAlign : 'top'; // 'top' | 'middle' | 'bottom'
-        this.options.textColor = options.textColor != undefined ? options.textColor : '#000000';
-        this.options.verticalText = options.verticalText != undefined ? options.verticalText : false;
+        this.options.backgroundColor = typeof options.backgroundColor != 'undefined' ? options.backgroundColor : '#000000';
+        this.options.hAlign = typeof options.hAlign != 'undefined' ? options.hAlign : 'left'; // 'left' | 'center' | 'right'
+        this.options.vAlign = typeof options.vAlign != 'undefined' ? options.vAlign : 'top'; // 'top' | 'middle' | 'bottom'
+        this.options.textColor = typeof options.textColor != 'undefined' ? options.textColor : '#000000';
+        this.options.verticalText = typeof options.verticalText != 'undefined' ? options.verticalText : false;
         this.options.font = {};
 
-        var font = options.font != undefined ? options.font : {};
-        this.options.font.style = font.style != undefined ? font.style : 'normal'; // 'normal' | 'italic' | 'oblique'
-        this.options.font.weight = font.weight != undefined ? font.weight : 'normal'; // 'normal' | 'bold' | 'bolder' | 'lighter'
-        this.options.font.size = font.size != undefined ? font.size : 16;
-        this.options.font.family = font.family != undefined ? font.family : 'Arial';
-
-        this.options.padding = options.padding != undefined ? options.padding : this.options.font.size / 4;
+        var font = typeof options.font != 'undefined' ? options.font : {};
+        this.options.font.style = typeof font.style != 'undefined' ? font.style : Chart.defaults.font.style; // 'normal' | 'italic' | 'oblique'
+        this.options.font.weight = typeof font.weight != 'undefined' ? font.weight : Chart.defaults.font.weight; // 'normal' | 'bold' | 'bolder' | 'lighter'
+        this.options.font.size = typeof font.size != 'undefined' ? font.size : Chart.defaults.font.size;
+        this.options.font.family = typeof font.family != 'undefined' ? font.family : 'Arial';
+        
+        this.options.padding = typeof options.padding != 'undefined' ? options.padding : this.options.font.size / 4;
         this.hasChild = false;
     }
-
+    
     _addText(ctx) {
         if (this.text == null) return;
         ctx.fillStyle = this.options.textColor;
