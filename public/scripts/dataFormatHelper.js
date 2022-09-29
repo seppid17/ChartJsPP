@@ -47,3 +47,4 @@ class DataFormatHelper {
         return processedList;
     }
 }
+module.exports  = DataFormatHelper;
