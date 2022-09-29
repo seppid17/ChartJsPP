@@ -14,25 +14,25 @@ test('Test 1: isEmpty',()=>{
     expect(functions.isEmpty('Non empty string')).toBeFalsy(); //non empty
 });
 
-test('Test 2: isEmail',()=>{
-    expect(functions.isEmail('sample@gmail.com')).toBeTruthy();
-    expect(functions.isEmail('abc@.com')).toBeFalsy();
-    expect(functions.isEmail('abc  12@gmail.com')).toBeFalsy();
-    expect(functions.isEmail('abc  12.com')).toBeFalsy();
-});
+// test('Test 2: isEmail',()=>{
+//     expect(functions.isEmail('sample@gmail.com')).toBeTruthy();
+//     expect(functions.isEmail('abc@.com')).toBeFalsy();
+//     expect(functions.isEmail('abc  12@gmail.com')).toBeFalsy();
+//     expect(functions.isEmail('abc  12.com')).toBeFalsy();
+// });
 
-test('Test 2: isPassword',()=>{
-    expect(functions.isPassword('123456789')).toBeTruthy();
-    expect(functions.isPassword('ad fss 35')).toBeFalsy();
-    expect(functions.isPassword('12@gm1314')).toBeTruthy();
-});
+// test('Test 3: isPassword',()=>{
+//     expect(functions.isPassword('123456789')).toBeTruthy();
+//     expect(functions.isPassword('ad fss 35')).toBeFalsy();
+//     expect(functions.isPassword('12@gm1314')).toBeTruthy();
+// });
 
-test('Test 2: isName',()=>{
-    expect(functions.isName('test')).toBeTruthy();
-    expect(functions.isName('@.com')).toBeFalsy();
-});
+// test('Test 4: isName',()=>{
+//     expect(functions.isName('test')).toBeTruthy();
+//     expect(functions.isName('@.com')).toBeFalsy();
+// });
 
-test('Test 2: isEqual',()=>{
-    expect(functions.isEqual('sample@gmail.com', 'sample@gmail.com')).toBeTruthy();
-    expect(functions.isEqual('abc@.com', ' abc@.com')).toBeFalsy();
-});
+// test('Test 5: isEqual',()=>{
+//     expect(functions.isEqual('sample@gmail.com', 'sample@gmail.com')).toBeTruthy();
+//     expect(functions.isEqual('abc@.com', ' abc@.com')).toBeFalsy();
+// });

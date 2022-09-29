@@ -74,22 +74,6 @@ function isEmpty(str) {
     return (!str || str.length === 0);
 }
 
-function isEmail(email) {
-    return email_pattern.test(email);
-}
-
-function isPassword(passwd) {
-    return password_pattern.test(passwd);
-}
-
-function isName(name) {
-    return name_pattern.test(name);
-}
-
-function isEqual(dataOne, dataTwo) {
-    return (dataOne == dataTwo);
-}
-
 function setErrorFor(input, message) {
     const formControl = input.parentElement;
     const small = formControl.querySelector('small');
@@ -104,4 +88,4 @@ function setClear(input) {
     formControl.className = 'form-control form-outline form-input';
 }
 
-module.exports = {isEmpty, isEmail, isPassword, isName, isEqual}
+module.exports = {isEmpty}
