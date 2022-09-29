@@ -72,7 +72,6 @@ function keyPressFn(e, pattern, nextElem, btn = null, errorMsg = null) {
  */
 function isEmpty(str) {
     return (!str || str.length === 0);
-    
 }
 
 function setErrorFor(input, message) {

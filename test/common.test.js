@@ -1,14 +1,38 @@
 //======================
-const function2 =require('../public/scripts/common');
+const functions = require('../public/scripts/common');
 
-/*Unit testing for common.js */
+/*Unit testing for common.js 
 
-let str1 = '' // Empty string
-test('Test 1: The emptiness of string',()=>{
-    expect(function2.isEmpty(str1)).toBeTruthy();
+Function names: isEmpty(str)
+                isEmail(email)
+                isPassword(passwd)
+                isName(name)
+                isEqual(dataOne, dataTwo)*/
+
+test('Test 1: isEmpty',()=>{
+    expect(functions.isEmpty('')).toBeTruthy(); //empty
+    expect(functions.isEmpty('Non empty string')).toBeFalsy(); //non empty
 });
 
-let str2 = 'Not Empty string' // The sting is not empty
-test('Test 2: The not empty string',()=>{
-    expect(function2.isEmpty(str2)).toBeFalsy();
-});
+// test('Test 2: isEmail',()=>{
+//     expect(functions.isEmail('sample@gmail.com')).toBeTruthy();
+//     expect(functions.isEmail('abc@.com')).toBeFalsy();
+//     expect(functions.isEmail('abc  12@gmail.com')).toBeFalsy();
+//     expect(functions.isEmail('abc  12.com')).toBeFalsy();
+// });
+
+// test('Test 3: isPassword',()=>{
+//     expect(functions.isPassword('123456789')).toBeTruthy();
+//     expect(functions.isPassword('ad fss 35')).toBeFalsy();
+//     expect(functions.isPassword('12@gm1314')).toBeTruthy();
+// });
+
+// test('Test 4: isName',()=>{
+//     expect(functions.isName('test')).toBeTruthy();
+//     expect(functions.isName('@.com')).toBeFalsy();
+// });
+
+// test('Test 5: isEqual',()=>{
+//     expect(functions.isEqual('sample@gmail.com', 'sample@gmail.com')).toBeTruthy();
+//     expect(functions.isEqual('abc@.com', ' abc@.com')).toBeFalsy();
+// });
