@@ -24,13 +24,19 @@ app.use(session({
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 app.use(express.static("public"));
+
 app.use('/', require('./routes/login'));
 app.use('/', require('./routes/signup'));
 app.use('/', require('./routes/passwordReset'));
 app.use('/chart', require('./routes/chart'));
+
 app.use('/', require('./routes/auth'));
+
 app.use('/dashboard', require('./routes/dashboard'));
+app.use('/authChart', require('./routes/saveChart'));
 app.use('/account', require('./routes/account'));
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log("Server has started at port " + PORT))
