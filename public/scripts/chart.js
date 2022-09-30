@@ -6,7 +6,13 @@ class ChartConfig {
         this.config = {};
         this.config.type = type;
         this.name = '';
+        backDiv.style.display = "none"
         ChartConfig.canvas.onclick = evt => {
+            if (this instanceof HierarchicalChartConfig) {
+                document.getElementById('expandBtnDiv').style.display = 'block';
+            } else {
+                document.getElementById('expandBtnDiv').style.display = 'none';
+            }
             let popup = document.getElementById("myPopup");
             popup.classList.remove("show");
             let myChart = ChartConfig.chart;
@@ -39,6 +45,7 @@ class ChartConfig {
                 document.getElementById('expandBtn').onclick = e => {
                     myChart.update('expand ' + point.index);
                     popup.classList.remove("show");
+                    backDiv.style.display = "block"
                 }
             }
         };
@@ -621,6 +628,12 @@ function rgb2hex(rgb) {
         ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+}
+
+const backDiv = document.getElementById('backDiv');
+
+document.getElementById('backBtn').onclick = e => {
+    ChartConfig.update('parent');
 }
 
 function setDivPos(d, x, y, mid) {

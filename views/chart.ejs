@@ -38,14 +38,11 @@
 
                                     <div id="nameView" style="display: block;">
                                         <div class="row">
-                                            <div class="col">
-                                                <h4 id="chartNameView">Untitled</h4>
-                                            </div>
-                                            <div class="col">
-                                                <span class="flex text-gray-500">
-                                                    <a id="editName"><i class="far fa-edit fa-lg"></i></a>
-                                                </span>
-                                            </div>
+                                            <span class="flex text-gray-500">
+                                                <span id="chartNameView"
+                                                    style="font-size: larger; font-weight: bold;">Untitled</span>
+                                                <a><i id="editName" class="far fa-edit fa-lg"></i></a>
+                                            </span>
                                         </div>
                                     </div>
 
@@ -80,49 +77,30 @@
                     </div>
 
                     <div class="row">
-                        <div class="col">
-                            <div class="row mb-3">
-                                <div clas="col">
-                                    <a class="btn btn-icon" id="boldBtn">
-                                        <i class="fa-solid fa-bold"></i>
-                                    </a>
-                                    <a class="btn btn-icon" id="italicBtn">
-                                        <i class="fa-solid fa-italic"></i>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <select name="sizeSelect" class="cus-select" id="fontSize">
-                                        <option selected>size</option>
-                                        <option value="10">10</option>
-                                        <option value="12">12</option>
-                                        <option value="14">14</option>
-                                        <option value="18">18</option>
-                                        <option value="24">24</option>
-                                        <option value="32">32</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col text-end">
-                            <div class="row prop-btns">
-                                <div class="text-end">
-                                    <a>
-                                        <i class="fa-solid fa-share-nodes fa-lg"></i>
-                                    </a>
-                                    <a id="downloadImgBtn">
-                                        <i class="fa-solid fa-download fa-lg"></i>
-                                    </a>
-                                    <a>
-                                        <i class="fa-solid fa-trash-can fa-lg"></i>
-                                    </a>
-                                    <a>
-                                        <i class="fa-solid fa-floppy-disk fa-lg"></i>
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="text-end">
+                            <a>
+                                <i class="fa-solid fa-share-nodes fa-lg"></i>
+                            </a>
+                            <a id="downloadImgBtn">
+                                <i class="fa-solid fa-download fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-trash-can fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                            </a>
                         </div>
                     </div>
+
+                    <div class="row" style="display: none;" id="backDiv">
+                        <a class="btn btn-back" id="backBtn" data-toggle="tab">
+                            <i class="fa-sharp fa-solid fa-caret-left"></i>
+                            <span>Back</span>
+                        </a>
+                    </div>
+
+                    <br>
 
                     <div class="row">
 
@@ -143,52 +121,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- <div class="row">
-                                                <div class="col d-flex justify-content-center">
-                                                    <div>
-                                                        <label class="form-label" for="nameText">Text</label>
-                                                        <div class="row">
-                                                            <div class="input-group mb-20">
-                                                                <input type="text" name="nameText" id="nameText"
-                                                                    class="name-text-input" placeholder="" />
-                                                                <div class="save-div">
-                                                                    <a>
-                                                                        <i class="far fa-check-circle fa-lg"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <div>
-                                                    <a class="btn btn-icon btn-icon-selected">
-                                                        <i class="fa-solid fa-bold"></i>
-                                                    </a>
-                                                    <a class="btn btn-icon">
-                                                        <i class="fa-solid fa-underline"></i>
-                                                    </a>
-                                                    <a class="btn btn-icon">
-                                                        <i class="fa-solid fa-italic"></i>
-                                                    </a>
-                                                    <select class="cus-select" id="inputGroupSelect01">
-                                                        <option selected>size</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-                                                        <option value="7">7</option>
-                                                        <option value="8">8</option>
-                                                        <option value="9">9</option>
-                                                        <option value="10">10</option>
-                                                    </select>
-                                                </div>
-                                            </div> -->
-
                                             <div class="row">
                                                 <div class="input-group">
                                                     <div class="row w-100">
@@ -206,7 +138,7 @@
 
                                             <br>
 
-                                            <div class="row">
+                                            <div class="row" style="display: none;" id="expandBtnDiv">
                                                 <div class="input-group">
                                                     <a class="btn btn-submit btn-ex" id="expandBtn" data-toggle="tab">
                                                         <span>Expand</span>
@@ -220,7 +152,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <br>
+                    
+                    <div class="row form-control">
+                        <h5>Chart properties</h5>
+                        
+                        <span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Text style
+                            <a class="btn btn-icon" id="boldBtn">
+                                <i class="fa-solid fa-bold"></i>
+                            </a>
+                            <a class="btn btn-icon" id="italicBtn">
+                                <i class="fa-solid fa-italic"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            Font size
+                            <input type="number" id="fontSize" class="sizeSelect" value="" min="10" max="32">
+                        </span>
+                    </div>
                 </div>
+
+                <br>
 
                 <div class="mt-20" style="display: block;" id="uploadViewDiv">
 
