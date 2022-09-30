@@ -646,7 +646,7 @@ document.getElementById('backBtn').onclick = e => {
 
 function setDivPos(d, x, y, mid) {
     if (x > mid) {
-        d.style.left = (x - 170) + 'px';
+        d.style.left = (x - 221) + 'px';
     } else {
         d.style.left = x + 'px';
     }
