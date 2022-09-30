@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Validator = require("../utils/validator");
 const bcrypt = require("bcrypt");
 
 const accountView = (req, res) => {
@@ -11,6 +12,18 @@ const changeName = (req, res) => {
     if (!firstName || !lastName || !password) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password' });
+        return;
+    }
+    if (!Validator.validate('name', firstName)) {
+        res.json({ 'success': false, 'reason': 'Invalid first name' });
+        return;
+    }
+    if (!Validator.validate('name', lastName)) {
+        res.json({ 'success': false, 'reason': 'Invalid last name' });
         return;
     }
     let user = req.session.user;
@@ -39,6 +52,14 @@ const changePasswd = (req, res) => {
     if (!curPassword || !newPassword) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        return;
+    }
+    if (!Validator.validate('password', curPassword)) {
+        res.json({ 'success': false, 'reason': 'Invalid current password' });
+        return;
+    }
+    if (!Validator.validate('password', newPassword)) {
+        res.json({ 'success': false, 'reason': 'Invalid new password' });
         return;
     }
     let user = req.session.user;
