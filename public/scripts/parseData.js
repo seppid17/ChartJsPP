@@ -59,6 +59,9 @@ function extractCSV(csv) {
         }
 
         ids = Object.keys(json);
+        if(ids.length==0){
+            throw 'Empty data file';
+        }
         ids.sort(function (a, b) { return a - b });
         ids.reverse();
         for (let i = 0; i < ids.length; i++) {
@@ -74,6 +77,7 @@ function extractCSV(csv) {
             }
             parent.c[id] = data;
         }
+        
         return json;
     } catch (ex) {
         if (ex) {
