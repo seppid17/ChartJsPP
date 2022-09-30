@@ -62,3 +62,7 @@ class DataFormatHelper {
         return root;
     }
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = DataFormatHelper;
+}
