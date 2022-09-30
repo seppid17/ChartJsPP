@@ -17,7 +17,7 @@ class ChartConfig {
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const point = points[points.length - 1];
-                
+
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
@@ -29,11 +29,15 @@ class ChartConfig {
                 }
                 colorPicker.value = crntColor;
                 colorPicker.onchange = e => {
-                    colors[point.index] = ColorInput.value;
-                    myChart.update();
+                    if (this instanceof HierarchicalChartConfig) {
+                        ChartConfig.chart._metasets[0].controller.pointers[point.index].clr = ColorInput.value
+                    } else {
+                        colors[point.index] = ColorInput.value;
+                    }
+                    myChart.update('none');
                 }
                 document.getElementById('expandBtn').onclick = e => {
-                    myChart.update('expand '+point.index);
+                    myChart.update('expand ' + point.index);
                     popup.classList.remove("show");
                 }
             }
@@ -586,10 +590,10 @@ fontSizeSelect.onchange = e => {
 var fontStyleBtn = document.getElementById('italicBtn');
 fontStyleBtn.onclick = e => {
     var style = Chart.defaults.font.style;
-    if (style=='normal') {
+    if (style == 'normal') {
         Chart.defaults.font.style = 'italic';
         fontStyleBtn.classList.add('btn-icon-selected');
-    }else if(style=='italic'){
+    } else if (style == 'italic') {
         Chart.defaults.font.style = 'normal';
         fontStyleBtn.classList.remove('btn-icon-selected');
     }
@@ -599,10 +603,10 @@ fontStyleBtn.onclick = e => {
 var fontWeightBtn = document.getElementById('boldBtn');
 fontWeightBtn.onclick = e => {
     var weight = Chart.defaults.font.weight;
-    if (weight=='normal') {
+    if (weight == 'normal') {
         Chart.defaults.font.weight = 'bold';
         fontWeightBtn.classList.add('btn-icon-selected');
-    }else if(weight=='bold'){
+    } else if (weight == 'bold') {
         Chart.defaults.font.weight = 'normal';
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
@@ -610,10 +614,6 @@ fontWeightBtn.onclick = e => {
 };
 
 const colorPicker = document.getElementById('ColorInput');
-let color = ColorInput.value;
-colorPicker.onchange = e => {
-    color = ColorInput.value;
-}
 
 function rgb2hex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
