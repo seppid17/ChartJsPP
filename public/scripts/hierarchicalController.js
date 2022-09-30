@@ -22,6 +22,12 @@ class HierarchicalController extends Chart.PieController {
     }
 
     update(mode) {
+        if (typeof mode != 'undefined' && mode.startsWith('expand')){
+            var index = mode.split(' ')[1];
+            index = parseInt(index);
+            this.draw(index);
+            return;
+        }
         super.update(mode);
         this._setAreaCoordinates();
         if (typeof mode == 'undefined' || mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none')

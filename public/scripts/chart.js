@@ -16,10 +16,12 @@ class ChartConfig {
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
+                const point = points[points.length - 1];
+                myChart.update('expand '+point.index);
+                return;
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
-                const point = points[points.length - 1];
                 let crntColor = null;
                 if (/^#[0-9A-F]{6}$/i.test(colors[point.index])) {
                     crntColor = colors[point.index];

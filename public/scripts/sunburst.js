@@ -38,7 +38,8 @@ class SunburstController extends HierarchicalController {
             let x = this._drawIndex;
             chartData[x] = item.v;
             labels[x] = item.n;
-            if (bgcols[x] == undefined) bgcols[x] = `rgba(${(167 * x + 51) % 256},${(71 * x + 203) % 256},${(203 * x + 67) % 256},1)`;
+            this.pointers[x] = item;
+            bgcols[x] = `rgba(${(167 * x + 51) % 256},${(71 * x + 203) % 256},${(203 * x + 67) % 256},1)`;
             let color = bgcols[x];
             let endAngle = startAngle + ang * item.w;
             this._drawSector(r0, r1, startAngle, endAngle, color, item.n);
@@ -47,13 +48,25 @@ class SunburstController extends HierarchicalController {
         });
     }
 
-    draw() {
+    draw(index = -1) {
         if (typeof this.endX == 'undefined' || this.endX == 0) {
             this._setAreaCoordinates();
         }
         this._setCenter();
         var meta = this.getMeta();
-        var data = meta._dataset.tree;
+        if (typeof this.tree == 'undefined') {
+            this.tree = meta._dataset.tree;
+        }
+        if (index >= 0) {
+            if (typeof this.pointers != 'undefined' && typeof this.pointers[index] != undefined) {
+                this.tree = this.pointers[index];
+            }
+        }
+        var data = this.tree;
+        this.pointers = [];
+        this.getMeta()._parsed.length = 0;
+        this.chart.$context.chart.data.labels = [];
+        this.chart.$context.chart.data.datasets[0].backgroundColor = [];
         var maxDepth = Math.min(data.d, SunburstController.maxDepth);
         var hwMin = Math.min(this.endX - this.startX, this.endY - this.startY);
         var r = hwMin / (2 * maxDepth + 1);
