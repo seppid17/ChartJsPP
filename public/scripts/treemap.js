@@ -40,13 +40,10 @@ class TreemapController extends HierarchicalController {
                 var myWidth = width * item.w;
                 chartData[n] = item.v;
                 labels[n] = item.n;
-                var x = n + 1;
-                var color = bgcols[n];
-                if (typeof color == 'undefined') {
-                    color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
-                    bgcols[n] = color;
-                }
                 this.pointers[n] = item;
+                if (item.clr == undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+                let color = item.clr;
+                bgcols[n] = color;
                 var rect = this._drawRect(ctx, x0, startY, myWidth, height, color, labels[n]);
                 var childStartX, childStartY, childEndX, childEndY;
                 if (myWidth > height) {
@@ -71,13 +68,10 @@ class TreemapController extends HierarchicalController {
                 var myHeight = height * item.w;
                 chartData[n] = item.v;
                 labels[n] = item.n;
-                var x = n + 1;
-                var color = bgcols[n];
-                if (typeof color == 'undefined') {
-                    color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
-                    bgcols[n] = color;
-                }
                 this.pointers[n] = item;
+                if (item.clr == undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+                let color = item.clr;
+                bgcols[n] = color;
                 var rect = this._drawRect(ctx, startX, y0, width, myHeight, color, labels[n]);
                 var childStartX, childStartY, childEndX, childEndY;
                 if (myHeight < width) {

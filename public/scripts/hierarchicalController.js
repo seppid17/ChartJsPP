@@ -22,11 +22,16 @@ class HierarchicalController extends Chart.PieController {
     }
 
     update(mode) {
-        if (typeof mode != 'undefined' && mode.startsWith('expand')) {
-            var index = mode.split(' ')[1];
-            index = parseInt(index);
-            this.draw(index);
-            return;
+        if (typeof mode != 'undefined') {
+            if (mode.startsWith('expand')) {
+                var index = mode.split(' ')[1];
+                index = parseInt(index);
+                this.draw(index);
+                return;
+            }else if (mode=='root'){
+                this.tree = this.getMeta()._dataset.tree;
+                return;
+            }
         }
         super.update(mode);
         this._setAreaCoordinates();

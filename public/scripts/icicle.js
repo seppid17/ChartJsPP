@@ -38,9 +38,10 @@ class IcicleController extends HierarchicalController {
             let n = this._drawIndex;
             chartData[n] = item.v;
             labels[n] = item.n;
-            if (bgcols[n] == undefined) bgcols[n] = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
-            let color = bgcols[n];
             this.pointers[n] = item;
+            if (item.clr==undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+            let color = item.clr;
+            bgcols[n] = color;
             let myHeight = height * item.w;
             this._drawRect(startX, y0, unitWidth, myHeight, color, item.n);
             this._drawChart(item.c, y0, y0 + myHeight, x1, unitWidth, remaining - 1);
