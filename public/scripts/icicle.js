@@ -40,6 +40,7 @@ class IcicleController extends HierarchicalController {
             labels[n] = item.n;
             if (bgcols[n] == undefined) bgcols[n] = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
             let color = bgcols[n];
+            this.pointers[n] = item;
             let myHeight = height * item.w;
             this._drawRect(startX, y0, unitWidth, myHeight, color, item.n);
             this._drawChart(item.c, y0, y0 + myHeight, x1, unitWidth, remaining - 1);
@@ -47,15 +48,9 @@ class IcicleController extends HierarchicalController {
         });
     }
 
-    draw() {
-        if (typeof this.startX == 'undefined' || this.startX == 0) {
-            this._setAreaCoordinates();
-        }
-        this.textOptions = this.chart.$context.chart.config._config.options.text;
-        if (typeof this.textOptions.font == 'undefined') this.textOptions.font = {};
-        this.textOptions.font.size = Chart.defaults.font.size;
-        var meta = this.getMeta();
-        var data = meta._dataset.tree;
+    draw(index = -1) {
+        super.draw(index);
+        var data = this.tree;
         var maxDepth = Math.min(data.d, IcicleController.maxDepth);
         var width = this.endX - this.startX;
         var unitWidth = width / maxDepth;

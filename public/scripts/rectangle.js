@@ -8,7 +8,7 @@ class RectangleElement extends Chart.Element {
         this.width = cfg.width;
         this.height = cfg.height;
         this.text = typeof cfg.text != 'undefined' ? cfg.text : null;
-        this.options = {};
+        if (typeof this.options == 'undefined') this.options = {};
 
         var options = cfg.options;
         this.options.backgroundColor = typeof options.backgroundColor != 'undefined' ? options.backgroundColor : '#000000';

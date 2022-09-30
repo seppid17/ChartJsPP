@@ -4,10 +4,13 @@ class LabeledArcElement extends Chart.elements.ArcElement {
     constructor(cfg) {
         super(cfg);
         this.text = typeof cfg.text != 'undefined' ? cfg.text : null;
-        this.options.textColor = typeof cfg.options.textColor != 'undefined' ? cfg.options.textColor : '#000000';
+        if (typeof this.options == 'undefined') this.options = {};
+
+        var options = cfg.options;
+        this.options.textColor = typeof options.textColor != 'undefined' ? options.textColor : '#000000';
         this.options.font = {};
 
-        var font = typeof cfg.options.font != 'undefined' ? cfg.options.font : {};
+        var font = typeof options.font != 'undefined' ? options.font : {};
         this.options.font.style = typeof font.style != 'undefined' ? font.style : Chart.defaults.font.style; // 'normal' | 'italic' | 'oblique'
         this.options.font.weight = typeof font.weight != 'undefined' ? font.weight : Chart.defaults.font.weight; // 'normal' | 'bold' | 'bolder' | 'lighter'
         this.options.font.size = typeof font.size != 'undefined' ? font.size : Chart.defaults.font.size;

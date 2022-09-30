@@ -22,7 +22,7 @@ class HierarchicalController extends Chart.PieController {
     }
 
     update(mode) {
-        if (typeof mode != 'undefined' && mode.startsWith('expand')){
+        if (typeof mode != 'undefined' && mode.startsWith('expand')) {
             var index = mode.split(' ')[1];
             index = parseInt(index);
             this.draw(index);
@@ -32,5 +32,29 @@ class HierarchicalController extends Chart.PieController {
         this._setAreaCoordinates();
         if (typeof mode == 'undefined' || mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none')
             this.draw();
+    }
+
+    draw(index = -1) {
+        if (typeof this.endX == 'undefined' || this.endX == 0) {
+            this._setAreaCoordinates();
+        }
+        var meta = this.getMeta();
+        if (typeof this.tree == 'undefined') {
+            this.tree = meta._dataset.tree;
+        }
+        if (index >= 0) {
+            if (typeof this.pointers != 'undefined' && typeof this.pointers[index] != undefined && this.pointers[index].c.length > 0) {
+                this.tree = this.pointers[index];
+            }
+        }
+        this.textOptions = this.chart.$context.chart.config._config.options.text;
+        if (this.textOptions == undefined) this.textOptions = {};
+        if (typeof this.textOptions.font == 'undefined') this.textOptions.font = {};
+        this.textOptions.font.size = Chart.defaults.font.size;
+        this.pointers = [];
+        meta._parsed.length = 0;
+        this.chart.$context.chart.data.labels = [];
+        this.chart.$context.chart.data.datasets[0].backgroundColor = [];
+        this._drawIndex = 0;
     }
 }

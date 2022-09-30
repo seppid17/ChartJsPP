@@ -1,6 +1,7 @@
 class SunburstController extends HierarchicalController {
     static maxDepth = 4;
     _drawSector(r1, r2, theta1, theta2, color = 'black', text = null) {
+        var textOptions = this.textOptions;
         var arc = new LabeledArcElement({
             startAngle: theta1,
             endAngle: theta2,
@@ -14,6 +15,13 @@ class SunburstController extends HierarchicalController {
                 circular: true,
                 spacing: 0,
                 offset: 0,
+                textColor: textOptions.color,
+                font: {
+                    style: textOptions.font.style,
+                    weight: textOptions.font.weight,
+                    size: textOptions.font.size,
+                    family: textOptions.font.family
+                }
             }
         });
         this.getMeta().data[this._drawIndex] = arc;
@@ -35,12 +43,12 @@ class SunburstController extends HierarchicalController {
         let startAngle = start;
         var r1 = r0 + r;
         data.forEach(item => {
-            let x = this._drawIndex;
-            chartData[x] = item.v;
-            labels[x] = item.n;
-            this.pointers[x] = item;
-            bgcols[x] = `rgba(${(167 * x + 51) % 256},${(71 * x + 203) % 256},${(203 * x + 67) % 256},1)`;
-            let color = bgcols[x];
+            let n = this._drawIndex;
+            chartData[n] = item.v;
+            labels[n] = item.n;
+            this.pointers[n] = item;
+            bgcols[n] = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+            let color = bgcols[n];
             let endAngle = startAngle + ang * item.w;
             this._drawSector(r0, r1, startAngle, endAngle, color, item.n);
             this._drawChart(item.c, startAngle, endAngle, r1, r, remaining - 1);
@@ -49,28 +57,12 @@ class SunburstController extends HierarchicalController {
     }
 
     draw(index = -1) {
-        if (typeof this.endX == 'undefined' || this.endX == 0) {
-            this._setAreaCoordinates();
-        }
+        super.draw(index);
         this._setCenter();
-        var meta = this.getMeta();
-        if (typeof this.tree == 'undefined') {
-            this.tree = meta._dataset.tree;
-        }
-        if (index >= 0) {
-            if (typeof this.pointers != 'undefined' && typeof this.pointers[index] != undefined) {
-                this.tree = this.pointers[index];
-            }
-        }
         var data = this.tree;
-        this.pointers = [];
-        this.getMeta()._parsed.length = 0;
-        this.chart.$context.chart.data.labels = [];
-        this.chart.$context.chart.data.datasets[0].backgroundColor = [];
         var maxDepth = Math.min(data.d, SunburstController.maxDepth);
         var hwMin = Math.min(this.endX - this.startX, this.endY - this.startY);
         var r = hwMin / (2 * maxDepth + 1);
-        this._drawIndex = 0;
         this._drawChart(data.c, 0, 2 * Math.PI, r / 2, r, maxDepth);
     }
 }
