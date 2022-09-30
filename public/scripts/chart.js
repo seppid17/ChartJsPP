@@ -394,7 +394,7 @@ window.onload = () => {
 Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
-const chartName = 'Dataset_1'
+let chartName = 'Untitled';
 
 Chart.register({
     id: "legendColorUpdate",
@@ -576,8 +576,9 @@ document.getElementById('editName').onclick = e => {
     document.getElementById('saveName').onclick = e => {
         nameView.style.display = 'block';
         nameEdit.style.display = 'none';
-        name = document.getElementById('nameInput').value
-        document.getElementById('chartNameView').innerText = name
+        name = document.getElementById('nameInput').value;
+        document.getElementById('chartNameView').innerText = name;
+        chartName = name;
     };
     document.getElementById('cancellEditName').onclick = e => {
         nameView.style.display = 'block';
@@ -642,6 +643,12 @@ const backDiv = document.getElementById('backDiv');
 
 document.getElementById('backBtn').onclick = e => {
     ChartConfig.update('parent');
+    var first = ChartConfig.chart._metasets[0].controller.pointers[0];
+    if (first==undefined || first.p == undefined || first.p==null) return;
+    var parent = first.p;
+    if (parent.p==undefined || parent.p==null){
+        backDiv.style.display = 'none';
+    }
 }
 
 function setDivPos(d, x, y, mid) {
