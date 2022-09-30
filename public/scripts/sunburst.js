@@ -1,48 +1,74 @@
 class SunburstController extends HierarchicalController {
-    _drawSector(ctx, x0, y0, r1, r2, theta1, theta2, color = 'black') {
-        var arc = new Chart.elements.ArcElement({
+    static maxDepth = 4;
+    _drawSector(r1, r2, theta1, theta2, color = 'black', text = null) {
+        var textOptions = this.textOptions;
+        var arc = new LabeledArcElement({
             startAngle: theta1,
             endAngle: theta2,
-            x: x0,
-            y: y0,
+            x: this.x0,
+            y: this.y0,
             innerRadius: r1,
             outerRadius: r2,
+            text: text,
             options: {
                 backgroundColor: color,
                 circular: true,
                 spacing: 0,
                 offset: 0,
+                textColor: textOptions.color,
+                font: {
+                    style: textOptions.font.style,
+                    weight: textOptions.font.weight,
+                    size: textOptions.font.size,
+                    family: textOptions.font.family
+                }
             }
         });
         this.getMeta().data[this._drawIndex] = arc;
         this._drawIndex += 1;
-        arc.draw(ctx);
+        arc.draw(this.chart.ctx);
     }
 
-    _getCenter() {
-        var x0 = (this.endX + this.startX) / 2;
-        var y0 = (this.endY + this.startY) / 2;
-        return [x0, y0];
+    _setCenter() {
+        this.x0 = (this.endX + this.startX) / 2;
+        this.y0 = (this.endY + this.startY) / 2;
     }
 
-    draw() {
-        super.draw();
-        this._processTree(0, 2 * Math.PI);
+    _drawChart(data, start, end, r0, r, remaining) {
+        if (remaining <= 0) return;
+        var chartData = this.getMeta()._parsed;
+        var labels = this.chart.$context.chart.data.labels;
+        var bgcols = this.chart.$context.chart.data.datasets[0].backgroundColor;
+        var ang = end - start;
+        let startAngle = start;
+        var r1 = r0 + r;
+        data.forEach(item => {
+            let n = this._drawIndex;
+            chartData[n] = item.v;
+            labels[n] = item.n;
+            this.pointers[n] = item;
+            if (item.clr==undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+            let color = item.clr;
+            bgcols[n] = color;
+            let endAngle = startAngle + ang * item.w;
+            this._drawSector(r0, r1, startAngle, endAngle, color, item.n);
+            this._drawChart(item.c, startAngle, endAngle, r1, r, remaining - 1);
+            startAngle = endAngle;
+        });
+    }
 
-        var ctx = this.chart.ctx;
-        var x0, y0;
-        [x0, y0] = this._getCenter();
-        var maxDepth = this.tree[this.tree.length - 1].n + 1;
-
+    draw(index = -1) {
+        super.draw(index);
+        this._setCenter();
+        var data = this.tree;
+        var maxDepth = Math.min(data.d, SunburstController.maxDepth);
         var hwMin = Math.min(this.endX - this.startX, this.endY - this.startY);
         var r = hwMin / (2 * maxDepth + 1);
-        var bgcols = this.$context.dataset.backgroundColor;
-        this.tree.forEach((item, index) => {
-            this._drawSector(ctx, x0, y0, r / 2 + r * item.n, r / 2 + r * (1 + item.n), item.s, item.e, bgcols[index]);
-        });
+        this._drawChart(data.c, 0, 2 * Math.PI, r / 2, r, maxDepth);
     }
 }
 
 SunburstController.id = 'sunburst';
 SunburstController.defaults = Chart.PieController.defaults;
+Chart.register(SunburstController, LabeledArcElement);
 Chart.register(SunburstController);

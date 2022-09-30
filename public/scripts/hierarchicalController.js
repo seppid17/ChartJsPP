@@ -22,71 +22,51 @@ class HierarchicalController extends Chart.PieController {
     }
 
     update(mode) {
+        if (typeof mode != 'undefined') {
+            if (mode.startsWith('expand')) {
+                var index = mode.split(' ')[1];
+                index = parseInt(index);
+                this.draw(index);
+                return;
+            } else if (mode == 'root') {
+                this.tree = this.getMeta()._dataset.tree;
+                return;
+            } else if (mode == 'parent') {
+                let parent = this.tree.p;
+                if (parent != undefined) {
+                    this.tree = parent;
+                    this.draw();
+                    return;
+                }
+            }
+        }
         super.update(mode);
         this._setAreaCoordinates();
         if (typeof mode == 'undefined' || mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none')
             this.draw();
     }
 
-    _makeTree(data, levelIndex, parent) {
-        if (typeof this.tree[levelIndex] == 'undefined') {
-            this.tree[levelIndex] = [];
-        }
-        var level = this.tree[levelIndex];
-        var totWeight = 0;
-        data.forEach(item => {
-            totWeight += item.v;
-        });
-        var prevWeight = 0;
-        data.forEach(item => {
-            var weight = item.v / totWeight;
-            var treeItem = {
-                pw: prevWeight,
-                w: weight,
-                p: parent
-            }
-            prevWeight += weight;
-            var myIndex = level.push(treeItem) - 1;
-            this._makeTree(item.c, levelIndex + 1, myIndex);
-        });
-    }
-
-    _processTree(minValue, maxValue) {
-        for (let n = 0; n < this.tree.length; n++) {
-            var prevRow = n == 0 ? [{ s: minValue, e: maxValue }] : this.tree[n - 1];
-            var row = this.tree[n];
-            row.forEach(elem => {
-                var parent = prevRow[elem.p];
-                var parentRange = parent.e - parent.s;
-                var myRange = parentRange * elem.w;
-                var prevPos = parent.s + parentRange * elem.pw;
-                elem.s = prevPos;
-                elem.e = prevPos + myRange;
-                elem.n = n;
-                delete elem.p;
-                delete elem.w;
-                delete elem.pw;
-            });
-        }
-        // flatten the tree
-        var flatTree = [];
-        this.tree.forEach(row => {
-            row.forEach(elem => {
-                flatTree.push(elem);
-            });
-        });
-        this.tree = flatTree;
-    }
-
-    draw() {
+    draw(index = -1) {
         if (typeof this.endX == 'undefined' || this.endX == 0) {
             this._setAreaCoordinates();
         }
         var meta = this.getMeta();
-        var data = meta._dataset.tree;
-        this.tree = [];
-        this._makeTree(data, 0, 0);
-        if (this.tree[this.tree.length - 1].length == 0) this.tree.length -= 1;
+        if (typeof this.tree == 'undefined') {
+            this.tree = meta._dataset.tree;
+        }
+        if (index >= 0) {
+            if (typeof this.pointers != 'undefined' && typeof this.pointers[index] != undefined && this.pointers[index].c.length > 0) {
+                this.tree = this.pointers[index];
+            }
+        }
+        this.textOptions = this.chart.$context.chart.config._config.options.text;
+        if (this.textOptions == undefined) this.textOptions = {};
+        if (typeof this.textOptions.font == 'undefined') this.textOptions.font = {};
+        this.textOptions.font.size = Chart.defaults.font.size;
+        this.pointers = [];
+        meta._parsed.length = 0;
+        this.chart.$context.chart.data.labels = [];
+        this.chart.$context.chart.data.datasets[0].backgroundColor = [];
         this._drawIndex = 0;
     }
 }

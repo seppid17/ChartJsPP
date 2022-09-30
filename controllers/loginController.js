@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Validator = require("../utils/validator");
 const bcrypt = require("bcrypt");
 
 const loginView = (req, res) => {
@@ -16,6 +17,14 @@ const loginUser = (req, res) => {
     if (!email || !password) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        return;
+    }
+    if (!Validator.validate('email', email)) {
+        res.json({ 'success': false, 'reason': 'Invalid email' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password' });
         return;
     }
     User.findOne({ email: email, active: true }).then((user) => {

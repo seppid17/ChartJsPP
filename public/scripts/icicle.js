@@ -1,5 +1,6 @@
 class IcicleController extends HierarchicalController {
-    _drawRect(ctx, x0, y0, width, height, backgroundColor = 'black', text = null) {
+    static maxDepth = 5;
+    _drawRect(x0, y0, width, height, backgroundColor = 'black', text = null) {
         var textOptions = this.textOptions;
         var rect = new RectangleElement({
             x: x0,
@@ -22,27 +23,40 @@ class IcicleController extends HierarchicalController {
         });
         this.getMeta().data[this._drawIndex] = rect;
         this._drawIndex += 1;
-        rect.draw(ctx);
+        rect.draw(this.chart.ctx);
     }
 
-    draw() {
-        super.draw();
-        this._processTree(this.startY, this.endY);
-        var maxDepth = this.tree[this.tree.length - 1].n + 1;
-        var unitWidth = (this.endX - this.startX) / maxDepth;
-
-        var ctx = this.chart.ctx;
-        this.textOptions = this.chart.$context.chart.config._config.options.text;
+    _drawChart(data, startY, endY, startX, unitWidth, remaining) {
+        if (remaining <= 0) return;
+        var chartData = this.getMeta()._parsed;
         var labels = this.chart.$context.chart.data.labels;
-
-        var maxDepth = this.tree[this.tree.length - 1].n + 1;
-        var bgcols = this.$context.dataset.backgroundColor;
-        this.tree.forEach((item, index) => {
-            var x0 = this.startX + unitWidth * item.n;
-            var y0 = item.s;
-            var height = item.e - item.s;
-            this._drawRect(ctx, x0, y0, unitWidth, height, bgcols[index], labels[index]);
+        var bgcols = this.chart.$context.chart.data.datasets[0].backgroundColor;
+        var height = endY - startY;
+        let y0 = startY;
+        var x1 = startX + unitWidth;
+        data.forEach(item => {
+            let n = this._drawIndex;
+            chartData[n] = item.v;
+            labels[n] = item.n;
+            this.pointers[n] = item;
+            if (item.clr==undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+            let color = item.clr;
+            bgcols[n] = color;
+            let myHeight = height * item.w;
+            this._drawRect(startX, y0, unitWidth, myHeight, color, item.n);
+            this._drawChart(item.c, y0, y0 + myHeight, x1, unitWidth, remaining - 1);
+            y0 += myHeight;
         });
+    }
+
+    draw(index = -1) {
+        super.draw(index);
+        var data = this.tree;
+        var maxDepth = Math.min(data.d, IcicleController.maxDepth);
+        var width = this.endX - this.startX;
+        var unitWidth = width / maxDepth;
+        this._drawIndex = 0;
+        this._drawChart(data.c, this.startY, this.endY, this.startX, unitWidth, maxDepth);
     }
 }
 

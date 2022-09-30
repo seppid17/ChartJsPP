@@ -17,7 +17,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/default.css">
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/home.css">
 
     <!-- Fontawesome -->
     <!-- <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css"> -->
@@ -29,8 +29,106 @@
 <body>
     <!-- Navbar -->
     <%- include('navbar.ejs', {"pageName":"home"}) %>
-</body>
 
+        <div class="wrapper">
+            <!-- <div class="popup">
+                <span class="popuptext show" id="myPopup">
+                    <div class="col">
+                        <div id="EditChartOption">
+                            <div class="row">
+                                <div class="text-end">
+                                    <a id="CloseEdit">
+                                        <i class="fa-solid fa-x fa-s"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="colorInput" class="form-label">Color</label>
+                                        </div>
+                                        <div class="col text-end d-flex align-item-center">
+                                            <input type="color" name="colorInput" class="color-input" id="ColorInput" value="#000000"
+                                                title="Choose your color">
+                                            <a><i class="far fa-check-circle fa-lg"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="input-group">
+                                    <a class="btn btn-submit btn-ex" id="expandBtn" data-toggle="tab">
+                                        <span>Expand</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </span>
+            </div> -->
+
+            <!-- <div class="row">
+                <span>
+                    Text style
+                    <a class="btn-icon" id="boldBtn">
+                        <i class="fa-solid fa-bold"></i>
+                    </a>
+                    <a class="btn-icon" id="italicBtn">
+                        <i class="fa-solid fa-italic"></i>
+                    </a>
+                    &nbsp;&nbsp;
+                    Font size
+                    <input type="number" id="fontSize" class="sizeSelect" value="" min="10" max="32">
+                </span>
+            </div> -->
+
+            <!-- <div class="row">
+                <div class="col">
+                    <div class="row mb-3">
+                        <div clas="col">
+                            
+                        </div>
+                        <div class="col">
+                            <select name="sizeSelect" class="cus-select" id="fontSize">
+                                <option selected>size</option>
+                                <option value="10">10</option>
+                                <option value="12">12</option>
+                                <option value="14">14</option>
+                                <option value="18">18</option>
+                                <option value="24">24</option>
+                                <option value="32">32</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col text-end">
+                    <div class="row prop-btns">
+                        <div class="text-end">
+                            <a>
+                                <i class="fa-solid fa-share-nodes fa-lg"></i>
+                            </a>
+                            <a id="downloadImgBtn">
+                                <i class="fa-solid fa-download fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-trash-can fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+</body>
 <!-- <!DOCTYPE html>
 <html lang="en">
 <head>

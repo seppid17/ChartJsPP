@@ -6,7 +6,13 @@ class ChartConfig {
         this.config = {};
         this.config.type = type;
         this.name = '';
+        backDiv.style.display = "none"
         ChartConfig.canvas.onclick = evt => {
+            if (this instanceof HierarchicalChartConfig) {
+                document.getElementById('expandBtnDiv').style.display = 'block';
+            } else {
+                document.getElementById('expandBtnDiv').style.display = 'none';
+            }
             let popup = document.getElementById("myPopup");
             popup.classList.remove("show");
             let myChart = ChartConfig.chart;
@@ -16,10 +22,11 @@ class ChartConfig {
             let points = myChart.getActiveElements(evt);
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
+                const point = points[points.length - 1];
+
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
-                const point = points[points.length - 1];
                 let crntColor = null;
                 if (/^#[0-9A-F]{6}$/i.test(colors[point.index])) {
                     crntColor = colors[point.index];
@@ -28,8 +35,17 @@ class ChartConfig {
                 }
                 colorPicker.value = crntColor;
                 colorPicker.onchange = e => {
-                    colors[point.index] = ColorInput.value;
-                    myChart.update();
+                    if (this instanceof HierarchicalChartConfig) {
+                        ChartConfig.chart._metasets[0].controller.pointers[point.index].clr = ColorInput.value
+                    } else {
+                        colors[point.index] = ColorInput.value;
+                    }
+                    myChart.update('none');
+                }
+                document.getElementById('expandBtn').onclick = e => {
+                    myChart.update('expand ' + point.index);
+                    popup.classList.remove("show");
+                    backDiv.style.display = "block"
                 }
             }
         };
@@ -267,7 +283,6 @@ class HierarchicalChartConfig extends ChartConfig {
                 borderWidth: 1
             }]
         };
-        this.tree = [];
         this.config.data = dataConf;
         this.maxLevels = maxLevels;
     }
@@ -276,22 +291,8 @@ class HierarchicalChartConfig extends ChartConfig {
     }
 
     setData(data) {
-        this.tree = DataFormatHelper.makeBFStree(data);
         if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].tree = data;
-            var datasetData = this.config.data.datasets[0].data;
-            var colors = this.config.data.datasets[0].backgroundColor;
-            var labels = this.config.data.labels;
-            for (let levelIndex = 0; levelIndex < this.maxLevels; levelIndex++) {
-                var level = this.tree[levelIndex];
-                if (typeof level == 'undefined' || level.length == 0) break;
-                level.forEach(item => {
-                    datasetData.push(item.v);
-                    var x = labels.push(item.n);
-                    var color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
-                    colors.push(color);
-                });
-            }
+            this.config.data.datasets[0].tree = DataFormatHelper.preProcess(data);
         }
     }
 }
@@ -307,7 +308,7 @@ class SunburstChartConfig extends HierarchicalChartConfig {
             },
             plugins: {
                 legend: {
-                    display: true,
+                    display: false,
                 },
                 tooltip: {
                     enabled: true
@@ -341,12 +342,6 @@ class TreemapChartConfig extends HierarchicalChartConfig {
                 }
             }
         });
-    }
-
-    setData(data) {
-        if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].tree = data;
-        }
     }
 }
 
@@ -602,10 +597,10 @@ fontSizeSelect.onchange = e => {
 var fontStyleBtn = document.getElementById('italicBtn');
 fontStyleBtn.onclick = e => {
     var style = Chart.defaults.font.style;
-    if (style=='normal') {
+    if (style == 'normal') {
         Chart.defaults.font.style = 'italic';
         fontStyleBtn.classList.add('btn-icon-selected');
-    }else if(style=='italic'){
+    } else if (style == 'italic') {
         Chart.defaults.font.style = 'normal';
         fontStyleBtn.classList.remove('btn-icon-selected');
     }
@@ -615,10 +610,10 @@ fontStyleBtn.onclick = e => {
 var fontWeightBtn = document.getElementById('boldBtn');
 fontWeightBtn.onclick = e => {
     var weight = Chart.defaults.font.weight;
-    if (weight=='normal') {
+    if (weight == 'normal') {
         Chart.defaults.font.weight = 'bold';
         fontWeightBtn.classList.add('btn-icon-selected');
-    }else if(weight=='bold'){
+    } else if (weight == 'bold') {
         Chart.defaults.font.weight = 'normal';
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
@@ -626,10 +621,6 @@ fontWeightBtn.onclick = e => {
 };
 
 const colorPicker = document.getElementById('ColorInput');
-let color = ColorInput.value;
-colorPicker.onchange = e => {
-    color = ColorInput.value;
-}
 
 function rgb2hex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
@@ -637,6 +628,12 @@ function rgb2hex(rgb) {
         ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
         ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+}
+
+const backDiv = document.getElementById('backDiv');
+
+document.getElementById('backBtn').onclick = e => {
+    ChartConfig.update('parent');
 }
 
 function setDivPos(d, x, y, mid) {
