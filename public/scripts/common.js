@@ -88,4 +88,6 @@ function setClear(input) {
     formControl.className = 'form-control form-outline form-input';
 }
 
-module.exports = {isEmpty}
+if (typeof module !== 'undefined') {
+    module.exports = { isEmpty }
+}

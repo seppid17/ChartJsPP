@@ -37,9 +37,9 @@ class ChartConfig {
                 colorPicker.onchange = e => {
                     if (this instanceof HierarchicalChartConfig) {
                         ChartConfig.chart._metasets[0].controller.pointers[point.index].clr = ColorInput.value
-                    } else {
-                        colors[point.index] = ColorInput.value;
                     }
+                    colors[point.index] = ColorInput.value;
+
                     myChart.update('none');
                 }
                 document.getElementById('expandBtn').onclick = e => {
@@ -589,7 +589,15 @@ var fontSizeSelect = document.getElementById('fontSize');
 fontSizeSelect.onchange = e => {
     var size = fontSizeSelect.value;
     if (/^\d{1,3}$/.test(size)) {
-        Chart.defaults.font.size = parseInt(size);
+        size = parseInt(size);
+        if (size < 8) {
+            size = 8;
+        }
+        if (size > 36) {
+            size = 36;
+        }
+        fontSizeSelect.value = size;
+        Chart.defaults.font.size = size;
         ChartConfig.update();
     }
 };
