@@ -42,7 +42,12 @@ body {
     border-radius: 20px;
     border: 1px solid gray;
 }
-
+.btn2 i{
+    color: white;
+}
+.btn2 i:hover{
+    color: #000000;
+}
 .fa-floppy-disk,
 .fa-trash-can,
 .fa-download,
