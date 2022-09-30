@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const ResetPasswordRequest = require("../models/ResetPassword");
 const Mailer = require("../utils/mail");
+const Validator = require("../utils/validator");
 const bcrypt = require("bcrypt");
 const crypto = require('crypto');
 
@@ -23,6 +24,10 @@ const forgotPassword = (req, res) => {
         if (!user) {
             console.log("email does not exist");
             res.json({ 'success': false, 'reason': "This email does not exist" });
+            return;
+        }
+        if (!Validator.validate('email', email)) {
+            res.json({ 'success': false, 'reason': 'Invalid email' });
             return;
         }
         let token = crypto.randomBytes(16).toString('hex');
@@ -65,6 +70,18 @@ const resetPassword = (req, res) => {
     if (!email || !password || !token) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        return;
+    }
+    if (!Validator.validate('email', email)) {
+        res.json({ 'success': false, 'reason': 'Invalid email' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password' });
+        return;
+    }
+    if (!Validator.validate('token', token)) {
+        res.json({ 'success': false, 'reason': 'Invalid token' });
         return;
     }
     ResetPasswordRequest.findOne({ email: email, token: token, used: false }).then((resetPasswordRequest) => {

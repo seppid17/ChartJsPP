@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const SignupRequest = require("../models/SignupRequest");
 const Mailer = require("../utils/mail");
+const Validator = require("../utils/validator");
 const bcrypt = require("bcrypt");
 const crypto = require('crypto');
 
@@ -17,6 +18,22 @@ const requestUser = (req, res) => {
     if (!email || !password || !firstName || !lastName) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        return;
+    }
+    if (!Validator.validate('email', email)) {
+        res.json({ 'success': false, 'reason': 'Invalid email' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password' });
+        return;
+    }
+    if (!Validator.validate('name', firstName)) {
+        res.json({ 'success': false, 'reason': 'Invalid first name' });
+        return;
+    }
+    if (!Validator.validate('name', lastName)) {
+        res.json({ 'success': false, 'reason': 'Invalid last name' });
         return;
     }
     User.findOne({ email: email, active: true }).then(user => {
@@ -72,6 +89,18 @@ const activateAccount = (req, res) => {
     if (!email || !password || !token) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        return;
+    }
+    if (!Validator.validate('email', email)) {
+        res.json({ 'success': false, 'reason': 'Invalid email' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password' });
+        return;
+    }
+    if (!Validator.validate('token', token)) {
+        res.json({ 'success': false, 'reason': 'Invalid token' });
         return;
     }
     SignupRequest.findOne({ email: email, token: token }).then((requestUser) => {
