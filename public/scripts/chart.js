@@ -285,7 +285,7 @@ class HierarchicalChartConfig extends ChartConfig {
 
     setData(data) {
         if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].tree = DataFormatHelper.preprocess(data);
+            this.config.data.datasets[0].tree = DataFormatHelper.preProcess(data);
         }
     }
 }

@@ -28,9 +28,16 @@ class HierarchicalController extends Chart.PieController {
                 index = parseInt(index);
                 this.draw(index);
                 return;
-            }else if (mode=='root'){
+            } else if (mode == 'root') {
                 this.tree = this.getMeta()._dataset.tree;
                 return;
+            } else if (mode == 'parent') {
+                let parent = this.tree.p;
+                if (parent != undefined) {
+                    this.tree = parent;
+                    this.draw();
+                    return;
+                }
             }
         }
         super.update(mode);

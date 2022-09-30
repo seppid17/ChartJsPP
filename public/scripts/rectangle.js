@@ -23,18 +23,20 @@ class RectangleElement extends Chart.Element {
         this.options.font.weight = typeof font.weight != 'undefined' ? font.weight : Chart.defaults.font.weight; // 'normal' | 'bold' | 'bolder' | 'lighter'
         this.options.font.size = typeof font.size != 'undefined' ? font.size : Chart.defaults.font.size;
         this.options.font.family = typeof font.family != 'undefined' ? font.family : 'Arial';
-        
+
         this.options.padding = typeof options.padding != 'undefined' ? options.padding : this.options.font.size / 4;
         this.hasChild = false;
     }
-    
+
     _addText(ctx) {
         if (this.text == null) return;
         ctx.fillStyle = this.options.textColor;
         ctx.font = this.options.font.style + ' ' + this.options.font.weight + ' ' + this.options.font.size + 'px' + ' ' + this.options.font.family;
-        if (this.options.verticalText) {
-            if (this.options.font.size*0.8 + this.options.padding * 2 > this.width) return;
-            if (ctx.measureText(this.text).width + this.options.padding * 2 > this.height) return;
+        var textHeight = this.options.font.size * 0.8 + this.options.padding * 2;
+        var textWidth = ctx.measureText(this.text).width + this.options.padding * 2;
+        if (this.options.verticalText && textHeight < textWidth) {
+            if (textHeight > this.width) return;
+            if (textWidth > this.height) return;
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
             var textX = this.x + this.options.padding;
@@ -45,8 +47,8 @@ class RectangleElement extends Chart.Element {
             ctx.fillText(this.text, 0, 0);
             ctx.setTransform(1, 0, 0, 1, 0, 0);
         } else {
-            if (this.options.font.size*0.8 + this.options.padding * 2 > this.height) return;
-            if (ctx.measureText(this.text).width + this.options.padding * 2 > this.width) return;
+            if (textHeight > this.height) return;
+            if (textWidth > this.width) return;
             var textX = this.x + this.options.padding;
             var textY = this.y + this.options.padding;
             if (this.options.hAlign == 'center') {
