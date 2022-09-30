@@ -17,8 +17,7 @@ class ChartConfig {
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const point = points[points.length - 1];
-                myChart.update('expand '+point.index);
-                return;
+                
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
@@ -32,6 +31,10 @@ class ChartConfig {
                 colorPicker.onchange = e => {
                     colors[point.index] = ColorInput.value;
                     myChart.update();
+                }
+                document.getElementById('expandBtn').onclick = e => {
+                    myChart.update('expand '+point.index);
+                    popup.classList.remove("show");
                 }
             }
         };

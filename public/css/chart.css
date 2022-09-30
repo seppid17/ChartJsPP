@@ -142,6 +142,12 @@ body {
     align-items: flex-end;
 }
 
+.btn-ex {
+    padding: 3px 15px 2px 5px;
+    width: fit-content;
+    align-items: flex-end;
+}
+
 .btn-chart-type {
     background-color: white;
     color: #000000;
