@@ -267,7 +267,6 @@ class HierarchicalChartConfig extends ChartConfig {
                 borderWidth: 1
             }]
         };
-        this.tree = [];
         this.config.data = dataConf;
         this.maxLevels = maxLevels;
     }
@@ -276,22 +275,8 @@ class HierarchicalChartConfig extends ChartConfig {
     }
 
     setData(data) {
-        this.tree = DataFormatHelper.makeBFStree(data);
         if (this.config && this.config.data.datasets.length > 0) {
             this.config.data.datasets[0].tree = DataFormatHelper.preprocess(data);
-            // var datasetData = this.config.data.datasets[0].data;
-            // var colors = this.config.data.datasets[0].backgroundColor;
-            // var labels = this.config.data.labels;
-            // for (let levelIndex = 0; levelIndex < this.maxLevels; levelIndex++) {
-            //     var level = this.tree[levelIndex];
-            //     if (typeof level == 'undefined' || level.length == 0) break;
-            //     level.forEach(item => {
-            //         datasetData.push(item.v);
-            //         var x = labels.push(item.n);
-            //         var color = `rgba(${(167 * x) % 256},${(71 * x) % 256},${(203 * x) % 256},1)`;
-            //         colors.push(color);
-            //     });
-            // }
         }
     }
 }
@@ -341,12 +326,6 @@ class TreemapChartConfig extends HierarchicalChartConfig {
                 }
             }
         });
-    }
-
-    setData(data) {
-        if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].tree = data;
-        }
     }
 }
 

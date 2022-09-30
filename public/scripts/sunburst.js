@@ -42,7 +42,6 @@ class SunburstController extends HierarchicalController {
             let color = bgcols[x];
             let endAngle = startAngle + ang * item.w;
             this._drawSector(r0, r1, startAngle, endAngle, color, item.n);
-            // this._drawIndex += 1;
             this._drawChart(item.c, startAngle, endAngle, r1, r, remaining - 1);
             startAngle = endAngle;
         });

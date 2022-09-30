@@ -33,7 +33,7 @@ class RectangleElement extends Chart.Element {
         ctx.fillStyle = this.options.textColor;
         ctx.font = this.options.font.style + ' ' + this.options.font.weight + ' ' + this.options.font.size + 'px' + ' ' + this.options.font.family;
         if (this.options.verticalText) {
-            if (this.options.font.size + this.options.padding * 2 > this.width) return;
+            if (this.options.font.size*0.8 + this.options.padding * 2 > this.width) return;
             if (ctx.measureText(this.text).width + this.options.padding * 2 > this.height) return;
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
@@ -45,7 +45,7 @@ class RectangleElement extends Chart.Element {
             ctx.fillText(this.text, 0, 0);
             ctx.setTransform(1, 0, 0, 1, 0, 0);
         } else {
-            if (this.options.font.size + this.options.padding * 2 > this.height) return;
+            if (this.options.font.size*0.8 + this.options.padding * 2 > this.height) return;
             if (ctx.measureText(this.text).width + this.options.padding * 2 > this.width) return;
             var textX = this.x + this.options.padding;
             var textY = this.y + this.options.padding;
