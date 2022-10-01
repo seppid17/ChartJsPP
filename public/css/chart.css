@@ -63,8 +63,7 @@ body {
 .fa-download:hover,
 .fa-share-nodes:hover,
 .fa-circle-check:hover,
-.fa-check-circle:hover
-.fa-edit:hover {
+.fa-check-circle:hover .fa-edit:hover {
     color: #20012a;
 }
 
@@ -316,6 +315,59 @@ body {
 .chart-type.error small {
     visibility: visible;
 }
+
+.breadcrumb {
+    font: .75em sans-serif;
+    list-style: none;
+  }
+  
+  .breadcrumb li {
+    display: inline-block;
+    margin-bottom: .2em;
+  }
+  
+  .breadcrumb li a {
+    background-color: #d862ff;
+    box-sizing: border-box;
+    color: #fff;
+    display: block;
+    max-height: 2em;
+    padding: .5em 1em .5em 1.5em;
+    position: relative;
+    text-decoration: none;
+    transition: .25s;
+  }
+  
+  .breadcrumb li a:before {
+    border-top: 1em solid transparent;
+    border-bottom: 1em solid transparent;
+    border-left: 1em solid #fff;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -1.25em;
+    z-index: 1;
+  }#d862ff
+  .breadcrumb li a:after {
+    border-top: 1em solid transparent;
+    border-bottom: 1em solid transparent;
+    border-left: 1em solid #d862ff;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -1em;
+    transition: .25s;
+    z-index: 1;
+  }
+  
+  .breadcrumb li:last-child a {
+    background-color: #ecb2ff;
+    pointer-events: none;
+  }
+  
+  .breadcrumb li:last-child a:after {
+    border-left-color: #ecb2ff;
+  }
 
 .form-control {
     padding-bottom: 20px;

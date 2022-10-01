@@ -7,6 +7,9 @@ class ChartConfig {
         this.config.type = type;
         this.name = '';
         backDiv.style.display = "none"
+        while (breadcrumb.hasChildNodes()) {
+            breadcrumb.removeChild(breadcrumb.firstChild);
+        }
         ChartConfig.canvas.onclick = evt => {
             if (this instanceof HierarchicalChartConfig) {
                 document.getElementById('expandBtnDiv').style.display = 'block';
@@ -44,6 +47,13 @@ class ChartConfig {
                 }
                 document.getElementById('expandBtn').onclick = e => {
                     myChart.update('expand ' + point.index);
+                    var first = ChartConfig.chart._metasets[0].controller.pointers[0];
+                    console.log(first)
+                    path = setPath(first);
+                    while (breadcrumb.hasChildNodes()) {
+                        breadcrumb.removeChild(breadcrumb.firstChild);
+                    }
+                    path.forEach(createBreadcrumb);
                     popup.classList.remove("show");
                     backDiv.style.display = "block"
                 }
@@ -641,14 +651,46 @@ function rgb2hex(rgb) {
 
 const backDiv = document.getElementById('backDiv');
 
+const breadcrumb = document.getElementById('breadcrumbA');
+let path = [];
+
 document.getElementById('backBtn').onclick = e => {
     ChartConfig.update('parent');
     var first = ChartConfig.chart._metasets[0].controller.pointers[0];
-    if (first==undefined || first.p == undefined || first.p==null) return;
+    if (first == undefined || first.p == undefined || first.p == null) return;
     var parent = first.p;
-    if (parent.p==undefined || parent.p==null){
+    if (parent.p == undefined || parent.p == null) {
         backDiv.style.display = 'none';
+    } else {
+        path.shift();
+        while (breadcrumb.hasChildNodes()) {
+            breadcrumb.removeChild(breadcrumb.firstChild);
+        }
+        path.forEach(createBreadcrumb);
     }
+}
+
+function setPath(first) {
+    let path = [];
+    if (first == undefined || first.p == undefined || first.p == null) return null;
+    let parent = first.p;
+    let hasParent = true;
+    while (hasParent) {
+        path.push(parent.n);
+        parent = parent.p;
+        if (parent.p == undefined || parent.p == null) {
+            hasParent = false;
+        }
+    }
+    console.log(path)
+    return path;
+}
+
+function createBreadcrumb(child) {
+    let x = document.createElement('li');
+    x.classList.toggle("breadcrumb-item");
+    x.innerText = child;
+    breadcrumb.prepend(x);
 }
 
 function setDivPos(d, x, y, mid) {

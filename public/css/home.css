@@ -13,91 +13,51 @@ body {
     /* padding: 20px 20px; */
     background-color: #ffffff;
     box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
-    padding: 10px 10px;
+    padding: 50px 10px 20px 10px;
 }
 
-.btn-icon {
-    padding: 2px 2px 2px 2px;
-    border-radius: 5px;
-    border: 1px solid gray;
-    background-color: #ffffff;
-    margin-right: 5px;
-    width: 30px;
-    height: 30px;
+.pill {
+    max-width: 15%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.btn-icon-selected {
-    background-color: #a7aaa7;
+.chart-title {
+    color: rgb(39, 39, 39);
+    font-family: "proxima-nova-soft", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 15px;
 }
 
-.prop-btns {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    margin-right: 0;
-    padding-left: 0;
+.chart-subtitle {
+    font-family: "proxima-nova-soft", sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    margin-bottom: 70px;
 }
 
-/* Popup container - can be anything you want */
-.popup {
-    position: relative;
+.btn {
+    border: 0;
+    text-align: center;
     display: inline-block;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    padding: 14px;
+    margin: 8px;
+    color: #FFFFFF;
+    background-color: #E7E9ED;
+    border-radius: 8px;
+    font-family: "proxima-nova-soft", sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: box-shadow 200ms ease-out;
+    width: 150px;
 }
 
-/* The actual popup */
-.popup .popuptext {
-    visibility: hidden;
-    background-color: #ffffff;
-    color: #fff;
-    padding: 10px 10px 10px 10px;
-    position: absolute;
-    z-index: 1;
-    right: auto;
-    border-radius: 5px;
-    width: 170px;
-    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+.btn-red {
+    background-color: rgb(255, 105, 105);
 }
 
-/* Popup arrow */
-/* .popup .popuptext::after {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent #ffffff transparent;
-} */
-
-/* Toggle this class - hide and show the popup */
-.popup .show {
-    visibility: visible;
-    -webkit-animation: fadeIn 0.5s;
-    animation: fadeIn 0.5s;
-}
-
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+.btn-blue {
+    background-color: rgb(105, 185, 255);
 }
