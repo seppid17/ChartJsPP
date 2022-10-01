@@ -73,10 +73,16 @@ test('Test 9: Missing parent',()=>{
         functions.parseCSV(err_data8)
     }).toThrow('Missing parent. Please check and upload again');
 });
+const err_data9 = ''; // Empty data file
+test('Test 10: Empty data file',()=>{
+    expect(() => {
+        functions.parseCSV(err_data9)
+    }).toThrow('Empty data file');
+});
 
 const valid_data2 = '  \n1,0,A,5\n\n2,0,B,6\n\t  \n3,0,A,5\n4,0,B,6\n\n';
 const output2 =[{n:'A',v:[5],c:[]},{n:'B',v:[6],c:[]},{n:'A',v:[5],c:[]},{n:'B',v:[6],c:[]}];
-test('Test 1: Valid data with empty lines',()=>{
+test('Test 11: Valid data with empty lines',()=>{
     expect(
         functions.parseCSV(valid_data2)).toEqual(output2);
 });

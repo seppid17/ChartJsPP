@@ -16,7 +16,7 @@ class Validator {
     static validate(type, value) {
         try {
             if (typeof value !== 'string') return false;
-            if (!value.length > this._lengthLimit[type]) return false;
+            if (value.length > this._lengthLimit[type]) return false;
             return this._patterns[type].test(value);
         } catch (e) {
             return false;
