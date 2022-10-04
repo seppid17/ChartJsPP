@@ -1,0 +1,63 @@
+body {
+    background-color: #F9FCFF;
+}
+
+.btn {
+    width: fit-content;
+}
+
+.wrapper {
+    max-width: 900px;
+    min-height: 550px;
+    margin: 50px auto;
+    /* padding: 20px 20px; */
+    background-color: #ffffff;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+    padding: 50px 10px 20px 10px;
+}
+
+.pill {
+    max-width: 15%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chart-title {
+    color: rgb(39, 39, 39);
+    font-family: "proxima-nova-soft", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.chart-subtitle {
+    font-family: "proxima-nova-soft", sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    margin-bottom: 70px;
+}
+
+.btn {
+    border: 0;
+    text-align: center;
+    display: inline-block;
+    padding: 14px;
+    margin: 8px;
+    color: #FFFFFF;
+    background-color: #E7E9ED;
+    border-radius: 8px;
+    font-family: "proxima-nova-soft", sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: box-shadow 200ms ease-out;
+    width: 150px;
+}
+
+.btn-red {
+    background-color: rgb(255, 105, 105);
+}
+
+.btn-blue {
+    background-color: rgb(105, 185, 255);
+}

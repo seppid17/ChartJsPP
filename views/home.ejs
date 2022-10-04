@@ -17,7 +17,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/default.css">
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/home.css">
 
     <!-- Fontawesome -->
     <!-- <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css"> -->
@@ -29,19 +29,28 @@
 <body>
     <!-- Navbar -->
     <%- include('navbar.ejs', {"pageName":"home"}) %>
-</body>
 
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChartJS++</title>
-</head>
-<body>
-    <h1>Welcome to ChartJS++</h1>
-    <a href="/dashboard"><button>Dashboard</button></a>
-    <a href="/signup"><button>Signup</button></a>
+        <div class="wrapper">
+            <div class="row">
+                <div class="col">
+                    <div class="row text-center">
+                        <img src="/images/icon.webp" alt="logo" class="pill">
+                    </div>
+                    <div class="row text-center">
+                        <h1 class="chart-title">Chart.js++</h1>
+                    </div>
+                    <div class="row text-center">
+                        <h2 class="chart-subtitle">Easy-to-use web interface of Chart.js for scientists & researchers
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row text-center">
+                <div>
+                    <a class="btn btn-red" href="./docs">Documentation</a>
+                    <a class="btn btn-blue" href="./docs/latest/samples">Samples</a>
+                </div>
+            </div>
+        </div>
 </body>
-</html> -->

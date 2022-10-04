@@ -1,372 +1,3 @@
-class ChartConfig {
-    static chart = null;
-    static canvas = null;
-    constructor(type) {
-        if (ChartConfig.canvas == null) throw new Error('No canvas selected');
-        this.config = {};
-        this.config.type = type;
-        this.name = '';
-        ChartConfig.canvas.onclick = evt => {
-            let popup = document.getElementById("myPopup");
-            popup.classList.remove("show");
-            let myChart = ChartConfig.chart;
-            if (!myChart) {
-                return;
-            }
-            let points = myChart.getActiveElements(evt);
-            var colors = myChart.data.datasets[0].backgroundColor;
-            if (points.length) {
-                const point = points[points.length - 1];
-
-                setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
-                popup.classList.toggle("show");
-                //set the current olor to colorPicker
-                let crntColor = null;
-                if (/^#[0-9A-F]{6}$/i.test(colors[point.index])) {
-                    crntColor = colors[point.index];
-                } else {
-                    crntColor = rgb2hex(colors[point.index]);
-                }
-                colorPicker.value = crntColor;
-                colorPicker.onchange = e => {
-                    if (this instanceof HierarchicalChartConfig) {
-                        ChartConfig.chart._metasets[0].controller.pointers[point.index].clr = ColorInput.value
-                    } else {
-                        colors[point.index] = ColorInput.value;
-                    }
-                    myChart.update('none');
-                }
-                document.getElementById('expandBtn').onclick = e => {
-                    myChart.update('expand ' + point.index);
-                    popup.classList.remove("show");
-                }
-            }
-        };
-    }
-
-    setData(data) {
-        if (this.config) {
-            this.config.data = data;
-        }
-    }
-
-    setName(name) {
-        this.name = name;
-        if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].label = name;
-        }
-    }
-
-    setOptions(options) {
-        this.config.options = options;
-    }
-
-    draw() {
-        if (this.config == null || ChartConfig.canvas == null) {
-            return;
-        }
-        if (ChartConfig.chart instanceof Chart) {
-            ChartConfig.chart.destroy();
-        }
-        ChartConfig.chart = new Chart(ChartConfig.canvas, this.config);
-    }
-
-    static update(mode) {
-        if (ChartConfig.canvas == null) {
-            return;
-        }
-        if (ChartConfig.chart instanceof Chart) {
-            ChartConfig.chart.update(mode);
-        }
-    }
-}
-
-class BasicChartConfig extends ChartConfig {
-    constructor(type) {
-        super(type);
-        var colors = [];
-        var dataConf = {
-            labels: [],
-            datasets: [{
-                label: this.name,
-                data: [],
-                backgroundColor: colors,
-                borderColor: colors,
-                borderWidth: 1
-            }]
-        };
-        this.config.data = dataConf;
-    }
-
-    setLabels(data) {
-        if (this.config) {
-            let labels = [];
-            data.forEach(item => {
-                labels.push(item.n);
-            });
-            this.config.data.labels = labels;
-        }
-    }
-
-    setData(data) {
-        if (this.config && this.config.data.datasets.length > 0) {
-            var clr = [];
-            data.forEach((d, i) => {
-                var r = Math.abs(((i + ~~d) * 93) % 256);
-                var g = Math.abs((i * ((2 * i) - ~~d) * 3) % 256);
-                var b = Math.abs((384 - r - g) % 256);
-                clr.push(`rgba(${r}, ${g}, ${b}, 1)`);
-            });
-            this.config.data.datasets[0].backgroundColor = clr;
-            this.config.data.datasets[0].borderColor = clr;
-            this.config.data.datasets[0].data = data;
-        }
-    }
-}
-
-class BarChartConfig extends BasicChartConfig {
-    constructor() {
-        super('bar');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            },
-            /*scales: {
-                y: {
-                    beginAtZero: true
-                },
-                x: {
-                    ticks: {
-                        font: { size: 20 }
-                    }
-                }
-            },*/
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        });
-    }
-}
-
-class PieChartConfig extends BasicChartConfig {
-    constructor() {
-        super('pie');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            }
-        });
-    }
-}
-
-class LineChartConfig extends BasicChartConfig {
-    constructor() {
-        super('line');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            },
-            /*scales: {
-                y: {
-                    beginAtZero: true
-                },
-                x: {
-                    ticks: {
-                        font: { size: 20 }
-                    }
-                }
-            },*/
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        });
-    }
-}
-
-class DoughnutChartConfig extends BasicChartConfig {
-    constructor() {
-        super('doughnut');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            }
-        });
-    }
-}
-
-class PolarAreaChartConfig extends BasicChartConfig {
-    constructor() {
-        super('polarArea');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            }
-        });
-    }
-}
-
-class ScatterChartConfig extends BasicChartConfig {
-    constructor() {
-        super('scatter');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            },
-            scales: {
-                x: {
-                    type: 'linear',
-                    position: 'bottom'
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        });
-    }
-}
-
-class BubbleChartConfig extends BasicChartConfig {
-    constructor() {
-        super('bubble');
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            },
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        });
-    }
-}
-
-class HierarchicalChartConfig extends ChartConfig {
-    constructor(type, maxLevels) {
-        super(type);
-        var colors = [];
-        var dataConf = {
-            labels: [],
-            datasets: [{
-                label: this.name,
-                data: [],
-                tree: [],
-                backgroundColor: colors,
-                borderColor: colors,
-                borderWidth: 1
-            }]
-        };
-        this.config.data = dataConf;
-        this.maxLevels = maxLevels;
-    }
-
-    setLabels(data) {
-    }
-
-    setData(data) {
-        if (this.config && this.config.data.datasets.length > 0) {
-            this.config.data.datasets[0].tree = DataFormatHelper.preProcess(data);
-        }
-    }
-}
-
-class SunburstChartConfig extends HierarchicalChartConfig {
-    constructor() {
-        super('sunburst', 4);
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            layout: {
-                autoPadding: false
-            },
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                tooltip: {
-                    enabled: true
-                }
-            }
-        });
-    }
-}
-
-class TreemapChartConfig extends HierarchicalChartConfig {
-    constructor() {
-        super('treemap', 5);
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            text: {
-                color: '#000000',
-                font: {
-                    family: 'Arial'
-                }
-            },
-            layout: {
-                autoPadding: false
-            },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    enabled: true
-                }
-            }
-        });
-    }
-}
-
-class IcicleChartConfig extends HierarchicalChartConfig {
-    constructor() {
-        super('icicle', 5);
-        super.setOptions({
-            maintainAspectRatio: false,
-            responsive: true,
-            text: {
-                hAlign: 'left',
-                vAlign: 'top',
-                color: '#000000',
-                font: {
-                    family: 'Arial'
-                }
-            },
-            layout: {
-                autoPadding: false
-            },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    enabled: true
-                }
-            }
-        });
-    }
-}
-
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 ChartConfig.canvas = canvas;
@@ -387,7 +18,7 @@ window.onload = () => {
 Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
-const chartName = 'Dataset_1'
+let chartName = 'Untitled';
 
 Chart.register({
     id: "legendColorUpdate",
@@ -569,8 +200,9 @@ document.getElementById('editName').onclick = e => {
     document.getElementById('saveName').onclick = e => {
         nameView.style.display = 'block';
         nameEdit.style.display = 'none';
-        name = document.getElementById('nameInput').value
-        document.getElementById('chartNameView').innerText = name
+        name = document.getElementById('nameInput').value;
+        document.getElementById('chartNameView').innerText = name;
+        chartName = name;
     };
     document.getElementById('cancellEditName').onclick = e => {
         nameView.style.display = 'block';
@@ -582,7 +214,15 @@ var fontSizeSelect = document.getElementById('fontSize');
 fontSizeSelect.onchange = e => {
     var size = fontSizeSelect.value;
     if (/^\d{1,3}$/.test(size)) {
-        Chart.defaults.font.size = parseInt(size);
+        size = parseInt(size);
+        if (size < 8) {
+            size = 8;
+        }
+        if (size > 36) {
+            size = 36;
+        }
+        fontSizeSelect.value = size;
+        Chart.defaults.font.size = size;
         ChartConfig.update();
     }
 };
@@ -623,9 +263,53 @@ function rgb2hex(rgb) {
         ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
 }
 
+const backDiv = document.getElementById('backDiv');
+
+const breadcrumb = document.getElementById('breadcrumbA');
+let path = [];
+
+document.getElementById('backBtn').onclick = e => {
+    ChartConfig.update('parent');
+    var first = ChartConfig.chart._metasets[0].controller.pointers[0];
+    if (first == undefined || first.p == undefined || first.p == null) return;
+    var parent = first.p;
+    if (parent.p == undefined || parent.p == null) {
+        backDiv.style.display = 'none';
+    } else {
+        path.shift();
+        while (breadcrumb.hasChildNodes()) {
+            breadcrumb.removeChild(breadcrumb.firstChild);
+        }
+        path.forEach(createBreadcrumb);
+    }
+}
+
+function setPath(first) {
+    let path = [];
+    if (first == undefined || first.p == undefined || first.p == null) return null;
+    let parent = first.p;
+    let hasParent = true;
+    while (hasParent) {
+        path.push(parent.n);
+        parent = parent.p;
+        if (parent.p == undefined || parent.p == null) {
+            hasParent = false;
+        }
+    }
+    console.log(path)
+    return path;
+}
+
+function createBreadcrumb(child) {
+    let x = document.createElement('li');
+    x.classList.toggle("breadcrumb-item");
+    x.innerText = child;
+    breadcrumb.prepend(x);
+}
+
 function setDivPos(d, x, y, mid) {
     if (x > mid) {
-        d.style.left = (x - 170) + 'px';
+        d.style.left = (x - 221) + 'px';
     } else {
         d.style.left = x + 'px';
     }
