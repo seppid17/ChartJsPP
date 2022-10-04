@@ -31,7 +31,7 @@
             <div class="wrapper">
                 <div class="wrapper-chart" style="display: none;" id="chartViewDiv">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-8">
                             <!-- name -->
                             <div class="title-saved">
                                 <div class="input-group mb-20">
@@ -68,16 +68,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col title-saved text-end">
-                            <a class="btn btn-submit btn-cn" data-toggle="tab" href="/chart" target="_blank">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <span>New</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="text-end">
+                        <div class="col-md-4 title-saved text-end">
                             <a>
                                 <i class="fa-solid fa-share-nodes fa-lg"></i>
                             </a>
@@ -90,19 +81,23 @@
                             <a id="saveBtn">
                                 <i class="fa-solid fa-floppy-disk fa-lg"></i>
                             </a>
+                            <a class="btn btn-submit btn-cn" data-toggle="tab" href="/chart" target="_blank">
+                                <i class="fa-solid fa-circle-plus"></i>
+                                <span>New</span>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="row" style="display: none;" id="backDiv">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb" id="breadcrumbA">
-                                <!-- add path -->
-                            </ol>
-                        </nav>
+                    <div class="breadcrum-div" style="display: none;" id="backDiv">
                         <a class="btn btn-back" id="backBtn" data-toggle="tab">
                             <i class="fa-sharp fa-solid fa-caret-left"></i>
                             <span>Back</span>
                         </a>
+                        <div id="crumbs">
+                            <ol id="breadcrumbA">
+                                <!-- add path -->
+                            </ol>
+                        </div>
                     </div>
 
                     <br>
@@ -129,8 +124,8 @@
                                             <div class="row">
                                                 <div class="input-group">
                                                     <div class="row w-100">
-                                                        <div class="col">
-                                                            <label for="color-input" class="form-label">Color</label>
+                                                        <div class="col text-end">
+                                                            <label class="form-label" for="color-input">Color</label>
                                                         </div>
                                                         <div class="col text-end d-flex align-item-center">
                                                             <div class="input-group mb-20">
@@ -143,11 +138,10 @@
                                                 </div>
                                             </div>
 
-                                            <br>
-
                                             <div class="row" style="display: none;" id="expandBtnDiv">
                                                 <div class="input-group">
                                                     <a class="btn btn-submit btn-ex" id="expandBtn" data-toggle="tab">
+                                                        <i class="fas fa-expand-alt"></i>
                                                         <span>Expand</span>
                                                     </a>
                                                 </div>
@@ -189,7 +183,7 @@
 
                         <div class="text-center">
                             <div class="chart-type" id="selectChartType">
-                                <h5 class="mb-0">Select chart type:</h5>
+                                <h5 class="mb-0">Select chart type:</h5><br>
 
                                 <div id="alertPop" style="display: none;" class="alert alert-danger" role="alert">
                                     <big><small>Error message</small>

@@ -1,44 +1,51 @@
 body {
-    background-color: #F9FCFF;
+    background-color: var(--bg-light-blue);
+    font-family: "proxima-nova-soft", sans-serif;
 }
 
 .btn {
-    width: fit-content;
-    padding: 3px 15px 3px 15px;
-    border-radius: 20px;
-    border: 1px solid gray;
+    border: 0;
+    text-align: center;
+    display: inline-block;
+    padding: 14px;
+    margin: 8px;
+    color: var(--white);
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: box-shadow 200ms ease-out;
+    width: 150px;
+}
+
+.btn:hover {
+    color: var(--white);
+    box-shadow: 0px 0px 4px 1px var(--shadow-gray);
 }
 
 .btn-signup {
-    font-weight: bold;
-    color: gray;
+    color: var(--gray);
     font-size: small;
+    width: fit-content;
+    border: 1px solid var(--gray);
+    padding: 3px 15px;
 }
 
-.btn-frogot {
-    color: gray;
-    padding: 0 0 0 0;
-    border: none;
-    margin-bottom: 20px;
+.btn-signup:hover {
+    color: var(--gray);
 }
 
 .btn-submit {
-    background-color: #d862ff;
-    color: white;
+    background-color: var(--purple);
+    color: var(--white);
     font-weight: bold;
     font-size: large;
     padding: 3px 20px 3px 20px;
     border: none;
-    margin-top: 5px;
-    box-shadow: 8px 8px 15px #a7aaa7;
-}
-
-.btn-submit:hover {
-    color: #373737;
+    margin-left: 0;
 }
 
 .text-new-signup {
-    color: gray;
+    color: var(--gray);
 }
 
 .text-hello {
@@ -46,26 +53,25 @@ body {
 }
 
 .text-login {
-    color: gray;
+    color: var(--gray);
     margin-bottom: 25px;
 }
 
 .text-chartjs {
-    color: #ffffff;
+    color: var(--white);
 }
 
 .wrapper {
     max-width: 900px;
     min-height: 550px;
     margin: 50px auto;
-    /* padding: 20px 20px; */
-    background-color: #ffffff;
-    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
 }
 
 .name {
     padding: 2px 2px 2px 0;
-    color: #000000;
+    color: var(--black);
 }
 
 .pill {
@@ -79,7 +85,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #d862ff;
+    background-color: var(--purple);
     padding: 20px 20px;
     min-width: 45%;
 }
@@ -112,7 +118,7 @@ body {
 }
 
 .form-control input {
-    border: 2px solid #f0f0f0;
+    border: 2px solid var(--input-border-gray);
     border-radius: 4px;
     display: block;
     font-family: inherit;
@@ -122,11 +128,11 @@ body {
 }
 
 .form-control.error input {
-	border-color: #e74c3c;
+	border-color: var(--red-error);
 }
 
 .form-control small {
-	color: #e74c3c;
+	color: var(--red-error);
 	position: absolute;
 	bottom: 0;
 	left: 0;

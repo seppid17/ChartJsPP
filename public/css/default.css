@@ -1,10 +1,32 @@
+:root {
+    --white: #ffffff;
+    --lighter-gray: #f7f7f7;
+    --light-gray: #e5e7eb;
+    --black: #000000;
+    --input-border-gray: #f0f0f0;
+    --shadow-gray: #a7aaa7;
+    --gray: #808080;
+    --dash-icon-gray: #373737;
+    --wrapper-shadow-gray: rgba(0, 0, 0, 0.1);
+    --bg-light-blue: #F9FCFF;
+    --purple: #d862ff;
+    --middle-purple: #800080;
+    --dark-purple: #20012a;
+    --red: #E70E0E;
+    --dark-red: #410101;
+    --red-error:  #e74c3c;
+    --delete-area-bg: #FFEBEB;
+    --red-light: #FFEBEB;
+    --green: #1eda1e;
+    --dark-green: #003400;
+}
+
 /* navbar */
 .navbar-brand {
     padding: 2px 2px 2px 0;
     font-weight: bold;
     font-size: x-large;
-    color: #000000;
-    font-family: Helvetica, sans-serif;
+    color: var(--black);
 }
 
 .nav-pill {
@@ -16,12 +38,12 @@
 }
 
 .nav-link {
-    color: black;
+    color: var(--black);
     font-weight: bold;
 }
 
 .navbar {
-    box-shadow: 2px 2px 5px rgb(203, 203, 203);
+    box-shadow: 2px 2px 5px var(--wrapper-shadow-gray);
     padding-top: 4px;
 }
 
@@ -51,7 +73,7 @@
     position: absolute;
     height: 4px;
     width: 100%;
-    background: #ff161e;
+    background: var(--red);
     border-radius: 25px;
     opacity: 1;
     left: 0;
@@ -96,11 +118,10 @@
 }
 
 .navbar-toggler.collapsed .toggler-icon {
-    background: #cd32fa;
+    background: var(--purple);
 }
 
 i {
     color: purple;
     margin: 5px;
-    /* font-size: x-large; */
 }

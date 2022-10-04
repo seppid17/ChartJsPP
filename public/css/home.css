@@ -2,10 +2,6 @@ body {
     background-color: #F9FCFF;
 }
 
-.btn {
-    width: fit-content;
-}
-
 .wrapper {
     max-width: 900px;
     min-height: 550px;

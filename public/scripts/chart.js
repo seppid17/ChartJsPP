@@ -350,13 +350,13 @@ function setPath(first) {
             hasParent = false;
         }
     }
+    path.push('ROOT')
     console.log(path)
     return path;
 }
 
 function createBreadcrumb(child) {
     let x = document.createElement('li');
-    x.classList.toggle("breadcrumb-item");
     x.innerText = child;
     breadcrumb.prepend(x);
 }
