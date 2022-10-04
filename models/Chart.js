@@ -2,38 +2,46 @@ const mongoose = require("mongoose");
 const ChartInfoSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
+    required: true
   },
   owner: {
     type: String,
-    required: true,
+    required: true
   },
   name: {
     type: String,
-    required: true,
+    required: true
+  },
+  shared: {
+    type: Boolean,
+    required: true
+  },
+  lastModified: {
+    type: String,
+    required: true
   },
   thumbnail: {
     type: String,
-    required: true,
+    required: true
   },
 });
 
 const ChartDataSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
+    required: true
   },
   type: {
     type: String,
-    required: true,
+    required: true
   },
   properties: {
     type: String,
-    required: true,
+    required: true
   },
   data: {
     type: String,
-    required: true,
+    required: true
   },
 });
 

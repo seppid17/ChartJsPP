@@ -5,9 +5,11 @@ const crypto = require('crypto');
 const saveChart = (req, res) => {
     let { name, thumbnail, type, data, properties, id } = req.body;
     const user = req.session.user;
+    var date = new Date();
+    var dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
     if (id == undefined) {
         id = crypto.randomBytes(16).toString('hex');
-        let chartInfo = { id: id, owner: user.email, name: name, thumbnail: thumbnail };
+        let chartInfo = { id: id, owner: user.email, name: name, shared: false, lastModified: dateStr, thumbnail: thumbnail };
         ChartInfo.findOneAndUpdate({ id: id }, { $setOnInsert: chartInfo }, { upsert: true }, (err, doc) => {
             if (err || (doc && !doc.isNew)) {
                 console.log(err);
@@ -25,7 +27,7 @@ const saveChart = (req, res) => {
             });
         });
     } else {
-        let chartInfo = { name: name, thumbnail: thumbnail };
+        let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
         ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
             let chartData = { id: id, type: type, data: data, properties: properties };
             ChartData.findOneAndUpdate({ id: id }, chartData).then(doc => {
@@ -96,4 +98,39 @@ const retrieveChart = async (req, res) => {
     }
 };
 
-module.exports = { saveChart, retrieveChart };
+async function getChartsByOwner(owner) {
+    var filters = { owner: owner };
+    var chartInfo = await ChartInfo.find(filters);
+    if (!chartInfo) {
+        return null;
+    }
+    let charts = [];
+    chartInfo.forEach(chart => {
+        let info = {
+            id: chart.id,
+            name: chart.name,
+            lastModified: chart.lastModified,
+            thumbnail: chart.thumbnail
+        };
+        charts.push(info);
+    })
+    return charts;
+}
+
+const getChartList = async (req, res) => {
+    const user = req.session.user;
+    try {
+        let chartInfo = await getChartsByOwner(user.email);
+        if (chartInfo == null) {
+            res.json({ 'success': false });
+            return;
+        }
+        res.json({ 'success': true, info: chartInfo });
+        return;
+    } catch (err) {
+        console.log(err);
+        res.json({ 'success': false });
+    }
+};
+
+module.exports = { saveChart, retrieveChart, getChartList };
