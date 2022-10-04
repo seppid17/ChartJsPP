@@ -59,7 +59,7 @@ body {
 }
 
 .btn-opt-selected {
-    background-color: #e5e7eb;
+    background-color: var(--light-gray);
 }
 
 .wrapper {
