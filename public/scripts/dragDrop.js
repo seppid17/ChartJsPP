@@ -62,7 +62,6 @@ function handleDrop(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 let selectChartType = document.getElementById('selectChartType');
-let alertDiv = document.getElementById('alertPop');
 document.getElementById('drawBtn').onclick = e => {
     selectChartType.className = 'chart-type';
     let found = false;
@@ -73,9 +72,9 @@ document.getElementById('drawBtn').onclick = e => {
     }
     if (found) {
         if (fileSelectedNoError) {
+            if (extractedData==null || extractedData.length==0) return;
             chartViewDiv.style.display = 'block';
             alertDiv.style.display = 'none';
-            if (extractedData==null || extractedData.length==0) return;
             cb(extractedData);
             document.getElementById('chartViewDiv').scrollIntoView();
         } else {

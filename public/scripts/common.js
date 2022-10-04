@@ -20,7 +20,7 @@ class XHRSender {
             if (xhr.status == 200) {
                 var unauthorized = xhr.getResponseHeader("Unauthorized");
                 if (unauthorized && unauthorized !== "") {
-                    window.location = unauthorized;
+                    // window.location = unauthorized;
                     return;
                 }
                 callback(xhr);
@@ -86,6 +86,15 @@ function setErrorFor(input, message) {
 function setClear(input) {
     const formControl = input.parentElement;
     formControl.className = 'form-control form-outline form-input';
+}
+
+/**
+ * Shows a success or error message to user.
+ * 
+ * If success is true, shows a success message. Otherwise, shows an error message
+ */
+function showMsg(msg, success = false) {
+    alert(msg);
 }
 
 if (typeof module != 'undefined') {

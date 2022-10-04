@@ -5,15 +5,6 @@ emailInput.onkeydown = event => {
     keyPressFn(event, email_pattern, null, submitBtn);
 }
 
-/**
- * Shows a success or error message to user.
- * 
- * If success is true, shows a success message. Otherwise, shows an error message
- */
-function showMsg(msg, success = false) {
-    alert(msg);
-}
-
 submitBtn.onclick = e => {
     e.preventDefault();
     let email = emailInput.value.trim();

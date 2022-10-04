@@ -33,6 +33,7 @@ class DataFormatHelper {
                 n: item.n,
                 p: parent
             }
+            if (typeof item.clr != 'undefined') newItem.clr = item.clr;
             var children, depth, childSum;
             [children, depth, childSum] = DataFormatHelper._recursiveProcess(item.c, newItem);
             newItem.d = depth - 1;
@@ -55,7 +56,7 @@ class DataFormatHelper {
 
     static preProcess(data) {
         var processedData, maxDepth, total;
-        var root = { n: '/', v: 1, w: 1, pw: 0 };
+        var root = { n: '/', v: 1, w: 1 };
         [processedData, maxDepth, total] = this._recursiveProcess(data, root);
         root.d = maxDepth - 1;
         root.c = processedData;

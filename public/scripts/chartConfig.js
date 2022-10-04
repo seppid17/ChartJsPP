@@ -1,5 +1,6 @@
 class ChartConfig {
     static chart = null;
+    static instance = null;
     static canvas = null;
     constructor(type) {
         if (ChartConfig.canvas == null) throw new Error('No canvas selected');
@@ -59,9 +60,16 @@ class ChartConfig {
                 }
             }
         };
+        ChartConfig.instance = this;
     }
 
     setData(data) {
+        if (this.config) {
+            this.config.data = data;
+        }
+    }
+
+    setSavedData(data) {
         if (this.config) {
             this.config.data = data;
         }
@@ -95,6 +103,14 @@ class ChartConfig {
         if (ChartConfig.chart instanceof Chart) {
             ChartConfig.chart.update(mode);
         }
+    }
+
+    getType(){
+        return this.config.type;
+    }
+
+    getData(){
+        return this.config.data;
     }
 }
 
@@ -304,6 +320,33 @@ class HierarchicalChartConfig extends ChartConfig {
         if (this.config && this.config.data.datasets.length > 0) {
             this.config.data.datasets[0].tree = DataFormatHelper.preProcess(data);
         }
+    }
+
+    setSavedData(data) {
+        this.setData(data);
+    }
+
+    _unlinkTree(tree){
+        var unlinked = [];
+        tree.c.forEach(item => {
+            let newItem = {
+                n:item.n,
+                v:item.v,
+                c:this._unlinkTree(item)
+            };
+            if (item.clr !== undefined){
+                newItem.clr = item.clr;
+            }
+            unlinked.push(newItem);
+        });
+        return unlinked;
+    }
+
+    getData(){
+        if (this.config && this.config.data.datasets.length > 0) {
+            return this._unlinkTree(this.config.data.datasets[0].tree);
+        }
+        return null;
     }
 }
 

@@ -5,6 +5,10 @@ const chartBtn = document.getElementById('drawBtn');
 
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
+const alertDiv = document.getElementById('alertPop');
+const fontSizeSelect = document.getElementById('fontSize');
+const fontStyleBtn = document.getElementById('italicBtn');
+const fontWeightBtn = document.getElementById('boldBtn');
 
 window.onload = () => {
     let height = window.innerHeight;
@@ -18,7 +22,15 @@ window.onload = () => {
 Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
+
 let chartName = 'Untitled';
+fontSizeSelect.value = Chart.defaults.font.size;
+if (Chart.defaults.font.style == 'italic') {
+    fontStyleBtn.classList.add('btn-icon-selected');
+}
+if (Chart.defaults.font.weight == 'bold') {
+    fontWeightBtn.classList.add('btn-icon-selected');
+}
 
 Chart.register({
     id: "legendColorUpdate",
@@ -127,7 +139,7 @@ const drawChart = (data) => {
                 }
                 values.push({ x: val[0], y: val[1], r: val[2] });
             });
-            myChart = new BubbleChartConfig(canvas);
+            myChart = new BubbleChartConfig();
             break;
         }
         case 'sunburst': {
@@ -183,6 +195,51 @@ document.getElementById('downloadImgBtn').onclick = e => {
     downLinkTmp.remove();
 };
 
+document.getElementById('saveBtn').onclick = e => {
+    var chartConfig = ChartConfig.instance;
+    if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
+        alert('No chart to save');
+        return;
+    }
+    var type = chartConfig.getType();
+    if (type == null) return;
+    var data = chartConfig.getData();
+    if (data == null) return;
+    var properties = {
+        fontSize: Chart.defaults.font.size,
+        fontStyle: Chart.defaults.font.style,
+        fontWeight: Chart.defaults.font.weight
+    };
+    var id = '';
+    if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
+        id = document.location.pathname.split('/')[2];
+    }
+
+    var xhrSender = new XHRSender();
+    if (id.length > 0) xhrSender.addField('id', id);
+    xhrSender.addField('name', chartName);
+    xhrSender.addField('thumbnail', 'nothumbnail');
+    xhrSender.addField('type', type);
+    xhrSender.addField('data', JSON.stringify(data));
+    xhrSender.addField('properties', JSON.stringify(properties));
+    xhrSender.send('/authChart/save', xhr => {
+        try {
+            let data = JSON.parse(xhr.responseText);
+            if (!data.hasOwnProperty('success') || data['success'] !== true) {
+                if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
+                    showMsg(data['reason']);
+                } else {
+                    showMsg('Chart saving failed!');
+                }
+                return;
+            }
+            showMsg('Chart saved', true);
+        } catch (error) {
+            showMsg('Something went wrong! Please try again.');
+        }
+    });
+};
+
 document.getElementById('CloseEdit').onclick = e => {
     // document.getElementById('EditChartOption').style.display = 'none';
     let popup = document.getElementById("myPopup");
@@ -210,7 +267,6 @@ document.getElementById('editName').onclick = e => {
     };
 };
 
-var fontSizeSelect = document.getElementById('fontSize');
 fontSizeSelect.onchange = e => {
     var size = fontSizeSelect.value;
     if (/^\d{1,3}$/.test(size)) {
@@ -227,7 +283,6 @@ fontSizeSelect.onchange = e => {
     }
 };
 
-var fontStyleBtn = document.getElementById('italicBtn');
 fontStyleBtn.onclick = e => {
     var style = Chart.defaults.font.style;
     if (style == 'normal') {
@@ -240,7 +295,6 @@ fontStyleBtn.onclick = e => {
     ChartConfig.update();
 };
 
-var fontWeightBtn = document.getElementById('boldBtn');
 fontWeightBtn.onclick = e => {
     var weight = Chart.defaults.font.weight;
     if (weight == 'normal') {
@@ -314,6 +368,100 @@ function setDivPos(d, x, y, mid) {
         d.style.left = x + 'px';
     }
     d.style.top = y + 'px';
+}
+
+function drawSavedChart(info, type, data, properties) {
+    if (typeof info.name != 'undefined') chartName = info.name;
+    if (typeof properties.fontSize != 'undefined') Chart.defaults.font.size = properties.fontSize;
+    if (typeof properties.fontStyle != 'undefined') Chart.defaults.font.style = properties.fontStyle;
+    if (typeof properties.fontWeight != 'undefined') Chart.defaults.font.weight = properties.fontWeight;
+    let myChart;
+    switch (type) {
+        case 'bar': {
+            myChart = new BarChartConfig();
+            break;
+        }
+        case 'pie': {
+            myChart = new PieChartConfig();
+            break;
+        }
+        case 'line': {
+            myChart = new LineChartConfig();
+            break;
+        }
+        case 'doughnut': {
+            myChart = new DoughnutChartConfig();
+            break;
+        }
+        case 'polarArea': {
+            myChart = new PolarAreaChartConfig();
+            break;
+        }
+        case 'scatter': {
+            myChart = new ScatterChartConfig();
+            break;
+        }
+        case 'bubble': {
+            myChart = new BubbleChartConfig();
+            break;
+        }
+        case 'sunburst': {
+            myChart = new SunburstChartConfig();
+            break;
+        }
+
+        case 'treemap': {
+            myChart = new TreemapChartConfig();
+            break;
+        }
+
+        case 'icicle': {
+            myChart = new IcicleChartConfig();
+            break;
+        }
+        default:
+            return;
+            break;
+    }
+    myChart.setName(chartName);
+    myChart.setSavedData(data);
+    chartViewDiv.style.display = 'block';
+    alertDiv.style.display = 'none';
+    myChart.draw();
+    document.getElementById('chartNameView').innerText = chartName;
+    fontSizeSelect.value = Chart.defaults.font.size;
+    if (Chart.defaults.font.style == 'italic') {
+        fontStyleBtn.classList.add('btn-icon-selected');
+    }
+    if (Chart.defaults.font.weight == 'bold') {
+        fontWeightBtn.classList.add('btn-icon-selected');
+    }
+}
+
+if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
+    let id = document.location.pathname.split('/')[2];
+    var xhrSender = new XHRSender();
+    xhrSender.addField('id', id);
+    xhrSender.send('/authChart/retrieve', xhr => {
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !resp.hasOwnProperty('data')) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                    showMsg(resp['reason']);
+                } else {
+                    showMsg('Chart retrieving failed!');
+                }
+                return;
+            }
+            let info = resp.info;
+            let data = resp.data;
+            let chartData = JSON.parse(data.data);
+            let properties = JSON.parse(data.properties);
+            drawSavedChart(info, data.type, chartData, properties);
+        } catch (error) {
+            showMsg('Something went wrong! Please try again.');
+        }
+    });
 }
 
 setCallback(drawChart);

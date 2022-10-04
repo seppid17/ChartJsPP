@@ -20,6 +20,11 @@ class LabeledArcElement extends Chart.elements.ArcElement {
     _addText(ctx) {
         if (this.text == null) return;
         var center = this.getCenterPoint(true);
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = this.options.textColor;
+        ctx.font = this.options.font.style + ' ' + this.options.font.weight + ' ' + this.options.font.size + 'px' + ' ' + this.options.font.family;
         var textX = center.x, textY = center.y;
         var height = this.options.font.size + 2;
         var width = ctx.measureText(this.text).width + 2;
@@ -27,16 +32,10 @@ class LabeledArcElement extends Chart.elements.ArcElement {
         var bottom = textY + height / 2;
         var left = textX - width / 2;
         var right = textX + width / 2;
-        // if (this.text=='A') console.log(this.text, textX, textY, top, left, bottom, right);
         if (!this.inRange(left, top, true)) return;
         if (!this.inRange(right, top, true)) return;
         if (!this.inRange(left, bottom, true)) return;
         if (!this.inRange(right, bottom, true)) return;
-        ctx.save();
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = this.options.textColor;
-        ctx.font = this.options.font.style + ' ' + this.options.font.weight + ' ' + this.options.font.size + 'px' + ' ' + this.options.font.family;
         ctx.fillText(this.text, textX, textY);
         ctx.restore();
     }
