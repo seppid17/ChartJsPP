@@ -4,13 +4,19 @@ function setCards() {
     xhrSender.send('/authChart/list', xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);
-            if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info')) {
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !Array.isArray(resp.info)) {
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
                     showMsg(resp['reason']);
                 } else {
                     showMsg('Chart list retrieving failed!');
                 }
                 return;
+            }
+            if (resp.info.length==0){
+                let p = document.createElement('p');
+                p.classList.add('text-details');
+                p.innerText = 'No saved charts';
+                cardsDiv.appendChild(p);
             }
             resp.info.forEach(chart => {
                 let cardColDiv = document.createElement('div');

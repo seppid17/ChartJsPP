@@ -23,6 +23,7 @@ Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
 
+let chartID = '';
 let chartName = 'Untitled';
 fontSizeSelect.value = Chart.defaults.font.size;
 if (Chart.defaults.font.style == 'italic') {
@@ -287,14 +288,13 @@ document.getElementById('saveBtn').onclick = e => {
         fontStyle: Chart.defaults.font.style,
         fontWeight: Chart.defaults.font.weight
     };
-    var id = '';
     if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-        id = document.location.pathname.split('/')[2];
+        chartID = document.location.pathname.split('/')[2];
     }
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
 
     var xhrSender = new XHRSender();
-    if (id.length > 0) xhrSender.addField('id', id);
+    if (chartID.length > 0) xhrSender.addField('id', chartID);
     xhrSender.addField('name', chartName);
     xhrSender.addField('type', type);
     xhrSender.addField('thumbnail', thumb);
@@ -312,6 +312,9 @@ document.getElementById('saveBtn').onclick = e => {
                 return;
             }
             showMsg('Chart saved', true);
+            if (data.hasOwnProperty('id') || typeof data['id'] == 'string') {
+                chartID = data['id'];
+            }
         } catch (error) {
             showMsg('Something went wrong! Please try again.');
         }
@@ -517,9 +520,9 @@ function drawSavedChart(info, type, data, properties) {
 }
 
 if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-    let id = document.location.pathname.split('/')[2];
+    chartID = document.location.pathname.split('/')[2];
     var xhrSender = new XHRSender();
-    xhrSender.addField('id', id);
+    xhrSender.addField('id', chartID);
     xhrSender.send('/authChart/retrieve', xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);
