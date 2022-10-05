@@ -185,7 +185,72 @@ window.onresize = e => {
     // chartDiv.onresize(e);
 };
 
+function getCroppedCanvas(canvas) {
+    var width_source = canvas.width;
+    var height_source = canvas.height;
+
+    var ctx = canvas.getContext("2d");
+    var img = ctx.getImageData(0, 0, width_source, height_source);
+    var data = img.data;
+
+    var left = width_source;
+    var top = height_source;
+    var right = 0;
+    var bottom = 0;
+
+    for (let i = 0; i < height_source; i++) {
+        for (let j = 0; j < width_source; j++) {
+            if (data[(i * width_source + j) * 4 + 3] > 0) {
+                if (i < top) {
+                    top = i;
+                }
+                if (i > bottom) {
+                    bottom = i;
+                }
+                if (j < left) {
+                    left = j;
+                }
+                if (j > right) {
+                    right = j;
+                }
+            }
+        }
+    }
+    var width = right - left + 1;
+    var height = bottom - top + 1;
+    if (width < 0) {
+        width = 0;
+        right = left - 1;
+    }
+    if (height < 0) {
+        height = 0;
+        bottom = top - 1;
+    }
+
+    var img2 = ctx.createImageData(width, height);
+    var data2 = img2.data;
+    for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+            let x = left + j;
+            let y = top + i;
+            pos0 = (x+y*width_source)*4;
+            pos = (j+i*width)*4;
+            data2[pos] = data[pos0];
+            data2[pos+1] = data[pos0+1];
+            data2[pos+2] = data[pos0+2];
+            data2[pos+3] = data[pos0+3];
+        }
+    }
+    let canvas2 = document.createElement('canvas');
+    canvas2.width = width;
+    canvas2.height = height;
+    let ctx2 = canvas2.getContext("2d");
+    ctx2.putImageData(img2, 0, 0);
+    return canvas2;
+}
+
 function make_thumb(canvas, width, height) {
+    canvas = getCroppedCanvas(canvas);
     var width_source = canvas.width;
     var height_source = canvas.height;
     width = Math.round(width);
@@ -193,11 +258,11 @@ function make_thumb(canvas, width, height) {
 
     var ratio_w = width_source / width;
     var ratio_h = height_source / height;
-    var ratio_min = Math.min(ratio_h, ratio_w);
-    var ratio_w_half = Math.ceil(ratio_min / 2);
-    var ratio_h_half = Math.ceil(ratio_min / 2);
-    var x_off = (width_source - width * ratio_min) / 2;
-    var y_off = (height_source - height * ratio_min) / 2;
+    var ratio_max = Math.max(ratio_h, ratio_w);
+    var ratio_w_half = Math.ceil(ratio_max / 2);
+    var ratio_h_half = Math.ceil(ratio_max / 2);
+    var x_off = (width_source - width * ratio_max) / 2;
+    var y_off = (height_source - height * ratio_max) / 2;
 
     var ctx = canvas.getContext("2d");
     var img = ctx.getImageData(0, 0, width_source, height_source);
@@ -215,16 +280,18 @@ function make_thumb(canvas, width, height) {
             var gx_g = 0;
             var gx_b = 0;
             var gx_a = 0;
-            var center_y = y_off + (j + 0.5) * ratio_min;
-            var yy_start = Math.floor(y_off + j * ratio_min);
-            var yy_stop = Math.ceil(y_off + (j + 1) * ratio_min);
+            var center_y = y_off + (j + 0.5) * ratio_max;
+            var yy_start = Math.floor(y_off + j * ratio_max);
+            var yy_stop = Math.ceil(y_off + (j + 1) * ratio_max);
             for (var yy = yy_start; yy < yy_stop; yy++) {
+                let inRange = (0<=yy && yy<=height_source);
                 var dy = Math.abs(center_y - (yy + 0.5)) / ratio_h_half;
-                var center_x = x_off + (i + 0.5) * ratio_min;
+                var center_x = x_off + (i + 0.5) * ratio_max;
                 var w0 = dy * dy; //pre-calc part of w
-                var xx_start = Math.floor(x_off + i * ratio_min);
-                var xx_stop = Math.ceil(x_off + (i + 1) * ratio_min);
+                var xx_start = Math.floor(x_off + i * ratio_max);
+                var xx_stop = Math.ceil(x_off + (i + 1) * ratio_max);
                 for (var xx = xx_start; xx < xx_stop; xx++) {
+                    if (inRange) inRange = (0<=xx && xx<=width_source)
                     var dx = Math.abs(center_x - (xx + 0.5)) / ratio_w_half;
                     var w = Math.sqrt(w0 + dx * dx);
                     if (w >= 1) {
@@ -235,14 +302,15 @@ function make_thumb(canvas, width, height) {
                     weight = 2 * w * w * w - 3 * w * w + 1;
                     var pos_x = 4 * (xx + yy * width_source);
                     //alpha
-                    gx_a += weight * data[pos_x + 3];
+                    let alpSrc = inRange ? data[pos_x + 3] : 0;
+                    gx_a += weight * alpSrc;
                     weights_alpha += weight;
                     //colors
-                    if (data[pos_x + 3] < 255)
-                        weight = weight * data[pos_x + 3] / 250;
-                    gx_r += weight * data[pos_x];
-                    gx_g += weight * data[pos_x + 1];
-                    gx_b += weight * data[pos_x + 2];
+                    if (alpSrc < 255)
+                        weight = weight * alpSrc / 250;
+                    gx_r += weight * (inRange ? data[pos_x] : 255);
+                    gx_g += weight * (inRange ? data[pos_x+1] : 255);
+                    gx_b += weight * (inRange ? data[pos_x+2] : 255);
                     weights += weight;
                 }
             }
@@ -268,7 +336,8 @@ function make_thumb(canvas, width, height) {
 }
 
 document.getElementById('downloadImgBtn').onclick = e => {
-    let canvasUrl = canvas.toDataURL();
+    let croppedCanvas = getCroppedCanvas(canvas);
+    let canvasUrl = croppedCanvas.toDataURL();
 
     const downLinkTmp = document.createElement('a');
     downLinkTmp.href = canvasUrl;
@@ -280,12 +349,14 @@ document.getElementById('downloadImgBtn').onclick = e => {
 document.getElementById('downloadPdf').onclick = e => {
     const canvas = document.getElementById("myChart");
     // create image
-    const canvasImage = canvas.toDataURL('image/png',1.0)
-    const doc = new jsPDF();
-    doc.setFontSize(20)
-    doc.addImage(canvasImage,'PNG',15,45,180,150)
-    doc.save('mychart.pdf')
-    }
+    let croppedCanvas = getCroppedCanvas(canvas);
+    const canvasImage = croppedCanvas.toDataURL();
+    window.jsPDF = window.jspdf.jsPDF;
+    const padding = 15;
+    const doc = new jsPDF(croppedCanvas.width<croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width+padding*2, croppedCanvas.height+padding*2]);
+    doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
+    doc.save(chartName+'.pdf');
+}
 
 document.getElementById('saveBtn').onclick = e => {
     var chartConfig = ChartConfig.instance;
