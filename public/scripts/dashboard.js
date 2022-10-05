@@ -1,5 +1,12 @@
+const cardsDiv = document.getElementById('cardsDiv');
+
+function showNoCharts() {
+    let p = document.createElement('p');
+    p.classList.add('text-details');
+    p.innerText = 'No saved charts';
+    cardsDiv.appendChild(p);
+}
 function setCards() {
-    const cardsDiv = document.getElementById('cardsDiv');
     var xhrSender = new XHRSender();
     xhrSender.send('/authChart/list', xhr => {
         try {
@@ -12,11 +19,8 @@ function setCards() {
                 }
                 return;
             }
-            if (resp.info.length==0){
-                let p = document.createElement('p');
-                p.classList.add('text-details');
-                p.innerText = 'No saved charts';
-                cardsDiv.appendChild(p);
+            if (resp.info.length == 0) {
+                showNoCharts();
             }
             resp.info.forEach(chart => {
                 let cardColDiv = document.createElement('div');
@@ -30,7 +34,7 @@ function setCards() {
                 cardColDiv.appendChild(cardDiv);
 
                 cardDiv.onclick = evt => {
-                    window.open('/chart/' + chart.id, '_blank');
+                    window.open('/authChart/retrieve/' + chart.id, '_blank');
                 }
 
                 let ul = document.createElement('ul');
@@ -80,16 +84,37 @@ function setCards() {
                 a.onclick = evt => {
                     evt.preventDefault();
                     evt.stopPropagation();
-                    alert('delete not implemented');
+                    let confirmed = confirm('Are you sure you want to delete ' + chart.name + '?');
+                    if (!confirmed) return;
+                    let xhrSender = new XHRSender();
+                    xhrSender.addField('id', chart.id);
+                    xhrSender.send('/authChart/delete', xhr => {
+                        try {
+                            let resp = JSON.parse(xhr.responseText);
+                            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                                    showMsg(resp['reason']);
+                                } else {
+                                    showMsg('Deleting chart failed!');
+                                }
+                                return;
+                            }
+                            cardsDiv.removeChild(cardColDiv);
+                            if (cardsDiv.childElementCount == 0) {
+                                showNoCharts();
+                            }
+                        } catch (error) {
+                            showMsg('Delete failed!');
+                        }
+                    });
                 }
-
                 let i = document.createElement('i');
                 i.classList.add('fa-solid');
                 i.classList.add('fa-trash-can');
                 a.appendChild(i);
             });
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showMsg('Loading saved charts failed!');
         }
     });
 }

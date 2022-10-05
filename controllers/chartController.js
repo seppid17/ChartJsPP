@@ -133,4 +133,30 @@ const getChartList = async (req, res) => {
     }
 };
 
-module.exports = { saveChart, retrieveChart, getChartList };
+const deleteChart = async (req, res) => {
+    let { id } = req.body;
+    const user = req.session.user;
+    if (id == undefined) {
+        console.log('no id');
+        res.json({ 'success': false, 'reason': 'No chart ID provided' });
+    } else {
+        try {
+            let infoResult = await ChartInfo.deleteOne({ id: id, owner: user.email });
+            if (infoResult.acknowledged !== true || infoResult.deletedCount <= 0) {
+                res.json({ 'success': false });
+                return;
+            }
+            let dataResult = await ChartData.deleteOne({ id: id });
+            if (dataResult.acknowledged !== true || dataResult.deletedCount <= 0) {
+                res.json({ 'success': false });
+                return;
+            }
+            res.json({ 'success': true });
+        } catch (err) {
+            console.log(err);
+            res.json({ 'success': false });
+        }
+    }
+};
+
+module.exports = { saveChart, retrieveChart, getChartList, deleteChart };

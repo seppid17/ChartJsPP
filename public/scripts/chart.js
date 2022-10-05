@@ -293,8 +293,8 @@ document.getElementById('saveBtn').onclick = e => {
         fontStyle: Chart.defaults.font.style,
         fontWeight: Chart.defaults.font.weight
     };
-    if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-        chartID = document.location.pathname.split('/')[2];
+    if (/^\/authChart\/retrieve\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
+        chartID = document.location.pathname.split('/')[3];
     }
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
 
@@ -322,6 +322,33 @@ document.getElementById('saveBtn').onclick = e => {
             }
         } catch (error) {
             showMsg('Something went wrong! Please try again.');
+        }
+    });
+};
+
+document.getElementById('deleteBtn').onclick = e => {
+    if (chartID.length == 0) {
+        showMsg('Chart is not saved');
+        return;
+    }
+    let confirmed = confirm('Are you sure you want to delete this chart?');
+    if (!confirmed) return;
+    let xhrSender = new XHRSender();
+    xhrSender.addField('id', chartID);
+    xhrSender.send('/authChart/delete', xhr => {
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                    showMsg(resp['reason']);
+                } else {
+                    showMsg('Deleting chart failed!');
+                }
+                return;
+            }
+            window.location = '/dashboard';
+        } catch (error) {
+            showMsg('Delete failed!');
         }
     });
 };
@@ -524,8 +551,8 @@ function drawSavedChart(info, type, data, properties) {
     }
 }
 
-if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-    chartID = document.location.pathname.split('/')[2];
+if (/^\/authChart\/retrieve\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
+    chartID = document.location.pathname.split('/')[3];
     var xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
     xhrSender.send('/authChart/retrieve', xhr => {
@@ -537,6 +564,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                 } else {
                     showMsg('Chart retrieving failed!');
                 }
+                window.location = '/chart';
                 return;
             }
             let info = resp.info;
