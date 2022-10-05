@@ -1,5 +1,6 @@
 body {
     background-color: #F9FCFF;
+    font-family: "proxima-nova-soft", sans-serif;
 }
 
 .wrapper {
@@ -20,7 +21,6 @@ body {
 
 .chart-title {
     color: rgb(39, 39, 39);
-    font-family: "proxima-nova-soft", sans-serif;
     font-size: 3.5rem;
     font-weight: 600;
     margin-top: 20px;
@@ -28,7 +28,6 @@ body {
 }
 
 .chart-subtitle {
-    font-family: "proxima-nova-soft", sans-serif;
     font-weight: 400;
     font-size: 1.25rem;
     margin-bottom: 70px;
@@ -43,7 +42,6 @@ body {
     color: #FFFFFF;
     background-color: #E7E9ED;
     border-radius: 8px;
-    font-family: "proxima-nova-soft", sans-serif;
     font-weight: 600;
     text-decoration: none;
     transition: box-shadow 200ms ease-out;
