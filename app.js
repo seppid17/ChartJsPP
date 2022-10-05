@@ -19,13 +19,24 @@ app.set('view engine', 'ejs');
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
-    cookie: { maxAge: 3600000 },
-    resave: true
+    cookie: {
+        maxAge: 3600000,
+        sameSite: 'strict'
+    },
+    resave: false
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(express.static("public"));
+
+app.use(function (req, res, next) {
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Content-Security-Policy', "script-src 'self' cdnjs.cloudflare.com cdn.jsdelivr.net kit.fontawesome.com; connect-src 'self' *.fontawesome.com; frame-src 'none'; form-action 'none'; object-src 'none';");
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    next();
+});
 
 app.use('/', require('./routes/login'));
 app.use('/', require('./routes/signup'));
