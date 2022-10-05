@@ -277,6 +277,15 @@ document.getElementById('downloadImgBtn').onclick = e => {
     downLinkTmp.click();
     downLinkTmp.remove();
 };
+document.getElementById('downloadPdf').onclick = e => {
+    const canvas = document.getElementById("myChart");
+    // create image
+    const canvasImage = canvas.toDataURL('image/png',1.0)
+    const doc = new jsPDF();
+    doc.setFontSize(20)
+    doc.addImage(canvasImage,'PNG',15,45,180,150)
+    doc.save('mychart.pdf')
+    }
 
 document.getElementById('saveBtn').onclick = e => {
     var chartConfig = ChartConfig.instance;
