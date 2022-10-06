@@ -335,7 +335,7 @@ function make_thumb(canvas, width, height) {
     return canvas2.toDataURL('image/jpeg', 0.8);
 }
 
-document.getElementById('downloadImgBtn').onclick = e => {
+document.getElementById('downloadImg').onclick = e => {
     let croppedCanvas = getCroppedCanvas(canvas);
     let canvasUrl = croppedCanvas.toDataURL();
 
@@ -345,6 +345,7 @@ document.getElementById('downloadImgBtn').onclick = e => {
 
     downLinkTmp.click();
     downLinkTmp.remove();
+    downloadPopup.classList.remove("show");
 };
 document.getElementById('downloadPdf').onclick = e => {
     const canvas = document.getElementById("myChart");
@@ -356,6 +357,7 @@ document.getElementById('downloadPdf').onclick = e => {
     const doc = new jsPDF(croppedCanvas.width<croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width+padding*2, croppedCanvas.height+padding*2]);
     doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
     doc.save(chartName+'.pdf');
+    downloadPopup.classList.remove("show");
 }
 
 document.getElementById('saveBtn').onclick = e => {
@@ -656,6 +658,21 @@ if (/^\/authChart\/retrieve\/[0-9a-fA-F]{16,32}$/.test(document.location.pathnam
             showMsg('Something went wrong! Please try again.');
         }
     });
+}
+
+let downloadPopup = document.getElementById("downloadPopup");
+
+document.getElementById('downloadBtn').onclick = e => {
+    e.stopImmediatePropagation(); // prevents document.onclick()
+    let popup = document.getElementById("myPopup");
+    downloadPopup.classList.toggle("show");
+    popup.classList.remove("show");
+}
+
+document.onclick = e => {
+    let popup = document.getElementById("myPopup");
+    downloadPopup.classList.remove("show");
+    popup.classList.remove("show");
 }
 
 setCallback(drawChart);

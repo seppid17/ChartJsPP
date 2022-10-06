@@ -53,6 +53,24 @@ body {
     align-items: flex-end;
 }
 
+.btn-dw {
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-left: 5px;
+    margin: 8px;
+    height: 35px;
+    width: 70px;
+    color: var(--black);
+    border: 1px solid var(--gray);
+    width: fit-content;
+    font-weight: normal;
+    font-size: medium;
+}
+
+.btn-dw:hover {
+    color: var(--black);
+}
+
 .btn-ex {
     padding-right: 10px;
     width: fit-content;
@@ -415,6 +433,32 @@ ol li:before {
     border-radius: 5px;
     min-width: 221px;
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
+}
+
+.popup .downloadPopup {
+    visibility: hidden;
+    background-color: var(--white);
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    border-radius: 5px;
+    min-width: 200px;
+    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
+}
+
+.popup .downloadPopup::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #ecf0f3 transparent transparent transparent;
 }
 
 /* Toggle this class - hide and show the popup */

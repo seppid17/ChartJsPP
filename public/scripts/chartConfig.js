@@ -12,6 +12,7 @@ class ChartConfig {
             breadcrumb.removeChild(breadcrumb.firstChild);
         }
         ChartConfig.canvas.onclick = evt => {
+            evt.stopImmediatePropagation(); // prevents document.onclick()
             if (this instanceof HierarchicalChartConfig) {
                 document.getElementById('expandBtnDiv').style.display = 'block';
             } else {
@@ -19,6 +20,7 @@ class ChartConfig {
             }
             let popup = document.getElementById("myPopup");
             popup.classList.remove("show");
+            downloadPopup.classList.remove("show");
             let myChart = ChartConfig.chart;
             if (!myChart) {
                 return;
