@@ -536,7 +536,7 @@ document.getElementById('backBtn').onclick = e => {
 function setPath(first) {
     let path = [];
     if (first == undefined || first.p == undefined || first.p == null) return null;
-    let parent = first.p;
+    let parent = first;
     let hasParent = true;
     while (hasParent) {
         path.push(parent.n);
@@ -545,8 +545,7 @@ function setPath(first) {
             hasParent = false;
         }
     }
-    path.push('ROOT')
-    console.log(path)
+    path.push('/')
     return path;
 }
 

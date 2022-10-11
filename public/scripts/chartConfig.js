@@ -49,16 +49,16 @@ class ChartConfig {
                     myChart.update('none');
                 }
                 document.getElementById('expandBtn').onclick = e => {
-                    myChart.update('expand ' + point.index);
-                    var first = ChartConfig.chart._metasets[0].controller.pointers[0];
-                    console.log(first)
-                    path = setPath(first);
+                    let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
+                    if (clicked.c.length==0) return;
+                    path = setPath(clicked);
                     while (breadcrumb.hasChildNodes()) {
                         breadcrumb.removeChild(breadcrumb.firstChild);
                     }
                     path.forEach(createBreadcrumb);
                     popup.classList.remove("show");
                     backDiv.style.display = "block"
+                    myChart.update('expand ' + point.index);
                 }
             }
         };
