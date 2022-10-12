@@ -106,7 +106,8 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: var(--purple);
+    background: var(--purple1);
+    background: linear-gradient(331deg, var(--purple1) 0%, var(--purple) 49%, var(--purple0) 100%); 
     padding: 20px 20px;
     min-width: 45%;
 }
