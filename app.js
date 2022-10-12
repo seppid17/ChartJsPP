@@ -21,9 +21,10 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         maxAge: 3600000,
-        sameSite: 'strict'
+        sameSite: 'lax'
     },
-    resave: false
+    resave: false,
+    rolling: true
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const { ChartInfo, ChartData } = require("../models/Chart");
 const Validator = require("../utils/validator");
 const bcrypt = require("bcrypt");
 
@@ -33,7 +34,7 @@ const changeName = (req, res) => {
         res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'password' });
         return;
     }
-    
+
     let user = req.session.user;
     bcrypt.compare(password, user.password).then(matching => {
         if (matching) {
@@ -62,7 +63,7 @@ const changePasswd = (req, res) => {
         return;
     }
     if (!Validator.validate('password', curPassword)) {
-        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'curPassword'  });
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'curPassword' });
         return;
     }
     if (!newPassword) {
@@ -111,6 +112,13 @@ const deleteAccount = (req, res) => {
     bcrypt.compare(password, user.password).then(matching => {
         if (matching) {
             User.updateMany({ email: user.email, active: true }, { active: false }).then(users => {
+                ChartInfo.find({ owner: user.email }, 'id').then(charts => {
+                    charts.forEach(chart => {
+                        let id = chart.id;
+                        ChartData.deleteOne({ id: id }).catch(err => { console.log(err); });
+                        ChartInfo.deleteOne({ id: id }).catch(err => { console.log(err); });
+                    });
+                }).catch(err => { console.log(err); });
                 req.session.loggedIn = false;
                 req.session.user = null;
                 res.json({ 'success': true });
