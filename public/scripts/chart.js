@@ -363,7 +363,7 @@ document.getElementById('downloadPdf').onclick = e => {
 document.getElementById('saveBtn').onclick = e => {
     var chartConfig = ChartConfig.instance;
     if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
-        alert('No chart to save');
+        showMsg('No chart to save');
         return;
     }
     var type = chartConfig.getType();

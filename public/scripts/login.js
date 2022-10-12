@@ -43,10 +43,15 @@ submitBtn.onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    if (data['reason'] === 'This email does not have an account') {
-                        setErrorFor(emailInput, data['reason']);
-                    } else if (data['reason'] === 'Incorrect password') {
-                        setErrorFor(passwdInput, data['reason']);
+                    if (data.hasOwnProperty('field')) {
+                        switch (data['field']) {
+                            case 'email':
+                                setErrorFor(emailInput, data['reason']);
+                                break;
+                            case 'password':
+                                setErrorFor(passwdInput, data['reason']);
+                                break;
+                        }
                     } else {
                         showMsg(data['reason']);
                     }
@@ -61,7 +66,7 @@ submitBtn.onclick = e => {
             }
             window.location = target;
         } catch (error) {
-            showMsg('Something went wrong!');
+            showMsg('Something went wrong! Try again.');
         }
     });
 }

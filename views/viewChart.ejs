@@ -1,0 +1,158 @@
+<div class="wrapper-chart" style="display: none;" id="chartViewDiv">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- name -->
+            <div class="title-saved">
+                <div class="input-group mb-20">
+
+                    <div id="nameView" style="display: block;">
+                        <div class="row">
+                            <span class="flex text-gray-500">
+                                <span id="chartNameView" style="font-size: larger; font-weight: 500;">Untitled</span>
+                                <a title="edit"><i id="editName" class="far fa-edit"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div id="nameEdit" style="display: none;">
+                        <div class="row">
+                            <div class="col">
+                                <input id="nameInput" class="name-input" value="Untitled">
+                            </div>
+                            <div class="col save-div">
+                                <span class="flex text-gray-500">
+                                    <a id="saveName" title="save"><i class="far fa-check-circle fa-lg"></i></a>
+                                </span>
+                                <span class="flex text-gray-500">
+                                    <a id="cancellEditName" title="cancel"><i class="far fa-times-circle fa-lg"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="flex">
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 title-saved text-end">
+            <a id="shareBtn" title="share">
+                <i class="fa-solid fa-share-nodes fa-lg"></i>
+            </a>
+            <div class="popup">
+                <a id="downloadBtn" title="download">
+                    <i class="fa-solid fa-download fa-lg"></i>
+                </a>
+                <span class="downloadPopup" id="downloadPopup">
+                    <div class="content">
+                        <a class="btn btn-dw" id="downloadImg">
+                            <i class="far fa-file-image"></i>
+                            <span>png</span>
+                        </a>
+                        <a class="btn btn-dw" id="downloadPdf">
+                            <i class="far fa-file-pdf"></i>
+                            <span>pdf</span>
+                        </a>
+                    </div>
+                </span>
+            </div>
+
+            <a id="deleteBtn" title="delete">
+                <i class="fa-solid fa-trash-can fa-lg"></i>
+            </a>
+            <a id="saveBtn" title="save">
+                <i class="fa-solid fa-floppy-disk fa-lg"></i>
+            </a>
+            <a class="btn btn-submit btn-cn" data-toggle="tab" href="/chart" target="_blank">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>New</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="breadcrum-div" style="display: none;" id="backDiv">
+        <a class="btn btn-back" id="backBtn" data-toggle="tab">
+            <i class="fa-sharp fa-solid fa-caret-left"></i>
+            <span>Back</span>
+        </a>
+        <div id="crumbs">
+            <ol id="breadcrumbA">
+                <!-- add path -->
+            </ol>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+
+        <div class="col d-flex justify-content-center">
+            <!-- chart -->
+            <div class="popup chart-sty" id="chartDiv">
+                <canvas id="myChart"></canvas>
+                <span class="popuptext" id="myPopup">
+                    <div class="col">
+                        <!-- prop -->
+                        <div id="EditChartOption">
+
+                            <div class="row">
+                                <div class="text-end">
+                                    <a id="CloseEdit">
+                                        <i class="fa-solid fa-x fa-s"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="row w-100">
+                                        <div class="col text-end">
+                                            <label class="form-label" for="color-input">Color</label>
+                                        </div>
+                                        <div class="col text-end d-flex align-item-center">
+                                            <div class="input-group mb-20">
+                                                <input type="color" class="color-input" id="ColorInput" value="#000000"
+                                                    title="Choose your color">
+                                                <a><i class="far fa-check-circle fa-lg"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="display: none;" id="expandBtnDiv">
+                                <div class="input-group">
+                                    <a class="btn btn-submit btn-ex" id="expandBtn" data-toggle="tab">
+                                        <i class="fas fa-expand-alt"></i>
+                                        <span>Expand</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row form-control">
+        <h5>Chart properties</h5>
+
+        <span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            Text style
+            <a class="btn btn-icon" id="boldBtn">
+                <i class="fa-solid fa-bold"></i>
+            </a>
+            <a class="btn btn-icon" id="italicBtn">
+                <i class="fa-solid fa-italic"></i>
+            </a>
+            &nbsp;&nbsp;
+            Font size
+            <input type="number" id="fontSize" class="sizeSelect" value="18" min="8" max="36">
+        </span>
+    </div>
+</div>

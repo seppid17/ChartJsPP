@@ -14,32 +14,52 @@ const activateView = (req, res) => {
 }
 
 const requestUser = (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
-    if (!email || !password || !firstName || !lastName) {
+    const { email, password, firstName, lastName, cnfPassword } = req.body;
+    if (!email) {
         console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
         return;
     }
     if (!Validator.validate('email', email)) {
-        res.json({ 'success': false, 'reason': 'Invalid email' });
+        res.json({ 'success': false, 'reason': 'Invalid email', 'field': 'email' });
         return;
     }
-    if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password' });
+    if (!firstName) {
+        res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'firstname' });
         return;
     }
     if (!Validator.validate('name', firstName)) {
-        res.json({ 'success': false, 'reason': 'Invalid first name' });
+        res.json({ 'success': false, 'reason': 'Invalid first name', 'field': 'firstname' });
+        return;
+    }
+    if (!lastName) {
+        res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'lastname' });
         return;
     }
     if (!Validator.validate('name', lastName)) {
-        res.json({ 'success': false, 'reason': 'Invalid last name' });
+        res.json({ 'success': false, 'reason': 'Invalid last name', 'field': 'lastname' });
+        return;
+    }
+    if (!password) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password', 'field': 'password' });
+        return;
+    }
+    if (!cnfPassword) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'cnfPassword' });
+        return;
+    }
+    if (password !== cnfPassword) {
+        res.json({ 'success': false, 'reason': 'Password dosen\'t match', 'field': 'cnfPassword' });
         return;
     }
     User.findOne({ email: email, active: true }).then(user => {
         if (user) {
             console.log("email exists");
-            res.json({ 'success': false, 'reason': "This email already exists" });
+            res.json({ 'success': false, 'reason': "This email already exists", 'field': 'email' });
             return;
         }
         let token = crypto.randomBytes(16).toString('hex');
@@ -65,7 +85,7 @@ const requestUser = (req, res) => {
                     Mailer.sendMail("activate", email, link, (error, info) => {
                         if (error) {
                             console.log(error);
-                            res.json({ 'success': false, 'reason': 'Error sending email' });
+                            res.json({ 'success': false, 'reason': 'Email sending failed! Try again later.' });
                         } else {
                             // console.log('Email sent: ' + info.response);
                             res.json({ 'success': true });
@@ -86,33 +106,36 @@ const requestUser = (req, res) => {
 const activateAccount = (req, res) => {
     const { password } = req.body;
     const { email, token } = req.params;
-    if (!email || !password || !token) {
+    if (!email || !token) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
         return;
     }
+    if (!password) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
+        return;
+    }
     if (!Validator.validate('email', email)) {
-        res.json({ 'success': false, 'reason': 'Invalid email' });
+        res.json({ 'success': false, 'reason': 'Account activation failed! Invalid email format.' });
         return;
     }
     if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password' });
+        res.json({ 'success': false, 'reason': 'Invalid password format.', 'field': 'password' });
         return;
     }
     if (!Validator.validate('token', token)) {
-        res.json({ 'success': false, 'reason': 'Invalid token' });
+        res.json({ 'success': false, 'reason': 'Account activation failed! Invalid token format.' });
         return;
     }
     SignupRequest.findOne({ email: email, token: token }).then((requestUser) => {
         if (!requestUser) {
-            console.log("email and token do not match");
-            res.json({ 'success': false, 'reason': 'Invalid token' });
+            res.json({ 'success': false, 'reason': 'Account activation failed! Invalid token.' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (requestUser.expiry < timestampNow) {
             console.log("expired");
-            res.json({ 'success': false, 'reason': 'Token is expired' });
+            res.json({ 'success': false, 'reason': 'Account activation failed! Token is expired.' });
             return;
         }
         bcrypt.compare(password, requestUser.password).then(matching => {
@@ -137,7 +160,7 @@ const activateAccount = (req, res) => {
                     res.json({ 'success': true });
                 });
             } else {
-                res.json({ 'success': false, 'reason': 'Incorrect password' });
+                res.json({ 'success': false, 'reason': 'Incorrect password', 'field': 'password' });
             }
         }).catch(err => {
             console.log(err);

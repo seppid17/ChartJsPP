@@ -14,23 +14,28 @@ const logout = (req, res) => {
 
 const loginUser = (req, res) => {
     const { email, password } = req.body;
-    if (!email || !password) {
+    if (!email) {
         console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
         return;
     }
     if (!Validator.validate('email', email)) {
-        res.json({ 'success': false, 'reason': 'Invalid email' });
+        res.json({ 'success': false, 'reason': 'Invalid email format', 'field': 'email' });
+        return;
+    }
+    if (!password) {
+        console.log("Fill empty fields");
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
         return;
     }
     if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password' });
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'password' });
         return;
     }
     User.findOne({ email: email, active: true }).then((user) => {
         if (!user) {
             console.log("email does not exist");
-            res.json({ 'success': false, 'reason': 'This email does not have an account' });
+            res.json({ 'success': false, 'reason': 'This email does not have an account', 'field': 'email' });
             return;
         }
         bcrypt.compare(password, user.password).then(matching => {
@@ -44,7 +49,7 @@ const loginUser = (req, res) => {
                 }
                 res.json(response);
             } else {
-                res.json({ 'success': false, 'reason': 'Incorrect password' });
+                res.json({ 'success': false, 'reason': 'Incorrect password', 'field': 'password' });
             }
         }).catch(err => {
             console.log(err);

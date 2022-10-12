@@ -1,0 +1,98 @@
+<div class="mt-20" style="display: block;" id="uploadViewDiv">
+
+    <div class="gen-main-div">
+
+        <div class="text-center">
+            <div class="chart-type" id="selectChartType">
+                <h5 class="mb-0">Select chart type:</h5><br>
+
+                <div id="alertPop" style="display: none;" class="alert alert-danger" role="alert">
+                    <big><small>Error message</small>
+                        <a><i class="fa-solid fa-x" id="closeAlert"></i></a>
+                    </big>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h6>Basic chart types</h6>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r1" value="bar" autocomplete="off"
+                            hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r1">Bar Chart</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r2" value="pie" autocomplete="off"
+                            hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r2">Pie Chart</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r3" value="line" autocomplete="off"
+                            hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r3">Line
+                            Chart</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r4" value="doughnut"
+                            autocomplete="off" hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r4">Doughnut
+                            Chart</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r5" value="polarArea"
+                            autocomplete="off" hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r5">Polar
+                            Area</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r6" value="scatter"
+                            autocomplete="off" hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r6">Scatter</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r7" value="bubble" autocomplete="off"
+                            hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r7">Bubble</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h6>Advance chart types</h6>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r9" value="sunburst"
+                            autocomplete="off" hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r9">Sunburst</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r10" value="treemap"
+                            autocomplete="off" hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r10">Tree Map</label>
+                    </div>
+                    <div class="mb-1">
+                        <input type="radio" class="btn-check" name="charttype" id="r11" value="icicle"
+                            autocomplete="off" hidden>
+                        <label class="btn btn-outline-success btn-chart-type" for="r11">Icicle</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center dropDiv" id="dropDiv">
+            <label for="selectFileBtn"
+                style="width: 100%; height: 100%; padding-left: 5px; padding-right: 5px; padding-top: 50px; padding-bottom: 50px;">
+                <i class="fa-solid fa-folder-open fa-5x"></i>
+                <div>
+                    <button name="selectFileBtn" id="selectFileBtn" hidden></button>
+                </div>
+                <span id="dropSpan" class="drop-span">Select your file or drag and drop it here</span>
+            </label>
+        </div>
+
+        <div class="text-center">
+            <button class="btn btn-submit mt-4" id="drawBtn">Generate</button>
+        </div>
+
+    </div>
+    
+</div>

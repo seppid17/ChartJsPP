@@ -16,7 +16,7 @@ submitBtn.onclick = e => {
         return false;
     }
     if (!email_pattern.test(email)) {
-        setErrorFor(emailInput, 'Invalid email');
+        setErrorFor(emailInput, 'Invalid email format');
         return false;
     }
     let xhrSender = new XHRSender();
@@ -26,8 +26,12 @@ submitBtn.onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    if (data['reason'] === 'This email does not exist') {
-                        setErrorFor(emailInput, data['reason']);
+                    if (data.hasOwnProperty('field')) {
+                        switch (data['field']) {
+                            case 'email':
+                                setErrorFor(emailInput, data['reason']);
+                                break;
+                        }
                     } else {
                         showMsg(data['reason']);
                     }
@@ -36,7 +40,7 @@ submitBtn.onclick = e => {
                 }
                 return;
             }
-            showMsg('Password reset requested. You will receive a password reset link to your email', true);
+            showMsg('Password reset requested. Check your email', true);
         } catch (error) {
             showMsg('Something went wrong! Please try again.');
         }

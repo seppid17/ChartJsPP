@@ -142,8 +142,10 @@ body {
 .fa-download:hover,
 .fa-share-nodes:hover,
 .fa-circle-check:hover,
-.fa-check-circle:hover .fa-edit:hover {
+.fa-check-circle:hover,
+.fa-edit:hover {
     color: var(--dark-purple);
+    cursor: pointer;
 }
 
 .fa-times-circle {
@@ -152,6 +154,7 @@ body {
 
 .fa-times-circle:hover {
     color: var(--dark-red);
+    cursor: pointer;
 }
 
 .fa-check-circle {
@@ -160,6 +163,7 @@ body {
 
 .fa-check-circle:hover {
     color: var(--dark-green);
+    cursor: pointer;
 }
 
 .fa-x {
@@ -220,7 +224,7 @@ body {
     max-width: 700px;
 }
 
-#dropDiv {
+.dropDiv {
     border: 2px dashed var(--gray);
     border-radius: 20px;
     width: 100%;
@@ -441,8 +445,8 @@ ol li:before {
     text-align: center;
     padding: 10px;
     position: absolute;
-    z-index: 1;
-    bottom: 125%;
+    z-index: 50;
+    top: 125%;
     left: 50%;
     margin-left: -100px;
     border-radius: 5px;
@@ -453,12 +457,13 @@ ol li:before {
 .popup .downloadPopup::after {
     content: "";
     position: absolute;
-    top: 100%;
-    left: 50%;
+    top: -22%;
+    left: 48.5%;
+    z-index: 100;
     margin-left: -5px;
-    border-width: 5px;
+    border-width: 8px;
     border-style: solid;
-    border-color: #ecf0f3 transparent transparent transparent;
+    border-color: transparent transparent var(--white) transparent;
 }
 
 /* Toggle this class - hide and show the popup */

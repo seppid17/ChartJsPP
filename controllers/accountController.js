@@ -9,23 +9,31 @@ const accountView = (req, res) => {
 
 const changeName = (req, res) => {
     const { firstName, lastName, password } = req.body;
-    if (!firstName || !lastName || !password) {
-        console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
-        return;
-    }
-    if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password' });
+    if (!firstName) {
+        res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'firstname' });
         return;
     }
     if (!Validator.validate('name', firstName)) {
-        res.json({ 'success': false, 'reason': 'Invalid first name' });
+        res.json({ 'success': false, 'reason': 'Invalid name format', 'field': 'firstname' });
+        return;
+    }
+    if (!lastName) {
+        res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'lastname' });
         return;
     }
     if (!Validator.validate('name', lastName)) {
-        res.json({ 'success': false, 'reason': 'Invalid last name' });
+        res.json({ 'success': false, 'reason': 'Invalid name format', 'field': 'lastname' });
         return;
     }
+    if (!password) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'password' });
+        return;
+    }
+    
     let user = req.session.user;
     bcrypt.compare(password, user.password).then(matching => {
         if (matching) {
@@ -39,7 +47,7 @@ const changeName = (req, res) => {
                 res.json({ 'success': false });
             });
         } else {
-            res.json({ 'success': false, reason: 'Invalid password' });
+            res.json({ 'success': false, reason: 'Incorrect password', 'field': 'password' });
         }
     }).catch(err => {
         console.log(err);
@@ -48,18 +56,29 @@ const changeName = (req, res) => {
 };
 
 const changePasswd = (req, res) => {
-    const { curPassword, newPassword } = req.body;
-    if (!curPassword || !newPassword) {
-        console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+    const { curPassword, newPassword, cnfPassword } = req.body;
+    if (!curPassword) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'curPassword' });
         return;
     }
     if (!Validator.validate('password', curPassword)) {
-        res.json({ 'success': false, 'reason': 'Invalid current password' });
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'curPassword'  });
+        return;
+    }
+    if (!newPassword) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'newPassword' });
         return;
     }
     if (!Validator.validate('password', newPassword)) {
-        res.json({ 'success': false, 'reason': 'Invalid new password' });
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'newPassword' });
+        return;
+    }
+    if (!cnfPassword) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'cnfPassword' });
+        return;
+    }
+    if (newPassword !== cnfPassword) {
+        res.json({ 'success': false, 'reason': 'Password dosen\'t match', 'field': 'cnfPassword' });
         return;
     }
     let user = req.session.user;
@@ -78,7 +97,7 @@ const changePasswd = (req, res) => {
                 res.json({ 'success': false });
             });
         } else {
-            res.json({ 'success': false, reason: 'Invalid current password' });
+            res.json({ 'success': false, reason: 'Incorrect password', 'field': 'curPassword' });
         }
     }).catch(err => {
         console.log(err);
@@ -89,8 +108,11 @@ const changePasswd = (req, res) => {
 const deleteAccount = (req, res) => {
     const { password } = req.body;
     if (!password) {
-        console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'delPassword' });
+        return;
+    }
+    if (!Validator.validate('password', password)) {
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'delPassword' });
         return;
     }
     let user = req.session.user;
@@ -105,7 +127,7 @@ const deleteAccount = (req, res) => {
                 res.json({ 'success': false });
             });
         } else {
-            res.json({ 'success': false, reason: 'Invalid password' });
+            res.json({ 'success': false, reason: 'Incorrect password', 'field': 'delPassword' });
         }
     }).catch(err => {
         console.log(err);

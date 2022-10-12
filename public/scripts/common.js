@@ -91,11 +91,51 @@ function setClear(input) {
 /**
  * Shows a success or error message to user.
  * 
- * If success is true, shows a success message. Otherwise, shows an error message
+ * If success is true, shows a success message. Otherwise, shows an error message on a popup
  */
-function showMsg(msg, success = false) {
-    alert(msg);
-}
+ function showMsg(msg, success = false) {
+    var closePopup = document.getElementById("popupclose");
+    var overlay = document.getElementById("overlay");
+    var popup = document.getElementById("msgPopup");
+    var msgSpan = document.getElementById("msgSpan");
+
+    msgSpan.innerText = msg;
+    if(!success) msgSpan.style.color = 'red'
+    else msgSpan.style.color = 'black'
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    closePopup.onclick = function () {
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+    };
+} 
+
+/**
+ * Shows a confimation message to user.
+ * 
+ * If user confirm, return true. else return false
+ */
+async function confirmMsg(msg) {
+    var closePopup = document.getElementById("confirmPopupClose");
+    var confimPopup = document.getElementById("confirmPopupCnf");
+    var overlay = document.getElementById("cnfOverlay");
+    var popup = document.getElementById("confirmMsgPopup");
+    var cnfMsgSpan = document.getElementById("confirmMsgSpan");
+
+    cnfMsgSpan.innerText = msg;
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    closePopup.onclick = e => {
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+    };
+    confimPopup.onclick = e => {
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+    };
+} 
 
 if (typeof module != 'undefined') {
     module.exports = { isEmpty }

@@ -17,17 +17,17 @@ const forgotPassword = (req, res) => {
     const { email } = req.body;
     if (!email) {
         console.log("Fill empty fields");
-        res.json({ 'success': false });
+        res.json({ 'success': false, 'reason': "Email cannot be empty.", 'field': 'email' });
         return;
     }
     User.findOne({ email: email, active: true }).then(user => {
         if (!user) {
             console.log("email does not exist");
-            res.json({ 'success': false, 'reason': "This email does not exist" });
+            res.json({ 'success': false, 'reason': "This email does not exist.", 'field': 'email' });
             return;
         }
         if (!Validator.validate('email', email)) {
-            res.json({ 'success': false, 'reason': 'Invalid email' });
+            res.json({ 'success': false, 'reason': 'Invalid email format', 'field': 'email' });
             return;
         }
         let token = crypto.randomBytes(16).toString('hex');
@@ -47,7 +47,7 @@ const forgotPassword = (req, res) => {
                 Mailer.sendMail("resetPassword", email, link, (error, info) => {
                     if (error) {
                         console.log(error);
-                        res.json({ 'success': false, 'reason': 'Error sending email' });
+                        res.json({ 'success': false, 'reason': 'Email sending failed! Try again later.' });
                     } else {
                         console.log('Email sent: ' + info.response);
                         res.json({ 'success': true });
@@ -65,35 +65,47 @@ const forgotPassword = (req, res) => {
 };
 
 const resetPassword = (req, res) => {
-    const { password } = req.body;
+    const { password, cnfPassword } = req.body;
     const { email, token } = req.params;
-    if (!email || !password || !token) {
+    if (!email || !token) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Some required fields are empty' });
         return;
     }
+    if (!password) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty.', 'field': 'password' });
+        return;
+    }
+    if (!cnfPassword) {
+        res.json({ 'success': false, 'reason': 'Password cannot be empty.', 'field': 'cnfPassword' });
+        return;
+    }
     if (!Validator.validate('email', email)) {
-        res.json({ 'success': false, 'reason': 'Invalid email' });
+        res.json({ 'success': false, 'reason': 'Invalid email format.' });
         return;
     }
     if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password' });
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'password'  });
         return;
     }
     if (!Validator.validate('token', token)) {
-        res.json({ 'success': false, 'reason': 'Invalid token' });
+        res.json({ 'success': false, 'reason': 'Invalid token.' });
+        return;
+    }
+    if (password !== cnfPassword) {
+        res.json({ 'success': false, 'reason': 'Password dosen\'t match', 'field': 'cnfPassword' });
         return;
     }
     ResetPasswordRequest.findOne({ email: email, token: token, used: false }).then((resetPasswordRequest) => {
         if (!resetPasswordRequest) {
             console.log("invalid or expired token");
-            res.json({ 'success': false, 'reason': 'Invalid token' });
+            res.json({ 'success': false, 'reason': 'Password reset failed! Invalid token.' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (resetPasswordRequest.expiry < timestampNow) {
             console.log("expired");
-            res.json({ 'success': false, 'reason': 'Token is expired' });
+            res.json({ 'success': false, 'reason': 'Password reset failed! Token is expired.' });
             return;
         }
         bcrypt.hash(password, 12, (err, hash) => {

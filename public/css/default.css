@@ -5,6 +5,7 @@
     --black: #000000;
     --input-border-gray: #f0f0f0;
     --shadow-gray: #a7aaa7;
+    --overlay-gray: #afafaf9c;
     --gray: #808080;
     --dash-icon-gray: #373737;
     --wrapper-shadow-gray: rgba(0, 0, 0, 0.1);
@@ -19,6 +20,7 @@
     --red-light: #FFEBEB;
     --green: #1eda1e;
     --dark-green: #003400;
+    --popup-ok-blue: #4c85ff;
 }
 
 /* navbar */
@@ -122,6 +124,67 @@
 }
 
 i {
-    color: purple;
+    color: var(--middle-purple);
     margin: 5px;
+}
+
+/* style for message popup */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background: var(--overlay-gray);
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    z-index: 100;
+}
+
+.msgPopup {
+    display: none;
+    position: fixed;
+    padding: 20px 15px 15px 15px;
+    top: 50%;
+    left: 50%;
+    background: var(--white);
+    width: 350px;
+    margin-left: -175px;
+    margin-top: -75px;
+    z-index: 200;
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
+}
+
+#popupclose,
+#confirmPopupClose {
+    float: right;
+    cursor: pointer;
+}
+
+#confirmPopupCnf {
+    float: right;
+    cursor: pointer;
+}
+
+.popupcontent {
+    padding: 10px;
+}
+
+.btn-cls {
+    background-color: var(--popup-ok-blue);
+    color: var(--white);
+    font-weight: normal;
+    font-size: medium;
+    border: none;
+    width: fit-content;
+    margin: 0;
+    margin-left: 5px;
+    padding: 3px 15px 2px 15px;
+    align-items: flex-end;
+    border-radius: 5px;
+}
+
+.btn-cnf {
+    background-color: var(--gray);
 }

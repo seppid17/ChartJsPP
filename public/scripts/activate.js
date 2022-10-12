@@ -16,7 +16,7 @@ submitBtn.onclick = e => {
         return;
     }
     if (!password_pattern.test(passwd)) {
-        setErrorFor(passwdInput, "Invalid password");
+        setErrorFor(passwdInput, 'Invalid password format');
         return;
     }
     let xhrSender = new XHRSender();
@@ -26,7 +26,15 @@ submitBtn.onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    showMsg(data['reason']);
+                    if (data.hasOwnProperty('field')) {
+                        switch (data['field']) {
+                            case 'password':
+                                setErrorFor(passwdInput, data['reason']);
+                                break;
+                        }
+                    } else {
+                        showMsg(data['reason']);
+                    }
                 } else {
                     showMsg('Account activation failed!');
                 }

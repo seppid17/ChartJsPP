@@ -16,11 +16,10 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/css/default.css">
     <link rel="stylesheet" href="/css/activate.css">
+    <link rel="stylesheet" href="/css/default.css">
 
     <!-- Fontawesome -->
-    <!-- <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css"> -->
     <script src="https://kit.fontawesome.com/8d62299fba.js" crossorigin="anonymous"></script>
 
 </head>
@@ -28,6 +27,9 @@
 <body>
     <!-- Navbar -->
     <%- include('navbar.ejs', {"pageName":"activate"}) %>
+
+    <!-- popup to display success and error messages -->
+    <%- include('showMsg.ejs') %>
 
     <div class="container">
         <div class="row justify-content-center">

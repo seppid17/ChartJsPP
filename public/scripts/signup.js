@@ -41,7 +41,7 @@ submitBtn.onclick = e => {
     }
 
     if (!email_pattern.test(email)) {
-        setErrorFor(emailInput, "Invalid email");
+        setErrorFor(emailInput, "Invalid email format");
         return;
     }
 
@@ -51,7 +51,7 @@ submitBtn.onclick = e => {
     }
 
     if (!name_pattern.test(firstName)) {
-        setErrorFor(firstNameInput, "Invalid name");
+        setErrorFor(firstNameInput, "Invalid name format");
         return;
     }
 
@@ -61,7 +61,7 @@ submitBtn.onclick = e => {
     }
 
     if (!name_pattern.test(lastName)) {
-        setErrorFor(lastNameInput, "Invalid name");
+        setErrorFor(lastNameInput, "Invalid name format");
         return;
     }
 
@@ -71,7 +71,7 @@ submitBtn.onclick = e => {
     }
 
     if (!password_pattern.test(passwd)) {
-        setErrorFor(passwdInput, "Invalid password");
+        setErrorFor(passwdInput, "Invalid password format");
         return;
     }
 
@@ -90,13 +90,30 @@ submitBtn.onclick = e => {
     xhrSender.addField('firstName', firstName);
     xhrSender.addField('lastName', lastName);
     xhrSender.addField('password', passwd);
+    xhrSender.addField('cnfPassword', cnfpasswd);
     xhrSender.send(document.URL, function (xhr) {
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    if (data['reason'] === "This email already exists") {
-                        setErrorFor(emailInput, data['reason']);
+                    if (data.hasOwnProperty('field')) {
+                        switch (data['field']) {
+                            case 'email':
+                                setErrorFor(emailInput, data['reason']);
+                                break;
+                            case 'firstname':
+                                setErrorFor(firstNameInput, data['reason']);
+                                break;
+                            case 'lastname':
+                                setErrorFor(lastNameInput, data['reason']);
+                                break;
+                            case 'password':
+                                setErrorFor(passwdInput, data['reason']);
+                                break;
+                            case 'cnfPassword':
+                                setErrorFor(cnfpasswdInput, data['reason']);
+                                break;
+                        }
                     } else {
                         showMsg(data['reason']);
                     }
@@ -105,9 +122,9 @@ submitBtn.onclick = e => {
                 }
                 return;
             }
-            showMsg('Account created. You will receive an account activation link to your email', true);
+            showMsg('Account created. Check your email.', true);
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showMsg('Something went wrong! Try again.');
         }
     });
 }

@@ -35,12 +35,24 @@ submitBtn.onclick = e => {
     }
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
+    xhrSender.addField('cnfPassword', cnfPasswd);
     xhrSender.send(document.URL, function (xhr) {
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    showMsg(data['reason']);
+                    if (data.hasOwnProperty('field')) {
+                        switch (data['field']) {
+                            case 'password':
+                                setErrorFor(passwdInput, data['reason']);
+                                break;
+                            case 'cnfPassword':
+                                setErrorFor(cnfPasswdInput, data['reason']);
+                                break;
+                        }
+                    } else {
+                        showMsg(data['reason']);
+                    }
                 } else {
                     showMsg('Password reset failed!');
                 }
@@ -49,7 +61,7 @@ submitBtn.onclick = e => {
             setTimeout(() => {
                 window.location = '/login';
             }, 4000);
-            showMsg('Account password reset', true);
+            showMsg('Account password reset successfull.', true);
         } catch (error) {
             showMsg('Something went wrong! Please try again.');
         }

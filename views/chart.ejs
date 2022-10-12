@@ -14,11 +14,10 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/css/default.css">
     <link rel="stylesheet" href="/css/chart.css">
+    <link rel="stylesheet" href="/css/default.css">
 
     <!-- Fontawesome -->
-    <!-- <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css"> -->
     <script src="https://kit.fontawesome.com/8d62299fba.js" crossorigin="anonymous"></script>
 </head>
 
@@ -27,280 +26,21 @@
     <!-- Navbar -->
     <%- include('navbar.ejs', {"pageName":"chart"}) %>
 
+    <!-- popup to display success and error messages -->
+    <%- include('showMsg.ejs') %>
+
+    <!-- popup to display confimation messages -->
+    <%- include('confirmMsg.ejs') %>
+
         <div class="container">
 
-
-
             <div class="wrapper">
-                <div class="wrapper-chart" style="display: none;" id="chartViewDiv">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <!-- name -->
-                            <div class="title-saved">
-                                <div class="input-group mb-20">
-
-                                    <div id="nameView" style="display: block;">
-                                        <div class="row">
-                                            <span class="flex text-gray-500">
-                                                <span id="chartNameView"
-                                                    style="font-size: larger; font-weight: 500;">Untitled</span>
-                                                <a><i id="editName" class="far fa-edit fa-lg"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div id="nameEdit" style="display: none;">
-                                        <div class="row">
-                                            <div class="col">
-                                                <input id="nameInput" class="name-input" value="Untitled">
-                                            </div>
-                                            <div class="col save-div">
-                                                <span class="flex text-gray-500">
-                                                    <a id="saveName"><i class="far fa-check-circle fa-lg"></i></a>
-                                                </span>
-                                                <span class="flex text-gray-500">
-                                                    <a id="cancellEditName"><i
-                                                            class="far fa-times-circle fa-lg"></i></a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <span class="flex">
-                                        </span>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 title-saved text-end">
-                            <a>
-                                <i class="fa-solid fa-share-nodes fa-lg"></i>
-                            </a>
-                            <div class="popup">
-                                <a id="downloadBtn">
-                                    <i class="fa-solid fa-download fa-lg"></i>
-                                </a>
-                                <span class="downloadPopup" id="downloadPopup">
-                                    <div class="content">
-                                        <a class="btn btn-dw" id="downloadImg">
-                                            <i class="far fa-file-image"></i>
-                                            <span>png</span>
-                                        </a>
-                                        <a class="btn btn-dw" id="downloadPdf">
-                                            <i class="far fa-file-pdf"></i>
-                                            <span>pdf</span>
-                                        </a>
-                                    </div>
-                                </span>
-                            </div>
-
-                            <a id="deleteBtn">
-                                <i class="fa-solid fa-trash-can fa-lg"></i>
-                            </a>
-                            <a id="saveBtn">
-                                <i class="fa-solid fa-floppy-disk fa-lg"></i>
-                            </a>
-                            <a class="btn btn-submit btn-cn" data-toggle="tab" href="/chart" target="_blank">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <span>New</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="breadcrum-div" style="display: none;" id="backDiv">
-                        <a class="btn btn-back" id="backBtn" data-toggle="tab">
-                            <i class="fa-sharp fa-solid fa-caret-left"></i>
-                            <span>Back</span>
-                        </a>
-                        <div id="crumbs">
-                            <ol id="breadcrumbA">
-                                <!-- add path -->
-                            </ol>
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <div class="row">
-
-                        <div class="col d-flex justify-content-center">
-                            <!-- chart -->
-                            <div class="popup chart-sty" id="chartDiv">
-                                <canvas id="myChart"></canvas>
-                                <span class="popuptext" id="myPopup">
-                                    <div class="col">
-                                        <!-- prop -->
-                                        <div id="EditChartOption">
-
-                                            <div class="row">
-                                                <div class="text-end">
-                                                    <a id="CloseEdit">
-                                                        <i class="fa-solid fa-x fa-s"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="input-group">
-                                                    <div class="row w-100">
-                                                        <div class="col text-end">
-                                                            <label class="form-label" for="color-input">Color</label>
-                                                        </div>
-                                                        <div class="col text-end d-flex align-item-center">
-                                                            <div class="input-group mb-20">
-                                                                <input type="color" class="color-input" id="ColorInput"
-                                                                    value="#000000" title="Choose your color">
-                                                                <a><i class="far fa-check-circle fa-lg"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row" style="display: none;" id="expandBtnDiv">
-                                                <div class="input-group">
-                                                    <a class="btn btn-submit btn-ex" id="expandBtn" data-toggle="tab">
-                                                        <i class="fas fa-expand-alt"></i>
-                                                        <span>Expand</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <div class="row form-control">
-                        <h5>Chart properties</h5>
-
-                        <span>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            Text style
-                            <a class="btn btn-icon" id="boldBtn">
-                                <i class="fa-solid fa-bold"></i>
-                            </a>
-                            <a class="btn btn-icon" id="italicBtn">
-                                <i class="fa-solid fa-italic"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            Font size
-                            <input type="number" id="fontSize" class="sizeSelect" value="18" min="8" max="36">
-                        </span>
-                    </div>
-                </div>
+                <!-- popup to display confimation messages -->
+                <%- include('viewChart.ejs') %>
 
                 <br>
-
-                <div class="mt-20" style="display: block;" id="uploadViewDiv">
-
-                    <div class="gen-main-div">
-
-                        <div class="text-center">
-                            <div class="chart-type" id="selectChartType">
-                                <h5 class="mb-0">Select chart type:</h5><br>
-
-                                <div id="alertPop" style="display: none;" class="alert alert-danger" role="alert">
-                                    <big><small>Error message</small>
-                                        <a><i class="fa-solid fa-x" id="closeAlert"></i></a>
-                                    </big>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <h6>Basic chart types</h6>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r1" value="bar"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r1">Bar Chart</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r2" value="pie"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r2">Pie Chart</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r3" value="line"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r3">Line
-                                            Chart</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r4" value="doughnut"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r4">Doughnut
-                                            Chart</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r5" value="polarArea"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r5">Polar
-                                            Area</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r6" value="scatter"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r6">Scatter</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r7" value="bubble"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r7">Bubble</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <h6>Advance chart types</h6>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r9" value="sunburst"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r9">Sunburst</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r10" value="treemap"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r10">Tree Map</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <input type="radio" class="btn-check" name="charttype" id="r11" value="icicle"
-                                            autocomplete="off" hidden>
-                                        <label class="btn btn-outline-success btn-chart-type" for="r11">Icicle</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <hr>
-                            <div class="row">
-                                <div class="d-grid gap-2 col-4 mx-auto">
-                                    <a class="btn btn-submit btn2"  download>
-                                        <i class="fa-solid fa-download"></i>
-                                        <span>Sample data</span>
-                                    </a>
-                                </div>
-                                
-                            </div> -->
-                        </div>
-                        <div class="text-center" id="dropDiv">
-                            <label for="selectFileBtn"
-                                style="width: 100%; height: 100%; padding-left: 5px; padding-right: 5px; padding-top: 50px; padding-bottom: 50px;">
-                                <i class="fa-solid fa-folder-open fa-5x"></i>
-                                <div>
-                                    <button name="selectFileBtn" id="selectFileBtn" hidden></button>
-                                </div>
-                                <span id="dropSpan" class="drop-span">Select your file or drag and drop it here</span>
-                            </label>
-                        </div>
-
-                        <div class="text-center">
-                            <button class="btn btn-submit mt-4" id="drawBtn">Generate</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- popup to display confimation messages -->
+                <%- include('generateChart.ejs') %>
             </div>
         </div>
 

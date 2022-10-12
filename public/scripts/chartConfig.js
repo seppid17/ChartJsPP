@@ -13,7 +13,7 @@ class ChartConfig {
         }
         ChartConfig.canvas.onclick = evt => {
             evt.stopImmediatePropagation(); // prevents document.onclick()
-            if (this instanceof HierarchicalChartConfig) {
+            if (this instanceof HierarchicalChartConfig) { // display expand button only for hierarchical charts
                 document.getElementById('expandBtnDiv').style.display = 'block';
             } else {
                 document.getElementById('expandBtnDiv').style.display = 'none';
@@ -29,7 +29,8 @@ class ChartConfig {
             var colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const point = points[points.length - 1];
-
+                let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
+                if (clicked.c.length==0) document.getElementById('expandBtnDiv').style.display = 'none'; // hide expand button if the selected element dosent have child
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
@@ -49,8 +50,7 @@ class ChartConfig {
                     myChart.update('none');
                 }
                 document.getElementById('expandBtn').onclick = e => {
-                    let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
-                    if (clicked.c.length==0) return;
+                    
                     path = setPath(clicked);
                     while (breadcrumb.hasChildNodes()) {
                         breadcrumb.removeChild(breadcrumb.firstChild);

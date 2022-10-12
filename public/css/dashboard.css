@@ -59,9 +59,21 @@ body {
 }
 
 .card {
-    max-width: 90%;
+    max-width: 80%;
     margin-bottom: 20px;
     min-height: 92%;
+}
+
+.card:hover {
+    cursor: pointer;
+}
+
+.btn-cn {
+    margin: 0;
+    margin-left: 5px;
+    padding: 3px 15px 2px 5px;
+    width: fit-content;
+    align-items: flex-end;
 }
 
 .card-col {
@@ -125,7 +137,6 @@ body {
     color: var(--gray);
 }
 
-.fa-circle-plus:hover,
 .fa-trash-can:hover,
 .fa-user-gear:hover {
     color: var(--dash-icon-gray);
