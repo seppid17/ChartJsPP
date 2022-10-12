@@ -164,7 +164,6 @@ changePasswdBtn.onclick = e => {
     let xhrSender = new XHRSender();
     xhrSender.addField('curPassword', curPasswd);
     xhrSender.addField('newPassword', newPasswd);
-    xhrSender.addField('cnfPassword', cnfPasswd);
     xhrSender.send('/account/password', function (xhr) {
         try {
             let data = JSON.parse(xhr.responseText);
@@ -177,9 +176,6 @@ changePasswdBtn.onclick = e => {
                                 break;
                             case 'newPassword':
                                 setErrorFor(newPasswdInput, data['reason']);
-                                break;
-                            case 'cnfPassword':
-                                setErrorFor(cnfPasswdInput, data['reason']);
                                 break;
                         }
                     } else {
@@ -200,12 +196,8 @@ changePasswdBtn.onclick = e => {
 deleteBtn.onclick = e => {
     e.preventDefault();
     let passwd = delPasswdInput.value.trim();
-    if (isEmpty(cnfPasswd)) {
+    if (isEmpty(passwd)) {
         setErrorFor(delPasswdInput, "Password cannot be empty");
-        return;
-    }
-    if (newPasswd !== cnfPasswd) {
-        setErrorFor(delPasswdInput, "Invalid password format");
         return;
     }
     let xhrSender = new XHRSender();

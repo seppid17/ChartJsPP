@@ -62,6 +62,11 @@ body {
     margin-left: 0;
 }
 
+.btn-submit:focus,
+.btn-frogot:focus {
+    border: none !important;
+}
+
 .text-new-signup {
     color: var(--gray);
 }
@@ -93,10 +98,8 @@ body {
 }
 
 .pill {
-    width: 50px;
     height: 50px;
-    object-fit: cover;
-    border-radius: 50%;
+    width: 250px;
 }
 
 .img-area {
@@ -159,4 +162,9 @@ body {
 
 .form-control.error small {
 	visibility: visible;
+}
+
+input:focus {
+    outline: none !important;;
+    border: 2px solid var(--purple);
 }

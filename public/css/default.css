@@ -10,7 +10,7 @@
     --dash-icon-gray: #373737;
     --wrapper-shadow-gray: rgba(0, 0, 0, 0.1);
     --bg-light-blue: #F9FCFF;
-    --purple: #d862ff;
+    --purple: #a666fe;
     --middle-purple: #800080;
     --dark-purple: #20012a;
     --red: #E70E0E;
@@ -26,17 +26,12 @@
 /* navbar */
 .navbar-brand {
     padding: 2px 2px 2px 0;
-    font-weight: bold;
-    font-size: x-large;
-    color: var(--black);
 }
 
 .nav-pill {
-    width: 40px;
     height: 40px;
     object-fit: cover;
     margin: 1px;
-    border-radius: 50%;
 }
 
 .nav-link {
@@ -171,7 +166,7 @@ i {
     padding: 10px;
 }
 
-.btn-cls {
+.btn-cnf {
     background-color: var(--popup-ok-blue);
     color: var(--white);
     font-weight: normal;
@@ -185,6 +180,6 @@ i {
     border-radius: 5px;
 }
 
-.btn-cnf {
+.btn-cls {
     background-color: var(--gray);
 }

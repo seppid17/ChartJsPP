@@ -35,7 +35,6 @@ submitBtn.onclick = e => {
     }
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
-    xhrSender.addField('cnfPassword', cnfPasswd);
     xhrSender.send(document.URL, function (xhr) {
         try {
             let data = JSON.parse(xhr.responseText);
@@ -45,9 +44,6 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                break;
-                            case 'cnfPassword':
-                                setErrorFor(cnfPasswdInput, data['reason']);
                                 break;
                         }
                     } else {

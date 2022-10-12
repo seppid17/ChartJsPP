@@ -14,7 +14,7 @@ const activateView = (req, res) => {
 }
 
 const requestUser = (req, res) => {
-    const { email, password, firstName, lastName, cnfPassword } = req.body;
+    const { email, password, firstName, lastName } = req.body;
     if (!email) {
         console.log("Fill empty fields");
         res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
@@ -46,14 +46,6 @@ const requestUser = (req, res) => {
     }
     if (!Validator.validate('password', password)) {
         res.json({ 'success': false, 'reason': 'Invalid password', 'field': 'password' });
-        return;
-    }
-    if (!cnfPassword) {
-        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'cnfPassword' });
-        return;
-    }
-    if (password !== cnfPassword) {
-        res.json({ 'success': false, 'reason': 'Password dosen\'t match', 'field': 'cnfPassword' });
         return;
     }
     User.findOne({ email: email, active: true }).then(user => {

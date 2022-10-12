@@ -156,3 +156,13 @@ body {
     font-weight: normal;
     padding-left: 12px;
 }
+
+.btn-submit:focus,
+.btn-delete:focus {
+    border: none !important;
+}
+
+input:focus {
+    outline: none !important;;
+    border: 2px solid var(--purple);
+}

@@ -64,7 +64,13 @@ body {
     min-height: 92%;
 }
 
-.card:hover {
+.text-chart-name {
+    width: fit-content;
+}
+
+.card-img-area:hover,
+.text-chart-name:hover,
+.fa-trash-can:hover {
     cursor: pointer;
 }
 

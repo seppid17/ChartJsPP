@@ -65,7 +65,7 @@ const forgotPassword = (req, res) => {
 };
 
 const resetPassword = (req, res) => {
-    const { password, cnfPassword } = req.body;
+    const { password } = req.body;
     const { email, token } = req.params;
     if (!email || !token) {
         console.log("Fill empty fields");
@@ -74,10 +74,6 @@ const resetPassword = (req, res) => {
     }
     if (!password) {
         res.json({ 'success': false, 'reason': 'Password cannot be empty.', 'field': 'password' });
-        return;
-    }
-    if (!cnfPassword) {
-        res.json({ 'success': false, 'reason': 'Password cannot be empty.', 'field': 'cnfPassword' });
         return;
     }
     if (!Validator.validate('email', email)) {
@@ -90,10 +86,6 @@ const resetPassword = (req, res) => {
     }
     if (!Validator.validate('token', token)) {
         res.json({ 'success': false, 'reason': 'Invalid token.' });
-        return;
-    }
-    if (password !== cnfPassword) {
-        res.json({ 'success': false, 'reason': 'Password dosen\'t match', 'field': 'cnfPassword' });
         return;
     }
     ResetPasswordRequest.findOne({ email: email, token: token, used: false }).then((resetPasswordRequest) => {

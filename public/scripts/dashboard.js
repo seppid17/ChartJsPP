@@ -33,18 +33,19 @@ function setCards() {
                 cardDiv.classList.add('card');
                 cardColDiv.appendChild(cardDiv);
 
-                cardDiv.onclick = evt => {
-                    window.open('/authChart/retrieve/' + chart.id, '_blank');
-                }
-
                 let ul = document.createElement('ul');
                 ul.classList.add('list-group');
                 ul.classList.add('list-group-flush');
                 cardDiv.appendChild(ul);
-
+                
                 let li1 = document.createElement('li');
                 li1.classList.add('list-group-item');
+                li1.classList.add('card-img-area');
                 ul.appendChild(li1);
+                
+                li1.onclick = evt => {
+                    window.open('/authChart/retrieve/' + chart.id, '_blank');
+                }
 
                 let img = document.createElement('img');
                 img.classList.add('card-img-top');
@@ -69,6 +70,10 @@ function setCards() {
                 h6.innerText = chart.name;
                 cardTextDiv.appendChild(h6);
 
+                h6.onclick = evt => {
+                    window.open('/authChart/retrieve/' + chart.id, '_blank');
+                }
+
                 let rowDiv = document.createElement('div');
                 rowDiv.classList.add('row');
                 cardTextDiv.appendChild(rowDiv);
@@ -84,29 +89,32 @@ function setCards() {
                 a.onclick = evt => {
                     evt.preventDefault();
                     evt.stopPropagation();
-                    let confirmed = confirm('Are you sure you want to delete ' + chart.name + '?');
-                    if (!confirmed) return;
-                    let xhrSender = new XHRSender();
-                    xhrSender.addField('id', chart.id);
-                    xhrSender.send('/authChart/delete', xhr => {
-                        try {
-                            let resp = JSON.parse(xhr.responseText);
-                            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                                    showMsg(resp['reason']);
-                                } else {
-                                    showMsg('Deleting chart failed!');
+                    showMsg('Are you sure you want to delete ' + chart.name + '?', true, true);
+                    document.getElementById("popupconfirm").onclick = e => {
+                        document.getElementById("overlay").style.display = 'none';
+                        document.getElementById("msgPopup").style.display = 'none';
+                        let xhrSender = new XHRSender();
+                        xhrSender.addField('id', chart.id);
+                        xhrSender.send('/authChart/delete', xhr => {
+                            try {
+                                let resp = JSON.parse(xhr.responseText);
+                                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                                        showMsg(resp['reason']);
+                                    } else {
+                                        showMsg('Deleting chart failed!');
+                                    }
+                                    return;
                                 }
-                                return;
+                                cardsDiv.removeChild(cardColDiv);
+                                if (cardsDiv.childElementCount == 0) {
+                                    showNoCharts();
+                                }
+                            } catch (error) {
+                                showMsg('Delete failed!');
                             }
-                            cardsDiv.removeChild(cardColDiv);
-                            if (cardsDiv.childElementCount == 0) {
-                                showNoCharts();
-                            }
-                        } catch (error) {
-                            showMsg('Delete failed!');
-                        }
-                    });
+                        });
+                    };
                 }
                 let i = document.createElement('i');
                 i.classList.add('fa-solid');

@@ -56,7 +56,7 @@ const changeName = (req, res) => {
 };
 
 const changePasswd = (req, res) => {
-    const { curPassword, newPassword, cnfPassword } = req.body;
+    const { curPassword, newPassword } = req.body;
     if (!curPassword) {
         res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'curPassword' });
         return;
@@ -71,14 +71,6 @@ const changePasswd = (req, res) => {
     }
     if (!Validator.validate('password', newPassword)) {
         res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'newPassword' });
-        return;
-    }
-    if (!cnfPassword) {
-        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'cnfPassword' });
-        return;
-    }
-    if (newPassword !== cnfPassword) {
-        res.json({ 'success': false, 'reason': 'Password dosen\'t match', 'field': 'cnfPassword' });
         return;
     }
     let user = req.session.user;

@@ -89,19 +89,27 @@ function setClear(input) {
 }
 
 /**
- * Shows a success or error message to user.
- * 
- * If success is true, shows a success message. Otherwise, shows an error message on a popup
+ * Shows a success, error, or confirm message to user.
  */
- function showMsg(msg, success = false) {
+function showMsg(msg, success = false, confirm = false) {
     var closePopup = document.getElementById("popupclose");
+    var confirmPopup = document.getElementById("popupconfirm");
     var overlay = document.getElementById("overlay");
     var popup = document.getElementById("msgPopup");
     var msgSpan = document.getElementById("msgSpan");
-
+    
     msgSpan.innerText = msg;
-    if(!success) msgSpan.style.color = 'red'
-    else msgSpan.style.color = 'black'
+    if (!success) msgSpan.style.color = 'red';
+    else msgSpan.style.color = 'black';
+
+    if (confirm) {
+        confirmPopup.hidden = false;
+        closePopup.children[0].innerText = 'Cancel';
+    } else {
+        confirmPopup.hidden = true;
+        closePopup.children[0].innerText = 'OK';
+    }
+
     overlay.style.display = 'block';
     popup.style.display = 'block';
 
@@ -109,33 +117,7 @@ function setClear(input) {
         overlay.style.display = 'none';
         popup.style.display = 'none';
     };
-} 
-
-/**
- * Shows a confimation message to user.
- * 
- * If user confirm, return true. else return false
- */
-async function confirmMsg(msg) {
-    var closePopup = document.getElementById("confirmPopupClose");
-    var confimPopup = document.getElementById("confirmPopupCnf");
-    var overlay = document.getElementById("cnfOverlay");
-    var popup = document.getElementById("confirmMsgPopup");
-    var cnfMsgSpan = document.getElementById("confirmMsgSpan");
-
-    cnfMsgSpan.innerText = msg;
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
-
-    closePopup.onclick = e => {
-        overlay.style.display = 'none';
-        popup.style.display = 'none';
-    };
-    confimPopup.onclick = e => {
-        overlay.style.display = 'none';
-        popup.style.display = 'none';
-    };
-} 
+}
 
 if (typeof module != 'undefined') {
     module.exports = { isEmpty }

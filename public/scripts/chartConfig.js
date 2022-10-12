@@ -30,7 +30,7 @@ class ChartConfig {
             if (points.length) {
                 const point = points[points.length - 1];
                 let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
-                if (clicked.c.length==0) document.getElementById('expandBtnDiv').style.display = 'none'; // hide expand button if the selected element dosent have child
+                if (clicked.c.length == 0) document.getElementById('expandBtnDiv').style.display = 'none'; // hide expand button if the selected element dosent have child
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
                 popup.classList.toggle("show");
                 //set the current olor to colorPicker
@@ -50,7 +50,7 @@ class ChartConfig {
                     myChart.update('none');
                 }
                 document.getElementById('expandBtn').onclick = e => {
-                    
+
                     path = setPath(clicked);
                     while (breadcrumb.hasChildNodes()) {
                         breadcrumb.removeChild(breadcrumb.firstChild);
@@ -107,11 +107,11 @@ class ChartConfig {
         }
     }
 
-    getType(){
+    getType() {
         return this.config.type;
     }
 
-    getData(){
+    getData() {
         return this.config.data;
     }
 }
@@ -328,15 +328,15 @@ class HierarchicalChartConfig extends ChartConfig {
         this.setData(data);
     }
 
-    _unlinkTree(tree){
+    _unlinkTree(tree) {
         var unlinked = [];
         tree.c.forEach(item => {
             let newItem = {
-                n:item.n,
-                v:item.v,
-                c:this._unlinkTree(item)
+                n: item.n,
+                v: item.v,
+                c: this._unlinkTree(item)
             };
-            if (item.clr !== undefined){
+            if (item.clr !== undefined) {
                 newItem.clr = item.clr;
             }
             unlinked.push(newItem);
@@ -344,7 +344,7 @@ class HierarchicalChartConfig extends ChartConfig {
         return unlinked;
     }
 
-    getData(){
+    getData() {
         if (this.config && this.config.data.datasets.length > 0) {
             return this._unlinkTree(this.config.data.datasets[0].tree);
         }

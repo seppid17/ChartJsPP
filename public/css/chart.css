@@ -493,3 +493,12 @@ ol li:before {
         opacity: 1;
     }
 }
+
+.btn-submit:focus {
+    border: none !important;
+}
+
+input:focus {
+    outline: none !important;;
+    border: 2px solid var(--purple);
+}

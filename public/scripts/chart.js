@@ -413,26 +413,29 @@ document.getElementById('deleteBtn').onclick = e => {
         showMsg('Chart is not saved');
         return;
     }
-    let confirmed = confirm('Are you sure you want to delete this chart?');
-    if (!confirmed) return;
-    let xhrSender = new XHRSender();
-    xhrSender.addField('id', chartID);
-    xhrSender.send('/authChart/delete', xhr => {
-        try {
-            let resp = JSON.parse(xhr.responseText);
-            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                    showMsg(resp['reason']);
-                } else {
-                    showMsg('Deleting chart failed!');
+    showMsg('Are you sure you want to delete this chart?', true, true);
+    document.getElementById("popupconfirm").onclick = e => {
+        document.getElementById("overlay").style.display = 'none';
+        document.getElementById("msgPopup").style.display = 'none';
+        let xhrSender = new XHRSender();
+        xhrSender.addField('id', chartID);
+        xhrSender.send('/authChart/delete', xhr => {
+            try {
+                let resp = JSON.parse(xhr.responseText);
+                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                        showMsg(resp['reason']);
+                    } else {
+                        showMsg('Deleting chart failed!');
+                    }
+                    return;
                 }
-                return;
+                window.location = '/dashboard';
+            } catch (error) {
+                showMsg('Delete failed!');
             }
-            window.location = '/dashboard';
-        } catch (error) {
-            showMsg('Delete failed!');
-        }
-    });
+        });
+    };
 };
 
 document.getElementById('CloseEdit').onclick = e => {
