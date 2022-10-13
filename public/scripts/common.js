@@ -149,10 +149,12 @@ const darkBtn = document.getElementById('darkBtn');
 if (getCookie('theme')==='dark'){
     isDark = true;
     darkBtn.checked = true;
+    document.getElementById('navbarBrand').src = "/images/brandWhite.png"
     document.body.classList.add("dark-mode");
     darkBtn.innerText = isDark ? 'light' : 'dark';
 }else{
     darkBtn.checked = false;
+    document.getElementById('navbarBrand').src = "/images/brandBlack.png"
     setCookie('theme', 'light', 365000);
 }
 
@@ -160,6 +162,8 @@ darkBtn.onclick = e => {
     darkBtn.innerText = isDark ? 'dark' : 'light'
     document.body.classList.toggle("dark-mode");
     isDark = !isDark;
+    if (isDark) document.getElementById('navbarBrand').src = "/images/brandWhite.png";
+    else document.getElementById('navbarBrand').src = "/images/brandBlack.png";
     setCookie('theme', isDark ? 'dark' : 'light', 365000);
 }
 

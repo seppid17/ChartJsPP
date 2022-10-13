@@ -248,7 +248,7 @@ i {
 }
 
 input:checked+.slider {
-    background-color: #2196f3;
+    background-color: var(--purple);
 }
 
 input:checked+.slider:before {
