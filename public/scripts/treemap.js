@@ -41,7 +41,7 @@ class TreemapController extends HierarchicalController {
                 chartData[n] = item.v;
                 labels[n] = item.n;
                 this.pointers[n] = item;
-                if (item.clr == undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+                if (item.clr == undefined) item.clr = genColor(n);
                 let color = item.clr;
                 bgcols[n] = color;
                 var rect = this._drawRect(ctx, x0, startY, myWidth, height, color, labels[n]);
@@ -69,7 +69,7 @@ class TreemapController extends HierarchicalController {
                 chartData[n] = item.v;
                 labels[n] = item.n;
                 this.pointers[n] = item;
-                if (item.clr == undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+                if (item.clr == undefined) item.clr = genColor(n);
                 let color = item.clr;
                 bgcols[n] = color;
                 var rect = this._drawRect(ctx, startX, y0, width, myHeight, color, labels[n]);

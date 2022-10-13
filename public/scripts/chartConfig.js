@@ -1,3 +1,7 @@
+function genColor(n) {
+    return `rgba(${(121*n+51)%192+48},${(52*n+203)%192+48},${(165*n+67)%192+48},1)`
+}
+
 class ChartConfig {
     static chart = null;
     static instance = null;
@@ -147,10 +151,7 @@ class BasicChartConfig extends ChartConfig {
         if (this.config && this.config.data.datasets.length > 0) {
             var clr = [];
             data.forEach((d, i) => {
-                var r = Math.abs(((i + ~~d) * 93) % 256);
-                var g = Math.abs((i * ((2 * i) - ~~d) * 3) % 256);
-                var b = Math.abs((384 - r - g) % 256);
-                clr.push(`rgba(${r}, ${g}, ${b}, 1)`);
+                clr.push(genColor(i));
             });
             this.config.data.datasets[0].backgroundColor = clr;
             this.config.data.datasets[0].borderColor = clr;

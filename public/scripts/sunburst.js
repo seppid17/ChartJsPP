@@ -47,7 +47,7 @@ class SunburstController extends HierarchicalController {
             chartData[n] = item.v;
             labels[n] = item.n;
             this.pointers[n] = item;
-            if (item.clr==undefined) item.clr = `rgba(${(167 * n + 51) % 256},${(71 * n + 203) % 256},${(203 * n + 67) % 256},1)`;
+            if (item.clr == undefined) item.clr = genColor(n);
             let color = item.clr;
             bgcols[n] = color;
             let endAngle = startAngle + ang * item.w;

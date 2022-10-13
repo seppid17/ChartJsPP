@@ -322,7 +322,7 @@ function make_thumb(canvas, width, height) {
             data2[x2] = 255 - (255 - data2[x2]) * data2[x2 + 3] / 255
             data2[x2 + 1] = 255 - (255 - data2[x2 + 1]) * data2[x2 + 3] / 255
             data2[x2 + 2] = 255 - (255 - data2[x2 + 2]) * data2[x2 + 3] / 255
-            data2[x2 + 3] = 255;
+            // data2[x2 + 3] = 255;
         }
     }
     //make canvas
@@ -332,7 +332,7 @@ function make_thumb(canvas, width, height) {
     //draw
     let ctx2 = canvas2.getContext("2d");
     ctx2.putImageData(img2, 0, 0);
-    return canvas2.toDataURL('image/jpeg', 0.8);
+    return canvas2.toDataURL('image/png', 0.8);
 }
 
 document.getElementById('downloadImg').onclick = e => {
