@@ -2,44 +2,54 @@ const { ChartInfo, ChartData } = require("../models/Chart");
 const Validator = require("../utils/validator");
 const crypto = require('crypto');
 
-const saveChart = (req, res) => {
-    let { name, thumbnail, type, data, properties, id } = req.body;
-    const user = req.session.user;
-    var date = new Date();
-    var dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-    if (id == undefined) {
-        id = crypto.randomBytes(16).toString('hex');
-        let chartInfo = { id: id, owner: user.email, name: name, shared: false, lastModified: dateStr, thumbnail: thumbnail };
-        ChartInfo.findOneAndUpdate({ id: id }, { $setOnInsert: chartInfo }, { upsert: true }, (err, doc) => {
-            if (err || (doc && !doc.isNew)) {
-                console.log(err);
-                res.json({ 'success': false });
+const saveChart = async (req, res) => {
+    try {
+        let { name, thumbnail, type, data, properties, id } = req.body;
+        const user = req.session.user;
+        var date = new Date();
+        var dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        if (id == undefined) {
+            let count = await ChartInfo.countDocuments({ owner: user.email });
+            if (count>=5){
+                res.json({ 'success': false, 'reason':'You cannot save more than 5 charts'});
                 return;
             }
-            let chartData = { id: id, type: type, data: data, properties: properties };
-            ChartData.findOneAndUpdate({ id: id }, { $setOnInsert: chartData }, { upsert: true }, (err, doc) => {
+            id = crypto.randomBytes(16).toString('hex');
+            let chartInfo = { id: id, owner: user.email, name: name, shared: false, lastModified: dateStr, thumbnail: thumbnail };
+            ChartInfo.findOneAndUpdate({ id: id }, { $setOnInsert: chartInfo }, { upsert: true }, (err, doc) => {
                 if (err || (doc && !doc.isNew)) {
                     console.log(err);
                     res.json({ 'success': false });
                     return;
                 }
-                res.json({ 'success': true, 'id': id });
+                let chartData = { id: id, type: type, data: data, properties: properties };
+                ChartData.findOneAndUpdate({ id: id }, { $setOnInsert: chartData }, { upsert: true }, (err, doc) => {
+                    if (err || (doc && !doc.isNew)) {
+                        console.log(err);
+                        res.json({ 'success': false });
+                        return;
+                    }
+                    res.json({ 'success': true, 'id': id });
+                });
             });
-        });
-    } else {
-        let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
-        ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
-            let chartData = { id: id, type: type, data: data, properties: properties };
-            ChartData.findOneAndUpdate({ id: id }, chartData).then(doc => {
-                res.json({ 'success': true });
+        } else {
+            let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
+            ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
+                let chartData = { id: id, type: type, data: data, properties: properties };
+                ChartData.findOneAndUpdate({ id: id }, chartData).then(doc => {
+                    res.json({ 'success': true });
+                }).catch(err => {
+                    console.log(err);
+                    res.json({ 'success': false });
+                });
             }).catch(err => {
                 console.log(err);
                 res.json({ 'success': false });
             });
-        }).catch(err => {
-            console.log(err);
-            res.json({ 'success': false });
-        });
+        }
+    } catch (e) {
+        console.log(e);
+        res.json({ 'success': false });
     }
 };
 

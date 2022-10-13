@@ -19,6 +19,15 @@ window.onload = () => {
     canvas.style.height = height + 'px';
 }
 
+if (isDark) Chart.defaults.color = '#eee';
+else Chart.defaults.color = '#333';
+let themeClick = darkBtn.onclick;
+darkBtn.onclick = e => {
+    themeClick(e);
+    if (darkBtn.checked) Chart.defaults.color = '#eee';
+    else Chart.defaults.color = '#333';
+    ChartConfig.update('none');
+}
 Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
@@ -233,12 +242,12 @@ function getCroppedCanvas(canvas) {
         for (let j = 0; j < width; j++) {
             let x = left + j;
             let y = top + i;
-            pos0 = (x+y*width_source)*4;
-            pos = (j+i*width)*4;
+            pos0 = (x + y * width_source) * 4;
+            pos = (j + i * width) * 4;
             data2[pos] = data[pos0];
-            data2[pos+1] = data[pos0+1];
-            data2[pos+2] = data[pos0+2];
-            data2[pos+3] = data[pos0+3];
+            data2[pos + 1] = data[pos0 + 1];
+            data2[pos + 2] = data[pos0 + 2];
+            data2[pos + 3] = data[pos0 + 3];
         }
     }
     let canvas2 = document.createElement('canvas');
@@ -284,14 +293,14 @@ function make_thumb(canvas, width, height) {
             var yy_start = Math.floor(y_off + j * ratio_max);
             var yy_stop = Math.ceil(y_off + (j + 1) * ratio_max);
             for (var yy = yy_start; yy < yy_stop; yy++) {
-                let inRange = (0<=yy && yy<=height_source);
+                let inRange = (0 <= yy && yy <= height_source);
                 var dy = Math.abs(center_y - (yy + 0.5)) / ratio_h_half;
                 var center_x = x_off + (i + 0.5) * ratio_max;
                 var w0 = dy * dy; //pre-calc part of w
                 var xx_start = Math.floor(x_off + i * ratio_max);
                 var xx_stop = Math.ceil(x_off + (i + 1) * ratio_max);
                 for (var xx = xx_start; xx < xx_stop; xx++) {
-                    if (inRange) inRange = (0<=xx && xx<=width_source)
+                    if (inRange) inRange = (0 <= xx && xx <= width_source)
                     var dx = Math.abs(center_x - (xx + 0.5)) / ratio_w_half;
                     var w = Math.sqrt(w0 + dx * dx);
                     if (w >= 1) {
@@ -309,8 +318,8 @@ function make_thumb(canvas, width, height) {
                     if (alpSrc < 255)
                         weight = weight * alpSrc / 250;
                     gx_r += weight * (inRange ? data[pos_x] : 255);
-                    gx_g += weight * (inRange ? data[pos_x+1] : 255);
-                    gx_b += weight * (inRange ? data[pos_x+2] : 255);
+                    gx_g += weight * (inRange ? data[pos_x + 1] : 255);
+                    gx_b += weight * (inRange ? data[pos_x + 2] : 255);
                     weights += weight;
                 }
             }
@@ -354,9 +363,9 @@ document.getElementById('downloadPdf').onclick = e => {
     const canvasImage = croppedCanvas.toDataURL();
     window.jsPDF = window.jspdf.jsPDF;
     const padding = 15;
-    const doc = new jsPDF(croppedCanvas.width<croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width+padding*2, croppedCanvas.height+padding*2]);
+    const doc = new jsPDF(croppedCanvas.width < croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width + padding * 2, croppedCanvas.height + padding * 2]);
     doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
-    doc.save(chartName+'.pdf');
+    doc.save(chartName + '.pdf');
     downloadPopup.classList.remove("show");
 }
 
