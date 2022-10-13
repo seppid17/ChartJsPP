@@ -119,15 +119,45 @@ function showMsg(msg, success = false, confirm = false) {
     };
 }
 
-if (typeof module != 'undefined') {
-    module.exports = { isEmpty }
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;samesite=strict";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 let isDark = false;
-
-document.getElementById('darkBtn').onclick = e => {
-    var element = document.body;
-    element.classList.toggle("dark-mode");
-    isDark = !isDark;
+const darkBtn = document.getElementById('darkBtn');
+if (getCookie('theme')==='dark'){
+    isDark = true;
+    document.body.classList.add("dark-mode");
+    darkBtn.innerText = isDark ? 'light' : 'dark';
+}else{
+    setCookie('theme', 'light', 365000);
 }
 
+darkBtn.onclick = e => {
+    darkBtn.innerText = isDark ? 'dark' : 'light'
+    document.body.classList.toggle("dark-mode");
+    isDark = !isDark;
+    setCookie('theme', isDark ? 'dark' : 'light', 365000);
+}
+
+if (typeof module != 'undefined') {
+    module.exports = { isEmpty }
+}
