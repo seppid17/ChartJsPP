@@ -100,7 +100,10 @@ function showMsg(msg, success = false, confirm = false) {
 
     msgSpan.innerText = msg;
     if (!success) msgSpan.style.color = 'red';
-    else msgSpan.style.color = 'black';
+    else {
+        if(!isDark) msgSpan.style.color = 'black';
+        else msgSpan.style.color = 'white';
+    }
 
     if (confirm) {
         confirmPopup.hidden = false;
@@ -145,9 +148,11 @@ let isDark = false;
 const darkBtn = document.getElementById('darkBtn');
 if (getCookie('theme')==='dark'){
     isDark = true;
+    darkBtn.checked = true;
     document.body.classList.add("dark-mode");
     darkBtn.innerText = isDark ? 'light' : 'dark';
 }else{
+    darkBtn.checked = false;
     setCookie('theme', 'light', 365000);
 }
 
