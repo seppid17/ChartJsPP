@@ -11,15 +11,18 @@
     --wrapper-shadow-gray: rgba(0, 0, 0, 0.1);
     --bg-light-blue: #F9FCFF;
     --purple0: #6ce6ff;
+    --light-purple: #d5b6ff;
     --purple: #a666fe;
     --purple1: #9460db;
     --middle-purple: #800080;
     --dark-purple: #20012a;
+    --light-red: #ff7b7b;
     --red: #E70E0E;
     --dark-red: #410101;
     --red-error:  #e74c3c;
     --delete-area-bg: #FFEBEB;
     --red-light: #FFEBEB;
+    --light-green: #a3faa3;
     --green: #1eda1e;
     --dark-green: #003400;
     --popup-ok-blue: #4c85ff;
@@ -39,6 +42,14 @@
 .nav-link {
     color: var(--black);
     font-weight: bold;
+}
+
+.fa-user-gear {
+    color: var(--gray);
+}
+
+.fa-user-gear:hover {
+    color: var(--dash-icon-gray);
 }
 
 .navbar {
@@ -184,4 +195,38 @@ i {
 
 .btn-cls {
     background-color: var(--gray);
+}
+
+.dark-area {
+    display: block;
+    position: fixed;
+    top: 95%;
+    left: 96%;
+    z-index: 100;
+}
+
+.dark-mode .navbar {
+    background-color: #1d2226;
+    box-shadow: 2px 2px 5px var(--wrapper-shadow-gray);
+}
+
+.dark-mode .nav-link {
+    color: #e9e9ea;
+}
+
+.dark-mode .fa-user-gear {
+    color: #e9e9ea;
+}
+
+.dark-mode .fa-user-gear:hover {
+    color: var(--white);
+}
+
+.dark-mode .nav-link:hover {
+    color: var(--white);
+}
+
+.dark-mode .toggler-icon,
+.dark-mode .navbar-toggler.collapsed .toggler-icon {
+    background: #e9e9ea;
 }

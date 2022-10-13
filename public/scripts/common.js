@@ -97,7 +97,7 @@ function showMsg(msg, success = false, confirm = false) {
     var overlay = document.getElementById("overlay");
     var popup = document.getElementById("msgPopup");
     var msgSpan = document.getElementById("msgSpan");
-    
+
     msgSpan.innerText = msg;
     if (!success) msgSpan.style.color = 'red';
     else msgSpan.style.color = 'black';
@@ -122,3 +122,12 @@ function showMsg(msg, success = false, confirm = false) {
 if (typeof module != 'undefined') {
     module.exports = { isEmpty }
 }
+
+let isDark = false;
+
+document.getElementById('darkBtn').onclick = e => {
+    var element = document.body;
+    element.classList.toggle("dark-mode");
+    isDark = !isDark;
+}
+
