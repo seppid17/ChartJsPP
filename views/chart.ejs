@@ -32,9 +32,12 @@
     <!-- dark mode switch -->
     <%- include('dark.ejs') %>
 
+    <!-- login form -->
+    <%- include('loginPopup.ejs') %>
+
         <div class="container">
 
-            <div class="wrapper">
+            <div class="wrapper-chart-main">
                 <!-- popup to display confimation messages -->
                 <%- include('viewChart.ejs') %>
 
@@ -56,6 +59,7 @@
         <script src="/scripts/icicle.js"></script>
         <script src="/scripts/chartConfig.js"></script>
         <script src="/scripts/chart.js"></script>
+        <script src="/scripts/login.js"></script>
         <!-- Bootstrap js-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
             integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"

@@ -41,7 +41,6 @@ body {
     padding: 14px;
     margin: 8px;
     color: #FFFFFF;
-    background-color: #E7E9ED;
     border-radius: 8px;
     font-family: "proxima-nova-soft", sans-serif;
     font-weight: 600;
@@ -50,10 +49,33 @@ body {
     width: 150px;
 }
 
+.btn:hover {
+    color: #FFFFFF;
+    box-shadow: 0px 0px 4px 1px var(--shadow-gray);
+}
+
 .btn-red {
-    background-color: rgb(255, 105, 105);
+    background-color: var(--red);
 }
 
 .btn-blue {
-    background-color: rgb(105, 185, 255);
+    background-color: var(--popup-ok-blue);
+}
+
+
+.dark-mode {
+    background-color: black;
+}
+
+.dark-mode .wrapper {
+    background-color: #1d2226;
+    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
+}
+
+.dark-mode .chart-title {
+    color: #e9e9ea;
+}
+
+.dark-mode .chart-subtitle {
+    color: #e9e9ea;
 }

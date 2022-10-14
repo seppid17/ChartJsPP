@@ -1,0 +1,34 @@
+<div class="overlay" id="overlay1"></div>
+
+
+<div class="login-wrapper p-4" id="loginPopup">
+    <p class="text-end text-new-signup">Don't have an account?&nbsp;<a class="btn btn-signup-popup" data-toggle="tab"
+            href="/signup">SIGN UP</a></p>
+    <div class="d-flex">
+        <div>
+            <h1 class="text-hello">Hello! Welcome Back</h1>
+            <p class="text-login">Login to your account</p>
+        </div>
+    </div>
+
+    <form id="loginForm" method="post" class="form">
+
+        <div class="form-control form-outline form-input">
+            <label class="form-label" for="username">Email</label>
+            <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" />
+            <small>Error message</small>
+        </div>
+
+        <div class="form-control form-outline form-input">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" />
+            <small>Error message</small>
+        </div>
+
+        <a class="btn btn-frogot" data-toggle="tab" href="/forgotPassword">Forgot Password?</a>
+
+        <div>
+            <input class="btn btn-submit-login" type="submit" id="submit" value="Login">
+        </div>
+    </form>
+</div>
