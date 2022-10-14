@@ -384,9 +384,7 @@ document.getElementById('saveBtn').onclick = e => {
         fontStyle: Chart.defaults.font.style,
         fontWeight: Chart.defaults.font.weight
     };
-    if (/^\/authChart\/retrieve\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-        chartID = document.location.pathname.split('/')[3];
-    }
+
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
 
     var xhrSender = new XHRSender();
@@ -401,9 +399,9 @@ document.getElementById('saveBtn').onclick = e => {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    if (data['reason']=='Unauthorized'){
+                    if (data['reason'] == 'Unauthorized') {
                         popupLogin(() => {
-                            xhrSender.send('/authChart/save', cb);
+                            xhrSender.send('/chart/save', cb);
                         });
                         return;
                     }
@@ -421,7 +419,7 @@ document.getElementById('saveBtn').onclick = e => {
             showMsg('Something went wrong! Please try again.');
         }
     }
-    xhrSender.send('/authChart/save', cb);
+    xhrSender.send('/chart/save', cb);
 };
 
 document.getElementById('deleteBtn').onclick = e => {
@@ -435,7 +433,7 @@ document.getElementById('deleteBtn').onclick = e => {
         document.getElementById("msgPopup").style.display = 'none';
         let xhrSender = new XHRSender();
         xhrSender.addField('id', chartID);
-        xhrSender.send('/authChart/delete', xhr => {
+        xhrSender.send('/chart/delete', xhr => {
             try {
                 let resp = JSON.parse(xhr.responseText);
                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
@@ -651,11 +649,11 @@ function drawSavedChart(info, type, data, properties) {
     }
 }
 
-if (/^\/authChart\/retrieve\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-    chartID = document.location.pathname.split('/')[3];
+if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
+    chartID = document.location.pathname.split('/')[2];
     var xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
-    xhrSender.send('/authChart/retrieve', xhr => {
+    xhrSender.send('/chart/retrieve', xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !resp.hasOwnProperty('data')) {

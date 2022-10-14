@@ -8,7 +8,7 @@ function showNoCharts() {
 }
 function setCards() {
     var xhrSender = new XHRSender();
-    xhrSender.send('/authChart/list', xhr => {
+    xhrSender.send('/chart/list', xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !Array.isArray(resp.info)) {
@@ -44,7 +44,7 @@ function setCards() {
                 ul.appendChild(li1);
                 
                 li1.onclick = evt => {
-                    window.open('/authChart/retrieve/' + chart.id, '_blank');
+                    window.open('/chart/' + chart.id, '_blank');
                 }
 
                 let img = document.createElement('img');
@@ -70,10 +70,6 @@ function setCards() {
                 h6.innerText = chart.name;
                 cardTextDiv.appendChild(h6);
 
-                h6.onclick = evt => {
-                    window.open('/authChart/retrieve/' + chart.id, '_blank');
-                }
-
                 let rowDiv = document.createElement('div');
                 rowDiv.classList.add('row');
                 cardTextDiv.appendChild(rowDiv);
@@ -95,7 +91,7 @@ function setCards() {
                         document.getElementById("msgPopup").style.display = 'none';
                         let xhrSender = new XHRSender();
                         xhrSender.addField('id', chart.id);
-                        xhrSender.send('/authChart/delete', xhr => {
+                        xhrSender.send('/chart/delete', xhr => {
                             try {
                                 let resp = JSON.parse(xhr.responseText);
                                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {

@@ -3,11 +3,16 @@ const { saveChart, retrieveChart, getChartList, deleteChart } = require('../cont
 const router = express.Router();
 
 router.post('/save/', saveChart);
-router.get('/retrieve/:id', (req, res) => {
-    res.render("chart", {});
-});
 router.post('/retrieve', retrieveChart);
 router.post('/list', getChartList);
 router.post('/delete', deleteChart);
+
+router.get('/:id', (req, res, next) => {
+    if (typeof req.params.id != 'undefined' && /^[0-9A-Fa-f]{16,32}$/.test(req.params.id)) {
+        res.render("chart", {});
+    } else {
+        next();
+    }
+});
 
 module.exports = router;

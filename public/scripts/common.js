@@ -101,7 +101,7 @@ function showMsg(msg, success = false, confirm = false) {
     msgSpan.innerText = msg;
     if (!success) msgSpan.style.color = 'red';
     else {
-        if(!isDark) msgSpan.style.color = 'black';
+        if (!isDark) msgSpan.style.color = 'black';
         else msgSpan.style.color = 'white';
     }
 
@@ -146,16 +146,25 @@ function getCookie(cname) {
 
 let isDark = false;
 const darkBtn = document.getElementById('darkBtn');
-if (getCookie('theme')==='dark'){
-    isDark = true;
-    darkBtn.checked = true;
-    document.getElementById('navbarBrand').src = "/images/brandWhite.png"
-    document.body.classList.add("dark-mode");
-    darkBtn.innerText = isDark ? 'light' : 'dark';
-}else{
-    darkBtn.checked = false;
-    document.getElementById('navbarBrand').src = "/images/brandBlack.png"
-    setCookie('theme', 'light', 365000);
+
+function checkTheme() {
+    let savedTheme = getCookie('theme')
+    if (savedTheme === 'dark') {
+        isDark = true;
+        darkBtn.checked = true;
+        document.getElementById('navbarBrand').src = "/images/brandWhite.png"
+        document.body.classList.add("dark-mode");
+    } else if (savedTheme === 'light') {
+        isDark = false;
+        darkBtn.checked = false;
+        document.getElementById('navbarBrand').src = "/images/brandBlack.png";
+        document.body.classList.remove("dark-mode");
+    } else {
+        darkBtn.checked = false;
+        document.getElementById('navbarBrand').src = "/images/brandBlack.png";
+        document.body.classList.remove("dark-mode");
+        setCookie('theme', 'light', 365000);
+    }
 }
 
 darkBtn.onclick = e => {
@@ -166,6 +175,14 @@ darkBtn.onclick = e => {
     else document.getElementById('navbarBrand').src = "/images/brandBlack.png";
     setCookie('theme', isDark ? 'dark' : 'light', 365000);
 }
+
+document.onvisibilitychange = e =>{
+    if (document.visibilityState=='visible'){
+        checkTheme();
+    }
+}
+
+checkTheme();
 
 if (typeof module != 'undefined') {
     module.exports = { isEmpty }
