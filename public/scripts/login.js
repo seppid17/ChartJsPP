@@ -1,4 +1,3 @@
-let form = document.getElementById('loginForm');
 let submitBtn = document.getElementById('submit');
 let emailInput = document.getElementById('email');
 let passwdInput = document.getElementById('password');
@@ -6,6 +5,7 @@ let passwdInput = document.getElementById('password');
 emailInput.onkeydown = event => {
     keyPressFn(event, email_pattern, passwdInput, null, 'Invalid email');
 }
+
 passwdInput.onkeydown = event => {
     keyPressFn(event, password_pattern, null, submitBtn, 'Invalid Password');
 }
@@ -38,7 +38,7 @@ submitBtn.onclick = e => {
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
     xhrSender.addField('password', passwd);
-    xhrSender.send(document.URL, function (xhr) {
+    xhrSender.send('/login', function (xhr) {
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {

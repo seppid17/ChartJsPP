@@ -1,9 +1,7 @@
-<div class="overlay" id="overlay1"></div>
-
-
-<div class="login-wrapper p-4" id="loginPopup">
+<div class="overlay" id="loginOverlay"></div>
+<div class="login-wrapper p-4 msgPopup" id="loginPopup">
     <p class="text-end text-new-signup">Don't have an account?&nbsp;<a class="btn btn-signup-popup" data-toggle="tab"
-            href="/signup">SIGN UP</a></p>
+            href="/signup" target="_blank">SIGN UP</a></p>
     <div class="d-flex">
         <div>
             <h1 class="text-hello">Hello! Welcome Back</h1>
@@ -28,7 +26,9 @@
         <a class="btn btn-frogot" data-toggle="tab" href="/forgotPassword">Forgot Password?</a>
 
         <div>
-            <input class="btn btn-submit-login" type="submit" id="submit" value="Login">
+            <input class="btn btn-submit-login" type="submit" id="login" value="Login">
         </div>
     </form>
 </div>
+
+<script src="/scripts/loginPopup.js"></script>

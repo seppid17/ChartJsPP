@@ -396,11 +396,17 @@ document.getElementById('saveBtn').onclick = e => {
     xhrSender.addField('thumbnail', thumb);
     xhrSender.addField('data', JSON.stringify(data));
     xhrSender.addField('properties', JSON.stringify(properties));
-    xhrSender.send('/authChart/save', xhr => {
+    let cb = xhr => {
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
                 if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
+                    if (data['reason']=='Unauthorized'){
+                        popupLogin(() => {
+                            xhrSender.send('/authChart/save', cb);
+                        });
+                        return;
+                    }
                     showMsg(data['reason']);
                 } else {
                     showMsg('Chart saving failed!');
@@ -414,7 +420,8 @@ document.getElementById('saveBtn').onclick = e => {
         } catch (error) {
             showMsg('Something went wrong! Please try again.');
         }
-    });
+    }
+    xhrSender.send('/authChart/save', cb);
 };
 
 document.getElementById('deleteBtn').onclick = e => {
