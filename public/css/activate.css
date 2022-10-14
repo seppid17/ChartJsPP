@@ -34,7 +34,7 @@ body {
     color: var(--gray);
 }
 
-.btn-frogot {
+.btn-forgot {
     color: var(--gray);
     padding: 0;
     border: none;
@@ -44,7 +44,7 @@ body {
     border: none;
 }
 
-.btn-frogot:hover {
+.btn-forgot:hover {
     color: var(--black);
     box-shadow: none;
 }

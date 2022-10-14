@@ -72,7 +72,7 @@
     border: 1px solid var(--purple);
 }
 
-.btn-frogot {
+.btn-forgot {
     width: fit-content;
     color: var(--gray);
     padding: 0;
@@ -85,12 +85,12 @@
     font-size: small;
 }
 
-.btn-frogot:hover {
+.btn-forgot:hover {
     color: var(--black);
     box-shadow: none;
 }
 
-.btn-frogot:focus {
+.btn-forgot:focus {
     border: none !important;
 }
 
@@ -126,6 +126,6 @@
     color: #e9e9ea;
 }
 
-.dark-mode .btn-frogot {
+.dark-mode .btn-forgot {
     color: #e9e9ea;
 }

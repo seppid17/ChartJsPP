@@ -17,7 +17,6 @@ function popupLogin(onlogin) {
     }
 
     popup.onclick = e => {
-        e.preventDefault();
         e.stopPropagation();
     }
 
