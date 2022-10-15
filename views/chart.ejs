@@ -36,38 +36,40 @@
     <!-- login form -->
     <%- include('loginPopup.ejs') %>
 
-        <div class="container">
+    <div class="container">
 
-            <div class="wrapper-chart-main">
-                <!-- popup to display confimation messages -->
-                <%- include('viewChart.ejs') %>
+        <div class="wrapper-chart-main">
+            <!-- chart view -->
+            <%- include('viewChart.ejs') %>
 
-                <br>
-                <!-- popup to display confimation messages -->
-                <%- include('generateChart.ejs') %>
+            <br>
+            <!-- chart data input view -->
+            <div class="authOnly onlyAuth">
+            <%- include('generateChart.ejs') %>
             </div>
         </div>
+    </div>
 
-        <script src="/scripts/common.js"></script>
-        <script src="/scripts/parseData.js"></script>
-        <script src="/scripts/dataFormatHelper.js"></script>
-        <script src="/scripts/dragDrop.js"></script>
-        <script src="/scripts/rectangle.js"></script>
-        <script src="/scripts/arc.js"></script>
-        <script src="/scripts/hierarchicalController.js"></script>
-        <script src="/scripts/sunburst.js"></script>
-        <script src="/scripts/treemap.js"></script>
-        <script src="/scripts/icicle.js"></script>
-        <script src="/scripts/chartConfig.js"></script>
-        <script src="/scripts/chart.js"></script>
-        <!-- Bootstrap js-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-            integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"
-            defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"
-            defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="/scripts/common.js"></script>
+    <script src="/scripts/parseData.js"></script>
+    <script src="/scripts/dataFormatHelper.js"></script>
+    <script src="/scripts/dragDrop.js"></script>
+    <script src="/scripts/rectangle.js"></script>
+    <script src="/scripts/arc.js"></script>
+    <script src="/scripts/hierarchicalController.js"></script>
+    <script src="/scripts/sunburst.js"></script>
+    <script src="/scripts/treemap.js"></script>
+    <script src="/scripts/icicle.js"></script>
+    <script src="/scripts/chartConfig.js"></script>
+    <script src="/scripts/chart.js"></script>
+    <!-- Bootstrap js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"
+        defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"
+        defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 </body>
 
 </html>

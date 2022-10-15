@@ -91,8 +91,8 @@ function setClear(input) {
 /**
  * Shows a success, error, or confirm message to user.
  */
-function showMsg(msg, success = false, confirm = false) {
-    var closePopup = document.getElementById("popupclose");
+function displayMsgConfirm(msg, success = false, confirm = false, onclosed=()=>{}) {
+    var closeBtn = document.getElementById("popupclose");
     var confirmPopup = document.getElementById("popupconfirm");
     var overlay = document.getElementById("overlay");
     var popup = document.getElementById("msgPopup");
@@ -103,19 +103,50 @@ function showMsg(msg, success = false, confirm = false) {
 
     if (confirm) {
         confirmPopup.hidden = false;
-        closePopup.children[0].innerText = 'Cancel';
+        closeBtn.children[0].innerText = 'Cancel';
     } else {
         confirmPopup.hidden = true;
-        closePopup.children[0].innerText = 'OK';
+        closeBtn.children[0].innerText = 'OK';
     }
 
     overlay.style.display = 'block';
     popup.style.display = 'block';
 
-    closePopup.onclick = function () {
-        overlay.style.display = 'none';
+    let closePopup = ()=>{
         popup.style.display = 'none';
+        overlay.style.display = 'none';
+        onclosed();
+    }
+
+    overlay.onclick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        closePopup();
+    }
+
+    popup.onclick = e => {
+        e.stopPropagation();
+    }
+
+    closeBtn.onclick = function () {
+        closePopup();
     };
+}
+
+function showMsg(msg, success = false, onclosed=()=>{}) {
+    displayMsgConfirm(msg, success, false, onclosed)
+}
+
+function showSuccess(msg, onclosed=()=>{}) {
+    showMsg(msg, true, onclosed);
+}
+
+function showFailure(msg, onclosed=()=>{}) {
+    showMsg(msg, false, onclosed);
+}
+
+function promptConfirmation(msg) {
+    displayMsgConfirm(msg, true, true);
 }
 
 function setCookie(cname, cvalue, exdays) {

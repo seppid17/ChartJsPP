@@ -33,16 +33,16 @@ submitBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Password reset request failed!');
+                    showFailure('Password reset request failed!');
                 }
                 return;
             }
-            showMsg('Password reset requested. Check your email', true);
+            showSuccess('Password reset requested. Check your email');
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     });
 }

@@ -1,4 +1,4 @@
-function popupLogin(onlogin) {
+function popupLogin(ondone) {
     var overlay = document.getElementById("loginOverlay");
     var popup = document.getElementById("loginPopup");
     var submitBtn = document.getElementById('login');
@@ -14,6 +14,7 @@ function popupLogin(onlogin) {
         passwdInput.value = '';
         popup.style.display = 'none';
         overlay.style.display = 'none';
+        ondone(false);
     }
 
     popup.onclick = e => {
@@ -71,19 +72,19 @@ function popupLogin(onlogin) {
                                     break;
                             }
                         } else {
-                            showMsg(data['reason']);
+                            showFailure(data['reason']);
                         }
                     } else {
-                        showMsg('Login failed!');
+                        showFailure('Login failed!');
                     }
                     return;
                 }
                 passwdInput.value = '';
-                onlogin();
+                ondone(true);
                 popup.style.display = 'none';
                 overlay.style.display = 'none';
             } catch (error) {
-                showMsg('Something went wrong! Try again.');
+                showFailure('Something went wrong! Try again.');
             }
         });
     }

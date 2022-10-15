@@ -3,6 +3,10 @@ body {
     font-family: "proxima-nova-soft", sans-serif;
 }
 
+body.authOnly .onlyAuth {
+    display: none;
+}
+
 .btn {
     border: 0;
     text-align: center;

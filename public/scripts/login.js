@@ -53,10 +53,14 @@ submitBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason'], false, () => {
+                            passwdInput.value = '';
+                        });
                     }
                 } else {
-                    showMsg('Login failed!');
+                    showFailure('Login failed!', false, () => {
+                        passwdInput.value = '';
+                    });
                 }
                 return;
             }
@@ -66,7 +70,9 @@ submitBtn.onclick = e => {
             }
             window.location = target;
         } catch (error) {
-            showMsg('Something went wrong! Try again.');
+            showFailure('Something went wrong! Try again.', false, () => {
+                passwdInput.value = '';
+            });
         }
     });
 }
