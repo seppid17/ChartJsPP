@@ -17,7 +17,6 @@
 .login-wrapper {
     display: none;
     position: fixed;
-    /* display: none; */
     top: 15%;
     left: 50%;
     width: 400px;
@@ -106,8 +105,9 @@
 
 #loginPopup{
     margin-top: -275px;
-    margin-left: -300px;
-    width: 600px;
+    margin-left: -200px;
+    width: 90%;
+    max-width: 400px;
 }
 
 .dark-mode .login-wrapper {

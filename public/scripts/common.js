@@ -100,10 +100,6 @@ function showMsg(msg, success = false, confirm = false) {
 
     msgSpan.innerText = msg;
     if (!success) msgSpan.style.color = 'red';
-    else {
-        if (!isDark) msgSpan.style.color = 'black';
-        else msgSpan.style.color = 'white';
-    }
 
     if (confirm) {
         confirmPopup.hidden = false;
