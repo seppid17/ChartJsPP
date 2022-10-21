@@ -1,5 +1,5 @@
 body {
-    background-color: var(--bg-light-blue);
+    background-color: var(--bg-primary);
     font-family: "proxima-nova-soft", sans-serif;
 }
 
@@ -9,7 +9,7 @@ body {
     display: inline-block;
     padding: 14px;
     margin: 8px;
-    color: var(--white);
+    color: var(--btn-text);
     border-radius: 8px;
     font-weight: 600;
     text-decoration: none;
@@ -18,13 +18,13 @@ body {
 }
 
 .btn:hover {
-    color: var(--white);
+    color: var(--btn-text);
     box-shadow: 0px 0px 4px 1px var(--shadow-gray);
 }
 
 .btn-submit {
-    background-color: var(--purple);
-    color: var(--white);
+    background-color: var(--primary-color);
+    color: var(--btn-text);
     font-weight: bold;
     font-size: large;
     padding: 3px 20px 3px 20px;
@@ -35,16 +35,18 @@ body {
 }
 
 .title-saved {
+    color: var(--text-primary);
     margin-top: 20px;
     margin-bottom: 40px;
 }
 
 .text-chart-name {
+    color: var(--text-primary);
     margin-bottom: 0;
 }
 
 .text-details {
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-bottom: 0;
     font-size: small;
 }
@@ -55,7 +57,7 @@ body {
     margin: 50px auto;
     padding: 20px 40px;
     padding-bottom: 45px;
-    background-color: var(--white);
+    background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
 }
 
@@ -88,6 +90,7 @@ body {
 }
 
 .form-control {
+    background-color: var(--bg-wrapper);
     padding-bottom: 20px;
     padding-left: 0;
     padding-right: 0;
@@ -96,13 +99,16 @@ body {
 }
 
 .form-control label {
+    color: var(--text-primary);
     display: inline-block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
 .form-control input {
-    border: 1px solid var(--input-border-gray);
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
+    border: 1px solid var(--input-border);
     border-radius: 4px;
     display: block;
     font-family: inherit;
@@ -132,16 +138,16 @@ body {
 }
 
 .fa-circle-plus {
-    color: var(--white);
+    color: var(--btn-text);
 }
 
 .fa-trash-can {
-    color: var(--gray);
+    color: var(--color-trash);
     float: right;
 }
 
 .fa-trash-can:hover {
-    color: var(--dash-icon-gray);
+    color: var(--color-trash-h);
 }
 
 .card-body {
@@ -149,40 +155,13 @@ body {
     padding: 0 0;
 }
 
-
-
-.dark-mode {
-    background-color: black;
+.card-body,
+.list-group-item,
+.card-img-top {
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
 }
 
-.dark-mode .wrapper {
-    background-color: #1d2226;
-    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
-}
-
-.dark-mode .card-body,
-.dark-mode .list-group-item,
-.dark-mode .card-img-top {
-    background-color: #1d2226;
-    color: #e9e9e9;
-}
-
-.dark-mode .fa-trash-can {
-    color: #e9e9e9;
-}
-
-.dark-mode .fa-trash-can:hover {
-    color: var(--white);
-}
-
-.dark-mode .text-details {
-    color: #e9e9e9;
-}
-
-.dark-mode li {
-    border-color: #e9e9e9;
-}
-
-.dark-mode .title-saved {
-    color: #e9e9e9;
+li {
+    border-color: var(--text-secondary);
 }

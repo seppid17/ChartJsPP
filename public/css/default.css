@@ -1,14 +1,13 @@
 :root {
-    --white: #ffffff;
+    /* --white: #ffffff;
     --lighter-gray: #f7f7f7;
     --light-gray: #e5e7eb;
     --black: #000000;
     --input-border-gray: #f0f0f0;
-    --shadow-gray: #a7aaa7;
-    --overlay-gray: #afafaf9c;
+    
     --gray: #808080;
     --dash-icon-gray: #373737;
-    --wrapper-shadow-gray: rgba(0, 0, 0, 0.1);
+    
     --bg-light-blue: #F9FCFF;
     --purple0: #6ce6ff;
     --light-purple: #d5b6ff;
@@ -19,13 +18,52 @@
     --light-red: #ff7b7b;
     --red: #E70E0E;
     --dark-red: #410101;
-    --red-error: #e74c3c;
     --delete-area-bg: #FFEBEB;
     --red-light: #FFEBEB;
     --light-green: #a3faa3;
     --green: #1eda1e;
     --dark-green: #003400;
-    --popup-ok-blue: #4c85ff;
+    --popup-ok-blue: #4c85ff; */
+
+    --primary-color: #a666fe;
+
+    --bg-primary: #F9FCFF;
+    --bg-wrapper: #ffffff;
+    --bg-gradient: linear-gradient(331deg, #9460db 0%, #a666fe 49%, #6ce6ff 100%);
+    --bg-delete-area: #FFEBEB;
+    --bg-delete-btn: #E70E0E;
+    --bg-opt-btn: #ffffff;
+    --bg-opt-btn-selected: #e5e7eb;
+    --overlay-gray: #afafaf9c;
+    --popup-btn-blue: #4c85ff;
+    --bg-btn-cancel: #808080;
+    --bg-dropdiv: #f7f7f7; /* #535353 */
+    --bg-crumb: #f4f6fa;
+    --bg-crumb-first: #357DFD;
+
+    --wrapper-shadow-gray: rgba(0, 0, 0, 0.1);
+    --shadow-gray: #a7aaa7;
+
+    --text-primary: #000000;
+    --text-primary-h: #000000;
+    --text-secondary: #808080;
+    --btn-text: #ffffff;
+    --text-opt-btn: #000000;
+    --text-opt-btn-selected: #000000;
+    --color-trash: #808080;
+    --color-trash-h: #000000;
+    --color-icon: #a666fe;
+    --color-icon-h: #7a14ff; /* #d8bbff */
+    --color-icon-success: #1eda1e;
+    --color-icon-success-h: #003400; /* #8bff8b */
+    --color-icon-cancel: #E70E0E;
+    --color-icon-cancel-h: #410101; /* #ff7b7b */
+    --color-crumb: #8093A7;
+    --color-crumb-first: #ffffff;
+
+    --input-border: #f0f0f0;
+    --red-error: #e74c3c;
+    --middle-purple: #800080;
 }
 
 /* navbar */
@@ -40,19 +78,24 @@
 }
 
 .nav-link {
-    color: var(--black);
+    color: var(--text-primary);
     font-weight: bold;
 }
 
+.nav-link:hover {
+    color: var(--text-primary-h);
+}
+
 .fa-user-gear {
-    color: var(--gray);
+    color: var(--text-primary);
 }
 
 .fa-user-gear:hover {
-    color: var(--dash-icon-gray);
+    color: var(--text-primary-h);
 }
 
 .navbar {
+    background-color: var(--bg-wrapper);
     box-shadow: 2px 2px 5px var(--wrapper-shadow-gray);
     padding-top: 4px;
 }
@@ -83,7 +126,7 @@
     position: absolute;
     height: 4px;
     width: 100%;
-    background: var(--red);
+    background: var(--red-error);
     border-radius: 25px;
     opacity: 1;
     left: 0;
@@ -128,12 +171,7 @@
 }
 
 .navbar-toggler.collapsed .toggler-icon {
-    background: var(--purple);
-}
-
-i {
-    color: var(--middle-purple);
-    margin: 5px;
+    background: var(--primary-color);
 }
 
 /* style for message popup */
@@ -155,7 +193,7 @@ i {
     padding: 20px 15px 15px 15px;
     top: 50%;
     left: 50%;
-    background: var(--white);
+    background: var(--bg-wrapper);
     width: 350px;
     margin-left: -175px;
     margin-top: -75px;
@@ -180,8 +218,8 @@ i {
 }
 
 .btn-cnf {
-    background-color: var(--popup-ok-blue);
-    color: var(--white);
+    background-color: var(--popup-btn-blue);
+    color: var(--btn-text);
     font-weight: normal;
     font-size: medium;
     border: none;
@@ -194,7 +232,7 @@ i {
 }
 
 .btn-cls {
-    background-color: var(--gray);
+    background-color: var(--bg-btn-cancel);
 }
 
 /* The switch - the box around the slider */
@@ -223,7 +261,7 @@ i {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--bg-wrapper);
     -webkit-transition: 0.4s;
     transition: 0.4s;
 }
@@ -241,21 +279,21 @@ i {
     -webkit-transition: 0.4s;
     transition: 0.4s;
     box-shadow: 0 0px 15px #2020203d;
-    background: white url('../images/sunny.png');
+    background: var(--bg-wrapper) url('../images/sunny.png');
     background-repeat: no-repeat;
     background-position: center;
     z-index: 100;
 }
 
 input:checked+.slider {
-    background-color: var(--purple);
+    background-color: var(--primary-color);
 }
 
 input:checked+.slider:before {
     -webkit-transform: translateX(24px);
     -ms-transform: translateX(24px);
     transform: translateX(24px);
-    background: white url('../images/night.png');
+    background: var(--bg-wrapper) url('../images/night.png');
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -270,43 +308,9 @@ input:checked+.slider:before {
 }
 
 .msg-div {
-    color: var(--black);
+    color: var(--text-primary);
 }
 
 input:focus {
     outline: none !important;
-}
-
-.dark-mode .navbar {
-    background-color: #1d2226;
-    box-shadow: 2px 2px 5px var(--wrapper-shadow-gray);
-}
-
-.dark-mode .nav-link {
-    color: #e9e9ea;
-}
-
-.dark-mode .fa-user-gear {
-    color: #e9e9ea;
-}
-
-.dark-mode .fa-user-gear:hover {
-    color: var(--white);
-}
-
-.dark-mode .nav-link:hover {
-    color: var(--white);
-}
-
-.dark-mode .toggler-icon,
-.dark-mode .navbar-toggler.collapsed .toggler-icon {
-    background: #e9e9ea;
-}
-
-.dark-mode .msgPopup {
-    background: #1d2226;
-}
-
-.dark-mode .msg-div {
-    color: var(--white);
 }

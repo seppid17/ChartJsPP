@@ -173,30 +173,69 @@ function getCookie(cname) {
 
 let isDark = false;
 const darkBtn = document.getElementById('darkBtn');
+var r = document.querySelector(':root');
+
+function switchTheme(is_dark) {
+    if (is_dark) {
+        r.style.setProperty('--bg-primary', '#000000');
+        r.style.setProperty('--bg-wrapper', '#1d2226');
+        r.style.setProperty('--bg-opt-btn', '#1d2226');
+        r.style.setProperty('--bg-opt-btn-selected', '#e9e9ea');
+        r.style.setProperty('--bg-dropdiv', '#535353');
+        r.style.setProperty('--bg-crumb', '#f4f6fa');
+        r.style.setProperty('--text-primary', '#e9e9ea');
+        r.style.setProperty('--text-primary-h', '#ffffff');
+        r.style.setProperty('--text-secondary', '#e9e9ea');
+        r.style.setProperty('--text-opt-btn', '#ffffff');
+        r.style.setProperty('--color-trash', '#e9e9ea');
+        r.style.setProperty('--color-trash-h', '#ffffff');
+        r.style.setProperty('--color-icon-h', '#d8bbff');
+        r.style.setProperty('--color-icon-success-h', '#8bff8b');
+        r.style.setProperty('--color-icon-cancel-h', '#ff7b7b');
+        r.style.setProperty('--input-border', '#e9e9ea');
+    } else {
+        r.style.setProperty('--bg-primary', '#F9FCFF');
+        r.style.setProperty('--bg-wrapper', '#ffffff');
+        r.style.setProperty('--bg-opt-btn', '#ffffff');
+        r.style.setProperty('--bg-opt-btn-selected', '#e5e7eb');
+        r.style.setProperty('--bg-dropdiv', '#f7f7f7');
+        r.style.setProperty('--bg-crumb', '#f4f6fa');
+        r.style.setProperty('--text-primary', '#000000');
+        r.style.setProperty('--text-primary-h', '#000000');
+        r.style.setProperty('--text-secondary', '#808080');
+        r.style.setProperty('--text-opt-btn', '#000000');
+        r.style.setProperty('--color-trash', '#808080');
+        r.style.setProperty('--color-trash-h', '#000000');
+        r.style.setProperty('--color-icon-h', '#7a14ff');
+        r.style.setProperty('--color-icon-success-h', '#003400');
+        r.style.setProperty('--color-icon-cancel-h', '#410101');
+        r.style.setProperty('--input-border', '#f0f0f0');
+    }
+}
 
 function checkTheme() {
     let savedTheme = getCookie('theme')
     if (savedTheme === 'dark') {
         isDark = true;
         darkBtn.checked = true;
-        document.getElementById('navbarBrand').src = "/images/brandWhite.png"
-        document.body.classList.add("dark-mode");
+        document.getElementById('navbarBrand').src = "/images/brandWhite.png";
+        switchTheme(true)
     } else if (savedTheme === 'light') {
         isDark = false;
         darkBtn.checked = false;
         document.getElementById('navbarBrand').src = "/images/brandBlack.png";
-        document.body.classList.remove("dark-mode");
+        switchTheme(false)
     } else {
         darkBtn.checked = false;
         document.getElementById('navbarBrand').src = "/images/brandBlack.png";
-        document.body.classList.remove("dark-mode");
+        switchTheme(false)
         setCookie('theme', 'light', 365000);
     }
 }
 
 darkBtn.onclick = e => {
     darkBtn.innerText = isDark ? 'dark' : 'light'
-    document.body.classList.toggle("dark-mode");
+    switchTheme(!isDark)
     isDark = !isDark;
     if (isDark) document.getElementById('navbarBrand').src = "/images/brandWhite.png";
     else document.getElementById('navbarBrand').src = "/images/brandBlack.png";

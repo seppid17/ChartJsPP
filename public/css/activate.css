@@ -1,5 +1,5 @@
 body {
-    background-color: var(--bg-light-blue);
+    background-color: var(--bg-primary);
     font-family: "proxima-nova-soft", sans-serif;
 }
 
@@ -9,7 +9,7 @@ body {
     display: inline-block;
     padding: 14px;
     margin: 8px;
-    color: var(--white);
+    color: var(--btn-text);
     border-radius: 8px;
     font-weight: 600;
     text-decoration: none;
@@ -18,84 +18,65 @@ body {
 }
 
 .btn:hover {
-    color: var(--white);
+    color: var(--btn-text);
     box-shadow: 0px 0px 4px 1px var(--shadow-gray);
 }
 
 .btn-signup {
-    color: var(--gray);
+    color: var(--text-secondary);
     font-size: small;
     width: fit-content;
-    border: 1px solid var(--gray);
+    border: 1px solid var(--text-secondary);
     padding: 3px 15px;
 }
 
 .btn-signup:hover {
-    color: var(--gray);
-}
-
-.btn-forgot {
-    color: var(--gray);
-    padding: 0;
-    border: none;
-    margin-left: 0;
-    margin-bottom: 20px;
-    margin-top: 10px;
-    border: none;
-}
-
-.btn-forgot:hover {
-    color: var(--black);
-    box-shadow: none;
+    color: var(--text-secondary);
 }
 
 .btn-submit {
-    background-color: var(--purple);
-    color: var(--white);
+    background-color: var(--primary-color);
+    color: var(--btn-text);
     font-weight: bold;
     font-size: large;
     padding: 3px 20px 3px 20px;
     border: none;
     margin-left: 0;
+    width: fit-content;
+}
+
+.btn-submit:focus {
+    border: none !important;
 }
 
 .text-hello {
+    color: var(--text-primary);
     margin-top: 25px;
 }
 
 .text-login {
-    color: var(--gray);
-    margin-bottom: 10px;
-}
-
-.text-chartjs {
-    color:  var(--white);
+    color: var(--text-secondary);
+    margin-bottom: 25px;
 }
 
 .wrapper {
     max-width: 900px;
     min-height: 100px;
     margin: 50px auto;
-    background-color:  var(--white);
+    background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
 }
 
-.name {
-    padding: 2px 2px 2px 0;
-    color:  var(--black);
-}
-
 .pill {
-    width: 250px;
     height: 50px;
+    width: 250px;
 }
 
 .img-area {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: var(--purple1);
-    background: linear-gradient(331deg, var(--purple1) 0%, var(--purple) 49%, var(--purple0) 100%); 
+    background: var(--bg-gradient);
     padding: 20px 20px;
     min-width: 45%;
 }
@@ -119,6 +100,7 @@ body {
 }
 
 .form-control {
+    background-color: var(--bg-wrapper);
     padding-bottom: 20px;
     padding-left: 0;
     padding-right: 0;
@@ -127,13 +109,16 @@ body {
 }
 
 .form-control label {
+    color: var(--text-primary);
     display: inline-block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
 .form-control input {
-    border: 1px solid var(--input-border-gray);
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
+    border: 2px solid var(--input-border);
     border-radius: 4px;
     display: block;
     font-family: inherit;
@@ -158,53 +143,7 @@ body {
 	visibility: visible;
 }
 
-.btn-submit:focus {
-    border: none !important;
-}
-
 input:focus {
-    outline: none !important;;
-    border: 2px solid var(--purple);
-}
-
-
-
-
-
-
-
-.dark-mode {
-    background-color: black;
-}
-
-.dark-mode .wrapper {
-    background-color: #1d2226;
-    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
-}
-
-
-.dark-mode .form-control {
-    background-color: #1d2226;
-}
-
-.dark-mode .form-control label {
-    color: #e9e9ea;
-}
-
-.dark-mode .form-control input {
-    border: 1px solid var(--input-border-gray);
-    color: #e9e9ea;
-    background-color: #1d2226;
-}
-
-.dark-mode .form-control.error input {
-    border-color: var(--red-error);
-}
-
-.dark-mode .text-hello {
-    color: #e9e9ea;
-}
-
-.dark-mode .text-login {
-    color: #e9e9ea;
+    outline: none !important;
+    border: 2px solid var(--primary-color);
 }
