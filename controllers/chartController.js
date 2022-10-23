@@ -35,6 +35,10 @@ const saveChart = async (req, res) => {
         } else {
             let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
             ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
+                if (!doc) {
+                    res.json({ 'success': false });
+                    return;
+                }
                 let chartData = { id: id, type: type, data: data, properties: properties };
                 ChartData.findOneAndUpdate({ id: id }, chartData).then(doc => {
                     res.json({ 'success': true });
@@ -93,15 +97,17 @@ const retrieveChartCommon = async (req, res, owner) => {
                 res.json({ 'success': false, 'reason': 'Chart not found' });
                 return;
             }
-            if (!chartInfo.shared && owner==null){
+            if (!chartInfo.shared && owner == null) {
                 res.json({ 'success': false, 'reason': 'NotShared' });
                 return;
             }
-            if (!chartInfo.shared && chartInfo.owner!==owner){
+            if (!chartInfo.shared && chartInfo.owner !== owner) {
                 res.json({ 'success': false, 'reason': 'You are not the owner of this chart' });
                 return;
             }
-            chartInfo.owner = owner;
+            if (owner == null || chartInfo.owner !== owner) {
+                chartInfo.owner = null;
+            }
             let chartData = await getChartData(id);
             if (chartData == null) {
                 res.json({ 'success': false });
@@ -194,7 +200,8 @@ const shareChart = async (req, res) => {
     } else {
         try {
             let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: true });
-            res.json({ 'success': true });
+            let success = (doc != null);
+            res.json({ 'success': success });
         } catch (err) {
             console.log(err);
             res.json({ 'success': false });

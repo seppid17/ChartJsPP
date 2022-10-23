@@ -18,11 +18,6 @@ class XHRSender {
         xhr.responseType = responseType;
         xhr.onload = () => {
             if (xhr.status == 200) {
-                var unauthorized = xhr.getResponseHeader("Unauthorized");
-                if (unauthorized && unauthorized !== "") {
-                    // window.location = unauthorized;
-                    return;
-                }
                 callback(xhr);
             }
         };

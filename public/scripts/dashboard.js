@@ -33,6 +33,10 @@ function setCards() {
                 cardDiv.classList.add('card');
                 cardColDiv.appendChild(cardDiv);
 
+                cardDiv.onclick = evt => {
+                    window.open('/chart/' + chart.id, '_blank');
+                }
+
                 let ul = document.createElement('ul');
                 ul.classList.add('list-group');
                 ul.classList.add('list-group-flush');
@@ -43,10 +47,6 @@ function setCards() {
                 li1.classList.add('card-img-area');
                 ul.appendChild(li1);
                 
-                li1.onclick = evt => {
-                    window.open('/chart/' + chart.id, '_blank');
-                }
-
                 let img = document.createElement('img');
                 img.classList.add('card-img-top');
                 img.alt = 'Chart thumbnail';
