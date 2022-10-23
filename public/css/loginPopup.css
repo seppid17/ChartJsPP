@@ -1,17 +1,27 @@
 .text-new-signup {
-    color: var(--gray);
+    color: var(--text-secondary);
+}
+
+.text-hello {
+    color: var(--text-primary);
+    margin-top: 25px;
+}
+
+.text-login {
+    color: var(--text-secondary);
+    margin-bottom: 25px;
 }
 
 .btn-signup-popup {
-    color: var(--gray);
+    color: var(--text-secondary);
     font-size: small;
     width: fit-content;
-    border: 1px solid var(--gray);
+    border: 1px solid var(--text-secondary);
     padding: 3px 15px;
 }
 
 .btn-signup-popup:hover {
-    color: var(--gray);
+    color: var(--text-secondary);
 }
 
 .login-wrapper {
@@ -21,12 +31,13 @@
     left: 50%;
     width: 400px;
     margin-left: -200px;
-    background-color: var(--white);
+    background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
     z-index: 50;
 }
 
 .form .form-control {
+    background-color: var(--bg-wrapper);
     padding-bottom: 20px;
     padding-left: 0;
     padding-right: 0;
@@ -35,13 +46,16 @@
 }
 
 .form .form-control label {
+    color: var(--text-primary);
     display: inline-block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
 .form .form-control input {
-    border: 1px solid var(--input-border-gray);
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
+    border: 2px solid var(--input-border);
     border-radius: 4px;
     display: block;
     font-family: inherit;
@@ -68,12 +82,12 @@
 
 .form input:focus {
     outline: none !important;
-    border: 1px solid var(--purple);
+    border: 2px solid var(--primary-color);
 }
 
 .btn-forgot {
     width: fit-content;
-    color: var(--gray);
+    color: var(--text-secondary);
     padding: 0;
     border: none;
     margin-left: 0;
@@ -85,7 +99,7 @@
 }
 
 .btn-forgot:hover {
-    color: var(--black);
+    color: var(--text-primary);
     box-shadow: none;
 }
 
@@ -94,8 +108,8 @@
 }
 
 .btn-submit-login {
-    background-color: var(--purple);
-    color: var(--white);
+    background-color: var(--primary-color);
+    color: var(--btn-text);
     font-weight: bold;
     font-size: large;
     padding: 3px 20px 3px 20px;
@@ -108,24 +122,4 @@
     margin-left: -200px;
     width: 90%;
     max-width: 400px;
-}
-
-.dark-mode .login-wrapper {
-    background-color: #1d2226;
-    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
-}
-
-.dark-mode .btn-signup-popup {
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-}
-
-.dark-mode .text-new-signup,
-.dark-mode .text-hello,
-.dark-mode .text-login {
-    color: #e9e9ea;
-}
-
-.dark-mode .btn-forgot {
-    color: #e9e9ea;
 }
