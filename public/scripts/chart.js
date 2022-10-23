@@ -403,7 +403,6 @@ document.getElementById('saveBtn').onclick = e => {
                         popupLogin(success => {
                             if (success) {
                                 xhrSender.send('/chart/save', cb);
-                                document.getElementsByTagName("body")[0].classList.remove('authOnly');
                             } else {
                                 showFailure('Unauthorized');
                             }
@@ -417,6 +416,7 @@ document.getElementById('saveBtn').onclick = e => {
                 return;
             }
             showSuccess('Chart saved');
+            document.getElementsByTagName("body")[0].classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
                 chartID = resp['id'];
             }
@@ -447,7 +447,6 @@ document.getElementById('deleteBtn').onclick = e => {
                             popupLogin(success => {
                                 if (success) {
                                     xhrSender.send('/chart/delete', cb);
-                                    document.getElementsByTagName("body")[0].classList.remove('authOnly');
                                 } else {
                                     showFailure('Unauthorized');
                                 }
@@ -487,7 +486,6 @@ document.getElementById('shareBtn').onclick = e => {
                         popupLogin(success => {
                             if (success) {
                                 xhrSender.send('/chart/share', cb);
-                                document.getElementsByTagName("body")[0].classList.remove('authOnly');
                             } else {
                                 showFailure('Unauthorized');
                             }
@@ -501,6 +499,7 @@ document.getElementById('shareBtn').onclick = e => {
                 return;
             }
             showSuccess('Chart shared');
+            document.getElementsByTagName("body")[0].classList.remove('authOnly');
         } catch (error) {
             showFailure('Share failed!');
         }

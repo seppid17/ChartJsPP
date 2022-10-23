@@ -86,7 +86,7 @@ function setClear(input) {
 /**
  * Shows a success, error, or confirm message to user.
  */
-function displayMsgConfirm(msg, success = false, confirm = false, onclosed=()=>{}) {
+function displayMsgConfirm(msg, success = false, confirm = false, onclosed = () => { }) {
     var closeBtn = document.getElementById("popupclose");
     var confirmPopup = document.getElementById("popupconfirm");
     var overlay = document.getElementById("overlay");
@@ -95,6 +95,7 @@ function displayMsgConfirm(msg, success = false, confirm = false, onclosed=()=>{
 
     msgSpan.innerText = msg;
     if (!success) msgSpan.style.color = 'red';
+    else msgSpan.style.color = 'var(--text-primary)';
 
     if (confirm) {
         confirmPopup.hidden = false;
@@ -107,7 +108,7 @@ function displayMsgConfirm(msg, success = false, confirm = false, onclosed=()=>{
     overlay.style.display = 'block';
     popup.style.display = 'block';
 
-    let closePopup = ()=>{
+    let closePopup = () => {
         popup.style.display = 'none';
         overlay.style.display = 'none';
         onclosed();
@@ -128,15 +129,15 @@ function displayMsgConfirm(msg, success = false, confirm = false, onclosed=()=>{
     };
 }
 
-function showMsg(msg, success = false, onclosed=()=>{}) {
+function showMsg(msg, success = false, onclosed = () => { }) {
     displayMsgConfirm(msg, success, false, onclosed)
 }
 
-function showSuccess(msg, onclosed=()=>{}) {
+function showSuccess(msg, onclosed = () => { }) {
     showMsg(msg, true, onclosed);
 }
 
-function showFailure(msg, onclosed=()=>{}) {
+function showFailure(msg, onclosed = () => { }) {
     showMsg(msg, false, onclosed);
 }
 
@@ -237,8 +238,8 @@ darkBtn.onclick = e => {
     setCookie('theme', isDark ? 'dark' : 'light', 365000);
 }
 
-document.onvisibilitychange = e =>{
-    if (document.visibilityState=='visible'){
+document.onvisibilitychange = e => {
+    if (document.visibilityState == 'visible') {
         checkTheme();
     }
 }
