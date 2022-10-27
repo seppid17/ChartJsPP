@@ -25,249 +25,234 @@
 </head>
 
 <body>
-     <!-- Navbar -->
-     <%- include('navbar.ejs', {"pageName":"home"}) %>
+    <!-- Navbar -->
+    <%- include('navbar.ejs', {"pageName":"home"}) %>
 
-     <!-- popup to display success and error messages -->
-     <!-- <%- include('showMsg.ejs') %> -->
- 
-     <!-- dark mode switch -->
-     <%- include('dark.ejs') %> 
+        <!-- popup to display success and error messages -->
+        <!-- <%- include('showMsg.ejs') %> -->
 
-    <div class="container-fluid">
+        <!-- dark mode switch -->
+        <%- include('dark.ejs') %>
 
-        <div class=".wrapper-chart-main shadow p-3 mb-5 bg-white rounded mt-2" >
-                <diV  class="row shadow bg-white rounded p-1">
-                    <h3>Basic chart types</h3>
-                </diV>
-                <div class="row p-1">
-                  <div class="col">
-                    <button class="btn btn-submit mt-1 w-100" id="SampleBarChart">Bar Chart</button>
-                  </div>
-                  <div class="col">
-                    <button class="btn btn-submit mt-1 w-100" id="SamplePieChart">Pie Chart</button>
-                  </div>
-                  <div class="col">
-                    <button class="btn btn-submit mt-1 w-100" id="SampleDoughnutChart">Doughnut Chart</button>
-                  </div>
-                  <div class="col">
-                    <button class="btn btn-submit mt-1 w-100" id="SampleLineChart">Line Chart</button>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <button class="btn btn-submit mt-1 w-100" id="SamplePolaChart">Pola Chart</button>
+            <div class="container">
+                <div class="wrapper">
+                    <div class="btn-type-row">
+                        <button class="btn btn-type" id="SampleBarChart">Bar Chart</button>
+                        <button class="btn btn-type" id="SamplePieChart">Pie Chart</button>
+                        <button class="btn btn-type" id="SampleDoughnutChart">Doughnut Chart</button>
+                        <button class="btn btn-type" id="SampleLineChart">Line Chart</button>
+                        <button class="btn btn-type" id="SamplePolaChart">Pola Chart</button>
+                        <button class="btn btn-type" id="SampleScatterChart">Scatter Chart</button>
+                        <button class="btn btn-type" id="SampleBubbleChart">Bubble Chart</button>
+                        <button class="btn btn-type" id="SampleSunburstChart">Sunburst Chart</button>
+                        <button class="btn btn-type" id="SampleTreemapChart">Treemap Chart</button>
+                        <button class="btn btn-type" id="SampleIcicleChart">Icicle Chart</button>
                     </div>
-                    <div class="col">
-                        <button class="btn btn-submit mt-1 w-100" id="SampleScatterChart">Scatter Chart</button>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-submit mt-1 w-100" id="SampleBubbleChart">Bubble Chart</button>
-                    </div>
-                </div>
-                <diV  class="row  shadow bg-white rounded d">
-                    <h3>Advanced chart types</h3>
-                </diV>
-                <div class="row">
-                    <div class="col">
-                        <button class="btn btn-submit mt-1 w-100" id="SampleSunburstChart">Sunburst Chart</button>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-submit mt-1 w-100" id="SampleTreemapChart">Treemap Chart</button>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-submit mt-1 w-100" id="SampleIcicleChart">Icicle Chart</button>
-                    </div>
-                </div>
-    
-        </div>
-    </div> 
-    <div class="container">
-        <div class=".wrapper-chart-main shadow p-3 mb-5 bg-white rounded mt-2">
-            <div class="card p-2" id="cardBarChart">
-                <div class="row">
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/BarChart.png" alt="Card image cap">
-                    </div>
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Bar Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2" id="cardPieChart">
-                <div class="row">
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Pie Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/PieChart.png" alt="Card image cap">
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2" id="cardDoughnutChart">
-                <div class="row">
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/DoughnutChart.png" alt="Card image cap">
-                    </div>
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Doughnut Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2"  id="cardLineChart">
-                <div class="row">
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Line Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/LineChart.png" alt="Card image cap">
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2" id="cardPolaChart">
-                <div class="row">
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/PolaChart.png" alt="Card image cap">
-                    </div>
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Pola Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2" id="cardScatterChart">
-                <div class="row">
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Scatter Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/ScatterChart.png" alt="Card image cap">
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2" id="cardBubbleChart">
-                <div class="row">
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/BubbleChart.png" alt="Card image cap">
-                    </div>
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Bubble Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2"  id="cardSunburstChart">
-                <div class="row">
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Sunburst Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card p-2"  id="cardTreemapChart">
-                <div class="row">
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/TreemapChart.png" alt="Card image cap">
-                    </div>
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Treemap Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-            <br>
-            <div class="card p-2"  id="cardIcicleChart">
-                <div class="row">
-                    <div class="col-7">
-                        <div class="card-body">
-                            <h5 class="card-title">Icicle Chart</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                            <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample Data</button>
-                            
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img class="image-labal" src="/images/IcicleChart.png" alt="Card image cap">
-                    </div>
-                </div>
-            </div>
-            <br>
-        </div>  
-    </div>
-    <script src="/scripts/common.js"></script>
-    <script src="/scripts/sampleData.js"></script>
-    
 
-    <!-- Bootstrap js-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"
-        defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"
-        defer></script>
+                    <div class="card p-2" id="cardBarChart">
+                        <div class="row">
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/BarChart.png" alt="Card image cap">
+                            </div>
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Bar Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardPieChart">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pie Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/PieChart.png" alt="Card image cap">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardDoughnutChart">
+                        <div class="row">
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/DoughnutChart.png" alt="Card image cap">
+                            </div>
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Doughnut Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardLineChart">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Line Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/LineChart.png" alt="Card image cap">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardPolaChart">
+                        <div class="row">
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/PolaChart.png" alt="Card image cap">
+                            </div>
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pola Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardScatterChart">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Scatter Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/ScatterChart.png" alt="Card image cap">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardBubbleChart">
+                        <div class="row">
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/BubbleChart.png" alt="Card image cap">
+                            </div>
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Bubble Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardSunburstChart">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sunburst Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardTreemapChart">
+                        <div class="row">
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/TreemapChart.png" alt="Card image cap">
+                            </div>
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Treemap Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card p-2" id="cardIcicleChart">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">Icicle Chart</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up
+                                        the bulk of the card's content.</p>
+                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
+                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
+                                        Data</button>
+
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img class="image-labal" src="/images/IcicleChart.png" alt="Card image cap">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <script src="/scripts/common.js"></script>
+            <script src="/scripts/sampleData.js"></script>
+
+
+            <!-- Bootstrap js-->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+                integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+                crossorigin="anonymous" defer></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                crossorigin="anonymous" defer></script>
 </body>
 
 </html>
