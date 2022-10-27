@@ -126,7 +126,7 @@
     position: absolute;
     height: 4px;
     width: 100%;
-    background: var(--red-error);
+    background: var(--text-primary);
     border-radius: 25px;
     opacity: 1;
     left: 0;
@@ -168,10 +168,6 @@
 .navbar-toggler.collapsed .bottom-bar {
     margin-top: 20px;
     transform: rotate(0deg);
-}
-
-.navbar-toggler.collapsed .toggler-icon {
-    background: var(--primary-color);
 }
 
 /* style for message popup */
