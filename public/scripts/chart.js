@@ -372,7 +372,7 @@ document.getElementById('downloadPdf').onclick = e => {
 document.getElementById('saveBtn').onclick = e => {
     var chartConfig = ChartConfig.instance;
     if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
-        showMsg('No chart to save');
+        showFailure('No chart to save');
         return;
     }
     var type = chartConfig.getType();
@@ -396,27 +396,32 @@ document.getElementById('saveBtn').onclick = e => {
     xhrSender.addField('properties', JSON.stringify(properties));
     let cb = xhr => {
         try {
-            let data = JSON.parse(xhr.responseText);
-            if (!data.hasOwnProperty('success') || data['success'] !== true) {
-                if (data.hasOwnProperty('reason') && typeof (data['reason']) === "string") {
-                    if (data['reason'] == 'Unauthorized') {
-                        popupLogin(() => {
-                            xhrSender.send('/chart/save', cb);
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                    if (resp['reason'] == 'Unauthorized') {
+                        popupLogin(success => {
+                            if (success) {
+                                xhrSender.send('/chart/save', cb);
+                            } else {
+                                showFailure('Unauthorized');
+                            }
                         });
                         return;
                     }
-                    showMsg(data['reason']);
+                    showFailure(resp['reason']);
                 } else {
-                    showMsg('Chart saving failed!');
+                    showFailure('Chart saving failed!');
                 }
                 return;
             }
-            showMsg('Chart saved', true);
-            if (data.hasOwnProperty('id') || typeof data['id'] == 'string') {
-                chartID = data['id'];
+            showSuccess('Chart saved');
+            document.getElementsByTagName("body")[0].classList.remove('authOnly');
+            if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
+                chartID = resp['id'];
             }
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     }
     xhrSender.send('/chart/save', cb);
@@ -424,36 +429,85 @@ document.getElementById('saveBtn').onclick = e => {
 
 document.getElementById('deleteBtn').onclick = e => {
     if (chartID.length == 0) {
-        showMsg('Chart is not saved');
+        showFailure('Chart is not saved');
         return;
     }
-    showMsg('Are you sure you want to delete this chart?', true, true);
+    promptConfirmation('Are you sure you want to delete this chart?');
     document.getElementById("popupconfirm").onclick = e => {
         document.getElementById("overlay").style.display = 'none';
         document.getElementById("msgPopup").style.display = 'none';
         let xhrSender = new XHRSender();
         xhrSender.addField('id', chartID);
-        xhrSender.send('/chart/delete', xhr => {
+        let cb = xhr => {
             try {
                 let resp = JSON.parse(xhr.responseText);
                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
                     if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                        showMsg(resp['reason']);
+                        if (resp['reason'] == 'Unauthorized') {
+                            popupLogin(success => {
+                                if (success) {
+                                    xhrSender.send('/chart/delete', cb);
+                                } else {
+                                    showFailure('Unauthorized');
+                                }
+                            });
+                            return;
+                        }
+                        showFailure(resp['reason']);
                     } else {
-                        showMsg('Deleting chart failed!');
+                        showFailure('Deleting chart failed!');
                     }
                     return;
                 }
-                window.location = '/dashboard';
+                showSuccess('Chart Deleted.', () => {
+                    window.location = '/dashboard';
+                });
             } catch (error) {
-                showMsg('Delete failed!');
+                showFailure('Delete failed!');
             }
-        });
+        };
+        xhrSender.send('/chart/delete', cb);
     };
 };
 
+document.getElementById('shareBtn').onclick = e => {
+    if (chartID.length == 0) {
+        showFailure('Chart is not saved');
+        return;
+    }
+    let xhrSender = new XHRSender();
+    xhrSender.addField('id', chartID);
+    let cb = xhr => {
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                    if (resp['reason'] == 'Unauthorized') {
+                        popupLogin(success => {
+                            if (success) {
+                                xhrSender.send('/chart/share', cb);
+                            } else {
+                                showFailure('Unauthorized');
+                            }
+                        });
+                        return;
+                    }
+                    showFailure(resp['reason']);
+                } else {
+                    showFailure('Sharing chart failed!');
+                }
+                return;
+            }
+            showSuccess('Chart shared');
+            document.getElementsByTagName("body")[0].classList.remove('authOnly');
+        } catch (error) {
+            showFailure('Share failed!');
+        }
+    };
+    xhrSender.send('/chart/share', cb);
+};
+
 document.getElementById('CloseEdit').onclick = e => {
-    // document.getElementById('EditChartOption').style.display = 'none';
     let popup = document.getElementById("myPopup");
     popup.classList.remove("show");
 }
@@ -653,27 +707,48 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
     chartID = document.location.pathname.split('/')[2];
     var xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
-    xhrSender.send('/chart/retrieve', xhr => {
+    let cb = xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !resp.hasOwnProperty('data')) {
+                let errMsg;
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                    showMsg(resp['reason']);
+                    if (resp['reason'] == 'Unauthorized') {
+                        xhrSender.send('/chart/retrieveShared', cb);
+                        return;
+                    }
+                    if (resp['reason'] == 'NotShared') {
+                        popupLogin(success => {
+                            if (success) {
+                                xhrSender.send('/chart/retrieve', cb);
+                            } else {
+                                showFailure('Unauthorized');
+                            }
+                        });
+                        return;
+                    }
+                    errMsg = resp['reason'];
                 } else {
-                    showMsg('Chart retrieving failed!');
+                    errMsg = 'Chart retrieving failed!';
                 }
-                window.location = '/chart';
+                showFailure(errMsg, () => {
+                    window.location = '/chart';
+                });
                 return;
             }
             let info = resp.info;
+            if (info.owner == null) {
+                document.getElementsByTagName("body")[0].classList.add('authOnly');
+            }
             let data = resp.data;
             let chartData = JSON.parse(data.data);
             let properties = JSON.parse(data.properties);
             drawSavedChart(info, data.type, chartData, properties);
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
-    });
+    };
+    xhrSender.send('/chart/retrieve', cb);
 }
 
 let downloadPopup = document.getElementById("downloadPopup");

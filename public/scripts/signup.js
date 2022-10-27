@@ -111,16 +111,16 @@ submitBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Account creation failed!');
+                    showFailure('Account creation failed!');
                 }
                 return;
             }
-            showMsg('Account created. Check your email.', true);
+            showSuccess('Account created. Check your email.');
         } catch (error) {
-            showMsg('Something went wrong! Try again.');
+            showFailure('Something went wrong! Try again.');
         }
     });
 }

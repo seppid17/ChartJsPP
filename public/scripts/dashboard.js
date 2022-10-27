@@ -13,9 +13,9 @@ function setCards() {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !Array.isArray(resp.info)) {
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                    showMsg(resp['reason']);
+                    showFailure(resp['reason']);
                 } else {
-                    showMsg('Chart list retrieving failed!');
+                    showFailure('Chart list retrieving failed!');
                 }
                 return;
             }
@@ -33,6 +33,10 @@ function setCards() {
                 cardDiv.classList.add('card');
                 cardColDiv.appendChild(cardDiv);
 
+                cardDiv.onclick = evt => {
+                    window.open('/chart/' + chart.id, '_blank');
+                }
+
                 let ul = document.createElement('ul');
                 ul.classList.add('list-group');
                 ul.classList.add('list-group-flush');
@@ -43,10 +47,6 @@ function setCards() {
                 li1.classList.add('card-img-area');
                 ul.appendChild(li1);
                 
-                li1.onclick = evt => {
-                    window.open('/chart/' + chart.id, '_blank');
-                }
-
                 let img = document.createElement('img');
                 img.classList.add('card-img-top');
                 img.alt = 'Chart thumbnail';
@@ -85,7 +85,7 @@ function setCards() {
                 a.onclick = evt => {
                     evt.preventDefault();
                     evt.stopPropagation();
-                    showMsg('Are you sure you want to delete ' + chart.name + '?', true, true);
+                    promptConfirmation('Are you sure you want to delete ' + chart.name + '?');
                     document.getElementById("popupconfirm").onclick = e => {
                         document.getElementById("overlay").style.display = 'none';
                         document.getElementById("msgPopup").style.display = 'none';
@@ -96,9 +96,9 @@ function setCards() {
                                 let resp = JSON.parse(xhr.responseText);
                                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
                                     if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                                        showMsg(resp['reason']);
+                                        showFailure(resp['reason']);
                                     } else {
-                                        showMsg('Deleting chart failed!');
+                                        showFailure('Deleting chart failed!');
                                     }
                                     return;
                                 }
@@ -107,7 +107,7 @@ function setCards() {
                                     showNoCharts();
                                 }
                             } catch (error) {
-                                showMsg('Delete failed!');
+                                showFailure('Delete failed!');
                             }
                         });
                     };
@@ -118,7 +118,7 @@ function setCards() {
                 a.appendChild(i);
             });
         } catch (error) {
-            showMsg('Loading saved charts failed!');
+            showFailure('Loading saved charts failed!');
         }
     });
 }

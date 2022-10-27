@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
+router.all('/isLogged', (req, res) => {
+    if (req.session.loggedIn === true && req.session.user) {
+        let user = req.session.user;
+        res.json({ logged: true, email: user.email, firstName: user.firstName, lastName: user.lastName });
+    } else {
+        res.json({ logged: false });
+    }
+});
+
 router.get(/.*/, (req, res, next) => {
     if (req.session.loggedIn === true && req.session.user) {
         next();

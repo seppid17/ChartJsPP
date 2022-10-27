@@ -10,8 +10,8 @@ const saveChart = async (req, res) => {
         var dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
         if (id == undefined) {
             let count = await ChartInfo.countDocuments({ owner: user.email });
-            if (count>=5){
-                res.json({ 'success': false, 'reason':'You cannot save more than 5 charts'});
+            if (count >= 5) {
+                res.json({ 'success': false, 'reason': 'You cannot save more than 5 charts' });
                 return;
             }
             id = crypto.randomBytes(16).toString('hex');
@@ -35,6 +35,10 @@ const saveChart = async (req, res) => {
         } else {
             let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
             ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
+                if (!doc) {
+                    res.json({ 'success': false });
+                    return;
+                }
                 let chartData = { id: id, type: type, data: data, properties: properties };
                 ChartData.findOneAndUpdate({ id: id }, chartData).then(doc => {
                     res.json({ 'success': true });
@@ -53,18 +57,17 @@ const saveChart = async (req, res) => {
     }
 };
 
-async function getChartInfo(id, owner = null) {
+async function getChartInfo(id) {
     var filters = { id: id };
-    if (owner != null) {
-        filters.owner = owner;
-    }
     var chartInfo = await ChartInfo.findOne(filters);
     if (!chartInfo) {
         return null;
     }
     var info = {
         name: chartInfo.name,
-        thumbnail: chartInfo.thumbnail
+        thumbnail: chartInfo.thumbnail,
+        shared: chartInfo.shared,
+        owner: chartInfo.owner
     }
     return info;
 }
@@ -82,18 +85,28 @@ async function getChartData(id) {
     return data;
 }
 
-const retrieveChart = async (req, res) => {
+const retrieveChartCommon = async (req, res, owner) => {
     let { id } = req.body;
-    const user = req.session.user;
     if (id == undefined) {
         console.log('no id');
         res.json({ 'success': false, 'reason': 'No chart ID provided' });
     } else {
         try {
-            let chartInfo = await getChartInfo(id, user.email);
+            let chartInfo = await getChartInfo(id);
             if (chartInfo == null) {
-                res.json({ 'success': false });
+                res.json({ 'success': false, 'reason': 'Chart not found' });
                 return;
+            }
+            if (!chartInfo.shared && owner == null) {
+                res.json({ 'success': false, 'reason': 'NotShared' });
+                return;
+            }
+            if (!chartInfo.shared && chartInfo.owner !== owner) {
+                res.json({ 'success': false, 'reason': 'You are not the owner of this chart' });
+                return;
+            }
+            if (owner == null || chartInfo.owner !== owner) {
+                chartInfo.owner = null;
             }
             let chartData = await getChartData(id);
             if (chartData == null) {
@@ -106,6 +119,15 @@ const retrieveChart = async (req, res) => {
             res.json({ 'success': false });
         }
     }
+};
+
+const retrieveSharedChart = async (req, res) => {
+    return await retrieveChartCommon(req, res, null);
+};
+
+const retrieveChart = async (req, res) => {
+    const user = req.session.user;
+    return await retrieveChartCommon(req, res, user.email);
 };
 
 async function getChartsByOwner(owner) {
@@ -169,4 +191,22 @@ const deleteChart = async (req, res) => {
     }
 };
 
-module.exports = { saveChart, retrieveChart, getChartList, deleteChart };
+const shareChart = async (req, res) => {
+    let { id } = req.body;
+    const user = req.session.user;
+    if (id == undefined) {
+        console.log('no id');
+        res.json({ 'success': false, 'reason': 'No chart ID provided' });
+    } else {
+        try {
+            let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: true });
+            let success = (doc != null);
+            res.json({ 'success': success });
+        } catch (err) {
+            console.log(err);
+            res.json({ 'success': false });
+        }
+    }
+};
+
+module.exports = { saveChart, retrieveSharedChart, retrieveChart, getChartList, deleteChart, shareChart };

@@ -33,19 +33,18 @@ submitBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Account activation failed!');
+                    showFailure('Account activation failed!');
                 }
                 return;
             }
-            setTimeout(() => {
+            showSuccess('Account activated.', () => {
                 window.location = '/login';
-            }, 4000);
-            showMsg('Account activated', true);
+            });
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     });
 }

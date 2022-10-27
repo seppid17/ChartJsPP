@@ -1,6 +1,20 @@
 body {
-    background-color: var(--bg-light-blue);
+    background-color: var(--bg-primary);
     font-family: "proxima-nova-soft", sans-serif;
+}
+
+body.authOnly .onlyAuth {
+    display: none;
+}
+
+i {
+    color: var(--color-icon);
+    margin: 5px;
+}
+
+i:hover {
+    color: var(--color-icon-h);
+    cursor: pointer;
 }
 
 .btn {
@@ -9,7 +23,7 @@ body {
     display: inline-block;
     padding: 14px;
     margin: 8px;
-    color: var(--white);
+    color: var(--btn-text);
     border-radius: 8px;
     font-weight: 600;
     text-decoration: none;
@@ -18,15 +32,16 @@ body {
 }
 
 .btn:hover {
-    color: var(--white);
+    color: var(--btn-text);
     box-shadow: 0px 0px 4px 1px var(--shadow-gray);
 }
 
 .btn-icon {
-    padding: 1px 2px 2px 2px;
+    color: var(--text-primary);
+    padding: 2px;
     border-radius: 5px;
-    border: 1px solid var(--gray);
-    background-color: var(--white);
+    border: 1px solid var(--text-secondary);
+    background-color: var(--bg-wrapper);
     margin-right: 5px;
     width: 30px;
     height: 30px;
@@ -37,8 +52,8 @@ body {
 }
 
 .btn-submit {
-    background-color: var(--purple);
-    color: var(--white);
+    background-color: var(--primary-color);
+    color: var(--btn-text);
     font-weight: bold;
     font-size: large;
     padding: 3px;
@@ -60,15 +75,15 @@ body {
     margin: 8px;
     height: 35px;
     width: 70px;
-    color: var(--black);
-    border: 1px solid var(--gray);
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary);
     width: fit-content;
     font-weight: normal;
     font-size: medium;
 }
 
 .btn-dw:hover {
-    color: var(--black);
+    color: var(--text-primary);
 }
 
 .btn-ex {
@@ -79,20 +94,20 @@ body {
 }
 
 .btn-chart-type {
-    background-color: var(--white);
-    color: var(--black);
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
     width: 100%;
     max-width: 150px;
     padding: 3px;
-    border: 1px solid var(--gray);
+    border: 1px solid var(--text-secondary);
     margin: 0;
     font-weight: normal;
     font-size: small;
 }
 
 .btn-chart-type:hover {
-    background-color: var(--purple);
-    border-color: var(--purple);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .btn-check:active+.btn-outline-success,
@@ -100,9 +115,9 @@ body {
 .btn-outline-success.active,
 .btn-outline-success.dropdown-toggle.show,
 .btn-outline-success:active {
-    color: var(--white);
-    background-color: var(--purple);
-    border-color: var(--purple);
+    color: var(--btn-text);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .btn-back {
@@ -110,7 +125,7 @@ body {
     padding-top: 3px;
     padding-left: 5px;
     margin: 0;
-    color: var(--black);
+    color: var(--text-primary);
     border: none;
     width: fit-content;
     height: 30px;
@@ -119,7 +134,7 @@ body {
 }
 
 .btn-back:hover {
-    color: var(--black);
+    color: var(--text-primary);
 }
 
 .title-saved {
@@ -127,7 +142,16 @@ body {
     margin-bottom: 10px;
 }
 
-.fa-floppy-disk,
+.name-display {
+    color: var(--text-primary);
+}
+
+.chart-text-prop h5,
+.chart-text-prop span {
+    color: var(--text-primary);
+}
+
+/* .fa-floppy-disk,
 .fa-trash-can,
 .fa-download,
 .fa-share-nodes,
@@ -135,9 +159,9 @@ body {
 .fa-check-circle,
 .fa-edit {
     color: var(--purple);
-}
+} */
 
-.fa-floppy-disk:hover,
+/* .fa-floppy-disk:hover,
 .fa-trash-can:hover,
 .fa-download:hover,
 .fa-share-nodes:hover,
@@ -146,33 +170,33 @@ body {
 .fa-edit:hover {
     color: var(--dark-purple);
     cursor: pointer;
-}
+} */
 
 .fa-times-circle {
-    color: var(--red);
+    color: var(--color-icon-cancel);
 }
 
 .fa-times-circle:hover {
-    color: var(--dark-red);
+    color: var(--color-icon-cancel-h);
     cursor: pointer;
 }
 
 .fa-check-circle {
-    color: var(--green);
+    color: var(--color-icon-success);
 }
 
 .fa-check-circle:hover {
-    color: var(--dark-green);
+    color: var(--color-icon-success-h);
     cursor: pointer;
 }
 
 .fa-x {
-    color: var(--red);
+    color: var(--color-icon-cancel);
 }
 
 .fa-italic,
 .fa-bold {
-    color: var(--black);
+    color: var(--text-primary);
 }
 
 .icon-hidden {
@@ -185,11 +209,11 @@ body {
 }
 
 .fa-circle-plus {
-    color: var(--white);
+    color: var(--btn-text);
 }
 
 .fa-expand-alt {
-    color: var(--white);
+    color: var(--btn-text);
 }
 
 .save-div {
@@ -204,7 +228,7 @@ body {
     margin: 50px auto;
     padding: 20px 40px;
     padding-bottom: 45px;
-    background-color: var(--white);
+    background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
 }
 
@@ -216,15 +240,15 @@ body {
 }
 
 .dropDiv {
-    border: 2px dashed var(--gray);
+    border: 2px dashed var(--text-secondary);
     border-radius: 20px;
     width: 100%;
     margin: 30px auto;
-    background-color: var(--lighter-gray);
+    background-color: var(--bg-dropdiv);
 }
 
 .name-input {
-    border: 2px solid var(--input-border-gray);
+    border: 1px solid var(--input-border);
     border-radius: 4px;
     display: block;
     font-size: 14px;
@@ -253,8 +277,17 @@ body {
     visibility: hidden;
 }
 
+.drop-span {
+    color: var(--text-primary);
+}
+
 .drop-span.error {
     color: var(--red-error);
+}
+
+.gen-main-div h6,
+.gen-main-div h5 {
+    color: var(--text-primary);
 }
 
 .chart-type.error small {
@@ -262,6 +295,7 @@ body {
 }
 
 .form-control {
+    background-color: var(--bg-wrapper);
     padding-bottom: 20px;
     padding-left: 0;
     padding-right: 0;
@@ -270,18 +304,27 @@ body {
 }
 
 .form-control label {
+    color: var(--text-primary);
     display: inline-block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
 .form-control input {
-    border: 1px solid var(--gray);
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary);
     border-radius: 5px;
     font-family: inherit;
     font-size: 14px;
     padding: 5px;
     width: 70px;
+}
+
+.title-saved input {
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary);
 }
 
 .color-input {
@@ -293,7 +336,7 @@ body {
 .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
 .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
     border-radius: 5px;
-    border-color: var(--gray);
+    border-color: var(--text-secondary);
 }
 
 .form-control.error input {
@@ -322,7 +365,7 @@ body {
 }
 
 .form-label {
-    color: var(--black);
+    color: var(--text-primary);
 }
 
 .breadcrum-div {
@@ -349,7 +392,7 @@ ol li {
     display: block;
     float: left;
     height: 30px;
-    background: #F3F5FA;
+    background: var(--bg-crumb);
 
     text-align: center;
     padding: 8px 10px 10px 25px;
@@ -359,14 +402,14 @@ ol li {
     font-size: 10px;
     font-weight: bold;
     text-decoration: none;
-    color: #8093A7;
+    color: var(--color-crumb);
 }
 
 ol li:after {
     content: "";
-    border-top: 15.5px solid transparent;
-    border-bottom: 15.5px solid transparent;
-    border-left: 15px solid #F3F5FA;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid var(--bg-crumb);
     position: absolute;
     right: -14.5px;
     top: 0;
@@ -375,9 +418,9 @@ ol li:after {
 
 ol li:before {
     content: "";
-    border-top: 15.5px solid transparent;
-    border-bottom: 15.5px solid transparent;
-    border-left: 15px solid #fff;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid var(--bg-wrapper);
     position: absolute;
     left: 0;
     top: 0;
@@ -397,8 +440,8 @@ ol li:before {
     padding-right: 15px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
-    background: #357DFD;
-    color: #fff;
+    background: var(--bg-crumb-first);
+    color: var(--color-crumb-first);
 }
 
 #crumbs ol li:last-child:after {
@@ -419,8 +462,8 @@ ol li:before {
 /* The actual popup */
 .popup .popuptext {
     visibility: hidden;
-    background-color: var(--white);
-    color: var(--white);
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
     padding: 10px 10px 20px 10px;
     position: absolute;
     z-index: 1;
@@ -432,7 +475,7 @@ ol li:before {
 
 .popup .downloadPopup {
     visibility: hidden;
-    background-color: var(--white);
+    background-color: var(--bg-wrapper);
     text-align: center;
     padding: 10px;
     position: absolute;
@@ -454,7 +497,7 @@ ol li:before {
     margin-left: -5px;
     border-width: 8px;
     border-style: solid;
-    border-color: transparent transparent var(--white) transparent;
+    border-color: transparent transparent var(--bg-wrapper) transparent;
 }
 
 /* Toggle this class - hide and show the popup */
@@ -466,23 +509,13 @@ ol li:before {
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .btn-submit:focus {
@@ -491,146 +524,5 @@ ol li:before {
 
 input:focus {
     outline: none !important;;
-    border: 2px solid var(--purple);
-}
-
-
-/* dark mode theme */
-
-.dark-mode {
-    background-color: black;
-}
-
-.dark-mode .wrapper-chart-main {
-    background-color: #1d2226;
-    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
-}
-
-.dark-mode .btn-chart-type {
-    background-color: #1d2226;
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-}
-
-.dark-mode .fa-folder-open {
-    color: #e9e9ea;
-}
-
-.dark-mode .dropDiv {
-    border: 2px dashed #e9e9ea;
-    background-color: #535353;
-}
-
-.dark-mode .drop-span {
-    color: #e9e9ea;
-}
-
-.dark-mode .drop-span.error {
-    color: var(--red-error);
-}
-
-.dark-mode .form-control,
-.dark-mode .form-control h5,
-.dark-mode .form-control span {
-    color: #e9e9ea;
-    background-color: #1d2226;
-}
-
-.dark-mode .fa-floppy-disk:hover,
-.dark-mode .fa-trash-can:hover,
-.dark-mode .fa-download:hover,
-.dark-mode .fa-share-nodes:hover,
-.dark-mode .fa-circle-check:hover,
-.dark-mode .fa-edit:hover {
-    color: var(--light-purple);
-}
-
-.dark-mode .btn-icon {
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-    background-color: #1d2226;
-}
-
-.dark-mode .btn-icon .fa-italic,
-.dark-mode .btn-icon .fa-bold {
-    color: #e9e9ea;
-}
-
-.dark-mode .btn-icon {
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-    background-color: #1d2226;
-}
-
-.dark-mode .btn-icon-selected {
-    background-color: #484a4b;
-}
-
-.dark-mode .size-select {
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-    background-color: #1d2226;
-}
-
-.dark-mode .name-display {
-    color: #e9e9ea;
-}
-
-.dark-mode .name-input {
-    background-color: #1d2226;
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-}
-
-.dark-mode .fa-check-circle:hover {
-    color: var(--light-green);
-}
-
-.dark-mode .fa-times-circle:hover {
-    color: var(--light-red);
-}
-
-.dark-mode .popup .popuptext {
-    background-color: var(--black);
-    color: var(--white);
-    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
-}
-
-.dark-mode .popup .downloadPopup {
-    background-color: var(--black);
-    box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
-}
-
-.dark-mode .popup .downloadPopup::after {
-    border-color: transparent transparent var(--black) transparent;
-}
-
-.dark-mode .fa-file-pdf,
-.dark-mode .fa-file-image,
-.dark-mode .btn-dw {
-    background-color: #1d2226;
-    color: #e9e9ea;
-    border: 1px solid #e9e9ea;
-}
-
-.dark-mode .form-label {
-    color: #e9e9ea;
-}
-
-.dark-mode ol li:before {
-    border-left: 15px solid #1d2226;
-}
-
-.dark-mode #crumbs ol li:last-child {
-    color: #1d2226;
-}
-
-.dark-mode .gen-main-div h6,
-.dark-mode .gen-main-div h5,
-.dark-mode .fa-caret-left {
-    color: #e9e9ea;
-}
-
-.dark-mode .btn-back span {
-    color: #e9e9ea;
+    border: 1px solid var(--primary-color);
 }

@@ -111,16 +111,16 @@ changeNameBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Change name failed!');
+                    showFailure('Change name failed!');
                 }
                 return;
             }
-            showMsg('Profile details updated.', true);
+            showSuccess('Profile details updated.');
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     });
 }
@@ -179,16 +179,16 @@ changePasswdBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Change password failed!');
+                    showFailure('Change password failed!');
                 }
                 return;
             }
-            showMsg('Password updated.', true);
+            showSuccess('Password updated.');
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     });
 }
@@ -214,19 +214,18 @@ deleteBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Delete account failed!');
+                    showFailure('Delete account failed!');
                 }
                 return;
             }
-            setTimeout(() => {
+            showSuccess('Account deactivated.', () => {
                 window.location = '/';
-            }, 4000);
-            showMsg('Account deactivated.', true);
+            });
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     });
 }

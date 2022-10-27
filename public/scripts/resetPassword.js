@@ -47,19 +47,18 @@ submitBtn.onclick = e => {
                                 break;
                         }
                     } else {
-                        showMsg(data['reason']);
+                        showFailure(data['reason']);
                     }
                 } else {
-                    showMsg('Password reset failed!');
+                    showFailure('Password reset failed!');
                 }
                 return;
             }
-            setTimeout(() => {
+            showSuccess('Account password reset successfull.', () => {
                 window.location = '/login';
-            }, 4000);
-            showMsg('Account password reset successfull.', true);
+            });
         } catch (error) {
-            showMsg('Something went wrong! Please try again.');
+            showFailure('Something went wrong! Please try again.');
         }
     });
 }
