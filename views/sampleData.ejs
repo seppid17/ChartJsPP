@@ -36,6 +36,7 @@
 
             <div class="container">
                 <div class="wrapper">
+
                     <div class="btn-type-row">
                         <button class="btn btn-type" id="SampleBarChart">Bar Chart</button>
                         <button class="btn btn-type" id="SamplePieChart">Pie Chart</button>
@@ -45,207 +46,199 @@
                         <button class="btn btn-type" id="SampleScatterChart">Scatter Chart</button>
                         <button class="btn btn-type" id="SampleBubbleChart">Bubble Chart</button>
                         <button class="btn btn-type" id="SampleSunburstChart">Sunburst Chart</button>
-                        <button class="btn btn-type" id="SampleTreemapChart">Treemap Chart</button>
                         <button class="btn btn-type" id="SampleIcicleChart">Icicle Chart</button>
+                        <button class="btn btn-type" id="SampleTreemapChart">Treemap Chart</button>
                     </div>
 
-                    <div class="card p-2" id="cardBarChart">
-                        <div class="row">
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/BarChart.png" alt="Card image cap">
-                            </div>
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Bar Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
+                    <div class="card-chart d-md-flex" id="cardBarChart">
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/BarChart.png" alt="Card image cap">
+                        </div>
 
-                                </div>
+                        <div class="card-wrapper p-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Bar Chart</h5>
+                                <p class="card-text">A bar chart is a graph with rectangular bars. 
+                                    Bar charts should be used when you are showing segments of information.
+                                    They are useful to compare different categorical or discrete variables,
+                                    such as age groups, classes, schools, etc., as long as there are not too many categories to compare.
+                                    They are also very useful for time series data.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="card p-2" id="cardPieChart">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Pie Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardPieChart">
+                        <div class="card-wrapper p-4">
+                            <div class="card-body" style="text-align: right;">
+                                <h5 class="card-title">Pie Chart</h5>
+                                <p class="card-text">A pie chart is a circular statistical graphic,
+                                    which is divided into slices to illustrate numerical proportion.
+                                    Pie charts can be used to show percentages of a whole,
+                                    and represents percentages at a set point in time.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/PieChart.png" alt="Card image cap">
+                        </div>
+
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/PieChart.png" alt="Card image cap">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardDoughnutChart">
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/DoughnutChart.png" alt="Card image cap">
+                        </div>
+
+                        <div class="card-wrapper p-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Doughnut Chart</h5>
+                                <p class="card-text">Just like a pie chart, a doughnut chart shows the relationship of parts to a whole,
+                                    but a doughnut chart can contain more than one data series.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="card p-2" id="cardDoughnutChart">
-                        <div class="row">
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/DoughnutChart.png" alt="Card image cap">
-                            </div>
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Doughnut Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardLineChart">
+                        <div class="card-wrapper p-4">
+                            <div class="card-body" style="text-align: right;">
+                                <h5 class="card-title">Line Chart</h5>
+                                <p class="card-text">A line chart is a type of chart used to show information that changes over time. 
+                                    Line charts are created by plotting a series of several points and connecting them with a straight line. 
+                                    Line charts are used to track changes over short and long periods.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
+                            </div>
+                        </div>
+
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/LineChart.png" alt="Card image cap">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardPolaChart">
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/PolaChart.png" alt="Card image cap">
+                        </div>
+
+                        <div class="card-wrapper p-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Polar Chart</h5>
+                                <p class="card-text">A Polar Chart (also known as a Web or Spider Graph) can help you to display 
+                                    different data points on a radial axis. The visualization design is often used to compare 
+                                    multivariate data sets. Besides, it's plotted in a Cartesian plane where the x-axis is 
+                                    wrapped around the perimeter</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="card p-2" id="cardLineChart">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Line Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardScatterChart">
+                        <div class="card-wrapper p-4">
+                            <div class="card-body" style="text-align: right;">
+                                <h5 class="card-title">Scatter Chart</h5>
+                                <p class="card-text">A scatter plot uses dots to represent values for two different numeric variables. 
+                                    The position of each dot on the horizontal and vertical axis indicates values for an individual 
+                                    data point. They are are commonly used for displaying and comparing numeric values. These charts 
+                                    are useful to show the relationships among the numeric values in several data series</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/LineChart.png" alt="Card image cap">
+                        </div>
+
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/ScatterChart.png" alt="Card image cap">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardBubbleChart">
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/BubbleChart.png" alt="Card image cap">
+                        </div>
+
+                        <div class="card-wrapper p-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Bubble Chart</h5>
+                                <p class="card-text">A bubble chart is a data visualization that displays multiple circles in a 
+                                    two-dimensional plot. Bubble charts can be used when data has three data series that each 
+                                    contain a set of values. The sizes of the bubbles are determined by the values in the third 
+                                    data series. Bubble charts are often used to present financial data.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="card p-2" id="cardPolaChart">
-                        <div class="row">
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/PolaChart.png" alt="Card image cap">
-                            </div>
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Pola Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardSunburstChart">
+                        <div class="card-wrapper p-4">
+                            <div class="card-body" style="text-align: right;">
+                                <h5 class="card-title">Sunburst Chart</h5>
+                                <p class="card-text">Sunburst chart is ideal for displaying hierarchical data. Each level of the 
+                                    hierarchy is represented by one ring or circle. Items in the hierarchy are laid out radially, 
+                                    with the top of the hierarchy at the center and deeper levels farther away from the center.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
+                            </div>
+                        </div>
+
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardIcicleChart">
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/IcicleChart.png" alt="Card image cap">
+                        </div>
+
+                        <div class="card-wrapper p-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Icicle Chart</h5>
+                                <p class="card-text">Icicle charts are used to visualize hierarchical data, and offer a way to 
+                                    easily spot clusters and understand to which level of a hierarchy they belong. Icicle 
+                                    charts also help to identify relationships in the data.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="card p-2" id="cardScatterChart">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Scatter Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/ScatterChart.png" alt="Card image cap">
+                    <hr>
+
+                    <div class="card-chart d-md-flex" id="cardTreemapChart">
+                        <div class="card-wrapper p-4">
+                            <div class="card-body" style="text-align: right;">
+                                <h5 class="card-title">Treemap Chart</h5>
+                                <p class="card-text">Treemapping is a data visualization technique that displays hierarchical 
+                                    data using rectangles of decreasing sizes. Treemaps are often used for sales data, as 
+                                    they capture relative sizes of data categories, allowing for quick perception of the items 
+                                    that are large contributors to each category.</p>
+                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample Data</button>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="card p-2" id="cardBubbleChart">
-                        <div class="row">
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/BubbleChart.png" alt="Card image cap">
-                            </div>
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Bubble Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
-                            </div>
+                        <div class="img-area">
+                            <img class="image-labal" src="/images/TreemapChart.png" alt="Card image cap">
                         </div>
                     </div>
-                    <br>
-                    <div class="card p-2" id="cardSunburstChart">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Sunburst Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
 
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="card p-2" id="cardTreemapChart">
-                        <div class="row">
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/TreemapChart.png" alt="Card image cap">
-                            </div>
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Treemap Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <br>
-                    <div class="card p-2" id="cardIcicleChart">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="card-body">
-                                    <h5 class="card-title">Icicle Chart</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk of the card's content.</p>
-                                    <!-- <a href="#" class="btn btn-primary"> Sample Data</a> -->
-                                    <button class="btn btn-submit"><i class="fa-solid fa-download Don-icon"></i>Sample
-                                        Data</button>
-
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <img class="image-labal" src="/images/IcicleChart.png" alt="Card image cap">
-                            </div>
-                        </div>
-                    </div>
-                    <br>
                 </div>
             </div>
+
             <script src="/scripts/common.js"></script>
             <script src="/scripts/sampleData.js"></script>
-
-
             <!-- Bootstrap js-->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
                 integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"

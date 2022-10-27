@@ -209,7 +209,7 @@
 .switch {
     position: fixed;
     display: inline-block;
-    width: 50px;
+    width: 45px;
     height: 29px;
     right: 20px;
     bottom: 15px;
@@ -228,7 +228,7 @@
     position: absolute;
     cursor: pointer;
     top: 0;
-    left: 0;
+    left: -5.5px;
     right: 0;
     bottom: 0;
     background-color: var(--bg-wrapper);

@@ -72,12 +72,28 @@ body {
 }
 
 .btn-type {
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
     width: fit-content;
+    padding: 3px 10px;
+    border: 1px solid var(--text-secondary);
+    margin: 0 5px 5px 0;
+    font-weight: normal;
+    font-size: small;
+}
+
+.btn-type:hover {
+    color: var(--text-primary);
+}
+
+.btn-dwn {
     background-color: var(--primary-color);
-    padding: 3px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 2px;
+    color: var(--btn-text);
+    width: fit-content;
+    padding: 3px 10px;
+    margin: 0;
+    font-weight: normal;
+    font-size: medium;
 }
 
 .text-new-signup {
@@ -96,15 +112,18 @@ body {
 
 .wrapper {
     padding: 10px;
-    max-width: 1500px;
+    max-width: 1100px;
     min-height: 550px;
     margin: 50px auto;
     background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
+    align-items: center;
 }
 
 .btn-type-row {
-    margin-bottom: 10px;
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .name {
@@ -116,6 +135,40 @@ body {
     margin: auto;
     max-width: 80%;
     /* margin-bottom: 0px; */
+}
+
+.img-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* background: var(--bg-gradient); */
+    padding: 20px 20px;
+    min-width: 55%;
+}
+
+.card-wrapper {
+    min-width: 45%;
+}
+
+.card-body {
+    padding: 0rem 1rem;
+}
+
+.card-title {
+    color: var(--text-primary);
+}
+
+.card-text {
+    color: var(--text-secondary);
+}
+
+hr {
+    color: var(--text-secondary) !important;
+    height: 2px !important;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 95%;
+    margin: auto;
 }
 
 .form-control {
