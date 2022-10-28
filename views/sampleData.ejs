@@ -42,7 +42,7 @@
                         <button class="btn btn-type" id="SamplePieChart">Pie Chart</button>
                         <button class="btn btn-type" id="SampleDoughnutChart">Doughnut Chart</button>
                         <button class="btn btn-type" id="SampleLineChart">Line Chart</button>
-                        <button class="btn btn-type" id="SamplePolaChart">Pola Chart</button>
+                        <button class="btn btn-type" id="SamplePolarChart">Polar Chart</button>
                         <button class="btn btn-type" id="SampleScatterChart">Scatter Chart</button>
                         <button class="btn btn-type" id="SampleBubbleChart">Bubble Chart</button>
                         <button class="btn btn-type" id="SampleSunburstChart">Sunburst Chart</button>
@@ -60,7 +60,7 @@
                                     They are useful to compare different categorical or discrete variables as long as there 
                                     are not too many categories to compare. They are also very useful for time series data.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="barDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -80,7 +80,7 @@
                                     Pie charts can be used to show percentages of a whole,
                                     and represents percentages at a set point in time.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="pieDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -98,7 +98,7 @@
                                     Just like a pie chart, a doughnut chart shows the relationship
                                     of parts to a whole,
                                     but a doughnut chart can contain more than one data series.</p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="doughnutDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -117,7 +117,7 @@
                                     changes over time.
                                     Line charts are used to track changes over short and long periods.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="lineDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -128,7 +128,7 @@
 
                         <hr>
 
-                        <div class="card-chart" id="cardPolaChart">
+                        <div class="card-chart" id="cardPolarChart">
                             <div class="chart-text chart-text__pull-right p-4">
                                 <h5 class="chart-title">Polar Chart</h5>
                                 <p class="chart-details">
@@ -136,12 +136,12 @@
                                     different data points on a radial axis. It's plotted in a Cartesian plane where the x-axis
                                     is wrapped around the perimeter
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="polarDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
                             <div class="chart-img chart-img__left chart-img__pull-right">
-                                <img class="image-labal" src="/images/PolaChart.png" alt="Card image cap">
+                                <img class="image-labal" src="/images/PolarChart.png" alt="Card image cap">
                             </div>
                         </div>
 
@@ -155,7 +155,7 @@
                                     numeric variables.
                                     These charts are useful to show the relationships among the numeric values in several data series
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="scatterDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -173,7 +173,7 @@
                                     A bubble chart is a data visualization that displays multiple
                                     circles in a two-dimensional plot. Bubble charts are often used to present financial data.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="bubbleDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -192,7 +192,7 @@
                                     in the hierarchy are laid out radially, with the top of the hierarchy at the center
                                     and deeper levels farther away from the center.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="sunburstDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -211,7 +211,7 @@
                                     offer a way to easily spot clusters and understand to which level of a hierarchy
                                     they belong.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="icicleDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 
@@ -230,7 +230,7 @@
                                     relative sizes of data categories, allowing for quick perception of the items that
                                     are large contributors to each category.
                                 </p>
-                                <button class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                <button id="treemapDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
                                     Data</button>
                             </div>
 

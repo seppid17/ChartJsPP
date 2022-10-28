@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+// api function to check if the user is logged in
 router.all('/isLogged', (req, res) => {
     if (req.session.loggedIn === true && req.session.user) {
         let user = req.session.user;
@@ -10,6 +11,7 @@ router.all('/isLogged', (req, res) => {
     }
 });
 
+// if not logged in, save the target and redirect to login
 router.get(/.*/, (req, res, next) => {
     if (req.session.loggedIn === true && req.session.user) {
         next();
@@ -19,6 +21,7 @@ router.get(/.*/, (req, res, next) => {
     }
 });
 
+// if not logged in, send Unauthorized
 router.all(/.*/, (req, res, next) => {
     if (req.session.loggedIn === true && req.session.user) {
         next();
