@@ -5,6 +5,42 @@ const crypto = require('crypto');
 const saveChart = async (req, res) => {
     try {
         let { name, thumbnail, type, data, properties, id } = req.body;
+        if (!name) {
+            res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'name' });
+            return;
+        }
+        if (!Validator.validate('name', name)) {
+            res.json({ 'success': false, 'reason': 'Invalid name', 'field': 'name' });
+            return;
+        }
+        if (!type) {
+            res.json({ 'success': false, 'reason': 'Type cannot be empty', 'field': 'type' });
+            return;
+        }
+        if (!Validator.validate('type', type)) {
+            res.json({ 'success': false, 'reason': 'Invalid type', 'field': 'type' });
+            return;
+        }
+        if (!data) {
+            res.json({ 'success': false, 'reason': 'Data cannot be empty', 'field': 'data' });
+            return;
+        }
+        if (!Validator.validate('json', data)) {
+            res.json({ 'success': false, 'reason': 'Invalid data', 'field': 'data' });
+            return;
+        }
+        if (!properties) {
+            res.json({ 'success': false, 'reason': 'Properties cannot be empty', 'field': 'properties' });
+            return;
+        }
+        if (!Validator.validate('json', properties)) {
+            res.json({ 'success': false, 'reason': 'Invalid properties', 'field': 'properties' });
+            return;
+        }
+        if (!thumbnail) {
+            res.json({ 'success': false, 'reason': 'Thumbnail cannot be empty', 'field': 'thumbnail' });
+            return;
+        }
         const user = req.session.user;
         var date = new Date();
         var dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -33,6 +69,15 @@ const saveChart = async (req, res) => {
                 });
             });
         } else {
+            if (!id) {
+                res.json({ 'success': false, 'reason': 'Id cannot be empty', 'field': 'id' });
+                return;
+            }
+            if (!Validator.validate('id', id)) {
+                res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
+                return;
+            }
+
             let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
             ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
                 if (!doc) {
@@ -87,37 +132,40 @@ async function getChartData(id) {
 
 const retrieveChartCommon = async (req, res, owner) => {
     let { id } = req.body;
-    if (id == undefined) {
-        console.log('no id');
-        res.json({ 'success': false, 'reason': 'No chart ID provided' });
-    } else {
-        try {
-            let chartInfo = await getChartInfo(id);
-            if (chartInfo == null) {
-                res.json({ 'success': false, 'reason': 'Chart not found' });
-                return;
-            }
-            if (!chartInfo.shared && owner == null) {
-                res.json({ 'success': false, 'reason': 'NotShared' });
-                return;
-            }
-            if (!chartInfo.shared && chartInfo.owner !== owner) {
-                res.json({ 'success': false, 'reason': 'You are not the owner of this chart' });
-                return;
-            }
-            if (owner == null || chartInfo.owner !== owner) {
-                chartInfo.owner = null;
-            }
-            let chartData = await getChartData(id);
-            if (chartData == null) {
-                res.json({ 'success': false });
-                return;
-            }
-            res.json({ 'success': true, 'info': chartInfo, 'data': chartData });
-        } catch (err) {
-            console.log(err);
-            res.json({ 'success': false });
+    if (!id) {
+        res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
+        return;
+    }
+    if (!Validator.validate('id', id)) {
+        res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
+        return;
+    }
+    try {
+        let chartInfo = await getChartInfo(id);
+        if (chartInfo == null) {
+            res.json({ 'success': false, 'reason': 'Chart not found' });
+            return;
         }
+        if (!chartInfo.shared && owner == null) {
+            res.json({ 'success': false, 'reason': 'NotShared' });
+            return;
+        }
+        if (!chartInfo.shared && chartInfo.owner !== owner) {
+            res.json({ 'success': false, 'reason': 'You are not the owner of this chart' });
+            return;
+        }
+        if (owner == null || chartInfo.owner !== owner) {
+            chartInfo.owner = null;
+        }
+        let chartData = await getChartData(id);
+        if (chartData == null) {
+            res.json({ 'success': false });
+            return;
+        }
+        res.json({ 'success': true, 'info': chartInfo, 'data': chartData });
+    } catch (err) {
+        console.log(err);
+        res.json({ 'success': false });
     }
 };
 
@@ -168,44 +216,50 @@ const getChartList = async (req, res) => {
 const deleteChart = async (req, res) => {
     let { id } = req.body;
     const user = req.session.user;
-    if (id == undefined) {
-        console.log('no id');
-        res.json({ 'success': false, 'reason': 'No chart ID provided' });
-    } else {
-        try {
-            let infoResult = await ChartInfo.deleteOne({ id: id, owner: user.email });
-            if (infoResult.acknowledged !== true || infoResult.deletedCount <= 0) {
-                res.json({ 'success': false });
-                return;
-            }
-            let dataResult = await ChartData.deleteOne({ id: id });
-            if (dataResult.acknowledged !== true || dataResult.deletedCount <= 0) {
-                res.json({ 'success': false });
-                return;
-            }
-            res.json({ 'success': true });
-        } catch (err) {
-            console.log(err);
+    if (!id) {
+        res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
+        return;
+    }
+    if (!Validator.validate('id', id)) {
+        res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
+        return;
+    }
+    try {
+        let infoResult = await ChartInfo.deleteOne({ id: id, owner: user.email });
+        if (infoResult.acknowledged !== true || infoResult.deletedCount <= 0) {
             res.json({ 'success': false });
+            return;
         }
+        let dataResult = await ChartData.deleteOne({ id: id });
+        if (dataResult.acknowledged !== true || dataResult.deletedCount <= 0) {
+            res.json({ 'success': false });
+            return;
+        }
+        res.json({ 'success': true });
+    } catch (err) {
+        console.log(err);
+        res.json({ 'success': false });
     }
 };
 
 const shareChart = async (req, res) => {
     let { id } = req.body;
     const user = req.session.user;
-    if (id == undefined) {
-        console.log('no id');
-        res.json({ 'success': false, 'reason': 'No chart ID provided' });
-    } else {
-        try {
-            let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: true });
-            let success = (doc != null);
-            res.json({ 'success': success });
-        } catch (err) {
-            console.log(err);
-            res.json({ 'success': false });
-        }
+    if (!id) {
+        res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
+        return;
+    }
+    if (!Validator.validate('id', id)) {
+        res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
+        return;
+    }
+    try {
+        let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: true });
+        let success = (doc != null);
+        res.json({ 'success': success });
+    } catch (err) {
+        console.log(err);
+        res.json({ 'success': false });
     }
 };
 

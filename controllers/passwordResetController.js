@@ -81,7 +81,7 @@ const resetPassword = (req, res) => {
         return;
     }
     if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'password'  });
+        res.json({ 'success': false, 'reason': 'Invalid password format', 'field': 'password' });
         return;
     }
     if (!Validator.validate('token', token)) {

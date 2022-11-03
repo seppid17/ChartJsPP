@@ -15,7 +15,7 @@ beforeAll(async () => {
 
     chartInfo = await ChartInfo.find({}); // ,{thumbnail:0}
     chartData = await ChartData.find({}); // ,{data:0}
-    users = await User.find({});
+    users = await User.find({ active: true });
     signupRequests = await SignupRequest.find({});
 });
 
@@ -74,7 +74,7 @@ test('Test 7: Charts must have valid name,owner,lastModified,thumbnail', () => {
     chartInfo.forEach(item => {
         expect(Validator.validate('email', item.owner)).toBeTruthy();
         expect(Validator.validate('name', item.name)).toBeTruthy();
-        expect(item.lastModified).toMatch(/^\d{2}\/\d{2}\/\d{4}$/);
+        expect(item.lastModified).toMatch(/^\d{1,2}\/\d{1,2}\/\d{4}$/);
         expect(item.thumbnail.length > 0).toBeTruthy();
     });
 });
