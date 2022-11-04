@@ -21,6 +21,11 @@ let isJson = jsonstr => {
         return false;
     }
 }
+/**
+ * This test cases for deleteAccount function that is in the accountController.js file.
+ * This function uses to delete the user account after validating the user current password
+ * .This testcases check those validation process.
+ */
 
 test('Test 1: Password cannot be empty', async() => {
     let res = await user1.post(domain+"/account/delete").send({});
