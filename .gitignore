@@ -3,6 +3,7 @@ node_modules/
 .idea/
 .trash/
 .env
+test/test.env
 package-lock.json
 TODO.txt
 startmongo.sh
