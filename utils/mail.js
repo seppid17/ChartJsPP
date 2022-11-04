@@ -13,7 +13,7 @@ class Mailer {
         Mailer.templates = templates;
     }
 
-    static sendMail(templateName, to, link, cb) {
+    static sendMail(templateName, to, link, cb = null) {
         let template = Mailer.templates[templateName];
         var mailOptions = {
             from: Mailer.sender,
@@ -21,7 +21,11 @@ class Mailer {
             subject: template.subject,
             html: template.body.replaceAll("#LINK", link)
         };
-        Mailer.transporter.sendMail(mailOptions, cb);
+        if (cb == null) { // return a promise
+            return Mailer.transporter.sendMail(mailOptions);
+        } else { // use the callback
+            Mailer.transporter.sendMail(mailOptions, cb);
+        }
     }
 }
 

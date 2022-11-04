@@ -13,42 +13,43 @@ const activateView = (req, res) => {
     res.render("activate", {});
 }
 
-const requestUser = (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
-    if (!email) {
-        console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
-        return;
-    }
-    if (!Validator.validate('email', email)) {
-        res.json({ 'success': false, 'reason': 'Invalid email', 'field': 'email' });
-        return;
-    }
-    if (!firstName) {
-        res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'firstname' });
-        return;
-    }
-    if (!Validator.validate('name', firstName)) {
-        res.json({ 'success': false, 'reason': 'Invalid first name', 'field': 'firstname' });
-        return;
-    }
-    if (!lastName) {
-        res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'lastname' });
-        return;
-    }
-    if (!Validator.validate('name', lastName)) {
-        res.json({ 'success': false, 'reason': 'Invalid last name', 'field': 'lastname' });
-        return;
-    }
-    if (!password) {
-        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
-        return;
-    }
-    if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password', 'field': 'password' });
-        return;
-    }
-    User.findOne({ email: email, active: true }).then(user => {
+const requestUser = async (req, res) => {
+    try {
+        const { email, password, firstName, lastName } = req.body;
+        if (!email) {
+            console.log("Fill empty fields");
+            res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
+            return;
+        }
+        if (!Validator.validate('email', email)) {
+            res.json({ 'success': false, 'reason': 'Invalid email', 'field': 'email' });
+            return;
+        }
+        if (!firstName) {
+            res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'firstname' });
+            return;
+        }
+        if (!Validator.validate('name', firstName)) {
+            res.json({ 'success': false, 'reason': 'Invalid first name', 'field': 'firstname' });
+            return;
+        }
+        if (!lastName) {
+            res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'lastname' });
+            return;
+        }
+        if (!Validator.validate('name', lastName)) {
+            res.json({ 'success': false, 'reason': 'Invalid last name', 'field': 'lastname' });
+            return;
+        }
+        if (!password) {
+            res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
+            return;
+        }
+        if (!Validator.validate('password', password)) {
+            res.json({ 'success': false, 'reason': 'Invalid password', 'field': 'password' });
+            return;
+        }
+        let user = await User.findOne({ email: email, active: true });
         if (user) {
             console.log("email exists");
             res.json({ 'success': false, 'reason': "This email already exists", 'field': 'email' });
@@ -56,70 +57,63 @@ const requestUser = (req, res) => {
         }
         let token = crypto.randomBytes(16).toString('hex');
         let timestamp = Math.floor(Date.now() / 1000) + 3600;
+        //Password Hashing
+        let hash = await bcrypt.hash(password, 12);
+        if (!hash) {
+            throw 'hashing error';
+        }
         const signupRequest = new SignupRequest({
             email: email,
-            password: password,
+            password: hash,
             firstName: firstName,
             lastName: lastName,
             token: token,
             expiry: timestamp,
             used: false
         });
-        //Password Hashing
-        bcrypt.hash(signupRequest.password, 12, (err, hash) => {
-            if (err) throw err;
-            signupRequest.password = hash;
-            signupRequest.save()
-                .then(() => {
-                    const proxyHost = req.headers["x-forwarded-host"];
-                    const host = proxyHost ? proxyHost : req.headers.host;
-                    let link = req.protocol + '://' + host + '/activate/' + email + '/' + token;
-                    Mailer.sendMail("activate", email, link, (error, info) => {
-                        if (error) {
-                            console.log(error);
-                            res.json({ 'success': false, 'reason': 'Email sending failed! Try again later.' });
-                        } else {
-                            // console.log('Email sent: ' + info.response);
-                            res.json({ 'success': true });
-                        }
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.json({ 'success': false });
-                });
-        });
-    }).catch(err => {
+        await signupRequest.save();
+        const proxyHost = req.headers["x-forwarded-host"];
+        const host = proxyHost ? proxyHost : req.headers.host;
+        let link = req.protocol + '://' + host + '/activate/' + email + '/' + token;
+        try {
+            await Mailer.sendMail("activate", email, link);
+            res.json({ 'success': true });
+        } catch (error) {
+            console.log(error);
+            res.json({ 'success': false, 'reason': 'Email sending failed! Try again later.' });
+        }
+    } catch (err) {
         console.log(err);
         res.json({ 'success': false });
-    });
+    };
 };
 
-const activateAccount = (req, res) => {
-    const { password } = req.body;
-    const { email, token } = req.params;
-    if (!email || !token) {
-        console.log("Fill empty fields");
-        res.json({ 'success': false, 'reason': 'Some required fields are empty' });
-        return;
-    }
-    if (!password) {
-        res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
-        return;
-    }
-    if (!Validator.validate('email', email)) {
-        res.json({ 'success': false, 'reason': 'Account activation failed! Invalid email format.' });
-        return;
-    }
-    if (!Validator.validate('password', password)) {
-        res.json({ 'success': false, 'reason': 'Invalid password format.', 'field': 'password' });
-        return;
-    }
-    if (!Validator.validate('token', token)) {
-        res.json({ 'success': false, 'reason': 'Account activation failed! Invalid token format.' });
-        return;
-    }
-    SignupRequest.findOne({ email: email, token: token }).then((requestUser) => {
+const activateAccount = async (req, res) => {
+    try {
+        const { password } = req.body;
+        const { email, token } = req.params;
+        if (!email || !token) {
+            console.log("Fill empty fields");
+            res.json({ 'success': false, 'reason': 'Some required fields are empty' });
+            return;
+        }
+        if (!Validator.validate('email', email)) {
+            res.json({ 'success': false, 'reason': 'Account activation failed! Invalid email format.' });
+            return;
+        }
+        if (!Validator.validate('token', token)) {
+            res.json({ 'success': false, 'reason': 'Account activation failed! Invalid token format.' });
+            return;
+        }
+        if (!password) {
+            res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
+            return;
+        }
+        if (!Validator.validate('password', password)) {
+            res.json({ 'success': false, 'reason': 'Invalid password format.', 'field': 'password' });
+            return;
+        }
+        let requestUser = await SignupRequest.findOne({ email: email, token: token, used: false });
         if (!requestUser) {
             res.json({ 'success': false, 'reason': 'Account activation failed! Invalid token.' });
             return;
@@ -130,38 +124,32 @@ const activateAccount = (req, res) => {
             res.json({ 'success': false, 'reason': 'Account activation failed! Token is expired.' });
             return;
         }
-        bcrypt.compare(password, requestUser.password).then(matching => {
-            if (matching) {
-                const user = new User({
-                    email: requestUser.email,
-                    password: requestUser.password,
-                    firstName: requestUser.firstName,
-                    lastName: requestUser.lastName,
-                    active: true
-                });
-                User.findOneAndUpdate({ email: email, active: true }, { $setOnInsert: user }, { upsert: true }, (err, doc) => {
-                    if (err || (doc && !doc.isNew)) {
-                        console.log(err);
-                        res.json({ 'success': false });
-                        return;
-                    }
-                    SignupRequest.findOneAndUpdate({ email: email, token: token }, { used: true }).then(updatedRequest => {
-                    }).catch(err => {
-                        console.log(err);
-                    });
-                    res.json({ 'success': true });
-                });
-            } else {
-                res.json({ 'success': false, 'reason': 'Incorrect password', 'field': 'password' });
+        let matching = await bcrypt.compare(password, requestUser.password);
+        if (matching === true) {
+            const user = new User({
+                email: requestUser.email,
+                password: requestUser.password,
+                firstName: requestUser.firstName,
+                lastName: requestUser.lastName,
+                active: true
+            });
+            let doc = await User.findOneAndUpdate({ email: email, active: true }, { $setOnInsert: user }, { upsert: true });
+            if (doc && !doc.isNew) {
+                throw 'Adding new user failed';
             }
-        }).catch(err => {
-            console.log(err);
-            res.json({ 'success': false });
-        });
-    }).catch(err => {
+            let updatedRequest = await SignupRequest.findOneAndUpdate({ email: email, token: token }, { used: true });
+            if (updatedRequest) {
+                res.json({ 'success': true });
+            } else {
+                throw 'Error while signup token expiring';
+            }
+        } else {
+            res.json({ 'success': false, 'reason': 'Incorrect password', 'field': 'password' });
+        }
+    } catch (err) {
         console.log(err);
         res.json({ 'success': false });
-    });
+    }
 };
 
 module.exports = { signupView, activateView, requestUser, activateAccount };
