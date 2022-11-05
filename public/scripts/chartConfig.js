@@ -163,6 +163,11 @@ class BasicChartConfig extends ChartConfig {
             this.config.data.datasets[0].data = data;
         }
     }
+
+    _update() {
+        this.config.options.scales.x.ticks.color = Chart.defaults.color;
+        this.config.options.scales.y.ticks.color = Chart.defaults.color;
+    }
 }
 
 class BarChartConfig extends BasicChartConfig {
@@ -194,6 +199,9 @@ class PieChartConfig extends BasicChartConfig {
             }
         });
     }
+
+    _update() {
+    }
 }
 
 class LineChartConfig extends BasicChartConfig {
@@ -217,6 +225,11 @@ class LineChartConfig extends BasicChartConfig {
         super.setData(data);
         this.config.data.datasets[0].borderColor = Chart.defaults.color;
     }
+
+    _update(){
+        super._update();
+        this.config.data.datasets[0].borderColor = Chart.defaults.color;
+    }
 }
 
 class DoughnutChartConfig extends BasicChartConfig {
@@ -230,6 +243,9 @@ class DoughnutChartConfig extends BasicChartConfig {
             }
         });
     }
+
+    _update() {
+    }
 }
 
 class PolarAreaChartConfig extends BasicChartConfig {
@@ -242,6 +258,10 @@ class PolarAreaChartConfig extends BasicChartConfig {
                 autoPadding: false
             }
         });
+    }
+
+    _update(){
+        this.config.options.scales.r.ticks.color = Chart.defaults.color;
     }
 }
 
@@ -296,7 +316,7 @@ class RadarChartConfig extends BasicChartConfig {
                 }
             },
             scales: {
-                y:{
+                y: {
                     display: false
                 },
                 r: {
@@ -311,7 +331,8 @@ class RadarChartConfig extends BasicChartConfig {
     }
 
     _update() {
-        super._update();
+        this.config.options.scales.r.ticks.color = Chart.defaults.color;
+        this.config.options.scales.r.pointLabels.color = Chart.defaults.color;
         this.config.options.scales.r.pointLabels.font.size = Chart.defaults.font.size;
     }
 
