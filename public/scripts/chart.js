@@ -43,6 +43,8 @@ darkBtn.onclick = e => {
 Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
+Chart.defaults.borderColor = '#8e909240';
+Chart.defaults.scale.ticks.backdropColor = '#0000';
 
 let chartID = '';
 let chartName = 'Untitled';
@@ -164,6 +166,18 @@ const drawChart = (data) => {
                 values.push({ x: val[0], y: val[1], r: val[2] });
             });
             myChart = new BubbleChartConfig();
+            break;
+        }
+        case 'radar': {
+            data.forEach(item => {
+                var val = item.v;
+                if (val.length !== 1) {
+                    console.log('invalid data for', type);
+                    return;
+                }
+                values.push(val[0]);
+            });
+            myChart = new RadarChartConfig();
             break;
         }
         case 'sunburst': {
@@ -560,7 +574,7 @@ markerSizeSelect.onchange = e => {
         markerSizeSelect.value = radius;
         Chart.defaults.elements.point.radius = radius;
         Chart.defaults.elements.point.hoverRadius = radius + 3;
-        ChartConfig.update();
+        ChartConfig.update('none');
     }
 };
 
@@ -571,7 +585,7 @@ markerStyleSelect.onchange = e => {
         style = markerStyleSelect.value;
     }
     Chart.defaults.elements.point.pointStyle = style;
-    ChartConfig.update();
+    ChartConfig.update('none');
 };
 
 fontSizeSelect.onchange = e => {
@@ -586,7 +600,7 @@ fontSizeSelect.onchange = e => {
         }
         fontSizeSelect.value = size;
         Chart.defaults.font.size = size;
-        ChartConfig.update();
+        ChartConfig.update('none');
     }
 };
 
@@ -599,7 +613,7 @@ fontStyleBtn.onclick = e => {
         Chart.defaults.font.style = 'normal';
         fontStyleBtn.classList.remove('btn-icon-selected');
     }
-    ChartConfig.update();
+    ChartConfig.update('none');
 };
 
 fontWeightBtn.onclick = e => {
@@ -611,7 +625,7 @@ fontWeightBtn.onclick = e => {
         Chart.defaults.font.weight = 'normal';
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
-    ChartConfig.update();
+    ChartConfig.update('none');
 };
 
 function rgb2hex(rgb) {
@@ -721,6 +735,10 @@ function drawSavedChart(info, type, data, properties) {
         }
         case 'bubble': {
             myChart = new BubbleChartConfig();
+            break;
+        }
+        case 'radar': {
+            myChart = new RadarChartConfig();
             break;
         }
         case 'sunburst': {

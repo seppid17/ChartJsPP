@@ -1,5 +1,5 @@
 function genColor(n) {
-    return `rgba(${(121*n+51)%192+48},${(52*n+203)%192+48},${(165*n+67)%192+48},1)`
+    return `rgba(${(121 * n + 51) % 192 + 48},${(52 * n + 203) % 192 + 48},${(165 * n + 67) % 192 + 48},1)`
 }
 
 class ChartConfig {
@@ -48,23 +48,24 @@ class ChartConfig {
                         ChartConfig.chart._metasets[0].controller.pointers[point.index].clr = ColorInput.value
                     }
                     colors[point.index] = ColorInput.value;
-                    
+
                     myChart.update('none');
                 }
-                if (ChartConfig.instance instanceof HierarchicalChartConfig){
-                let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
-                if (clicked.c.length == 0) document.getElementById('expandBtnDiv').style.display = 'none'; // hide expand button if the selected element dosent have child
-                document.getElementById('expandBtn').onclick = e => {
-                    
-                    path = setPath(clicked);
-                    while (breadcrumb.hasChildNodes()) {
-                        breadcrumb.removeChild(breadcrumb.firstChild);
+                if (ChartConfig.instance instanceof HierarchicalChartConfig) {
+                    let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
+                    if (clicked.c.length == 0) document.getElementById('expandBtnDiv').style.display = 'none'; // hide expand button if the selected element dosent have child
+                    document.getElementById('expandBtn').onclick = e => {
+
+                        path = setPath(clicked);
+                        while (breadcrumb.hasChildNodes()) {
+                            breadcrumb.removeChild(breadcrumb.firstChild);
+                        }
+                        path.forEach(createBreadcrumb);
+                        popup.classList.remove('show');
+                        backDiv.style.display = 'block'
+                        myChart.update('expand ' + point.index);
                     }
-                    path.forEach(createBreadcrumb);
-                    popup.classList.remove('show');
-                    backDiv.style.display = 'block'
-                    myChart.update('expand ' + point.index);
-                }}
+                }
             }
         };
         ChartConfig.instance = this;
@@ -103,11 +104,15 @@ class ChartConfig {
         ChartConfig.chart = new Chart(ChartConfig.canvas, this.config);
     }
 
+    _update() {
+    }
+
     static update(mode) {
         if (ChartConfig.canvas == null) {
             return;
         }
         if (ChartConfig.chart instanceof Chart) {
+            ChartConfig.instance._update();
             ChartConfig.chart.update(mode);
         }
     }
@@ -207,6 +212,11 @@ class LineChartConfig extends BasicChartConfig {
             }
         });
     }
+
+    setData(data) {
+        super.setData(data);
+        this.config.data.datasets[0].borderColor = Chart.defaults.color;
+    }
 }
 
 class DoughnutChartConfig extends BasicChartConfig {
@@ -268,6 +278,48 @@ class BubbleChartConfig extends BasicChartConfig {
                 }
             }
         });
+    }
+}
+
+class RadarChartConfig extends BasicChartConfig {
+    constructor() {
+        super('radar');
+        super.setOptions({
+            maintainAspectRatio: false,
+            responsive: true,
+            layout: {
+                autoPadding: false
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y:{
+                    display: false
+                },
+                r: {
+                    pointLabels: {
+                        font: {
+                            size: Chart.defaults.font.size
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    _update() {
+        super._update();
+        this.config.options.scales.r.pointLabels.font.size = Chart.defaults.font.size;
+    }
+
+    setData(data) {
+        super.setData(data);
+        if (this.config && this.config.data.datasets.length > 0) {
+            this.config.data.datasets[0].fill = false;
+        }
     }
 }
 
