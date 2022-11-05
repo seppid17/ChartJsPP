@@ -229,6 +229,25 @@ function checkTheme() {
     }
 }
 
+function checkLogged() {
+    let nav = document.getElementById('navbar');
+    if (!nav) return;
+    let xhrSender = new XHRSender();
+    xhrSender.send('/isLogged', xhr => {
+        try {
+            let data = JSON.parse(xhr.responseText);
+            if (data.hasOwnProperty('logged') && data['logged'] == true) {
+                nav.classList.remove('notLogged');
+                nav.classList.add('logged');
+            } else {
+                nav.classList.remove('logged');
+                nav.classList.add('notLogged');
+            }
+        } catch (error) {
+        }
+    });
+}
+
 darkBtn.onclick = e => {
     darkBtn.innerText = isDark ? 'dark' : 'light'
     switchTheme(!isDark)
@@ -240,10 +259,12 @@ darkBtn.onclick = e => {
 
 document.onvisibilitychange = e => {
     if (document.visibilityState == 'visible') {
+        checkLogged();
         checkTheme();
     }
 }
 
+checkLogged();
 checkTheme();
 
 if (typeof module != 'undefined') {
