@@ -539,6 +539,7 @@ document.getElementById('editName').onclick = e => {
         name = nameInput.value;
         chartNameView.innerText = name;
         chartName = name;
+        ChartConfig.instance.setName(chartName);
     };
     document.getElementById('cancelEditName').onclick = e => {
         nameView.style.display = 'block';
@@ -740,8 +741,8 @@ function drawSavedChart(info, type, data, properties) {
             return;
             break;
     }
-    myChart.setName(chartName);
     myChart.setSavedData(data);
+    myChart.setName(chartName);
     chartViewDiv.style.display = 'block';
     alertDiv.style.display = 'none';
     myChart.draw();

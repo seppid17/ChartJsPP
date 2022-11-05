@@ -125,7 +125,7 @@ class BasicChartConfig extends ChartConfig {
     constructor(type) {
         super(type);
         var colors = [];
-        var dataConf = {
+        this.config.data = {
             labels: [],
             datasets: [{
                 label: this.name,
@@ -135,7 +135,6 @@ class BasicChartConfig extends ChartConfig {
                 borderWidth: 1
             }]
         };
-        this.config.data = dataConf;
     }
 
     setLabels(data) {
@@ -170,16 +169,6 @@ class BarChartConfig extends BasicChartConfig {
             layout: {
                 autoPadding: false
             },
-            /*scales: {
-                y: {
-                    beginAtZero: true
-                },
-                x: {
-                    ticks: {
-                        font: { size: 20 }
-                    }
-                }
-            },*/
             plugins: {
                 legend: {
                     display: false
@@ -211,16 +200,6 @@ class LineChartConfig extends BasicChartConfig {
             layout: {
                 autoPadding: false
             },
-            /*scales: {
-                y: {
-                    beginAtZero: true
-                },
-                x: {
-                    ticks: {
-                        font: { size: 20 }
-                    }
-                }
-            },*/
             plugins: {
                 legend: {
                     display: false
@@ -264,12 +243,6 @@ class ScatterChartConfig extends BasicChartConfig {
             responsive: true,
             layout: {
                 autoPadding: false
-            },
-            scales: {
-                x: {
-                    type: 'linear',
-                    position: 'bottom'
-                }
             },
             plugins: {
                 legend: {
