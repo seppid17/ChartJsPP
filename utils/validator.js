@@ -5,6 +5,7 @@ class Validator {
         email: 40,
         password: 15,
         name: 30,
+        chartName: 40,
         token: 32,
         id: 32
     }
@@ -14,6 +15,7 @@ class Validator {
         email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         password: /^[\x21-\x7E]{8,15}$/,
         name: /^[A-Za-z]{2,30}$/,
+        chartName: /^[\x20-\x7e]{1,40}$/,
         token: /^[0-9a-fA-F]{1,32}$/,
         id: /^[0-9a-fA-F]{1,32}$/
     };

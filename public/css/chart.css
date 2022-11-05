@@ -7,7 +7,7 @@ body.authOnly .onlyAuth {
     display: none;
 }
 
-i {
+i:not(.fa-user-gear) {
     color: var(--color-icon);
     margin: 5px;
 }
@@ -151,51 +151,30 @@ i:hover {
     color: var(--text-primary);
 }
 
-/* .fa-floppy-disk,
-.fa-trash-can,
-.fa-download,
-.fa-share-nodes,
-.fa-circle-check,
-.fa-check-circle,
-.fa-edit {
-    color: var(--purple);
-} */
-
-/* .fa-floppy-disk:hover,
-.fa-trash-can:hover,
-.fa-download:hover,
-.fa-share-nodes:hover,
-.fa-circle-check:hover,
-.fa-check-circle:hover,
-.fa-edit:hover {
-    color: var(--dark-purple);
-    cursor: pointer;
-} */
-
-.fa-times-circle {
+i.fa-times-circle {
     color: var(--color-icon-cancel);
 }
 
-.fa-times-circle:hover {
+i.fa-times-circle:hover {
     color: var(--color-icon-cancel-h);
     cursor: pointer;
 }
 
-.fa-check-circle {
+i.fa-check-circle {
     color: var(--color-icon-success);
 }
 
-.fa-check-circle:hover {
+i.fa-check-circle:hover {
     color: var(--color-icon-success-h);
     cursor: pointer;
 }
 
-.fa-x {
+i.fa-x {
     color: var(--color-icon-cancel);
 }
 
-.fa-italic,
-.fa-bold {
+i.fa-italic,
+i.fa-bold {
     color: var(--text-primary);
 }
 
@@ -203,16 +182,16 @@ i:hover {
     visibility: hidden;
 }
 
-.fa-folder-open {
+i.fa-folder-open {
     margin-bottom: 0;
     width: 100%;
 }
 
-.fa-circle-plus {
+i.fa-circle-plus {
     color: var(--btn-text);
 }
 
-.fa-expand-alt {
+i.fa-expand-alt {
     color: var(--btn-text);
 }
 

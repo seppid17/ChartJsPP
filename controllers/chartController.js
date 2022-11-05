@@ -9,7 +9,7 @@ const saveChart = async (req, res) => {
             res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'name' });
             return;
         }
-        if (!Validator.validate('name', name)) {
+        if (!Validator.validate('chartName', name)) {
             res.json({ 'success': false, 'reason': 'Invalid name', 'field': 'name' });
             return;
         }

@@ -9,6 +9,7 @@ const alertDiv = document.getElementById('alertPop');
 const fontSizeSelect = document.getElementById('fontSize');
 const fontStyleBtn = document.getElementById('italicBtn');
 const fontWeightBtn = document.getElementById('boldBtn');
+const markerSizeSelect = document.getElementById('markerSize');
 
 window.onload = () => {
     let height = window.innerHeight;
@@ -35,6 +36,7 @@ Chart.defaults.font.weight = 'normal';
 let chartID = '';
 let chartName = 'Untitled';
 fontSizeSelect.value = Chart.defaults.font.size;
+markerSizeSelect.value = Chart.defaults.elements.point.radius;
 if (Chart.defaults.font.style == 'italic') {
     fontStyleBtn.classList.add('btn-icon-selected');
 }
@@ -177,6 +179,11 @@ const drawChart = (data) => {
     myChart.setLabels(data);
     myChart.setData(values);
     myChart.draw();
+    if (['line', 'scatter', 'radar'].includes(type)) {
+        document.getElementById('markerSpan').hidden = false;
+    } else {
+        document.getElementById('markerSpan').hidden = true;
+    }
 };
 
 chartDiv.onresize = e => {
@@ -357,7 +364,6 @@ document.getElementById('downloadImg').onclick = e => {
     downloadPopup.classList.remove("show");
 };
 document.getElementById('downloadPdf').onclick = e => {
-    const canvas = document.getElementById("myChart");
     // create image
     let croppedCanvas = getCroppedCanvas(canvas);
     const canvasImage = croppedCanvas.toDataURL();
@@ -382,7 +388,8 @@ document.getElementById('saveBtn').onclick = e => {
     var properties = {
         fontSize: Chart.defaults.font.size,
         fontStyle: Chart.defaults.font.style,
-        fontWeight: Chart.defaults.font.weight
+        fontWeight: Chart.defaults.font.weight,
+        markerSize: Chart.defaults.elements.point.radius
     };
 
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
@@ -533,6 +540,23 @@ document.getElementById('editName').onclick = e => {
     };
 };
 
+markerSizeSelect.onchange = e => {
+    var radius = markerSizeSelect.value;
+    if (/^\d{1,2}$/.test(radius)) {
+        radius = parseInt(radius);
+        if (radius < 1) {
+            radius = 1;
+        }
+        if (radius > 12) {
+            radius = 12;
+        }
+        markerSizeSelect.value = radius;
+        Chart.defaults.elements.point.radius = radius;
+        Chart.defaults.elements.point.hoverRadius = radius + 3;
+        ChartConfig.update();
+    }
+};
+
 fontSizeSelect.onchange = e => {
     var size = fontSizeSelect.value;
     if (/^\d{1,3}$/.test(size)) {
@@ -637,9 +661,22 @@ function setDivPos(d, x, y, mid) {
 
 function drawSavedChart(info, type, data, properties) {
     if (typeof info.name != 'undefined') chartName = info.name;
-    if (typeof properties.fontSize != 'undefined') Chart.defaults.font.size = properties.fontSize;
-    if (typeof properties.fontStyle != 'undefined') Chart.defaults.font.style = properties.fontStyle;
-    if (typeof properties.fontWeight != 'undefined') Chart.defaults.font.weight = properties.fontWeight;
+    if (typeof properties.markerSize != 'undefined') {
+        markerSizeSelect.value = properties.markerSize;
+        markerSizeSelect.onchange(null);
+    }
+    if (typeof properties.fontSize != 'undefined') {
+        fontSizeSelect.value = properties.fontSize;
+        fontSizeSelect.onchange(null);
+    }
+    if (typeof properties.fontStyle != 'undefined') {
+        if (['normal', 'italic'].includes(properties.fontStyle))
+            Chart.defaults.font.style = properties.fontStyle;
+    }
+    if (typeof properties.fontWeight != 'undefined') {
+        if (['normal', 'bold'].includes(properties.fontWeight))
+            Chart.defaults.font.weight = properties.fontWeight;
+    }
     let myChart;
     switch (type) {
         case 'bar': {
@@ -694,12 +731,20 @@ function drawSavedChart(info, type, data, properties) {
     alertDiv.style.display = 'none';
     myChart.draw();
     document.getElementById('chartNameView').innerText = chartName;
-    fontSizeSelect.value = Chart.defaults.font.size;
     if (Chart.defaults.font.style == 'italic') {
         fontStyleBtn.classList.add('btn-icon-selected');
+    } else {
+        fontStyleBtn.classList.remove('btn-icon-selected');
     }
     if (Chart.defaults.font.weight == 'bold') {
         fontWeightBtn.classList.add('btn-icon-selected');
+    } else {
+        fontWeightBtn.classList.remove('btn-icon-selected');
+    }
+    if (['line', 'scatter', 'radar'].includes(type)) {
+        document.getElementById('markerSpan').hidden = false;
+    } else {
+        document.getElementById('markerSpan').hidden = true;
     }
 }
 
