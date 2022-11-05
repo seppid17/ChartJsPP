@@ -2,7 +2,7 @@
     <div class="container-fluid">
 
         <!-- navbar brand -->
-        <a class="navbar-brand" href="\">
+        <a id="home_link" class="navbar-brand" href="\">
             <img id='navbarBrand' src="" alt="Avatar Logo" class="nav-pill">
         </a>
         <!-- <%= pageName %> -->
@@ -19,14 +19,14 @@
 
                 <% if (pageName == "chart" || pageName == "account" || pageName == "home") { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                        <a id="dashboard_link" class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                 <% } %>
                 
 
                 <% if (pageName == "dashboard" || pageName == "account" || pageName == "home") { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/chart">Chart</a>
+                        <a id="chart_link" class="nav-link" href="/chart">Chart</a>
                     </li>
                 <% } %>
 
@@ -36,7 +36,7 @@
                 
                 <% if (pageName == "chart" || pageName == "dashboard") { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/account">
+                        <a id="account_link" class="nav-link" href="/account">
                             <i class="fa-solid fa-user-gear"></i>
                         </a>
                     </li>
@@ -44,19 +44,19 @@
 
                 <% if (pageName == "chart" || pageName == "account" || pageName == "dashboard") { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Sign Out</a>
+                        <a id="signout_link" class="nav-link" href="/logout">Sign Out</a>
                     </li>
                 <% } %>
 
                 <% if (pageName == "signup" || pageName == "home" || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Sign In</a>
+                        <a id="signin_link" class="nav-link" href="/login">Sign In</a>
                     </li>
                 <% } %>
 
                 <% if (pageName == "login" || pageName == "home"  || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/signup">Sign Up</a>
+                        <a id="signup_link" class="nav-link" href="/signup">Sign Up</a>
                     </li>
                 <% } %>
             </ul>

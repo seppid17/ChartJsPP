@@ -7,53 +7,53 @@
                 <h5 class="mb-0">Select chart type:</h5><br>
 
                 <div id="alertPop" style="display: none;" class="alert alert-danger" role="alert">
-                    <big><small>Error message</small>
+                    <big>
+                        <small name="chart_type_error">Error message</small>
                         <a><i class="fa-solid fa-x" id="closeAlert"></i></a>
                     </big>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3">
                     <div class="mb-3">
                         <h6>Basic chart types</h6>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r1" value="bar" autocomplete="off"
                             hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r1">Bar Chart</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r1Lable" for="r1">Bar Chart</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r2" value="pie" autocomplete="off"
                             hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r2">Pie Chart</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r2Lable" for="r2">Pie Chart</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r3" value="line" autocomplete="off"
                             hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r3">Line
-                            Chart</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r3Lable" for="r3">Line Chart</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r4" value="doughnut"
                             autocomplete="off" hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r4">Doughnut
+                        <label class="btn btn-outline-success btn-chart-type" id="r4Lable" for="r4">Doughnut
                             Chart</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r5" value="polarArea"
                             autocomplete="off" hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r5">Polar
+                        <label class="btn btn-outline-success btn-chart-type" id="r5Lable" for="r5">Polar
                             Area</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r6" value="scatter"
                             autocomplete="off" hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r6">Scatter</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r6Lable" for="r6">Scatter</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r7" value="bubble" autocomplete="off"
                             hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r7">Bubble</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r7Lable" for="r7">Bubble</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -63,23 +63,23 @@
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r9" value="sunburst"
                             autocomplete="off" hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r9">Sunburst</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r9Lable" for="r9">Sunburst</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r10" value="treemap"
                             autocomplete="off" hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r10">Tree Map</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r10Lable" for="r10">Tree Map</label>
                     </div>
                     <div class="mb-1">
                         <input type="radio" class="btn-check" name="charttype" id="r11" value="icicle"
                             autocomplete="off" hidden>
-                        <label class="btn btn-outline-success btn-chart-type" for="r11">Icicle</label>
+                        <label class="btn btn-outline-success btn-chart-type" id="r11Lable" for="r11">Icicle</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="text-center dropDiv" id="dropDiv">
-            <label for="selectFileBtn"
+            <label for="selectFileBtn" id="lableSelectFileBtn"
                 style="width: 100%; height: 100%; padding-left: 5px; padding-right: 5px; padding-top: 50px; padding-bottom: 50px;">
                 <i class="fa-solid fa-folder-open fa-5x"></i>
                 <div>
