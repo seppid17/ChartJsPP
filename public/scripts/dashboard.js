@@ -41,12 +41,12 @@ function setCards() {
                 ul.classList.add('list-group');
                 ul.classList.add('list-group-flush');
                 cardDiv.appendChild(ul);
-                
+
                 let li1 = document.createElement('li');
                 li1.classList.add('list-group-item');
                 li1.classList.add('card-img-area');
                 ul.appendChild(li1);
-                
+
                 let img = document.createElement('img');
                 img.classList.add('card-img-top');
                 img.alt = 'Chart thumbnail';
@@ -85,10 +85,7 @@ function setCards() {
                 a.onclick = evt => {
                     evt.preventDefault();
                     evt.stopPropagation();
-                    promptConfirmation('Are you sure you want to delete ' + chart.name + '?');
-                    document.getElementById("popupconfirm").onclick = e => {
-                        document.getElementById("overlay").style.display = 'none';
-                        document.getElementById("msgPopup").style.display = 'none';
+                    promptConfirmation('Are you sure you want to delete ' + chart.name + '?', () => {
                         let xhrSender = new XHRSender();
                         xhrSender.addField('id', chart.id);
                         xhrSender.send('/chart/delete', xhr => {
@@ -110,7 +107,7 @@ function setCards() {
                                 showFailure('Delete failed!');
                             }
                         });
-                    };
+                    });
                 }
                 let i = document.createElement('i');
                 i.classList.add('fa-solid');

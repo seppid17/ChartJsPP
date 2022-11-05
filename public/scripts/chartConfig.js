@@ -11,7 +11,7 @@ class ChartConfig {
         this.config = {};
         this.config.type = type;
         this.name = '';
-        backDiv.style.display = "none"
+        backDiv.style.display = 'none'
         while (breadcrumb.hasChildNodes()) {
             breadcrumb.removeChild(breadcrumb.firstChild);
         }
@@ -22,9 +22,9 @@ class ChartConfig {
             } else {
                 document.getElementById('expandBtnDiv').style.display = 'none';
             }
-            let popup = document.getElementById("myPopup");
-            popup.classList.remove("show");
-            downloadPopup.classList.remove("show");
+            let popup = document.getElementById('chartEditPopup');
+            popup.classList.remove('show');
+            downloadPopup.classList.remove('show');
             let myChart = ChartConfig.chart;
             if (!myChart) {
                 return;
@@ -34,7 +34,7 @@ class ChartConfig {
             if (points.length) {
                 const point = points[points.length - 1];
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
-                popup.classList.toggle("show");
+                popup.classList.toggle('show');
                 //set the current olor to colorPicker
                 let crntColor = null;
                 if (/^#[0-9A-F]{6}$/i.test(colors[point.index])) {
@@ -61,8 +61,8 @@ class ChartConfig {
                         breadcrumb.removeChild(breadcrumb.firstChild);
                     }
                     path.forEach(createBreadcrumb);
-                    popup.classList.remove("show");
-                    backDiv.style.display = "block"
+                    popup.classList.remove('show');
+                    backDiv.style.display = 'block'
                     myChart.update('expand ' + point.index);
                 }}
             }

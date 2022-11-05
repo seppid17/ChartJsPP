@@ -10,6 +10,16 @@ const fontSizeSelect = document.getElementById('fontSize');
 const fontStyleBtn = document.getElementById('italicBtn');
 const fontWeightBtn = document.getElementById('boldBtn');
 const markerSizeSelect = document.getElementById('markerSize');
+const chartNameView = document.getElementById('chartNameView');
+const markerSpan = document.getElementById('markerSpan');
+const downloadPopup = document.getElementById('downloadPopup');
+const nameView = document.getElementById('nameView');
+const nameEdit = document.getElementById('nameEdit');
+const nameInput = document.getElementById('nameInput');
+const colorPicker = document.getElementById('ColorInput');
+const backDiv = document.getElementById('backDiv');
+const breadcrumb = document.getElementById('breadcrumbA');
+let chartEditPopup = document.getElementById('chartEditPopup');
 
 window.onload = () => {
     let height = window.innerHeight;
@@ -45,7 +55,7 @@ if (Chart.defaults.font.weight == 'bold') {
 }
 
 Chart.register({
-    id: "legendColorUpdate",
+    id: 'legendColorUpdate',
     afterRender: function (c) {
         var legends = c.legend.legendItems;
         var colors = c.data.datasets[0].backgroundColor;
@@ -180,9 +190,9 @@ const drawChart = (data) => {
     myChart.setData(values);
     myChart.draw();
     if (['line', 'scatter', 'radar'].includes(type)) {
-        document.getElementById('markerSpan').hidden = false;
+        markerSpan.hidden = false;
     } else {
-        document.getElementById('markerSpan').hidden = true;
+        markerSpan.hidden = true;
     }
 };
 
@@ -205,7 +215,7 @@ function getCroppedCanvas(canvas) {
     var width_source = canvas.width;
     var height_source = canvas.height;
 
-    var ctx = canvas.getContext("2d");
+    var ctx = canvas.getContext('2d');
     var img = ctx.getImageData(0, 0, width_source, height_source);
     var data = img.data;
 
@@ -260,7 +270,7 @@ function getCroppedCanvas(canvas) {
     let canvas2 = document.createElement('canvas');
     canvas2.width = width;
     canvas2.height = height;
-    let ctx2 = canvas2.getContext("2d");
+    let ctx2 = canvas2.getContext('2d');
     ctx2.putImageData(img2, 0, 0);
     return canvas2;
 }
@@ -280,7 +290,7 @@ function make_thumb(canvas, width, height) {
     var x_off = (width_source - width * ratio_max) / 2;
     var y_off = (height_source - height * ratio_max) / 2;
 
-    var ctx = canvas.getContext("2d");
+    var ctx = canvas.getContext('2d');
     var img = ctx.getImageData(0, 0, width_source, height_source);
     var img2 = ctx.createImageData(width, height);
     var data = img.data;
@@ -346,7 +356,7 @@ function make_thumb(canvas, width, height) {
     canvas2.width = width;
     canvas2.height = height;
     //draw
-    let ctx2 = canvas2.getContext("2d");
+    let ctx2 = canvas2.getContext('2d');
     ctx2.putImageData(img2, 0, 0);
     return canvas2.toDataURL('image/png', 0.8);
 }
@@ -361,7 +371,7 @@ document.getElementById('downloadImg').onclick = e => {
 
     downLinkTmp.click();
     downLinkTmp.remove();
-    downloadPopup.classList.remove("show");
+    downloadPopup.classList.remove('show');
 };
 document.getElementById('downloadPdf').onclick = e => {
     // create image
@@ -372,7 +382,7 @@ document.getElementById('downloadPdf').onclick = e => {
     const doc = new jsPDF(croppedCanvas.width < croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width + padding * 2, croppedCanvas.height + padding * 2]);
     doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
     doc.save(chartName + '.pdf');
-    downloadPopup.classList.remove("show");
+    downloadPopup.classList.remove('show');
 }
 
 document.getElementById('saveBtn').onclick = e => {
@@ -405,7 +415,7 @@ document.getElementById('saveBtn').onclick = e => {
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                     if (resp['reason'] == 'Unauthorized') {
                         popupLogin(success => {
                             if (success) {
@@ -423,7 +433,7 @@ document.getElementById('saveBtn').onclick = e => {
                 return;
             }
             showSuccess('Chart saved');
-            document.getElementsByTagName("body")[0].classList.remove('authOnly');
+            document.getElementsByTagName('body')[0].classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
                 chartID = resp['id'];
             }
@@ -439,17 +449,14 @@ document.getElementById('deleteBtn').onclick = e => {
         showFailure('Chart is not saved');
         return;
     }
-    promptConfirmation('Are you sure you want to delete this chart?');
-    document.getElementById("popupconfirm").onclick = e => {
-        document.getElementById("overlay").style.display = 'none';
-        document.getElementById("msgPopup").style.display = 'none';
+    promptConfirmation('Are you sure you want to delete this chart?', () => {
         let xhrSender = new XHRSender();
         xhrSender.addField('id', chartID);
         let cb = xhr => {
             try {
                 let resp = JSON.parse(xhr.responseText);
                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                         if (resp['reason'] == 'Unauthorized') {
                             popupLogin(success => {
                                 if (success) {
@@ -474,7 +481,7 @@ document.getElementById('deleteBtn').onclick = e => {
             }
         };
         xhrSender.send('/chart/delete', cb);
-    };
+    });
 };
 
 document.getElementById('shareBtn').onclick = e => {
@@ -488,7 +495,7 @@ document.getElementById('shareBtn').onclick = e => {
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                     if (resp['reason'] == 'Unauthorized') {
                         popupLogin(success => {
                             if (success) {
@@ -506,7 +513,7 @@ document.getElementById('shareBtn').onclick = e => {
                 return;
             }
             showSuccess('Chart shared');
-            document.getElementsByTagName("body")[0].classList.remove('authOnly');
+            document.getElementsByTagName('body')[0].classList.remove('authOnly');
         } catch (error) {
             showFailure('Share failed!');
         }
@@ -515,23 +522,19 @@ document.getElementById('shareBtn').onclick = e => {
 };
 
 document.getElementById('CloseEdit').onclick = e => {
-    let popup = document.getElementById("myPopup");
-    popup.classList.remove("show");
+    chartEditPopup.classList.remove('show');
 }
-
-let nameView = document.getElementById('nameView')
-let nameEdit = document.getElementById('nameEdit')
 
 document.getElementById('editName').onclick = e => {
     nameView.style.display = 'none';
     nameEdit.style.display = 'block';
-    let name = document.getElementById('chartNameView').innerText
-    document.getElementById('nameInput').value = name;
+    let name = chartNameView.innerText
+    nameInput.value = name;
     document.getElementById('saveName').onclick = e => {
         nameView.style.display = 'block';
         nameEdit.style.display = 'none';
-        name = document.getElementById('nameInput').value;
-        document.getElementById('chartNameView').innerText = name;
+        name = nameInput.value;
+        chartNameView.innerText = name;
         chartName = name;
     };
     document.getElementById('cancellEditName').onclick = e => {
@@ -597,19 +600,14 @@ fontWeightBtn.onclick = e => {
     ChartConfig.update();
 };
 
-const colorPicker = document.getElementById('ColorInput');
-
 function rgb2hex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-    return (rgb && rgb.length === 4) ? "#" +
-        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+    return (rgb && rgb.length === 4) ? '#' +
+        ('0' + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+        ('0' + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+        ('0' + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
 }
 
-const backDiv = document.getElementById('backDiv');
-
-const breadcrumb = document.getElementById('breadcrumbA');
 let path = [];
 
 document.getElementById('backBtn').onclick = e => {
@@ -730,7 +728,7 @@ function drawSavedChart(info, type, data, properties) {
     chartViewDiv.style.display = 'block';
     alertDiv.style.display = 'none';
     myChart.draw();
-    document.getElementById('chartNameView').innerText = chartName;
+    chartNameView.innerText = chartName;
     if (Chart.defaults.font.style == 'italic') {
         fontStyleBtn.classList.add('btn-icon-selected');
     } else {
@@ -742,9 +740,9 @@ function drawSavedChart(info, type, data, properties) {
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
     if (['line', 'scatter', 'radar'].includes(type)) {
-        document.getElementById('markerSpan').hidden = false;
+        markerSpan.hidden = false;
     } else {
-        document.getElementById('markerSpan').hidden = true;
+        markerSpan.hidden = true;
     }
 }
 
@@ -757,7 +755,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !resp.hasOwnProperty('data')) {
                 let errMsg;
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                     if (resp['reason'] == 'Unauthorized') {
                         xhrSender.send('/chart/retrieveShared', cb);
                         return;
@@ -783,7 +781,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             }
             let info = resp.info;
             if (info.owner == null) {
-                document.getElementsByTagName("body")[0].classList.add('authOnly');
+                document.getElementsByTagName('body')[0].classList.add('authOnly');
             }
             let data = resp.data;
             let chartData = JSON.parse(data.data);
@@ -796,19 +794,15 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
     xhrSender.send('/chart/retrieve', cb);
 }
 
-let downloadPopup = document.getElementById("downloadPopup");
-
 document.getElementById('downloadBtn').onclick = e => {
     e.stopImmediatePropagation(); // prevents document.onclick()
-    let popup = document.getElementById("myPopup");
-    downloadPopup.classList.toggle("show");
-    popup.classList.remove("show");
+    downloadPopup.classList.toggle('show');
+    chartEditPopup.classList.remove('show');
 }
 
 document.onclick = e => {
-    let popup = document.getElementById("myPopup");
-    downloadPopup.classList.remove("show");
-    popup.classList.remove("show");
+    downloadPopup.classList.remove('show');
+    chartEditPopup.classList.remove('show');
 }
 
 setCallback(drawChart);

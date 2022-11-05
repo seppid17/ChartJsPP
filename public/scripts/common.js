@@ -141,8 +141,13 @@ function showFailure(msg, onclosed = () => { }) {
     showMsg(msg, false, onclosed);
 }
 
-function promptConfirmation(msg) {
+function promptConfirmation(msg, onconfirm = () => { }) {
     displayMsgConfirm(msg, true, true);
+    document.getElementById('popupconfirm').onclick = e => {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('msgPopup').style.display = 'none';
+        onconfirm();
+    }
 }
 
 function setCookie(cname, cvalue, exdays) {
