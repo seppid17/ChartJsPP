@@ -10,6 +10,7 @@ const fontSizeSelect = document.getElementById('fontSize');
 const fontStyleBtn = document.getElementById('italicBtn');
 const fontWeightBtn = document.getElementById('boldBtn');
 const markerSizeSelect = document.getElementById('markerSize');
+const markerStyleSelect = document.getElementById('markerStyle');
 const chartNameView = document.getElementById('chartNameView');
 const markerSpan = document.getElementById('markerSpan');
 const downloadPopup = document.getElementById('downloadPopup');
@@ -47,6 +48,7 @@ let chartID = '';
 let chartName = 'Untitled';
 fontSizeSelect.value = Chart.defaults.font.size;
 markerSizeSelect.value = Chart.defaults.elements.point.radius;
+markerStyleSelect.value = Chart.defaults.elements.point.pointStyle;
 if (Chart.defaults.font.style == 'italic') {
     fontStyleBtn.classList.add('btn-icon-selected');
 }
@@ -399,7 +401,8 @@ document.getElementById('saveBtn').onclick = e => {
         fontSize: Chart.defaults.font.size,
         fontStyle: Chart.defaults.font.style,
         fontWeight: Chart.defaults.font.weight,
-        markerSize: Chart.defaults.elements.point.radius
+        markerSize: Chart.defaults.elements.point.radius,
+        markerStyle: Chart.defaults.elements.point.pointStyle
     };
 
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
@@ -560,6 +563,16 @@ markerSizeSelect.onchange = e => {
     }
 };
 
+markerStyleSelect.onchange = e => {
+    var style = markerStyleSelect.value;
+    if (!['circle', 'cross', 'crossRot', 'dash', 'line', 'rect', 'rectRounded', 'rectRot', 'star', 'triangle'].includes(style)) {
+        markerStyleSelect.value = 'circle';
+        style = markerStyleSelect.value;
+    }
+    Chart.defaults.elements.point.pointStyle = style;
+    ChartConfig.update();
+};
+
 fontSizeSelect.onchange = e => {
     var size = fontSizeSelect.value;
     if (/^\d{1,3}$/.test(size)) {
@@ -662,6 +675,10 @@ function drawSavedChart(info, type, data, properties) {
     if (typeof properties.markerSize != 'undefined') {
         markerSizeSelect.value = properties.markerSize;
         markerSizeSelect.onchange(null);
+    }
+    if (typeof properties.markerStyle != 'undefined') {
+        markerStyleSelect.value = properties.markerStyle;
+        markerStyleSelect.onchange(null);
     }
     if (typeof properties.fontSize != 'undefined') {
         fontSizeSelect.value = properties.fontSize;
