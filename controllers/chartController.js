@@ -52,22 +52,18 @@ const saveChart = async (req, res) => {
             }
             id = crypto.randomBytes(16).toString('hex');
             let chartInfo = { id: id, owner: user.email, name: name, shared: false, lastModified: dateStr, thumbnail: thumbnail };
-            ChartInfo.findOneAndUpdate({ id: id }, { $setOnInsert: chartInfo }, { upsert: true }, (err, doc) => {
-                if (err || (doc && !doc.isNew)) {
-                    console.log(err);
-                    res.json({ 'success': false });
-                    return;
-                }
-                let chartData = { id: id, type: type, data: data, properties: properties };
-                ChartData.findOneAndUpdate({ id: id }, { $setOnInsert: chartData }, { upsert: true }, (err, doc) => {
-                    if (err || (doc && !doc.isNew)) {
-                        console.log(err);
-                        res.json({ 'success': false });
-                        return;
-                    }
-                    res.json({ 'success': true, 'id': id });
-                });
-            });
+            let infoDoc = await ChartInfo.findOneAndUpdate({ id: id }, { $setOnInsert: chartInfo }, { upsert: true });
+            if (infoDoc && !infoDoc.isNew) {
+                res.json({ 'success': false });
+                return;
+            }
+            let chartData = { id: id, type: type, data: data, properties: properties };
+            let dataDoc = await ChartData.findOneAndUpdate({ id: id }, { $setOnInsert: chartData }, { upsert: true });
+            if (dataDoc && !dataDoc.isNew) {
+                res.json({ 'success': false });
+                return;
+            }
+            res.json({ 'success': true, 'id': id });
         } else {
             if (!id) {
                 res.json({ 'success': false, 'reason': 'Id cannot be empty', 'field': 'id' });
@@ -79,22 +75,18 @@ const saveChart = async (req, res) => {
             }
 
             let chartInfo = { name: name, lastModified: dateStr, thumbnail: thumbnail };
-            ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo).then(doc => {
-                if (!doc) {
-                    res.json({ 'success': false });
-                    return;
-                }
-                let chartData = { id: id, type: type, data: data, properties: properties };
-                ChartData.findOneAndUpdate({ id: id }, chartData).then(doc => {
-                    res.json({ 'success': true });
-                }).catch(err => {
-                    console.log(err);
-                    res.json({ 'success': false });
-                });
-            }).catch(err => {
-                console.log(err);
+            let infoDoc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, chartInfo);
+            if (!infoDoc) {
                 res.json({ 'success': false });
-            });
+                return;
+            }
+            let chartData = { id: id, type: type, data: data, properties: properties };
+            let doc = await ChartData.findOneAndUpdate({ id: id }, chartData);
+            if (!doc) {
+                res.json({ 'success': false });
+                return;
+            }
+            res.json({ 'success': true });
         }
     } catch (e) {
         console.log(e);

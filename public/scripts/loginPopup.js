@@ -80,6 +80,7 @@ function popupLogin(ondone) {
                     return;
                 }
                 passwdInput.value = '';
+                checkLogged();
                 ondone(true);
                 popup.style.display = 'none';
                 overlay.style.display = 'none';

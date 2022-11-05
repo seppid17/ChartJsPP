@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav id="navbar" class="navbar navbar-expand-lg logged notLogged">
     <div class="container-fluid">
 
         <!-- navbar brand -->
@@ -17,14 +17,14 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
 
-                <% if (pageName == "chart" || pageName == "account" || pageName == "home") { %>
-                    <li class="nav-item">
-                        <a id="dashboard_link" class="nav-link" href="/dashboard">Dashboard</a>
+                <% if (pageName != "dashboard") { %>
+                    <li class="nav-item loggedOnly">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                 <% } %>
                 
 
-                <% if (pageName == "dashboard" || pageName == "account" || pageName == "home") { %>
+                <% if (pageName != "chart") { %>
                     <li class="nav-item">
                         <a id="chart_link" class="nav-link" href="/chart">Chart</a>
                     </li>
@@ -34,29 +34,27 @@
 
             <ul class="navbar-nav ms-auto">
                 
-                <% if (pageName == "chart" || pageName == "dashboard") { %>
-                    <li class="nav-item">
-                        <a id="account_link" class="nav-link" href="/account">
+                <% if (pageName != "account") { %>
+                    <li class="nav-item loggedOnly">
+                        <a class="nav-link" href="/account">
                             <i class="fa-solid fa-user-gear"></i>
                         </a>
                     </li>
                 <% } %>
 
-                <% if (pageName == "chart" || pageName == "account" || pageName == "dashboard") { %>
-                    <li class="nav-item">
-                        <a id="signout_link" class="nav-link" href="/logout">Sign Out</a>
+                <li class="nav-item loggedOnly">
+                    <a class="nav-link" href="/logout">Sign Out</a>
+                </li>
+
+                <% if (pageName != "login") { %>
+                    <li class="nav-item notLoggedOnly">
+                        <a class="nav-link" href="/login">Sign In</a>
                     </li>
                 <% } %>
 
-                <% if (pageName == "signup" || pageName == "home" || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
-                    <li class="nav-item">
-                        <a id="signin_link" class="nav-link" href="/login">Sign In</a>
-                    </li>
-                <% } %>
-
-                <% if (pageName == "login" || pageName == "home"  || pageName == "resetPassword" || pageName == "forgotPassword" || pageName == "activate") { %>
-                    <li class="nav-item">
-                        <a id="signup_link" class="nav-link" href="/signup">Sign Up</a>
+                <% if (pageName != "signup") { %>
+                    <li class="nav-item notLoggedOnly">
+                        <a class="nav-link" href="/signup">Sign Up</a>
                     </li>
                 <% } %>
             </ul>
