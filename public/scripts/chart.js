@@ -540,7 +540,7 @@ document.getElementById('editName').onclick = e => {
         chartNameView.innerText = name;
         chartName = name;
     };
-    document.getElementById('cancellEditName').onclick = e => {
+    document.getElementById('cancelEditName').onclick = e => {
         nameView.style.display = 'block';
         nameEdit.style.display = 'none';
     };
