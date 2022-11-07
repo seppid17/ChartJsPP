@@ -45,6 +45,7 @@ Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
 Chart.defaults.borderColor = '#8e909240';
 Chart.defaults.scale.ticks.backdropColor = '#0000';
+Chart.defaults.plugins.legend.position = 'bottom';
 
 let chartID = '';
 let chartName = 'Untitled';
