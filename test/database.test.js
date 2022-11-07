@@ -73,7 +73,7 @@ test('Test 6: Charts must have an existing owner', () => {
 test('Test 7: Charts must have valid name,owner,lastModified,thumbnail', () => {
     chartInfo.forEach(item => {
         expect(Validator.validate('email', item.owner)).toBeTruthy();
-        expect(Validator.validate('name', item.name)).toBeTruthy();
+        expect(Validator.validate('chartName', item.name)).toBeTruthy();
         expect(item.lastModified).toMatch(/^\d{1,2}\/\d{1,2}\/\d{4}$/);
         expect(item.thumbnail.length > 0).toBeTruthy();
     });
