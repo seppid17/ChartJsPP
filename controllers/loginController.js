@@ -16,7 +16,6 @@ const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email) {
-            console.log("Fill empty fields");
             res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
             return;
         }
@@ -25,7 +24,6 @@ const loginUser = async (req, res) => {
             return;
         }
         if (!password) {
-            console.log("Fill empty fields");
             res.json({ 'success': false, 'reason': 'Password cannot be empty', 'field': 'password' });
             return;
         }

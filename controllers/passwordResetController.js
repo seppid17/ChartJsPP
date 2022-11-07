@@ -17,7 +17,6 @@ const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
         if (!email) {
-            console.log("Fill empty fields");
             res.json({ 'success': false, 'reason': "Email cannot be empty.", 'field': 'email' });
             return;
         }
@@ -27,7 +26,6 @@ const forgotPassword = async (req, res) => {
         }
         let user = await User.findOne({ email: email, active: true });
         if (!user) {
-            console.log("email does not exist");
             res.json({ 'success': false, 'reason': "This email does not exist.", 'field': 'email' });
             return;
         }
@@ -62,7 +60,6 @@ const resetPassword = async (req, res) => {
         const { password } = req.body;
         const { email, token } = req.params;
         if (!email || !token) {
-            console.log("Fill empty fields");
             res.json({ 'success': false, 'reason': 'Some required fields are empty' });
             return;
         }
@@ -84,13 +81,11 @@ const resetPassword = async (req, res) => {
         }
         let resetPasswordRequest = await ResetPasswordRequest.findOne({ email: email, token: token, used: false });
         if (!resetPasswordRequest) {
-            console.log("invalid or expired token");
             res.json({ 'success': false, 'reason': 'Password reset failed! Invalid token.' });
             return;
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (resetPasswordRequest.expiry < timestampNow) {
-            console.log("expired");
             res.json({ 'success': false, 'reason': 'Password reset failed! Token is expired.' });
             return;
         }

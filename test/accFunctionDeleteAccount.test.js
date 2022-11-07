@@ -1,6 +1,5 @@
 const dotenv =  require("dotenv");
 const { json } = require("express");
-dotenv.config({ path: ".env" });
 dotenv.config({ path: "test/test.env" });
 const superagent = require('superagent');
 const user1 = superagent.agent();

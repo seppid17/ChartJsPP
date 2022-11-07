@@ -17,7 +17,6 @@ const requestUser = async (req, res) => {
     try {
         const { email, password, firstName, lastName } = req.body;
         if (!email) {
-            console.log("Fill empty fields");
             res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
             return;
         }
@@ -51,7 +50,6 @@ const requestUser = async (req, res) => {
         }
         let user = await User.findOne({ email: email, active: true });
         if (user) {
-            console.log("email exists");
             res.json({ 'success': false, 'reason': "This email already exists", 'field': 'email' });
             return;
         }
@@ -93,7 +91,6 @@ const activateAccount = async (req, res) => {
         const { password } = req.body;
         const { email, token } = req.params;
         if (!email || !token) {
-            console.log("Fill empty fields");
             res.json({ 'success': false, 'reason': 'Some required fields are empty' });
             return;
         }
@@ -120,7 +117,6 @@ const activateAccount = async (req, res) => {
         }
         let timestampNow = Math.floor(Date.now() / 1000);
         if (requestUser.expiry < timestampNow) {
-            console.log("expired");
             res.json({ 'success': false, 'reason': 'Account activation failed! Token is expired.' });
             return;
         }
