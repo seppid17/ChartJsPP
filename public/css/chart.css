@@ -205,7 +205,7 @@ i.fa-expand-alt {
     max-width: 100%;
     min-height: 550px;
     margin: 50px auto;
-    padding: 20px 40px;
+    padding: 20px 0;
     padding-bottom: 45px;
     background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
@@ -359,6 +359,7 @@ i.fa-expand-alt {
 
 #crumbs {
     overflow: hidden;
+    white-space: nowrap;
 }
 
 ol {
