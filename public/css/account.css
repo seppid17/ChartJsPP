@@ -127,10 +127,13 @@ body {
 .form-control label,
 .form-label {
     color: var(--text-primary);
-    color: var(--text-primary);
     display: inline-block;
     margin: 0;
     font-weight: bold;
+}
+
+.form-label-delete {
+    color: black
 }
 
 

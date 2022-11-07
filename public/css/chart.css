@@ -505,3 +505,14 @@ input:focus {
     outline: none !important;;
     border: 1px solid var(--primary-color);
 }
+
+.marker-select {
+    background-color: var(--bg-wrapper);
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 7px;
+    width: fit-content;
+}

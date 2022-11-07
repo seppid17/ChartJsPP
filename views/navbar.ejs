@@ -19,7 +19,7 @@
 
                 <% if (pageName != "dashboard") { %>
                     <li class="nav-item loggedOnly">
-                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                        <a id="dashboard_link" class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                 <% } %>
                 
@@ -36,25 +36,25 @@
                 
                 <% if (pageName != "account") { %>
                     <li class="nav-item loggedOnly">
-                        <a class="nav-link" href="/account">
+                        <a id="account_link" class="nav-link" href="/account">
                             <i class="fa-solid fa-user-gear"></i>
                         </a>
                     </li>
                 <% } %>
 
                 <li class="nav-item loggedOnly">
-                    <a class="nav-link" href="/logout">Sign Out</a>
+                    <a id="signout_link" class="nav-link" href="/logout">Sign Out</a>
                 </li>
 
                 <% if (pageName != "login") { %>
                     <li class="nav-item notLoggedOnly">
-                        <a class="nav-link" href="/login">Sign In</a>
+                        <a id="signin_link" class="nav-link" href="/login">Sign In</a>
                     </li>
                 <% } %>
 
                 <% if (pageName != "signup") { %>
                     <li class="nav-item notLoggedOnly">
-                        <a class="nav-link" href="/signup">Sign Up</a>
+                        <a id="signup_link" class="nav-link" href="/signup">Sign Up</a>
                     </li>
                 <% } %>
             </ul>
