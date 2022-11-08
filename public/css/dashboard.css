@@ -165,3 +165,7 @@ body {
 li {
     border-color: var(--text-secondary);
 }
+
+.list-group-item {
+    border: 1px solid var(--text-secondary);
+}
