@@ -14,7 +14,6 @@ let isJson = jsonstr => {
     }
 }
 
-
 test('Test 1: empty email', async () => {
     let res = await user1.post(domain + '/signup').send({ password: "password", firstName: "dumyfirstname", lastName: "dumylastname" });
     let text = res.text;
@@ -22,7 +21,6 @@ test('Test 1: empty email', async () => {
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Email cannot be empty');
-
 });
 
 test('Test 2: invalid email', async () => {
@@ -32,7 +30,6 @@ test('Test 2: invalid email', async () => {
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Invalid email');
-
 });
 
 test('Test 3: empty firstname', async () => {
@@ -52,16 +49,15 @@ test('Test 4: invalid firstname', async () => {
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Invalid first name');
-
 });
-test('Test 5: empty firstname', async () => {
+
+test('Test 5: empty lastname', async () => {
     let res = await user1.post(domain + '/signup').send({ email: process.env.EMAIL, password: "password", firstName: "dumylastname" });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Name cannot be empty');
-
 });
 
 test('Test 6: invalid lastname', async () => {
@@ -71,7 +67,6 @@ test('Test 6: invalid lastname', async () => {
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Invalid last name');
-
 });
 
 test('Test 7: empty password', async () => {
@@ -81,7 +76,6 @@ test('Test 7: empty password', async () => {
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Password cannot be empty');
-
 });
 
 test('Test 8: invalid password', async () => {
@@ -91,17 +85,15 @@ test('Test 8: invalid password', async () => {
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('Invalid password');
-
 });
 
-test('Test 9: exist email', async () => {
+test('Test 9: email already used', async () => {
     let res = await user1.post(domain + '/signup').send({ email: process.env.EMAIL, password: "password", firstName: "dumyfirstname", lastName: "dumylastname" });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
     expect(obj.reason).toEqual('This email already exists');
-
 });
 
 test('Test 10: signup to new account', async () => {
@@ -110,6 +102,4 @@ test('Test 10: signup to new account', async () => {
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
     expect(obj.success).toBeTruthy();
-
-
-});
+}, 20000);
