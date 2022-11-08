@@ -3,7 +3,10 @@ body {
     font-family: "proxima-nova-soft", sans-serif;
 }
 
-body.authOnly .onlyAuth {
+body.authOnly .onlyAuth,
+body.noMarker .marker,
+body.noGrid .grid,
+body.noAxis .axis {
     display: none;
 }
 

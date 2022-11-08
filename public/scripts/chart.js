@@ -1,3 +1,4 @@
+const body = document.getElementsByTagName('body')[0];
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 ChartConfig.canvas = canvas;
@@ -12,7 +13,6 @@ const fontWeightBtn = document.getElementById('boldBtn');
 const markerSizeSelect = document.getElementById('markerSize');
 const markerStyleSelect = document.getElementById('markerStyle');
 const chartNameView = document.getElementById('chartNameView');
-const markerSpan = document.getElementById('markerSpan');
 const downloadPopup = document.getElementById('downloadPopup');
 const nameView = document.getElementById('nameView');
 const nameEdit = document.getElementById('nameEdit');
@@ -206,10 +206,10 @@ const drawChart = (data) => {
     myChart.setLabels(data);
     myChart.setData(values);
     myChart.draw();
-    if (['line', 'scatter', 'radar'].includes(type)) {
-        markerSpan.hidden = false;
+    if (['line', 'scatter', 'radar', 'bubble'].includes(type)) {
+        body.classList.remove('noMarker');
     } else {
-        markerSpan.hidden = true;
+        body.classList.add('noMarker');
     }
 };
 
@@ -451,7 +451,7 @@ document.getElementById('saveBtn').onclick = e => {
                 return;
             }
             showSuccess('Chart saved');
-            document.getElementsByTagName('body')[0].classList.remove('authOnly');
+            body.classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
                 chartID = resp['id'];
             }
@@ -531,7 +531,7 @@ document.getElementById('shareBtn').onclick = e => {
                 return;
             }
             showSuccess('Chart shared');
-            document.getElementsByTagName('body')[0].classList.remove('authOnly');
+            body.classList.remove('authOnly');
         } catch (error) {
             showFailure('Share failed!');
         }
@@ -776,10 +776,10 @@ function drawSavedChart(info, type, data, properties) {
     } else {
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
-    if (['line', 'scatter', 'radar'].includes(type)) {
-        markerSpan.hidden = false;
+    if (['line', 'scatter', 'radar', 'bubble'].includes(type)) {
+        body.classList.remove('noMarker');
     } else {
-        markerSpan.hidden = true;
+        body.classList.add('noMarker');
     }
 }
 
@@ -818,7 +818,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             }
             let info = resp.info;
             if (info.owner == null) {
-                document.getElementsByTagName('body')[0].classList.add('authOnly');
+                body.classList.add('authOnly');
             }
             let data = resp.data;
             let chartData = JSON.parse(data.data);
