@@ -1,4 +1,4 @@
-<nav id="navbar" class="navbar navbar-expand-lg logged notLogged">
+<nav id="navbar" class="navbar navbar-expand-sm logged notLogged">
     <div class="container-fluid">
 
         <!-- navbar brand -->
@@ -6,9 +6,9 @@
             <img id='navbarBrand' src="" alt="Avatar Logo" class="nav-pill">
         </a>
         <!-- <%= pageName %> -->
-        <button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarcontent"
-            aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler collapsed d-flex d-sm-none flex-column justify-content-around" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarcontent" aria-expanded="false"
+            aria-label="Toggle navigation" id="nav_collapse_btn">
             <span class="toggler-icon top-bar"></span>
             <span class="toggler-icon middle-bar"></span>
             <span class="toggler-icon bottom-bar"></span>
@@ -17,46 +17,47 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
 
-                <% if (pageName != "dashboard") { %>
+                <% if (pageName !="dashboard" ) { %>
                     <li class="nav-item loggedOnly">
                         <a id="dashboard_link" class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
-                <% } %>
-                
+                    <% } %>
 
-                <% if (pageName != "chart") { %>
-                    <li class="nav-item">
-                        <a id="chart_link" class="nav-link" href="/chart">Chart</a>
-                    </li>
-                <% } %>
+
+                        <% if (pageName !="chart" ) { %>
+                            <li class="nav-item">
+                                <a id="chart_link" class="nav-link" href="/chart">Chart</a>
+                            </li>
+                            <% } %>
 
             </ul>
 
             <ul class="navbar-nav ms-auto">
-                
-                <% if (pageName != "account") { %>
+
+                <% if (pageName !="account" ) { %>
                     <li class="nav-item loggedOnly">
                         <a id="account_link" class="nav-link" href="/account">
-                            <i class="fa-solid fa-user-gear"></i>
+                            <span class="account-icon"><i class="fa-solid fa-user-gear"></i></span>
+                            <span class="account-link">Account</span>
                         </a>
                     </li>
-                <% } %>
+                    <% } %>
 
-                <li class="nav-item loggedOnly">
-                    <a id="signout_link" class="nav-link" href="/logout">Sign Out</a>
-                </li>
+                        <li class="nav-item loggedOnly">
+                            <a id="signout_link" class="nav-link" href="/logout">Sign Out</a>
+                        </li>
 
-                <% if (pageName != "login") { %>
-                    <li class="nav-item notLoggedOnly">
-                        <a id="signin_link" class="nav-link" href="/login">Sign In</a>
-                    </li>
-                <% } %>
+                        <% if (pageName !="login" ) { %>
+                            <li class="nav-item notLoggedOnly">
+                                <a id="signin_link" class="nav-link" href="/login">Sign In</a>
+                            </li>
+                            <% } %>
 
-                <% if (pageName != "signup") { %>
-                    <li class="nav-item notLoggedOnly">
-                        <a id="signup_link" class="nav-link" href="/signup">Sign Up</a>
-                    </li>
-                <% } %>
+                                <% if (pageName !="signup" ) { %>
+                                    <li class="nav-item notLoggedOnly">
+                                        <a id="signup_link" class="nav-link" href="/signup">Sign Up</a>
+                                    </li>
+                                    <% } %>
             </ul>
         </div>
     </div>

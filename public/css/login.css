@@ -28,6 +28,7 @@ body {
     width: fit-content;
     border: 1px solid var(--text-secondary);
     padding: 3px 15px;
+    margin-right: 0;
 }
 
 .btn-signup:hover {
@@ -163,4 +164,27 @@ body {
 input:focus {
     outline: none !important;
     border: 2px solid var(--primary-color);
+}
+
+@media only screen and (max-width: 768px) {
+    /* .image-chart {
+        max-width: 80%;
+        margin: 0 auto;
+    } */
+
+    .login-wrapper {
+        width: 100%;
+    }
+
+    .img-area {
+        display: none;
+    }
+
+    .text-hello {
+        margin-top: 10px;
+    }
+
+    .wrapper {
+        min-height: 0px;
+    }
 }

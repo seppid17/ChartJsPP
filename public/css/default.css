@@ -11,7 +11,8 @@
     --overlay-gray: #afafaf9c;
     --popup-btn-blue: #4c85ff;
     --bg-btn-cancel: #808080;
-    --bg-dropdiv: #f7f7f7; /* #535353 */
+    --bg-dropdiv: #f7f7f7;
+    /* #535353 */
     --bg-crumb: #f4f6fa;
     --bg-crumb-first: #357DFD;
 
@@ -27,11 +28,14 @@
     --color-trash: #808080;
     --color-trash-h: #000000;
     --color-icon: #a666fe;
-    --color-icon-h: #7a14ff; /* #d8bbff */
+    --color-icon-h: #7a14ff;
+    /* #d8bbff */
     --color-icon-success: #1eda1e;
-    --color-icon-success-h: #003400; /* #8bff8b */
+    --color-icon-success-h: #003400;
+    /* #8bff8b */
     --color-icon-cancel: #E70E0E;
-    --color-icon-cancel-h: #410101; /* #ff7b7b */
+    --color-icon-cancel-h: #410101;
+    /* #ff7b7b */
     --color-crumb: #8093A7;
     --color-crumb-first: #ffffff;
 
@@ -285,10 +289,38 @@ input:focus {
     outline: none !important;
 }
 
-#navbar.notLogged .loggedOnly{
+#navbar.notLogged .loggedOnly {
     display: none;
 }
 
-#navbar.logged .notLoggedOnly{
+#navbar.logged .notLoggedOnly {
     display: none;
+}
+
+.account-icon {
+    display: block;
+}
+
+.account-link {
+    display: none;
+}
+
+.fa-user-gear:hover,
+.account-icon:hover,
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+@media only screen and (max-width: 576px) {
+    .account-icon {
+        display: none;
+    }
+
+    .account-link {
+        display: block;
+    }
+
+    .nav-link {
+        margin-left: 10px;
+    }
 }

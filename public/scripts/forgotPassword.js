@@ -46,3 +46,7 @@ submitBtn.onclick = e => {
         }
     });
 }
+
+document.body.onload = function (e) {
+    emailInput.focus();
+}

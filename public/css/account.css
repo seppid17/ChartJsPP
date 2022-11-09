@@ -76,7 +76,7 @@ body {
 }
 
 .col-opt {
-    margin-top: 10px;
+    margin-top: 25px;
     margin-bottom: 20px;
 }
 
@@ -178,6 +178,46 @@ body {
 }
 
 input:focus {
-    outline: none !important;;
+    outline: none !important;
+    ;
     border: 2px solid var(--primary-color);
+}
+
+.btn-opt-row {
+    margin-bottom: 36px;
+}
+
+@media only screen and (max-width: 768px) {
+    [class*="col-"] {
+        width: 100%;
+    }
+
+    .form-control {
+        padding-top: 0;
+    }
+
+    .input-name {
+        padding-bottom: 3px;
+    }
+
+    .delete-password {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .btn-opt-row {
+        margin-bottom: 5px;
+    }
+
+    .form-label-delete {
+        margin-left: 3px;
+    }
+
+    .email-row {
+        padding-bottom: 0;
+    }
+    
+    .email-div {
+        padding-bottom: 0;
+    }
 }

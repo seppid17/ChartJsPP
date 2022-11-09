@@ -272,6 +272,15 @@ document.onvisibilitychange = e => {
 checkLogged();
 checkTheme();
 
+document.getElementById("nav_collapse_btn").onclick = e => {
+    let nav = document.getElementById("navbarNav");
+    console.log(nav.classList);
+    console.log(nav.style.height);
+    if (true) {
+        console.log(document.getElementById("account_link"));
+    } 
+}
+
 if (typeof module != 'undefined') {
     module.exports = { isEmpty }
 }
