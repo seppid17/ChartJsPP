@@ -22,14 +22,19 @@ const backDiv = document.getElementById('backDiv');
 const breadcrumb = document.getElementById('breadcrumbA');
 let chartEditPopup = document.getElementById('chartEditPopup');
 
-window.onload = () => {
+resizeFn = () => {
     let height = window.innerHeight;
     let width = window.innerWidth;
     chartDiv.style.width = width + 'px';
-    chartDiv.style.height = height + 'px';
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
+    if (width >= height) {
+        chartDiv.style.height = height + 'px';
+    } else {
+        chartDiv.style.height = width + 'px';
+    }
 }
+
+window.onload = resizeFn;
+window.onresize = resizeFn;
 
 if (isDark) Chart.defaults.color = '#eee';
 else Chart.defaults.color = '#333';
@@ -211,21 +216,6 @@ const drawChart = (data) => {
     } else {
         body.classList.add('noMarker');
     }
-};
-
-chartDiv.onresize = e => {
-    let width = chartDiv.style.width;
-    let height = chartDiv.style.height;
-    canvas.style.width = width;
-    canvas.style.height = height;
-};
-
-window.onresize = e => {
-    let height = window.innerHeight;
-    let width = window.innerWidth;
-    chartDiv.style.width = width + 'px';
-    chartDiv.style.height = height + 'px';
-    // chartDiv.onresize(e);
 };
 
 function getCroppedCanvas(canvas) {
