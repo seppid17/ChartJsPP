@@ -70,7 +70,7 @@ body {
     max-width: 900px;
     min-height: 550px;
     margin: 50px auto;
-    padding: 50px 60px;
+    padding: 2% 5%;
     background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
 }

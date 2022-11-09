@@ -13,7 +13,7 @@ body {
 }
 
 .pill {
-    max-width: 15%;
+    max-width: 110px;
     margin-left: auto;
     margin-right: auto;
 }

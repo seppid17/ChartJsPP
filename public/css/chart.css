@@ -492,13 +492,23 @@ ol li:before {
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .btn-submit:focus {
@@ -506,7 +516,8 @@ ol li:before {
 }
 
 input:focus {
-    outline: none !important;;
+    outline: none !important;
+    ;
     border: 1px solid var(--primary-color);
 }
 
@@ -519,4 +530,8 @@ input:focus {
     font-size: 14px;
     padding: 7px;
     width: fit-content;
+}
+
+.container {
+    min-width: 95%;
 }

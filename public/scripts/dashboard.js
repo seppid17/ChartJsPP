@@ -2,7 +2,7 @@ const cardsDiv = document.getElementById('cardsDiv');
 
 function showNoCharts() {
     let p = document.createElement('p');
-    p.classList.add('text-details');
+    p.classList.add('text-no-chart');
     p.innerText = 'No saved charts';
     cardsDiv.appendChild(p);
 }
@@ -112,6 +112,7 @@ function setCards() {
                 let i = document.createElement('i');
                 i.classList.add('fa-solid');
                 i.classList.add('fa-trash-can');
+                i.title = 'delete'
                 a.appendChild(i);
             });
         } catch (error) {

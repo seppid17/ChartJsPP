@@ -55,7 +55,7 @@ body {
     max-width: 100%;
     min-height: 550px;
     margin: 50px auto;
-    padding: 20px 40px;
+    padding: 2% 5%;
     padding-bottom: 45px;
     background-color: var(--bg-wrapper);
     box-shadow: 0px 0px 4px 2px var(--wrapper-shadow-gray);
@@ -80,7 +80,7 @@ body {
 .btn-cn {
     margin: 0;
     margin-left: 5px;
-    padding: 3px 15px 2px 5px;
+    padding: 3px 15px 2px 10px;
     width: fit-content;
     align-items: flex-end;
 }
@@ -135,6 +135,7 @@ body {
 
 .card {
     margin: 10px auto;
+    border: 1px solid var(--text-secondary);
 }
 
 .fa-circle-plus {
@@ -168,4 +169,8 @@ li {
 
 .list-group-item {
     border: 1px solid var(--text-secondary);
+}
+
+.text-no-chart {
+    color: var(--text-primary);
 }
