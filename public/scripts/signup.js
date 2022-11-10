@@ -5,6 +5,9 @@ let lastNameInput = document.getElementById('lastName');
 let passwdInput = document.getElementById('password');
 let cnfpasswdInput = document.getElementById('cnfPassword');
 
+let overlayLoader = document.getElementById("overlayLoader");
+let loader = document.getElementById("loader");
+
 emailInput.onkeydown = event => {
     keyPressFn(event, email_pattern, firstNameInput);
 }
@@ -85,6 +88,8 @@ submitBtn.onclick = e => {
         return;
     }
 
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
     xhrSender.addField('firstName', firstName);
@@ -99,15 +104,19 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'firstname':
                                 setErrorFor(firstNameInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'lastname':
                                 setErrorFor(lastNameInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -116,15 +125,23 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Account creation failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Account created. Check your email.');
         } catch (error) {
             showFailure('Something went wrong! Try again.');
         }
+        getLoader('none');
     });
+
 }
 
 document.body.onload = function (e) {
     emailInput.focus();
+}
+
+function getLoader(type) { // type = 'block' or 'none'
+    overlayLoader.style.display = type;
+    loader.style.display = type;
 }
