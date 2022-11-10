@@ -3,10 +3,10 @@ let passwdInput = document.getElementById('password');
 let cnfPasswdInput = document.getElementById('cnfPassword');
 
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, cnfPasswdInput);
+    keyPressFn(event, password_pattern, cnfPasswdInput, 'Invalid Password');
 }
 cnfPasswdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, submitBtn);
+    keyPressFn(event, password_pattern, null, 'Invalid Password', submitBtn);
 }
 
 submitBtn.onclick = e => {

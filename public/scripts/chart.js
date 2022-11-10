@@ -20,7 +20,8 @@ const nameInput = document.getElementById('nameInput');
 const colorPicker = document.getElementById('ColorInput');
 const backDiv = document.getElementById('backDiv');
 const breadcrumb = document.getElementById('breadcrumbA');
-let chartEditPopup = document.getElementById('chartEditPopup');
+const chartEditPopup = document.getElementById('chartEditPopup');
+const saveNameBtn = document.getElementById('saveName');
 
 resizeFn = () => {
     let height = window.innerHeight;
@@ -380,6 +381,7 @@ document.getElementById('downloadImg').onclick = e => {
     downLinkTmp.remove();
     downloadPopup.classList.remove('show');
 };
+
 document.getElementById('downloadPdf').onclick = e => {
     // create image
     let croppedCanvas = getCroppedCanvas(canvas);
@@ -390,7 +392,7 @@ document.getElementById('downloadPdf').onclick = e => {
     doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
     doc.save(chartName + '.pdf');
     downloadPopup.classList.remove('show');
-}
+};
 
 document.getElementById('saveBtn').onclick = e => {
     var chartConfig = ChartConfig.instance;
@@ -531,14 +533,15 @@ document.getElementById('shareBtn').onclick = e => {
 
 document.getElementById('CloseEdit').onclick = e => {
     chartEditPopup.classList.remove('show');
-}
+};
 
 document.getElementById('editName').onclick = e => {
     nameView.style.display = 'none';
     nameEdit.style.display = 'block';
+    nameEdit.onkeypress = e => { keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn); };
     let name = chartNameView.innerText
     nameInput.value = name;
-    document.getElementById('saveName').onclick = e => {
+    saveNameBtn.onclick = e => {
         nameView.style.display = 'block';
         nameEdit.style.display = 'none';
         name = nameInput.value;

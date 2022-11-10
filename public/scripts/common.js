@@ -41,10 +41,11 @@ const password_pattern = /^[\x21-\x7E]{8,15}$/;
  * @param {string} [errorMsg] error message to show on error
  * @return {void}
  */
-function keyPressFn(e, pattern, nextElem, btn = null, errorMsg = null) {
+function keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
     if (e.keyCode === 13) {
-        setClear(e.target);
+        if (errorMsg != null) setClear(e.target);
         e.preventDefault();
+        e.stopPropagation();
         let value = e.target.value.trim();
         if (!pattern.test(value)) {
             if (errorMsg != null) setErrorFor(e.target, errorMsg);
@@ -278,7 +279,7 @@ document.getElementById("nav_collapse_btn").onclick = e => {
     console.log(nav.style.height);
     if (true) {
         console.log(document.getElementById("account_link"));
-    } 
+    }
 }
 
 if (typeof module != 'undefined') {

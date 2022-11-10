@@ -2,7 +2,7 @@ let submitBtn = document.getElementById('submitBtn');
 let emailInput = document.getElementById('email');
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, null, submitBtn);
+    keyPressFn(event, email_pattern, null, 'Invalid email', submitBtn);
 }
 
 submitBtn.onclick = e => {

@@ -3,11 +3,11 @@ let emailInput = document.getElementById('email');
 let passwdInput = document.getElementById('password');
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, passwdInput, null, 'Invalid email');
+    keyPressFn(event, email_pattern, passwdInput, 'Invalid email');
 }
 
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, submitBtn, 'Invalid Password');
+    keyPressFn(event, password_pattern, null, 'Invalid Password', submitBtn);
 }
 
 submitBtn.onclick = e => {

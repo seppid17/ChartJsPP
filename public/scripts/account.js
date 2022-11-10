@@ -43,13 +43,13 @@ DeleteAccountBtn.onclick = e => {
     setSelect(DeleteAccountBtn, AccountDetailsBtn, ChangePasswordBtn);
 }
 
-firstNameInput.onkeydown = event => { keyPressFn(event, name_pattern, lastNameInput); }
-lastNameInput.onkeydown = event => { keyPressFn(event, name_pattern, passwdInput); }
-passwdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, changeNameBtn); }
-curPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, newPasswdInput); }
-newPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, cnfPasswdInput); }
-cnfPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, changePasswdBtn); }
-delPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, deleteBtn); }
+firstNameInput.onkeydown = event => { keyPressFn(event, name_pattern, lastNameInput, 'Invalid name'); }
+lastNameInput.onkeydown = event => { keyPressFn(event, name_pattern, passwdInput, 'Invalid name'); }
+passwdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, 'Invalid password', changeNameBtn); }
+curPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, newPasswdInput, 'Invalid password'); }
+newPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, cnfPasswdInput, 'Invalid password'); }
+cnfPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, 'Invalid password', changePasswdBtn); }
+delPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, 'Invalid password', deleteBtn); }
 
 changeNameBtn.onclick = e => {
     e.preventDefault();

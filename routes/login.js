@@ -1,10 +1,12 @@
 const express = require('express');
 const { loginView, logout, loginUser } = require('../controllers/loginController');
+const wrap = require('../utils/controllerWrapper');
 const router = express.Router();
+
 router.get('/', (req, res) => {
     res.render("home", {});
 });
-router.get('/logout', logout);
+router.get('/logout', wrap(logout));
 router.all('/login', (req, res, next) => {
     if (req.session.loggedIn === true && req.session.user) {
         res.redirect('/dashboard');
@@ -12,7 +14,7 @@ router.all('/login', (req, res, next) => {
         next();
     }
 })
-router.get('/login', loginView);
-router.post('/login', loginUser);
+router.get('/login', wrap(loginView));
+router.post('/login', wrap(loginUser));
 
 module.exports = router;

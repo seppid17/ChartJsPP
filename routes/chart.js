@@ -1,9 +1,10 @@
 const express = require('express');
-const {retrieveSharedChart } = require('../controllers/chartController');
+const { retrieveSharedChart } = require('../controllers/chartController');
+const wrap = require('../utils/controllerWrapper');
 
 const router = express.Router();
 
-router.post('/retrieveShared', retrieveSharedChart);
+router.post('/retrieveShared', wrap(retrieveSharedChart));
 
 router.get('/', (req, res) => {
     res.render("chart", {});

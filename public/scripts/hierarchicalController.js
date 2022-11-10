@@ -40,7 +40,6 @@ class HierarchicalController extends Chart.PieController {
                 }
             }
         }
-        console.log(mode);
         super.update(mode);
         this._setAreaCoordinates();
         if (typeof mode == 'undefined' || mode == 'resize' || mode == 'default' || mode == 'reset' || mode == 'none')

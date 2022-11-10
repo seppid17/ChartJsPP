@@ -9,19 +9,19 @@ let overlayLoader = document.getElementById("overlayLoader");
 let loader = document.getElementById("loader");
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, firstNameInput);
+    keyPressFn(event, email_pattern, firstNameInput, 'Invalid email');
 }
 firstNameInput.onkeydown = event => {
-    keyPressFn(event, name_pattern, lastNameInput);
+    keyPressFn(event, name_pattern, lastNameInput, 'Invalid name');
 }
 lastNameInput.onkeydown = event => {
-    keyPressFn(event, name_pattern, passwdInput);
+    keyPressFn(event, name_pattern, passwdInput, 'Invalid name');
 }
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, cnfpasswdInput);
+    keyPressFn(event, password_pattern, cnfpasswdInput, 'Invalid password');
 }
 cnfpasswdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, submitBtn);
+    keyPressFn(event, password_pattern, null, 'Invalid password', submitBtn);
 }
 
 submitBtn.onclick = e => {

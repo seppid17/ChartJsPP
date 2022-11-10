@@ -2,7 +2,7 @@ let submitBtn = document.getElementById('submitBtn');
 let passwdInput = document.getElementById('password');
 
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, submitBtn);
+    keyPressFn(event, password_pattern, null, 'Invalid password', submitBtn);
 }
 
 submitBtn.onclick = e => {
@@ -10,7 +10,7 @@ submitBtn.onclick = e => {
     let passwd = passwdInput.value.trim();
 
     setClear(passwdInput);
-    
+
     if (isEmpty(passwd)) {
         setErrorFor(passwdInput, 'Password cannot be empty');
         return;

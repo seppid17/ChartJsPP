@@ -48,10 +48,20 @@ const requestUser = async (req, res) => {
             res.json({ 'success': false, 'reason': 'Invalid password', 'field': 'password' });
             return;
         }
-        let user = await User.findOne({ email: email, active: true });
-        if (user) {
-            res.json({ 'success': false, 'reason': "This email already exists", 'field': 'email' });
-            return;
+        {
+            let user;
+            if (email.endsWith('@gmail.com')) {
+                let emailName = email.replace(/@gmail\.com$/, '');
+                let regexName = '\\.?' + Array.from(emailName).filter(c => { return c != '.'; }).join('\\.?') + '\\.?@gmail\\.com';
+                let re = new RegExp(regexName);
+                user = await User.findOne({ email: { $regex: re }, active: true });
+            } else {
+                user = await User.findOne({ email: email, active: true });
+            }
+            if (user) {
+                res.json({ 'success': false, 'reason': "This email already exists", 'field': 'email' });
+                return;
+            }
         }
         let token = crypto.randomBytes(16).toString('hex');
         let timestamp = Math.floor(Date.now() / 1000) + 3600;
