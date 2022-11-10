@@ -413,4 +413,16 @@ input:focus {
     .nav-link {
         margin-left: 10px;
     }
+
+    .wrapper-loader{
+        width:120px;
+    }
+
+    .shadow:nth-child(4){
+        left: 41.5%;
+    }
+
+    .circle:nth-child(2){
+        left:41.5%;
+    }
 }
