@@ -114,7 +114,6 @@
                                             <div class="input-group mb-20">
                                                 <input type="color" class="color-input" id="ColorInput" value="#000000"
                                                     title="Choose your color">
-                                                <a><i class="far fa-check-circle fa-lg"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -142,37 +141,45 @@
     <div class="row form-control chart-text-prop">
         <h5>Chart properties</h5>
 
-        <span>
-            &nbsp;&nbsp;
-            Text style
-            <a class="btn btn-icon" id="boldBtn">
-                <i class="fa-solid fa-bold"></i>
-            </a>
-            <a class="btn btn-icon" id="italicBtn">
-                <i class="fa-solid fa-italic"></i>
-            </a>
-            &nbsp;&nbsp;
-            Font size
-            <input type="number" id="fontSize" class="size-select" value="18" min="8" max="36">
-            <span class="marker">
-                &nbsp;&nbsp;
-                Marker size
-                <input type="number" id="markerSize" class="size-select" value="3" min="1" max="12">
-                &nbsp;&nbsp;
-                Marker type
-                <select class="marker-select" name="markerStyle" id="markerStyle">
-                    <option value="circle">Circle</option>
-                    <option value="cross">Cross</option>
-                    <option value="crossRot">Rotated Cross</option>
-                    <option value="dash">Dash</option>
-                    <option value="line">Line</option>
-                    <option value="rect">Rectangle</option>
-                    <option value="rectRounded">Rounded Rectangle</option>
-                    <option value="rectRot">Rotated Rectangle</option>
-                    <option value="star">Star</option>
-                    <option value="triangle">Triangle</option>
-                </select>
-            </span>
+        <span class="chart-props">
+            <div class="text-props">
+                <div class="text-type">
+                    Text style
+                    <span class="style-button">
+                        <a class="btn btn-icon" id="boldBtn">
+                            <i class="fa-solid fa-bold"></i>
+                        </a>
+                        <a class="btn btn-icon" id="italicBtn">
+                            <i class="fa-solid fa-italic"></i>
+                        </a>
+                    </span>
+                </div>
+                <div class="text-size">
+                    Font size
+                    <input type="number" id="fontSize" class="size-select" value="18" min="8" max="36">
+                </div>
+            </div>
+            <div class="marker">
+                <div class="marker-size">
+                    Marker size
+                    <input type="number" id="markerSize" class="size-select" value="3" min="1" max="12">
+                </div>
+                <div class="marker-type">
+                    Marker type
+                    <select class="marker-select" name="markerStyle" id="markerStyle">
+                        <option value="circle">Circle</option>
+                        <option value="cross">Cross</option>
+                        <option value="crossRot">Rotated Cross</option>
+                        <option value="dash">Dash</option>
+                        <option value="line">Line</option>
+                        <option value="rect">Rectangle</option>
+                        <option value="rectRounded">Rounded Rectangle</option>
+                        <option value="rectRot">Rotated Rectangle</option>
+                        <option value="star">Star</option>
+                        <option value="triangle">Triangle</option>
+                    </select>
+                </div>
+            </div>
         </span>
     </div>
 </div>

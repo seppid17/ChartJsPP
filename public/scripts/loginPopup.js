@@ -54,6 +54,8 @@ function popupLogin(ondone) {
             return false;
         }
 
+        getLoader('block');
+
         let xhrSender = new XHRSender();
         xhrSender.addField('email', email);
         xhrSender.addField('password', passwd);
@@ -66,9 +68,11 @@ function popupLogin(ondone) {
                             switch (data['field']) {
                                 case 'email':
                                     setErrorFor(emailInput, data['reason']);
+                                    getLoader('none');
                                     break;
                                 case 'password':
                                     setErrorFor(passwdInput, data['reason']);
+                                    getLoader('none');
                                     break;
                             }
                         } else {
@@ -77,6 +81,7 @@ function popupLogin(ondone) {
                     } else {
                         showFailure('Login failed!');
                     }
+                    getLoader('none');
                     return;
                 }
                 passwdInput.value = '';
@@ -87,6 +92,7 @@ function popupLogin(ondone) {
             } catch (error) {
                 showFailure('Something went wrong! Try again.');
             }
+            getLoader('none');
         });
     }
 

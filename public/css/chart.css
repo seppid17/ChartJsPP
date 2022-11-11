@@ -45,6 +45,7 @@ i:hover {
     border-radius: 5px;
     border: 1px solid var(--text-secondary);
     background-color: var(--bg-wrapper);
+    margin: 0;
     margin-right: 5px;
     width: 30px;
     height: 30px;
@@ -217,7 +218,7 @@ i.fa-expand-alt {
 .gen-main-div {
     padding-left: 30px;
     padding-right: 30px;
-    margin: 30px auto;
+    margin: 0px auto;
     max-width: 700px;
 }
 
@@ -527,11 +528,39 @@ input:focus {
     border: 1px solid var(--text-secondary);
     border-radius: 5px;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 13px;
     padding: 7px;
     width: fit-content;
 }
 
 .container {
     min-width: 95%;
+}
+
+.marker-size,
+.marker-type,
+.text-type,
+.text-size {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+@media only screen and (min-width: 860px) {
+    .chart-props {
+        display: flex;
+        align-items: center;
+    } 
+}
+
+@media only screen and (min-width: 500px) {
+    .marker {
+        display: flex;
+        align-items: center;
+    }
+
+    .text-props {
+        display: flex;
+        align-items: center;
+    } 
 }

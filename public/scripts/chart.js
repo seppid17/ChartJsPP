@@ -778,6 +778,7 @@ function drawSavedChart(info, type, data, properties) {
 
 if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
     chartID = document.location.pathname.split('/')[2];
+    getLoader('block');
     var xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
     let cb = xhr => {
@@ -788,6 +789,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                     if (resp['reason'] == 'Unauthorized') {
                         xhrSender.send('/chart/retrieveShared', cb);
+                        getLoader('none');
                         return;
                     }
                     if (resp['reason'] == 'NotShared') {
@@ -798,6 +800,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                                 showFailure('Unauthorized');
                             }
                         });
+                        getLoader('none');
                         return;
                     }
                     errMsg = resp['reason'];
@@ -807,6 +810,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                 showFailure(errMsg, () => {
                     window.location = '/chart';
                 });
+                getLoader('none');
                 return;
             }
             let info = resp.info;
@@ -820,6 +824,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     };
     xhrSender.send('/chart/retrieve', cb);
 }
