@@ -7,7 +7,7 @@ function showNoCharts() {
     cardsDiv.appendChild(p);
 }
 function setCards() {
-    getLoader('block');
+    showLoader();
     var xhrSender = new XHRSender();
     xhrSender.send('/chart/list', xhr => {
         try {
@@ -18,7 +18,7 @@ function setCards() {
                 } else {
                     showFailure('Chart list retrieving failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             if (resp.info.length == 0) {
@@ -88,7 +88,7 @@ function setCards() {
                     evt.preventDefault();
                     evt.stopPropagation();
                     promptConfirmation('Are you sure you want to delete ' + chart.name + '?', () => {
-                        getLoader('block');
+                        showLoader();
                         let xhrSender = new XHRSender();
                         xhrSender.addField('id', chart.id);
                         xhrSender.send('/chart/delete', xhr => {
@@ -100,7 +100,7 @@ function setCards() {
                                     } else {
                                         showFailure('Deleting chart failed!');
                                     }
-                                    getLoader('none');
+                                    hideLoader();
                                     return;
                                 }
                                 cardsDiv.removeChild(cardColDiv);
@@ -110,7 +110,7 @@ function setCards() {
                             } catch (error) {
                                 showFailure('Delete failed!');
                             }
-                            getLoader('none');
+                            hideLoader();
                         });
                     });
                 }
@@ -123,7 +123,7 @@ function setCards() {
         } catch (error) {
             showFailure('Loading saved charts failed!');
         }
-        getLoader('none');
+        hideLoader();
     });
 }
 

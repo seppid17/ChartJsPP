@@ -89,7 +89,7 @@ changeNameBtn.onclick = e => {
         return;
     }
 
-    getLoader('block');
+    showLoader();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('firstName', firstName);
@@ -104,15 +104,15 @@ changeNameBtn.onclick = e => {
                         switch (data['field']) {
                             case 'firstname':
                                 setErrorFor(firstNameInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                             case 'lastname':
                                 setErrorFor(lastNameInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                         }
                     } else {
@@ -121,14 +121,14 @@ changeNameBtn.onclick = e => {
                 } else {
                     showFailure('Change name failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             showSuccess('Profile details updated.');
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
-        getLoader('none');
+        hideLoader();
     });
 }
 
@@ -169,7 +169,7 @@ changePasswdBtn.onclick = e => {
         return;
     }
 
-    getLoader('block');
+    showLoader();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('curPassword', curPasswd);
@@ -183,11 +183,11 @@ changePasswdBtn.onclick = e => {
                         switch (data['field']) {
                             case 'curPassword':
                                 setErrorFor(curPasswdInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                             case 'newPassword':
                                 setErrorFor(newPasswdInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                         }
                     } else {
@@ -196,14 +196,14 @@ changePasswdBtn.onclick = e => {
                 } else {
                     showFailure('Change password failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             showSuccess('Password updated.');
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
-        getLoader('none');
+        hideLoader();
     });
 }
 
@@ -215,7 +215,7 @@ deleteBtn.onclick = e => {
         return;
     }
 
-    getLoader('block');
+    showLoader();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
@@ -228,7 +228,7 @@ deleteBtn.onclick = e => {
                         switch (data['field']) {
                             case 'delPassword':
                                 setErrorFor(delPasswdInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                         }
                     } else {
@@ -237,7 +237,7 @@ deleteBtn.onclick = e => {
                 } else {
                     showFailure('Delete account failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             showSuccess('Account deactivated.', () => {
@@ -246,6 +246,6 @@ deleteBtn.onclick = e => {
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
-        getLoader('none');
+        hideLoader();
     });
 }

@@ -34,7 +34,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    getLoader('block');
+    showLoader();
     
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
@@ -47,7 +47,7 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                         }
                     } else {
@@ -56,7 +56,7 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Password reset failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             showSuccess('Account password reset successfull.', () => {
@@ -65,7 +65,7 @@ submitBtn.onclick = e => {
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
-        getLoader('none');
+        hideLoader();
     });
 }
 

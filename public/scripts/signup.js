@@ -85,7 +85,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    getLoader('block');
+    showLoader();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
@@ -101,19 +101,19 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                             case 'firstname':
                                 setErrorFor(firstNameInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                             case 'lastname':
                                 setErrorFor(lastNameInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                         }
                     } else {
@@ -122,14 +122,14 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Account creation failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             showSuccess('Account created. Check your email.');
         } catch (error) {
             showFailure('Something went wrong! Try again.');
         }
-        getLoader('none');
+        hideLoader();
     });
 
 }

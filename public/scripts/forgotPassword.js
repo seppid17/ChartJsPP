@@ -20,7 +20,7 @@ submitBtn.onclick = e => {
         return false;
     }
 
-    getLoader('block');
+    showLoader();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
@@ -33,7 +33,7 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
-                                getLoader('none');
+                                hideLoader();
                                 break;
                         }
                     } else {
@@ -42,14 +42,14 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Password reset request failed!');
                 }
-                getLoader('none');
+                hideLoader();
                 return;
             }
             showSuccess('Password reset requested. Check your email');
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
-        getLoader('none');
+        hideLoader();
     });
 }
 

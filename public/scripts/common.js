@@ -1,13 +1,32 @@
+/**
+ * Send XHR POST request with url encoded parameters.
+ * Call the callback once response 200 OK is received.
+ */
 class XHRSender {
     constructor() {
         this.fields = {};
     }
 
+    /**
+     * Add a new field to request as a key-value pair
+     * 
+     * @param {string} fieldName
+     * @param {*} value
+     * @return {void}
+     */
     addField(fieldName, value) {
         this.fields[fieldName] = value;
     }
 
-    send(url, callback, responseType = '') {
+    /**
+     * Send the request.
+     * Callback function is called when response OK is received.
+     * 
+     * @param {string} url URL to send the request
+     * @param {function} callback
+     * @return {void}
+     */
+    send(url, callback) {
         let encoded = Object.keys(this.fields).map((index) => {
             return encodeURIComponent(index) + '=' + encodeURIComponent(this.fields[index]);
         });
@@ -15,7 +34,6 @@ class XHRSender {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.responseType = responseType;
         xhr.onload = () => {
             if (xhr.status == 200) {
                 callback(xhr);
@@ -34,11 +52,12 @@ const password_pattern = /^[\x21-\x7E]{8,15}$/;
  * it sets the keyboard focus to next form input field if the current field is valid.
  * If the field is the last input field of the form, triggers the onclick
  * of the submit button.
+ * 
  * @param {KeyboardEvent} e the keypress event
  * @param {RegExp} pattern pattern to check the input
  * @param {HTMLElement} nextElem next element to set focus
- * @param {HTMLElement} [btn] button to press on success
  * @param {string} [errorMsg] error message to show on error
+ * @param {HTMLElement} [btn] button to press on success
  * @return {void}
  */
 function keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
@@ -64,28 +83,47 @@ function keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
 /**
  * Check if a string is empty
  * 
- * Returns true if string is empty, and false otherwise.
+ * @return {boolean} true if string is empty, and false otherwise.
  */
 function isEmpty(str) {
     return (!str || str.length === 0);
 }
 
+/**
+ * Set error message for a input field
+ * 
+ * @param {HTMLElement} input Input field
+ * @param {string} message Error message
+ * @return {void}
+ */
 function setErrorFor(input, message) {
     const formControl = input.parentElement;
     const small = formControl.querySelector('small');
     if (small != null) {
-        formControl.className = 'form-control form-outline form-input error';
+        formControl.classList.add('error');
         small.innerText = message;
     }
 }
 
+/**
+ * Clear the error message for a input field
+ * 
+ * @param {HTMLElement} input Input field
+ * @return {void}
+ */
 function setClear(input) {
     const formControl = input.parentElement;
-    formControl.className = 'form-control form-outline form-input';
+    formControl.classList.remove('error');
 }
 
 /**
- * Shows a success, error, or confirm message to user.
+ * Show a success, error, or confirm message.
+ * 
+ * @param {string} msg
+ * @param {boolean} [success]
+ * @param {boolean} [confirm]
+ * @param {function} [onclosed]
+ * @return {void}
  */
 function displayMsgConfirm(msg, success = false, confirm = false, onclosed = () => { }) {
     var closeBtn = document.getElementById("popupclose");
@@ -130,18 +168,47 @@ function displayMsgConfirm(msg, success = false, confirm = false, onclosed = () 
     };
 }
 
+/**
+ * Show a success or error message.
+ * 
+ * @param {string} msg
+ * @param {boolean} [success]
+ * @param {function} [onclosed]
+ * @return {void}
+ */
 function showMsg(msg, success = false, onclosed = () => { }) {
     displayMsgConfirm(msg, success, false, onclosed)
 }
 
+/**
+ * Show a success message.
+ * 
+ * @param {string} msg
+ * @param {function} [onclosed]
+ * @return {void}
+ */
 function showSuccess(msg, onclosed = () => { }) {
     showMsg(msg, true, onclosed);
 }
 
+/**
+ * Show an error message.
+ * 
+ * @param {string} msg
+ * @param {function} [onclosed]
+ * @return {void}
+ */
 function showFailure(msg, onclosed = () => { }) {
     showMsg(msg, false, onclosed);
 }
 
+/**
+ * Show a confirm message.
+ * 
+ * @param {string} msg
+ * @param {function} [onconfirm]
+ * @return {void}
+ */
 function promptConfirmation(msg, onconfirm = () => { }) {
     displayMsgConfirm(msg, true, true);
     document.getElementById('popupconfirm').onclick = e => {
@@ -151,15 +218,29 @@ function promptConfirmation(msg, onconfirm = () => { }) {
     }
 }
 
-function setCookie(cname, cvalue, exdays) {
+/**
+ * Set a cookie with given name, value and expiry date.
+ * 
+ * @param {*} name name of the cookie
+ * @param {*} value value of the cookie
+ * @param {number} expiryDays days to expiry of the cookie
+ * @return {void}
+ */
+function setCookie(name, value, expiryDays) {
     const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    d.setTime(d.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;samesite=strict";
+    document.cookie = name + "=" + value + ";" + expires + ";path=/;samesite=strict";
 }
 
-function getCookie(cname) {
-    let name = cname + "=";
+/**
+ * Get the cookie with given name.
+ * 
+ * @param {*} name name of the cookie
+ * @return {string} value of the cookie if exists, otherwise an empty string
+ */
+function getCookie(name) {
+    let name = name + "=";
     let ca = document.cookie.split(';');
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
@@ -177,6 +258,12 @@ let isDark = false;
 const darkBtn = document.getElementById('darkBtn');
 var r = document.querySelector(':root');
 
+/**
+ * Set the theme to light or dark
+ * 
+ * @param {boolean} is_dark
+ * @return {void}
+ */
 function switchTheme(is_dark) {
     if (is_dark) {
         r.style.setProperty('--bg-primary', '#000000');
@@ -215,6 +302,12 @@ function switchTheme(is_dark) {
     }
 }
 
+/**
+ * Check the saved theme and set it.
+ * Use the apporpriate brand image for the theme.
+ * 
+ * @return {void}
+ */
 function checkTheme() {
     let savedTheme = getCookie('theme')
     if (savedTheme === 'dark') {
@@ -235,6 +328,12 @@ function checkTheme() {
     }
 }
 
+/**
+ * Check if the user is logged.
+ * Show or hide navbar buttons depending on logged status.
+ * 
+ * @return {void}
+ */
 function checkLogged() {
     let nav = document.getElementById('navbar');
     if (!nav) return;
@@ -254,6 +353,9 @@ function checkLogged() {
     });
 }
 
+/**
+ * Change theme when theme switch button is pressed
+ */
 darkBtn.onclick = e => {
     darkBtn.innerText = isDark ? 'dark' : 'light'
     switchTheme(!isDark)
@@ -263,6 +365,9 @@ darkBtn.onclick = e => {
     setCookie('theme', isDark ? 'dark' : 'light', 365000);
 }
 
+/**
+ * Check theme and logged status when navigating through pages
+ */
 document.onvisibilitychange = e => {
     if (document.visibilityState == 'visible') {
         checkLogged();
@@ -273,11 +378,26 @@ document.onvisibilitychange = e => {
 checkLogged();
 checkTheme();
 
-function getLoader(type) { // type = 'block' or 'none'
+/**
+ * Show or hide the loader
+ * 
+ * @param {string} type 'block' or 'none'
+ */
+function getLoader(type) {
     document.getElementById("overlayLoader").style.display = type;
     document.getElementById("loader").style.display = type;
 }
 
-if (typeof module != 'undefined') {
-    module.exports = { isEmpty }
+/**
+ * Show the loader
+ */
+function showLoader() {
+    getLoader('block');
+}
+
+/**
+ * Hide the loader
+ */
+function hideLoader() {
+    getLoader('none');
 }
