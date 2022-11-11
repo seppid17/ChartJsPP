@@ -19,6 +19,9 @@ submitBtn.onclick = e => {
         setErrorFor(passwdInput, 'Invalid password format');
         return;
     }
+
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
     xhrSender.send(document.URL, function (xhr) {
@@ -30,6 +33,7 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -38,6 +42,7 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Account activation failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Account activated.', () => {
@@ -46,5 +51,6 @@ submitBtn.onclick = e => {
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     });
 }

@@ -282,6 +282,11 @@ document.getElementById("nav_collapse_btn").onclick = e => {
     }
 }
 
+function getLoader(type) { // type = 'block' or 'none'
+    document.getElementById("overlayLoader").style.display = type;
+    document.getElementById("loader").style.display = type;
+}
+
 if (typeof module != 'undefined') {
     module.exports = { isEmpty }
 }

@@ -33,6 +33,9 @@ submitBtn.onclick = e => {
         setErrorFor(cnfPasswdInput, "Passwords doesn't match");
         return;
     }
+
+    getLoader('block');
+    
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
     xhrSender.send(document.URL, function (xhr) {
@@ -44,6 +47,7 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -52,6 +56,7 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Password reset failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Account password reset successfull.', () => {
@@ -60,6 +65,7 @@ submitBtn.onclick = e => {
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     });
 }
 

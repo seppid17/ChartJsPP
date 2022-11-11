@@ -35,6 +35,8 @@ submitBtn.onclick = e => {
         return false;
     }
 
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
     xhrSender.addField('password', passwd);
@@ -47,9 +49,11 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -62,6 +66,7 @@ submitBtn.onclick = e => {
                         passwdInput.value = '';
                     });
                 }
+                getLoader('none');
                 return;
             }
             let target = '/dashboard';
@@ -74,6 +79,7 @@ submitBtn.onclick = e => {
                 passwdInput.value = '';
             });
         }
+        getLoader('none');
     });
 }
 

@@ -19,6 +19,9 @@ submitBtn.onclick = e => {
         setErrorFor(emailInput, 'Invalid email format');
         return false;
     }
+
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
     xhrSender.send(document.URL, function (xhr) {
@@ -30,6 +33,7 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -38,12 +42,14 @@ submitBtn.onclick = e => {
                 } else {
                     showFailure('Password reset request failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Password reset requested. Check your email');
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     });
 }
 

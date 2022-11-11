@@ -89,6 +89,8 @@ changeNameBtn.onclick = e => {
         return;
     }
 
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('firstName', firstName);
     xhrSender.addField('lastName', lastName);
@@ -102,12 +104,15 @@ changeNameBtn.onclick = e => {
                         switch (data['field']) {
                             case 'firstname':
                                 setErrorFor(firstNameInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'lastname':
                                 setErrorFor(lastNameInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -116,12 +121,14 @@ changeNameBtn.onclick = e => {
                 } else {
                     showFailure('Change name failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Profile details updated.');
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     });
 }
 
@@ -161,6 +168,9 @@ changePasswdBtn.onclick = e => {
         setErrorFor(cnfPasswdInput, "Password dosen't match");
         return;
     }
+
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('curPassword', curPasswd);
     xhrSender.addField('newPassword', newPasswd);
@@ -173,9 +183,11 @@ changePasswdBtn.onclick = e => {
                         switch (data['field']) {
                             case 'curPassword':
                                 setErrorFor(curPasswdInput, data['reason']);
+                                getLoader('none');
                                 break;
                             case 'newPassword':
                                 setErrorFor(newPasswdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -184,12 +196,14 @@ changePasswdBtn.onclick = e => {
                 } else {
                     showFailure('Change password failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Password updated.');
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     });
 }
 
@@ -200,6 +214,9 @@ deleteBtn.onclick = e => {
         setErrorFor(delPasswdInput, "Password cannot be empty");
         return;
     }
+
+    getLoader('block');
+
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
     xhrSender.send('/account/delete', function (xhr) {
@@ -211,6 +228,7 @@ deleteBtn.onclick = e => {
                         switch (data['field']) {
                             case 'delPassword':
                                 setErrorFor(delPasswdInput, data['reason']);
+                                getLoader('none');
                                 break;
                         }
                     } else {
@@ -219,6 +237,7 @@ deleteBtn.onclick = e => {
                 } else {
                     showFailure('Delete account failed!');
                 }
+                getLoader('none');
                 return;
             }
             showSuccess('Account deactivated.', () => {
@@ -227,5 +246,6 @@ deleteBtn.onclick = e => {
         } catch (error) {
             showFailure('Something went wrong! Please try again.');
         }
+        getLoader('none');
     });
 }

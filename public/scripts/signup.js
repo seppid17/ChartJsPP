@@ -5,9 +5,6 @@ let lastNameInput = document.getElementById('lastName');
 let passwdInput = document.getElementById('password');
 let cnfpasswdInput = document.getElementById('cnfPassword');
 
-let overlayLoader = document.getElementById("overlayLoader");
-let loader = document.getElementById("loader");
-
 emailInput.onkeydown = event => {
     keyPressFn(event, email_pattern, firstNameInput, 'Invalid email');
 }
@@ -139,9 +136,4 @@ submitBtn.onclick = e => {
 
 document.body.onload = function (e) {
     emailInput.focus();
-}
-
-function getLoader(type) { // type = 'block' or 'none'
-    overlayLoader.style.display = type;
-    loader.style.display = type;
 }
