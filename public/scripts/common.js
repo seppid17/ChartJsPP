@@ -392,16 +392,28 @@ function getLoader(type) {
     document.getElementById("loader").style.display = type;
 }
 
+let loadTimerID = 0;
+
 /**
  * Show the loader
  */
 function showLoader() {
-    getLoader('block');
+    if (loadTimerID != 0) {
+        clearTimeout(loadTimerID);
+        loadTimerID = 0;
+    }
+    loadTimerID = setTimeout(() => {
+        getLoader('block');
+    }, 200);
 }
 
 /**
  * Hide the loader
  */
 function hideLoader() {
+    if (loadTimerID != 0) {
+        clearTimeout(loadTimerID);
+        loadTimerID = 0;
+    }
     getLoader('none');
 }
