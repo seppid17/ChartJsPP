@@ -26,9 +26,11 @@ const chartTypes = document.getElementsByName('charttype');
 
 const xVisible = document.getElementById('xVisible');
 const xGridVisible = document.getElementById('xGridVisible');
+const xTicksVisible = document.getElementById('xTicksVisible');
 const xTitleVisible = document.getElementById('xTitleVisible');
 const yVisible = document.getElementById('yVisible');
 const yGridVisible = document.getElementById('yGridVisible');
+const yTicksVisible = document.getElementById('yTicksVisible');
 const yTitleVisible = document.getElementById('yTitleVisible');
 
 resizeFn = () => {
@@ -431,9 +433,11 @@ document.getElementById('saveBtn').onclick = e => {
     if (chartConfig instanceof AxisChartConfig) {
         properties.xAxisVisible = chartConfig.getAxisVisibility('x');
         properties.xGridVisible = chartConfig.getGridVisibility('x');
+        properties.xTicksVisible = chartConfig.getTicksVisibility('x');
         properties.xTitleVisible = chartConfig.getTitleVisibility('x');
         properties.yAxisVisible = chartConfig.getAxisVisibility('y');
         properties.yGridVisible = chartConfig.getGridVisibility('y');
+        properties.yTicksVisible = chartConfig.getTicksVisibility('y');
         properties.yTitleVisible = chartConfig.getTitleVisibility('y');
     }
 
@@ -791,6 +795,9 @@ function drawSavedChart(info, type, data, properties) {
         if (typeof properties.xGridVisible == 'boolean') {
             myChart.setGridVisibility('x', properties.xGridVisible);
         }
+        if (typeof properties.xTicksVisible == 'boolean') {
+            myChart.setTicksVisibility('x', properties.xTicksVisible);
+        }
         if (typeof properties.xTitleVisible == 'boolean') {
             myChart.setTitleVisibility('x', properties.xTitleVisible);
         }
@@ -799,6 +806,9 @@ function drawSavedChart(info, type, data, properties) {
         }
         if (typeof properties.yGridVisible == 'boolean') {
             myChart.setGridVisibility('y', properties.yGridVisible);
+        }
+        if (typeof properties.yTicksVisible == 'boolean') {
+            myChart.setTicksVisibility('y', properties.xTicksVisible);
         }
         if (typeof properties.yTitleVisible == 'boolean') {
             myChart.setTitleVisibility('y', properties.yTitleVisible);
@@ -898,6 +908,13 @@ xGridVisible.onclick = e => {
     chart.setGridVisibility('x', show);
 }
 
+xTicksVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = xTicksVisible.checked;
+    chart.setTicksVisibility('x', show);
+}
+
 xTitleVisible.onclick = e => {
     let chart = ChartConfig.instance;
     if (!(chart instanceof AxisChartConfig)) return;
@@ -917,6 +934,13 @@ yGridVisible.onclick = e => {
     if (!(chart instanceof AxisChartConfig)) return;
     let show = yGridVisible.checked;
     chart.setGridVisibility('y', show);
+}
+
+yTicksVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = yTicksVisible.checked;
+    chart.setTicksVisibility('y', show);
 }
 
 yTitleVisible.onclick = e => {
@@ -943,9 +967,11 @@ function updateSettings() {
         body.classList.remove('noAxis');
         xVisible.checked = chart.getAxisVisibility('x');
         xGridVisible.checked = chart.getGridVisibility('x');
+        xTicksVisible.checked = chart.getTicksVisibility('x');
         xTitleVisible.checked = chart.getTitleVisibility('x');
         yVisible.checked = chart.getAxisVisibility('y');
         yGridVisible.checked = chart.getGridVisibility('y');
+        yTicksVisible.checked = chart.getTicksVisibility('y');
         yTitleVisible.checked = chart.getTitleVisibility('y');
     } else {
         body.classList.add('noAxis');

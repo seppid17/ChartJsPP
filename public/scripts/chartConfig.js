@@ -181,6 +181,9 @@ class AxisChartConfig extends BasicChartConfig {
                 title: {
                     display: false
                 },
+                ticks: {
+                    display: true
+                },
                 grid: {
                     display: true
                 }
@@ -189,6 +192,9 @@ class AxisChartConfig extends BasicChartConfig {
                 display: true,
                 title: {
                     display: false
+                },
+                ticks: {
+                    display: true
                 },
                 grid: {
                     display: true
@@ -208,6 +214,11 @@ class AxisChartConfig extends BasicChartConfig {
         return this.config.options.scales[axis].grid.display;
     }
 
+    getTicksVisibility(axis) {
+        if (axis !== 'x' && axis !== 'y') return false;
+        return this.config.options.scales[axis].ticks.display;
+    }
+
     getTitleVisibility(axis) {
         if (axis !== 'x' && axis !== 'y') return false;
         return this.config.options.scales[axis].title.display;
@@ -222,6 +233,12 @@ class AxisChartConfig extends BasicChartConfig {
     setGridVisibility(axis, visible) {
         if (axis !== 'x' && axis !== 'y') return;
         this.config.options.scales[axis].grid.display = visible;
+        ChartConfig.update('none');
+    }
+
+    setTicksVisibility(axis, visible) {
+        if (axis !== 'x' && axis !== 'y') return;
+        this.config.options.scales[axis].ticks.display = visible;
         ChartConfig.update('none');
     }
 
