@@ -4,6 +4,7 @@ body {
 }
 
 body.authOnly .onlyAuth,
+body.noLegend .legend,
 body.noMarker .marker,
 body.noMarkerSize .marker-size,
 body.noAxis .axis {
@@ -542,6 +543,7 @@ input:focus {
 .marker-type,
 .text-type,
 .text-size,
+.legend,
 .Xaxis,
 .Yaxis {
     margin-bottom: 10px;

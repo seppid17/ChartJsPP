@@ -32,6 +32,7 @@ const yVisible = document.getElementById('yVisible');
 const yGridVisible = document.getElementById('yGridVisible');
 const yTicksVisible = document.getElementById('yTicksVisible');
 const yTitleVisible = document.getElementById('yTitleVisible');
+const legendVisible = document.getElementById('legendVisible');
 
 resizeFn = () => {
     let height = window.innerHeight;
@@ -440,6 +441,9 @@ document.getElementById('saveBtn').onclick = e => {
         properties.yTicksVisible = chartConfig.getTicksVisibility('y');
         properties.yTitleVisible = chartConfig.getTitleVisibility('y');
     }
+    if (chartConfig instanceof LegendChartConfig) {
+        properties.legendVisible = chartConfig.getLegendVisibility();
+    }
 
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
 
@@ -814,6 +818,11 @@ function drawSavedChart(info, type, data, properties) {
             myChart.setTitleVisibility('y', properties.yTitleVisible);
         }
     }
+    if (myChart instanceof LegendChartConfig) {
+        if (typeof properties.legendVisible == 'boolean') {
+            myChart.setLegendVisibility(properties.legendVisible);
+        }
+    }
     chartViewDiv.style.display = 'block';
     alertDiv.style.display = 'none';
     myChart.draw();
@@ -950,6 +959,13 @@ yTitleVisible.onclick = e => {
     chart.setTitleVisibility('y', show);
 }
 
+legendVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof LegendChartConfig)) return;
+    let show = legendVisible.checked;
+    chart.setLegendVisibility(show);
+}
+
 function updateSettings() {
     let chart = ChartConfig.instance;
     if (chart == null) return;
@@ -962,6 +978,12 @@ function updateSettings() {
         body.classList.remove('noMarkerSize');
     } else {
         body.classList.add('noMarkerSize');
+    }
+    if (chart instanceof LegendChartConfig) {
+        body.classList.remove('noLegend');
+        legendVisible.checked = chart.getLegendVisibility();
+    } else {
+        body.classList.add('noLegend');
     }
     if (chart instanceof AxisChartConfig) {
         body.classList.remove('noAxis');

@@ -173,34 +173,35 @@ class BasicChartConfig extends ChartConfig {
 }
 
 class AxisChartConfig extends BasicChartConfig {
-
     initOptions(options) {
-        options.scales = {
-            x: {
-                display: true,
-                title: {
-                    display: false
+        copyObjectProperties({
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: false
+                    },
+                    ticks: {
+                        display: true
+                    },
+                    grid: {
+                        display: true
+                    }
                 },
-                ticks: {
-                    display: true
-                },
-                grid: {
-                    display: true
-                }
-            },
-            y: {
-                display: true,
-                title: {
-                    display: false
-                },
-                ticks: {
-                    display: true
-                },
-                grid: {
-                    display: true
+                y: {
+                    display: true,
+                    title: {
+                        display: false
+                    },
+                    ticks: {
+                        display: true
+                    },
+                    grid: {
+                        display: true
+                    }
                 }
             }
-        }
+        }, options);
         super.initOptions(options);
     }
 
@@ -260,6 +261,28 @@ class AxisChartConfig extends BasicChartConfig {
     }
 }
 
+class LegendChartConfig extends BasicChartConfig {
+    initOptions(options) {
+        copyObjectProperties({
+            plugins: {
+                legend: {
+                    display: true
+                }
+            }
+        }, options);
+        super.initOptions(options);
+    }
+
+    getLegendVisibility() {
+        return this.config.options.plugins.legend.display;
+    }
+
+    setLegendVisibility(visible) {
+        this.config.options.plugins.legend.display = visible;
+        ChartConfig.update('none');
+    }
+}
+
 class BarChartConfig extends AxisChartConfig {
     constructor() {
         super('bar');
@@ -279,7 +302,7 @@ class BarChartConfig extends AxisChartConfig {
     }
 }
 
-class PieChartConfig extends BasicChartConfig {
+class PieChartConfig extends LegendChartConfig {
     constructor() {
         super('pie');
         super.initOptions({
@@ -325,7 +348,7 @@ class LineChartConfig extends AxisChartConfig {
     }
 }
 
-class DoughnutChartConfig extends BasicChartConfig {
+class DoughnutChartConfig extends LegendChartConfig {
     constructor() {
         super('doughnut');
         super.initOptions({
@@ -341,7 +364,7 @@ class DoughnutChartConfig extends BasicChartConfig {
     }
 }
 
-class PolarAreaChartConfig extends BasicChartConfig {
+class PolarAreaChartConfig extends LegendChartConfig {
     constructor() {
         super('polarArea');
         super.initOptions({
