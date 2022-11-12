@@ -77,7 +77,7 @@
             <span>Back</span>
         </a>
         <div id="crumbs">
-            <ol id="breadcrumbA">
+            <ol id="breadcrumbs">
                 <!-- add path -->
             </ol>
         </div>
@@ -145,14 +145,16 @@
             <div class="text-props">
                 <div class="text-type">
                     Text style
-                    <span class="style-button">
-                        <a class="btn btn-icon" id="boldBtn">
-                            <i class="fa-solid fa-bold"></i>
-                        </a>
-                        <a class="btn btn-icon" id="italicBtn">
-                            <i class="fa-solid fa-italic"></i>
-                        </a>
-                    </span>
+                    <nobr>
+                        <span class="style-button">
+                            <a class="btn btn-icon" id="boldBtn">
+                                <i class="fa-solid fa-bold"></i>
+                            </a>
+                            <a class="btn btn-icon" id="italicBtn">
+                                <i class="fa-solid fa-italic"></i>
+                            </a>
+                        </span>
+                    </nobr>
                 </div>
                 <div class="text-size">
                     Font size
@@ -178,6 +180,30 @@
                         <option value="star">Star</option>
                         <option value="triangle">Triangle</option>
                     </select>
+                </div>
+            </div>
+            <div class="axis">
+                <div class="Xaxis">
+                    X
+                    <nobr>
+                        Axis
+                        <input type="checkbox" id="xVisible" checked>
+                        Grid
+                        <input type="checkbox" id="xGridVisible" checked>
+                        Title
+                        <input type="checkbox" id="xTitleVisible" checked>
+                    </nobr>
+                </div>
+                <div class="Yaxis">
+                    Y
+                    <nobr>
+                        Axis
+                        <input type="checkbox" id="yVisible" checked>
+                        Grid
+                        <input type="checkbox" id="yGridVisible" checked>
+                        Title
+                        <input type="checkbox" id="yTitleVisible" checked>
+                    </nobr>
                 </div>
             </div>
         </span>

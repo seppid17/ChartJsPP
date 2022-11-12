@@ -1,3 +1,5 @@
+const expandBtnDiv = document.getElementById('expandBtnDiv');
+
 function genColor(n) {
     return `rgba(${(121 * n + 51) % 192 + 48},${(52 * n + 203) % 192 + 48},${(165 * n + 67) % 192 + 48},1)`
 }
@@ -8,19 +10,19 @@ class ChartConfig {
     static canvas = null;
     constructor(type) {
         if (ChartConfig.canvas == null) throw new Error('No canvas selected');
+        this.hasMarker = false;
+        this.hasMarkerSize = false;
         this.config = {};
         this.config.type = type;
         this.name = '';
         backDiv.style.display = 'none'
-        while (breadcrumb.hasChildNodes()) {
-            breadcrumb.removeChild(breadcrumb.firstChild);
-        }
+        clearBreadcrumb();
         ChartConfig.canvas.onclick = evt => {
             evt.stopImmediatePropagation(); // prevents document.onclick()
             if (this instanceof HierarchicalChartConfig) { // display expand button only for hierarchical charts
-                document.getElementById('expandBtnDiv').style.display = 'block';
+                expandBtnDiv.style.display = 'block';
             } else {
-                document.getElementById('expandBtnDiv').style.display = 'none';
+                expandBtnDiv.style.display = 'none';
             }
             let popup = document.getElementById('chartEditPopup');
             popup.classList.remove('show');
@@ -49,21 +51,19 @@ class ChartConfig {
                     }
                     colors[point.index] = ColorInput.value;
 
-                    myChart.update('none');
+                    ChartConfig.update('none');
                 }
                 if (ChartConfig.instance instanceof HierarchicalChartConfig) {
                     let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
-                    if (clicked.c.length == 0) document.getElementById('expandBtnDiv').style.display = 'none'; // hide expand button if the selected element dosent have child
+                    if (clicked.c.length == 0) expandBtnDiv.style.display = 'none'; // hide expand button if the selected element dosent have child
                     document.getElementById('expandBtn').onclick = e => {
 
-                        path = setPath(clicked);
-                        while (breadcrumb.hasChildNodes()) {
-                            breadcrumb.removeChild(breadcrumb.firstChild);
-                        }
+                        path = getPath(clicked);
+                        clearBreadcrumb();
                         path.forEach(createBreadcrumb);
                         popup.classList.remove('show');
                         backDiv.style.display = 'block'
-                        myChart.update('expand ' + point.index);
+                        ChartConfig.update('expand ' + point.index);
                     }
                 }
             }
@@ -90,7 +90,7 @@ class ChartConfig {
         }
     }
 
-    setOptions(options) {
+    initOptions(options) {
         this.config.options = options;
     }
 
@@ -102,6 +102,7 @@ class ChartConfig {
             ChartConfig.chart.destroy();
         }
         ChartConfig.chart = new Chart(ChartConfig.canvas, this.config);
+        updateSettings();
     }
 
     _update() {
@@ -115,6 +116,7 @@ class ChartConfig {
             ChartConfig.instance._update();
             ChartConfig.chart.update(mode);
         }
+        updateSettings();
     }
 
     getType() {
@@ -170,10 +172,81 @@ class BasicChartConfig extends ChartConfig {
     }
 }
 
-class BarChartConfig extends BasicChartConfig {
+class AxisChartConfig extends BasicChartConfig {
+
+    initOptions(options) {
+        options.scales = {
+            x: {
+                display: true,
+                title: {
+                    display: false
+                },
+                grid: {
+                    display: true
+                }
+            },
+            y: {
+                display: true,
+                title: {
+                    display: false
+                },
+                grid: {
+                    display: true
+                }
+            }
+        }
+        super.initOptions(options);
+    }
+
+    getAxisVisibility(axis) {
+        if (axis !== 'x' && axis !== 'y') return false;
+        return this.config.options.scales[axis].display;
+    }
+
+    getGridVisibility(axis) {
+        if (axis !== 'x' && axis !== 'y') return false;
+        return this.config.options.scales[axis].grid.display;
+    }
+
+    getTitleVisibility(axis) {
+        if (axis !== 'x' && axis !== 'y') return false;
+        return this.config.options.scales[axis].title.display;
+    }
+
+    setAxisVisibility(axis, visible) {
+        if (axis !== 'x' && axis !== 'y') return;
+        this.config.options.scales[axis].display = visible;
+        ChartConfig.update('none');
+    }
+
+    setGridVisibility(axis, visible) {
+        if (axis !== 'x' && axis !== 'y') return;
+        this.config.options.scales[axis].grid.display = visible;
+        ChartConfig.update('none');
+    }
+
+    setTitleVisibility(axis, visible) {
+        if (axis !== 'x' && axis !== 'y') return;
+        this.config.options.scales[axis].title.display = visible;
+        ChartConfig.update('none');
+    }
+
+    setAxisTitle(axis, title) {
+        if (axis !== 'x' && axis !== 'y') return;
+        if (typeof (title) !== 'string') title = '';
+        this.config.options.scales[axis].title.text = title;
+        if (title == '') {
+            this.setTitleVisibility(axis, false);
+        } else {
+            this.setTitleVisibility(axis, true);
+        }
+    }
+}
+
+class BarChartConfig extends AxisChartConfig {
     constructor() {
         super('bar');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -185,13 +258,14 @@ class BarChartConfig extends BasicChartConfig {
                 }
             }
         });
+        this.config.options.scales.x.grid.display = false;
     }
 }
 
 class PieChartConfig extends BasicChartConfig {
     constructor() {
         super('pie');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -204,10 +278,10 @@ class PieChartConfig extends BasicChartConfig {
     }
 }
 
-class LineChartConfig extends BasicChartConfig {
+class LineChartConfig extends AxisChartConfig {
     constructor() {
         super('line');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -219,6 +293,8 @@ class LineChartConfig extends BasicChartConfig {
                 }
             }
         });
+        this.hasMarker = true;
+        this.hasMarkerSize = true;
     }
 
     setData(data) {
@@ -226,7 +302,7 @@ class LineChartConfig extends BasicChartConfig {
         this.config.data.datasets[0].borderColor = Chart.defaults.color;
     }
 
-    _update(){
+    _update() {
         super._update();
         this.config.data.datasets[0].borderColor = Chart.defaults.color;
     }
@@ -235,7 +311,7 @@ class LineChartConfig extends BasicChartConfig {
 class DoughnutChartConfig extends BasicChartConfig {
     constructor() {
         super('doughnut');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -251,7 +327,7 @@ class DoughnutChartConfig extends BasicChartConfig {
 class PolarAreaChartConfig extends BasicChartConfig {
     constructor() {
         super('polarArea');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -260,15 +336,15 @@ class PolarAreaChartConfig extends BasicChartConfig {
         });
     }
 
-    _update(){
+    _update() {
         this.config.options.scales.r.ticks.color = Chart.defaults.color;
     }
 }
 
-class ScatterChartConfig extends BasicChartConfig {
+class ScatterChartConfig extends AxisChartConfig {
     constructor() {
         super('scatter');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -280,13 +356,15 @@ class ScatterChartConfig extends BasicChartConfig {
                 }
             }
         });
+        this.hasMarker = true;
+        this.hasMarkerSize = true;
     }
 }
 
-class BubbleChartConfig extends BasicChartConfig {
+class BubbleChartConfig extends AxisChartConfig {
     constructor() {
         super('bubble');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -298,13 +376,14 @@ class BubbleChartConfig extends BasicChartConfig {
                 }
             }
         });
+        this.hasMarker = true;
     }
 }
 
 class RadarChartConfig extends BasicChartConfig {
     constructor() {
         super('radar');
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -328,6 +407,8 @@ class RadarChartConfig extends BasicChartConfig {
                 }
             }
         });
+        this.hasMarker = true;
+        this.hasMarkerSize = true;
     }
 
     _update() {
@@ -403,7 +484,7 @@ class HierarchicalChartConfig extends ChartConfig {
 class SunburstChartConfig extends HierarchicalChartConfig {
     constructor() {
         super('sunburst', 4);
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -424,7 +505,7 @@ class SunburstChartConfig extends HierarchicalChartConfig {
 class TreemapChartConfig extends HierarchicalChartConfig {
     constructor() {
         super('treemap', 5);
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             text: {
@@ -451,7 +532,7 @@ class TreemapChartConfig extends HierarchicalChartConfig {
 class IcicleChartConfig extends HierarchicalChartConfig {
     constructor() {
         super('icicle', 5);
-        super.setOptions({
+        super.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             text: {

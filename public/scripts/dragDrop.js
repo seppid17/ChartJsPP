@@ -63,8 +63,8 @@ let selectChartType = document.getElementById('selectChartType');
 document.getElementById('drawBtn').onclick = e => {
     selectChartType.className = 'chart-type';
     let found = false;
-    for (i = 0; i < types.length; i++) {
-        if (types[i].checked) {
+    for (i = 0; i < chartTypes.length; i++) {
+        if (chartTypes[i].checked) {
             found = true;
         }
     }

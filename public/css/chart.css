@@ -5,7 +5,7 @@ body {
 
 body.authOnly .onlyAuth,
 body.noMarker .marker,
-body.noGrid .grid,
+body.noMarkerSize .marker-size,
 body.noAxis .axis {
     display: none;
 }
@@ -314,6 +314,7 @@ i.fa-expand-alt {
     padding: 3px;
     height: 30px;
     width: 30px;
+    border-radius: 5px;
 }
 
 .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
@@ -540,7 +541,9 @@ input:focus {
 .marker-size,
 .marker-type,
 .text-type,
-.text-size {
+.text-size,
+.Xaxis,
+.Yaxis {
     margin-bottom: 10px;
     padding-left: 20px;
     font-size: 14px;

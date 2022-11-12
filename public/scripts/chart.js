@@ -19,9 +19,17 @@ const nameEdit = document.getElementById('nameEdit');
 const nameInput = document.getElementById('nameInput');
 const colorPicker = document.getElementById('ColorInput');
 const backDiv = document.getElementById('backDiv');
-const breadcrumb = document.getElementById('breadcrumbA');
+const breadcrumb = document.getElementById('breadcrumbs');
 const chartEditPopup = document.getElementById('chartEditPopup');
 const saveNameBtn = document.getElementById('saveName');
+const chartTypes = document.getElementsByName('charttype');
+
+const xVisible = document.getElementById('xVisible');
+const xGridVisible = document.getElementById('xGridVisible');
+const xTitleVisible = document.getElementById('xTitleVisible');
+const yVisible = document.getElementById('yVisible');
+const yGridVisible = document.getElementById('yGridVisible');
+const yTitleVisible = document.getElementById('yTitleVisible');
 
 resizeFn = () => {
     let height = window.innerHeight;
@@ -49,7 +57,7 @@ darkBtn.onclick = e => {
 Chart.defaults.font.size = 18;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
-Chart.defaults.borderColor = '#8e909240';
+Chart.defaults.borderColor = '#8e909280';
 Chart.defaults.scale.ticks.backdropColor = '#0000';
 Chart.defaults.plugins.legend.position = 'bottom';
 
@@ -76,18 +84,31 @@ Chart.register({
     }
 });
 
-let types = document.getElementsByName('charttype');
+function getSelectedChartType() {
+    let type = null;
+    for (i = 0; i < chartTypes.length; i++) {
+        if (chartTypes[i].checked) {
+            type = chartTypes[i].value;
+        }
+    }
+    return type;
+}
+
+function setSelectedChartType(type) {
+    for (i = 0; i < chartTypes.length; i++) {
+        if (chartTypes[i].value == type) {
+            chartTypes[i].checked = true;
+        }
+    }
+}
+
 const drawChart = (data) => {
     if (!(data instanceof Array) || data.length <= 0) {
         console.log('invalid data', data);
         return;
     }
-    let type = 'bar';
-    for (i = 0; i < types.length; i++) {
-        if (types[i].checked) {
-            type = types[i].value;
-        }
-    }
+    let type = getSelectedChartType();
+    if (type == null) return;
     let myChart;
     let values = [];
     switch (type) {
@@ -212,11 +233,6 @@ const drawChart = (data) => {
     myChart.setLabels(data);
     myChart.setData(values);
     myChart.draw();
-    if (['line', 'scatter', 'radar', 'bubble'].includes(type)) {
-        body.classList.remove('noMarker');
-    } else {
-        body.classList.add('noMarker');
-    }
 };
 
 function getCroppedCanvas(canvas) {
@@ -409,8 +425,17 @@ document.getElementById('saveBtn').onclick = e => {
         fontStyle: Chart.defaults.font.style,
         fontWeight: Chart.defaults.font.weight,
         markerSize: Chart.defaults.elements.point.radius,
-        markerStyle: Chart.defaults.elements.point.pointStyle
+        markerStyle: Chart.defaults.elements.point.pointStyle,
     };
+
+    if (chartConfig instanceof AxisChartConfig) {
+        properties.xAxisVisible = chartConfig.getAxisVisibility('x');
+        properties.xGridVisible = chartConfig.getGridVisibility('x');
+        properties.xTitleVisible = chartConfig.getTitleVisibility('x');
+        properties.yAxisVisible = chartConfig.getAxisVisibility('y');
+        properties.yGridVisible = chartConfig.getGridVisibility('y');
+        properties.yTitleVisible = chartConfig.getTitleVisibility('y');
+    }
 
     var thumb = make_thumb(ChartConfig.canvas, 400, 300);
 
@@ -632,6 +657,12 @@ function rgb2hex(rgb) {
 
 let path = [];
 
+function clearBreadcrumb() {
+    while (breadcrumb.hasChildNodes()) {
+        breadcrumb.removeChild(breadcrumb.firstChild);
+    }
+}
+
 document.getElementById('backBtn').onclick = e => {
     ChartConfig.update('parent');
     var first = ChartConfig.chart._metasets[0].controller.pointers[0];
@@ -641,14 +672,12 @@ document.getElementById('backBtn').onclick = e => {
         backDiv.style.display = 'none';
     } else {
         path.shift();
-        while (breadcrumb.hasChildNodes()) {
-            breadcrumb.removeChild(breadcrumb.firstChild);
-        }
+        clearBreadcrumb();
         path.forEach(createBreadcrumb);
     }
 }
 
-function setPath(first) {
+function getPath(first) {
     let path = [];
     if (first == undefined || first.p == undefined || first.p == null) return null;
     let parent = first;
@@ -755,6 +784,26 @@ function drawSavedChart(info, type, data, properties) {
     }
     myChart.setSavedData(data);
     myChart.setName(chartName);
+    if (myChart instanceof AxisChartConfig) {
+        if (typeof properties.xAxisVisible == 'boolean') {
+            myChart.setAxisVisibility('x', properties.xAxisVisible);
+        }
+        if (typeof properties.xGridVisible == 'boolean') {
+            myChart.setGridVisibility('x', properties.xGridVisible);
+        }
+        if (typeof properties.xTitleVisible == 'boolean') {
+            myChart.setTitleVisibility('x', properties.xTitleVisible);
+        }
+        if (typeof properties.yAxisVisible == 'boolean') {
+            myChart.setAxisVisibility('y', properties.yAxisVisible);
+        }
+        if (typeof properties.yGridVisible == 'boolean') {
+            myChart.setGridVisibility('y', properties.yGridVisible);
+        }
+        if (typeof properties.yTitleVisible == 'boolean') {
+            myChart.setTitleVisibility('y', properties.yTitleVisible);
+        }
+    }
     chartViewDiv.style.display = 'block';
     alertDiv.style.display = 'none';
     myChart.draw();
@@ -768,11 +817,6 @@ function drawSavedChart(info, type, data, properties) {
         fontWeightBtn.classList.add('btn-icon-selected');
     } else {
         fontWeightBtn.classList.remove('btn-icon-selected');
-    }
-    if (['line', 'scatter', 'radar', 'bubble'].includes(type)) {
-        body.classList.remove('noMarker');
-    } else {
-        body.classList.add('noMarker');
     }
 }
 
@@ -838,6 +882,74 @@ document.getElementById('downloadBtn').onclick = e => {
 document.onclick = e => {
     downloadPopup.classList.remove('show');
     chartEditPopup.classList.remove('show');
+}
+
+xVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = xVisible.checked;
+    chart.setAxisVisibility('x', show);
+}
+
+xGridVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = xGridVisible.checked;
+    chart.setGridVisibility('x', show);
+}
+
+xTitleVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = xTitleVisible.checked;
+    chart.setTitleVisibility('x', show);
+}
+
+yVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = yVisible.checked;
+    chart.setAxisVisibility('y', show);
+}
+
+yGridVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = yGridVisible.checked;
+    chart.setGridVisibility('y', show);
+}
+
+yTitleVisible.onclick = e => {
+    let chart = ChartConfig.instance;
+    if (!(chart instanceof AxisChartConfig)) return;
+    let show = yTitleVisible.checked;
+    chart.setTitleVisibility('y', show);
+}
+
+function updateSettings() {
+    let chart = ChartConfig.instance;
+    if (chart == null) return;
+    if (chart.hasMarker) {
+        body.classList.remove('noMarker');
+    } else {
+        body.classList.add('noMarker');
+    }
+    if (chart.hasMarkerSize) {
+        body.classList.remove('noMarkerSize');
+    } else {
+        body.classList.add('noMarkerSize');
+    }
+    if (chart instanceof AxisChartConfig) {
+        body.classList.remove('noAxis');
+        xVisible.checked = chart.getAxisVisibility('x');
+        xGridVisible.checked = chart.getGridVisibility('x');
+        xTitleVisible.checked = chart.getTitleVisibility('x');
+        yVisible.checked = chart.getAxisVisibility('y');
+        yGridVisible.checked = chart.getGridVisibility('y');
+        yTitleVisible.checked = chart.getTitleVisibility('y');
+    } else {
+        body.classList.add('noAxis');
+    }
 }
 
 setCallback(drawChart);

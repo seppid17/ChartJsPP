@@ -227,9 +227,9 @@ function promptConfirmation(msg, onconfirm = () => { }) {
  * @return {void}
  */
 function setCookie(name, value, expiryDays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
+    const date = new Date();
+    date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + date.toUTCString();
     document.cookie = name + "=" + value + ";" + expires + ";path=/;samesite=strict";
 }
 
@@ -240,15 +240,19 @@ function setCookie(name, value, expiryDays) {
  * @return {string} value of the cookie if exists, otherwise an empty string
  */
 function getCookie(name) {
-    let name = name + "=";
-    let ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+    name = name + "=";
+    let cookieList = document.cookie.split(';');
+    for (let i = 0; i < cookieList.length; i++) {
+        let cookie = cookieList[i];
+        let index = 0;
+        for (; index < cookie.length; index++) {
+            if (cookie.charAt(index) != ' ') break;
         }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+        if (index > 0) {
+            cookie = cookie.substring(index);
+        }
+        if (cookie.startsWith(name)) {
+            return cookie.substring(name.length, cookie.length);
         }
     }
     return "";
@@ -256,7 +260,7 @@ function getCookie(name) {
 
 let isDark = false;
 const darkBtn = document.getElementById('darkBtn');
-var r = document.querySelector(':root');
+var root = document.querySelector(':root');
 
 /**
  * Set the theme to light or dark
@@ -266,39 +270,39 @@ var r = document.querySelector(':root');
  */
 function switchTheme(is_dark) {
     if (is_dark) {
-        r.style.setProperty('--bg-primary', '#000000');
-        r.style.setProperty('--bg-wrapper', '#1d2226');
-        r.style.setProperty('--bg-opt-btn', '#1d2226');
-        r.style.setProperty('--bg-opt-btn-selected', '#e9e9ea');
-        r.style.setProperty('--bg-dropdiv', '#535353');
-        r.style.setProperty('--bg-crumb', '#f4f6fa');
-        r.style.setProperty('--text-primary', '#e9e9ea');
-        r.style.setProperty('--text-primary-h', '#ffffff');
-        r.style.setProperty('--text-secondary', '#e9e9ea');
-        r.style.setProperty('--text-opt-btn', '#ffffff');
-        r.style.setProperty('--color-trash', '#e9e9ea');
-        r.style.setProperty('--color-trash-h', '#ffffff');
-        r.style.setProperty('--color-icon-h', '#d8bbff');
-        r.style.setProperty('--color-icon-success-h', '#8bff8b');
-        r.style.setProperty('--color-icon-cancel-h', '#ff7b7b');
-        r.style.setProperty('--input-border', '#e9e9ea');
+        root.style.setProperty('--bg-primary', '#000000');
+        root.style.setProperty('--bg-wrapper', '#1d2226');
+        root.style.setProperty('--bg-opt-btn', '#1d2226');
+        root.style.setProperty('--bg-opt-btn-selected', '#e9e9ea');
+        root.style.setProperty('--bg-dropdiv', '#535353');
+        root.style.setProperty('--bg-crumb', '#f4f6fa');
+        root.style.setProperty('--text-primary', '#e9e9ea');
+        root.style.setProperty('--text-primary-h', '#ffffff');
+        root.style.setProperty('--text-secondary', '#e9e9ea');
+        root.style.setProperty('--text-opt-btn', '#ffffff');
+        root.style.setProperty('--color-trash', '#e9e9ea');
+        root.style.setProperty('--color-trash-h', '#ffffff');
+        root.style.setProperty('--color-icon-h', '#d8bbff');
+        root.style.setProperty('--color-icon-success-h', '#8bff8b');
+        root.style.setProperty('--color-icon-cancel-h', '#ff7b7b');
+        root.style.setProperty('--input-border', '#e9e9ea');
     } else {
-        r.style.setProperty('--bg-primary', '#F9FCFF');
-        r.style.setProperty('--bg-wrapper', '#ffffff');
-        r.style.setProperty('--bg-opt-btn', '#ffffff');
-        r.style.setProperty('--bg-opt-btn-selected', '#e5e7eb');
-        r.style.setProperty('--bg-dropdiv', '#f7f7f7');
-        r.style.setProperty('--bg-crumb', '#f4f6fa');
-        r.style.setProperty('--text-primary', '#000000');
-        r.style.setProperty('--text-primary-h', '#000000');
-        r.style.setProperty('--text-secondary', '#808080');
-        r.style.setProperty('--text-opt-btn', '#000000');
-        r.style.setProperty('--color-trash', '#808080');
-        r.style.setProperty('--color-trash-h', '#000000');
-        r.style.setProperty('--color-icon-h', '#7a14ff');
-        r.style.setProperty('--color-icon-success-h', '#003400');
-        r.style.setProperty('--color-icon-cancel-h', '#410101');
-        r.style.setProperty('--input-border', '#f0f0f0');
+        root.style.setProperty('--bg-primary', '#F9FCFF');
+        root.style.setProperty('--bg-wrapper', '#ffffff');
+        root.style.setProperty('--bg-opt-btn', '#ffffff');
+        root.style.setProperty('--bg-opt-btn-selected', '#e5e7eb');
+        root.style.setProperty('--bg-dropdiv', '#f7f7f7');
+        root.style.setProperty('--bg-crumb', '#f4f6fa');
+        root.style.setProperty('--text-primary', '#000000');
+        root.style.setProperty('--text-primary-h', '#000000');
+        root.style.setProperty('--text-secondary', '#808080');
+        root.style.setProperty('--text-opt-btn', '#000000');
+        root.style.setProperty('--color-trash', '#808080');
+        root.style.setProperty('--color-trash-h', '#000000');
+        root.style.setProperty('--color-icon-h', '#7a14ff');
+        root.style.setProperty('--color-icon-success-h', '#003400');
+        root.style.setProperty('--color-icon-cancel-h', '#410101');
+        root.style.setProperty('--input-border', '#f0f0f0');
     }
 }
 
