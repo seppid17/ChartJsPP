@@ -56,7 +56,7 @@ darkBtn.onclick = e => {
     else Chart.defaults.color = '#333';
     ChartConfig.update('none');
 }
-Chart.defaults.font.size = 18;
+Chart.defaults.font.size = 14;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
 Chart.defaults.borderColor = '#8e909280';
