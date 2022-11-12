@@ -298,6 +298,40 @@ class LegendChartConfig extends BasicChartConfig {
     }
 }
 
+class MarkerChartConfig extends BasicChartConfig {
+    initOptions(options) {
+        copyObjectProperties({
+            elements: {
+                point: {
+                    radius: Chart.defaults.elements.point.radius,
+                    hoverRadius: Chart.defaults.elements.point.radius + 3,
+                    pointStyle: 'circle'
+                }
+            }
+        }, options);
+        super.initOptions(options);
+    }
+
+    getMarkerSize() {
+        return this.config.options.elements.point.radius;
+    }
+
+    getMarkerStyle() {
+        return this.config.options.elements.point.pointStyle;
+    }
+
+    setMarkerSize(radius) {
+        this.config.options.elements.point.radius = radius;
+        this.config.options.elements.point.hoverRadius = radius + 3;
+        ChartConfig.update('none');
+    }
+
+    setMarkerStyle(style) {
+        this.config.options.elements.point.pointStyle = style;
+        ChartConfig.update('none');
+    }
+}
+
 class BarChartConfig extends BasicChartConfig {
     constructor() {
         super('bar');
@@ -438,14 +472,14 @@ class BubbleChartConfig extends BasicChartConfig {
             }
         });
         this.hasAxis = true;
-        this.hasMarker = true;
+        // this.hasMarker = true;
     }
 }
 
 class RadarChartConfig extends BasicChartConfig {
     constructor() {
         super('radar');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -465,6 +499,9 @@ class RadarChartConfig extends BasicChartConfig {
                         font: {
                             size: Chart.defaults.font.size
                         }
+                    },
+                    ticks: {
+                        backdropColor: '#0000'
                     }
                 }
             }
@@ -637,4 +674,12 @@ class IcicleChartConfig extends HierarchicalChartConfig {
     cls.prototype.setTicksVisibility = AxisChartConfig.prototype.setTicksVisibility;
     cls.prototype.setTitleVisibility = AxisChartConfig.prototype.setTitleVisibility;
     cls.prototype.setAxisTitle = AxisChartConfig.prototype.setAxisTitle;
+});
+
+[LineChartConfig, ScatterChartConfig, BubbleChartConfig, RadarChartConfig].forEach(cls => {
+    cls.prototype.initOptions = MarkerChartConfig.prototype.initOptions;
+    cls.prototype.getMarkerSize = MarkerChartConfig.prototype.getMarkerSize;
+    cls.prototype.getMarkerStyle = MarkerChartConfig.prototype.getMarkerStyle;
+    cls.prototype.setMarkerSize = MarkerChartConfig.prototype.setMarkerSize;
+    cls.prototype.setMarkerStyle = MarkerChartConfig.prototype.setMarkerStyle;
 });

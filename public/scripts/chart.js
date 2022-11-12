@@ -61,7 +61,6 @@ Chart.defaults.font.size = 14;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
 Chart.defaults.borderColor = '#8e909280';
-Chart.defaults.scale.ticks.backdropColor = '#0000';
 Chart.defaults.plugins.legend.position = 'bottom';
 
 let chartID = '';
@@ -69,6 +68,7 @@ let chartName = 'Untitled';
 fontSizeSelect.value = Chart.defaults.font.size;
 markerSizeSelect.value = Chart.defaults.elements.point.radius;
 markerStyleSelect.value = Chart.defaults.elements.point.pointStyle;
+
 if (Chart.defaults.font.style == 'italic') {
     fontStyleBtn.classList.add('btn-icon-selected');
 }
@@ -414,22 +414,28 @@ document.getElementById('downloadPdf').onclick = e => {
 };
 
 document.getElementById('saveBtn').onclick = e => {
-    var chartConfig = ChartConfig.instance;
+    let chartConfig = ChartConfig.instance;
     if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
         showFailure('No chart to save');
         return;
     }
-    var type = chartConfig.getType();
+
+    let type = chartConfig.getType();
     if (type == null) return;
-    var data = chartConfig.getData();
+
+    let data = chartConfig.getData();
     if (data == null) return;
-    var properties = {
+
+    let properties = {
         fontSize: Chart.defaults.font.size,
         fontStyle: Chart.defaults.font.style,
         fontWeight: Chart.defaults.font.weight,
-        markerSize: Chart.defaults.elements.point.radius,
-        markerStyle: Chart.defaults.elements.point.pointStyle,
     };
+
+    if (chartConfig.hasMarker) {
+        properties.markerSize = chartConfig.getMarkerSize();
+        properties.markerStyle = chartConfig.getMarkerStyle();
+    }
 
     if (chartConfig.hasAxis) {
         properties.xAxisVisible = chartConfig.getAxisVisibility('x');
@@ -588,33 +594,6 @@ document.getElementById('editName').onclick = e => {
     };
 };
 
-markerSizeSelect.onchange = e => {
-    var radius = markerSizeSelect.value;
-    if (/^\d{1,2}$/.test(radius)) {
-        radius = parseInt(radius);
-        if (radius < 1) {
-            radius = 1;
-        }
-        if (radius > 12) {
-            radius = 12;
-        }
-        markerSizeSelect.value = radius;
-        Chart.defaults.elements.point.radius = radius;
-        Chart.defaults.elements.point.hoverRadius = radius + 3;
-        ChartConfig.update('none');
-    }
-};
-
-markerStyleSelect.onchange = e => {
-    var style = markerStyleSelect.value;
-    if (!['circle', 'cross', 'crossRot', 'dash', 'line', 'rect', 'rectRounded', 'rectRot', 'star', 'triangle'].includes(style)) {
-        markerStyleSelect.value = 'circle';
-        style = markerStyleSelect.value;
-    }
-    Chart.defaults.elements.point.pointStyle = style;
-    ChartConfig.update('none');
-};
-
 fontSizeSelect.onchange = e => {
     var size = fontSizeSelect.value;
     if (/^\d{1,3}$/.test(size)) {
@@ -718,14 +697,6 @@ function setDivPos(d, x, y, mid) {
 
 function drawSavedChart(info, type, data, properties) {
     if (typeof info.name != 'undefined') chartName = info.name;
-    if (typeof properties.markerSize != 'undefined') {
-        markerSizeSelect.value = properties.markerSize;
-        markerSizeSelect.onchange(null);
-    }
-    if (typeof properties.markerStyle != 'undefined') {
-        markerStyleSelect.value = properties.markerStyle;
-        markerStyleSelect.onchange(null);
-    }
     if (typeof properties.fontSize != 'undefined') {
         fontSizeSelect.value = properties.fontSize;
         fontSizeSelect.onchange(null);
@@ -792,6 +763,14 @@ function drawSavedChart(info, type, data, properties) {
     }
     myChart.setSavedData(data);
     myChart.setName(chartName);
+    if (myChart.hasMarker) {
+        if (myChart.hasMarkerSize && typeof properties.markerSize == 'number') {
+            myChart.setMarkerSize(properties.markerSize);
+        }
+        if (typeof properties.markerStyle == 'string') {
+            myChart.setMarkerStyle(properties.markerStyle);
+        }
+    }
     if (myChart.hasAxis) {
         if (typeof properties.xAxisVisible == 'boolean') {
             myChart.setAxisVisibility('x', properties.xAxisVisible);
@@ -903,6 +882,36 @@ document.onclick = e => {
     chartEditPopup.classList.remove('show');
 }
 
+markerSizeSelect.onchange = e => {
+    let chart = ChartConfig.instance;
+    if (!chart.hasMarkerSize) return;
+    var radius = markerSizeSelect.value;
+    if (/^\d{1,2}$/.test(radius)) {
+        radius = parseInt(radius);
+        if (radius < 1) {
+            radius = 1;
+        }
+        if (radius > 12) {
+            radius = 12;
+        }
+        markerSizeSelect.value = radius;
+        chart.setMarkerSize(radius);
+        ChartConfig.update('none');
+    }
+};
+
+markerStyleSelect.onchange = e => {
+    let chart = ChartConfig.instance;
+    if (!chart.hasMarker) return;
+    var style = markerStyleSelect.value;
+    if (!['circle', 'cross', 'crossRot', 'dash', 'line', 'rect', 'rectRounded', 'rectRot', 'star', 'triangle'].includes(style)) {
+        markerStyleSelect.value = 'circle';
+        style = markerStyleSelect.value;
+    }
+    chart.setMarkerStyle(style);
+    ChartConfig.update('none');
+};
+
 xVisible.onclick = e => {
     let chart = ChartConfig.instance;
     if (!chart.hasAxis) return;
@@ -971,11 +980,13 @@ function updateSettings() {
     if (chart == null) return;
     if (chart.hasMarker) {
         body.classList.remove('noMarker');
+        markerStyleSelect.value = chart.getMarkerStyle();
     } else {
         body.classList.add('noMarker');
     }
     if (chart.hasMarkerSize) {
         body.classList.remove('noMarkerSize');
+        markerSizeSelect.value = chart.getMarkerSize();
     } else {
         body.classList.add('noMarkerSize');
     }
