@@ -417,15 +417,3 @@ function hideLoader() {
     }
     getLoader('none');
 }
-
-function copyObjectProperties(src, dest) {
-    Object.keys(src).forEach(key =>{
-        let value = src[key];
-        if (value instanceof Object){
-            if (!dest.hasOwnProperty(key)) dest[key] = {};
-            copyObjectProperties(value, dest[key]);
-        }else{
-            if (!dest.hasOwnProperty(key)) dest[key] = value;
-        }
-    });
-}

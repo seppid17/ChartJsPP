@@ -4,12 +4,26 @@ function genColor(n) {
     return `rgba(${(121 * n + 51) % 192 + 48},${(52 * n + 203) % 192 + 48},${(165 * n + 67) % 192 + 48},1)`
 }
 
+function copyObjectProperties(src, dest) {
+    Object.keys(src).forEach(key => {
+        let value = src[key];
+        if (value instanceof Object) {
+            if (!dest.hasOwnProperty(key)) dest[key] = {};
+            copyObjectProperties(value, dest[key]);
+        } else {
+            if (!dest.hasOwnProperty(key)) dest[key] = value;
+        }
+    });
+}
+
 class ChartConfig {
     static chart = null;
     static instance = null;
     static canvas = null;
     constructor(type) {
         if (ChartConfig.canvas == null) throw new Error('No canvas selected');
+        this.hasAxis = false;
+        this.hasLegend = false;
         this.hasMarker = false;
         this.hasMarkerSize = false;
         this.config = {};
@@ -91,6 +105,7 @@ class ChartConfig {
     }
 
     initOptions(options) {
+        if (!this.hasOwnProperty('config')) this.config = {};
         this.config.options = options;
     }
 
@@ -283,10 +298,10 @@ class LegendChartConfig extends BasicChartConfig {
     }
 }
 
-class BarChartConfig extends AxisChartConfig {
+class BarChartConfig extends BasicChartConfig {
     constructor() {
         super('bar');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -298,30 +313,32 @@ class BarChartConfig extends AxisChartConfig {
                 }
             }
         });
+        this.hasAxis = true;
         this.config.options.scales.x.grid.display = false;
     }
 }
 
-class PieChartConfig extends LegendChartConfig {
+class PieChartConfig extends BasicChartConfig {
     constructor() {
         super('pie');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
                 autoPadding: false
             }
         });
+        this.hasLegend = true;
     }
 
     _update() {
     }
 }
 
-class LineChartConfig extends AxisChartConfig {
+class LineChartConfig extends BasicChartConfig {
     constructor() {
         super('line');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -333,6 +350,7 @@ class LineChartConfig extends AxisChartConfig {
                 }
             }
         });
+        this.hasAxis = true;
         this.hasMarker = true;
         this.hasMarkerSize = true;
     }
@@ -348,32 +366,34 @@ class LineChartConfig extends AxisChartConfig {
     }
 }
 
-class DoughnutChartConfig extends LegendChartConfig {
+class DoughnutChartConfig extends BasicChartConfig {
     constructor() {
         super('doughnut');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
                 autoPadding: false
             }
         });
+        this.hasLegend = true;
     }
 
     _update() {
     }
 }
 
-class PolarAreaChartConfig extends LegendChartConfig {
+class PolarAreaChartConfig extends BasicChartConfig {
     constructor() {
         super('polarArea');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
                 autoPadding: false
             }
         });
+        this.hasLegend = true;
     }
 
     _update() {
@@ -381,10 +401,10 @@ class PolarAreaChartConfig extends LegendChartConfig {
     }
 }
 
-class ScatterChartConfig extends AxisChartConfig {
+class ScatterChartConfig extends BasicChartConfig {
     constructor() {
         super('scatter');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -396,15 +416,16 @@ class ScatterChartConfig extends AxisChartConfig {
                 }
             }
         });
+        this.hasAxis = true;
         this.hasMarker = true;
         this.hasMarkerSize = true;
     }
 }
 
-class BubbleChartConfig extends AxisChartConfig {
+class BubbleChartConfig extends BasicChartConfig {
     constructor() {
         super('bubble');
-        super.initOptions({
+        this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
@@ -416,6 +437,7 @@ class BubbleChartConfig extends AxisChartConfig {
                 }
             }
         });
+        this.hasAxis = true;
         this.hasMarker = true;
     }
 }
@@ -597,3 +619,22 @@ class IcicleChartConfig extends HierarchicalChartConfig {
         });
     }
 }
+
+[PieChartConfig, DoughnutChartConfig, PolarAreaChartConfig].forEach(cls => {
+    cls.prototype.initOptions = LegendChartConfig.prototype.initOptions;
+    cls.prototype.getLegendVisibility = LegendChartConfig.prototype.getLegendVisibility;
+    cls.prototype.setLegendVisibility = LegendChartConfig.prototype.setLegendVisibility;
+});
+
+[BarChartConfig, LineChartConfig, ScatterChartConfig, BubbleChartConfig].forEach(cls => {
+    cls.prototype.initOptions = AxisChartConfig.prototype.initOptions;
+    cls.prototype.getAxisVisibility = AxisChartConfig.prototype.getAxisVisibility;
+    cls.prototype.getGridVisibility = AxisChartConfig.prototype.getGridVisibility;
+    cls.prototype.getTicksVisibility = AxisChartConfig.prototype.getTicksVisibility;
+    cls.prototype.getTitleVisibility = AxisChartConfig.prototype.getTitleVisibility;
+    cls.prototype.setAxisVisibility = AxisChartConfig.prototype.setAxisVisibility;
+    cls.prototype.setGridVisibility = AxisChartConfig.prototype.setGridVisibility;
+    cls.prototype.setTicksVisibility = AxisChartConfig.prototype.setTicksVisibility;
+    cls.prototype.setTitleVisibility = AxisChartConfig.prototype.setTitleVisibility;
+    cls.prototype.setAxisTitle = AxisChartConfig.prototype.setAxisTitle;
+});

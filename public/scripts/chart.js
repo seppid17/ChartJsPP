@@ -431,7 +431,7 @@ document.getElementById('saveBtn').onclick = e => {
         markerStyle: Chart.defaults.elements.point.pointStyle,
     };
 
-    if (chartConfig instanceof AxisChartConfig) {
+    if (chartConfig.hasAxis) {
         properties.xAxisVisible = chartConfig.getAxisVisibility('x');
         properties.xGridVisible = chartConfig.getGridVisibility('x');
         properties.xTicksVisible = chartConfig.getTicksVisibility('x');
@@ -441,7 +441,7 @@ document.getElementById('saveBtn').onclick = e => {
         properties.yTicksVisible = chartConfig.getTicksVisibility('y');
         properties.yTitleVisible = chartConfig.getTitleVisibility('y');
     }
-    if (chartConfig instanceof LegendChartConfig) {
+    if (chartConfig.hasLegend) {
         properties.legendVisible = chartConfig.getLegendVisibility();
     }
 
@@ -792,7 +792,7 @@ function drawSavedChart(info, type, data, properties) {
     }
     myChart.setSavedData(data);
     myChart.setName(chartName);
-    if (myChart instanceof AxisChartConfig) {
+    if (myChart.hasAxis) {
         if (typeof properties.xAxisVisible == 'boolean') {
             myChart.setAxisVisibility('x', properties.xAxisVisible);
         }
@@ -818,7 +818,7 @@ function drawSavedChart(info, type, data, properties) {
             myChart.setTitleVisibility('y', properties.yTitleVisible);
         }
     }
-    if (myChart instanceof LegendChartConfig) {
+    if (myChart.hasLegend) {
         if (typeof properties.legendVisible == 'boolean') {
             myChart.setLegendVisibility(properties.legendVisible);
         }
@@ -905,63 +905,63 @@ document.onclick = e => {
 
 xVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = xVisible.checked;
     chart.setAxisVisibility('x', show);
 }
 
 xGridVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = xGridVisible.checked;
     chart.setGridVisibility('x', show);
 }
 
 xTicksVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = xTicksVisible.checked;
     chart.setTicksVisibility('x', show);
 }
 
 xTitleVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = xTitleVisible.checked;
     chart.setTitleVisibility('x', show);
 }
 
 yVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = yVisible.checked;
     chart.setAxisVisibility('y', show);
 }
 
 yGridVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = yGridVisible.checked;
     chart.setGridVisibility('y', show);
 }
 
 yTicksVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = yTicksVisible.checked;
     chart.setTicksVisibility('y', show);
 }
 
 yTitleVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof AxisChartConfig)) return;
+    if (!chart.hasAxis) return;
     let show = yTitleVisible.checked;
     chart.setTitleVisibility('y', show);
 }
 
 legendVisible.onclick = e => {
     let chart = ChartConfig.instance;
-    if (!(chart instanceof LegendChartConfig)) return;
+    if (!chart.hasLegend) return;
     let show = legendVisible.checked;
     chart.setLegendVisibility(show);
 }
@@ -979,13 +979,13 @@ function updateSettings() {
     } else {
         body.classList.add('noMarkerSize');
     }
-    if (chart instanceof LegendChartConfig) {
+    if (chart.hasLegend) {
         body.classList.remove('noLegend');
         legendVisible.checked = chart.getLegendVisibility();
     } else {
         body.classList.add('noLegend');
     }
-    if (chart instanceof AxisChartConfig) {
+    if (chart.hasAxis) {
         body.classList.remove('noAxis');
         xVisible.checked = chart.getAxisVisibility('x');
         xGridVisible.checked = chart.getGridVisibility('x');
