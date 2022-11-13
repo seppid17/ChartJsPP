@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="col-md-4 title-saved text-end">
-            <a id="shareBtn" title="share">
+            <a id="shareBtn" title="share" class="authOnly onlyAuth">
                 <i class="fa-solid fa-share-nodes fa-lg"></i>
             </a>
             <div class="popup">
@@ -58,7 +58,7 @@
                 </span>
             </div>
 
-            <a id="deleteBtn" title="delete">
+            <a id="deleteBtn" title="delete" class="authOnly onlyAuth">
                 <i class="fa-solid fa-trash-can fa-lg"></i>
             </a>
             <a id="saveBtn" title="save">
@@ -142,76 +142,96 @@
         <h5>Chart properties</h5>
 
         <span class="chart-props">
-            <div class="text-props">
-                <div class="text-type">
-                    Text style
-                    <nobr>
-                        <span class="style-button">
-                            <a class="btn btn-icon" id="boldBtn">
-                                <i class="fa-solid fa-bold"></i>
-                            </a>
-                            <a class="btn btn-icon" id="italicBtn">
-                                <i class="fa-solid fa-italic"></i>
-                            </a>
-                        </span>
-                    </nobr>
+            <div class="chart-related-props">
+                <div class="text-props">
+                    <div class="text-type">
+                        Text style
+                        <nobr>
+                            <span class="style-button">
+                                <a class="btn btn-icon" id="boldBtn">
+                                    <i class="fa-solid fa-bold"></i>
+                                </a>
+                                <a class="btn btn-icon" id="italicBtn">
+                                    <i class="fa-solid fa-italic"></i>
+                                </a>
+                            </span>
+                        </nobr>
+                    </div>
+                    <div class="text-size">
+                        Font size
+                        <input type="number" id="fontSize" class="size-select" value="" min="8" max="36">
+                    </div>
                 </div>
-                <div class="text-size">
-                    Font size
-                    <input type="number" id="fontSize" class="size-select" value="" min="8" max="36">
+                <div class="marker">
+                    <div class="marker-size">
+                        Marker size
+                        <input type="number" id="markerSize" class="size-select" value="" min="1" max="12">
+                    </div>
+                    <div class="marker-type">
+                        Marker type
+                        <select class="marker-select" name="markerStyle" id="markerStyle">
+                            <option value="circle">Circle</option>
+                            <option value="cross">Cross</option>
+                            <option value="crossRot">Rotated Cross</option>
+                            <option value="dash">Dash</option>
+                            <option value="line">Line</option>
+                            <option value="rect">Rectangle</option>
+                            <option value="rectRounded">Rounded Rectangle</option>
+                            <option value="rectRot">Rotated Rectangle</option>
+                            <option value="star">Star</option>
+                            <option value="triangle">Triangle</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="marker">
-                <div class="marker-size">
-                    Marker size
-                    <input type="number" id="markerSize" class="size-select" value="" min="1" max="12">
+            <div class="check-boxes">
+                <div class="legend">
+                    Display Legend
+                    <input class="axis-prop-input" type="checkbox" id="legendVisible" checked>
                 </div>
-                <div class="marker-type">
-                    Marker type
-                    <select class="marker-select" name="markerStyle" id="markerStyle">
-                        <option value="circle">Circle</option>
-                        <option value="cross">Cross</option>
-                        <option value="crossRot">Rotated Cross</option>
-                        <option value="dash">Dash</option>
-                        <option value="line">Line</option>
-                        <option value="rect">Rectangle</option>
-                        <option value="rectRounded">Rounded Rectangle</option>
-                        <option value="rectRot">Rotated Rectangle</option>
-                        <option value="star">Star</option>
-                        <option value="triangle">Triangle</option>
-                    </select>
-                </div>
-            </div>
-            <div class="legend">
-                Legend
-                <input type="checkbox" id="legendVisible" checked>
-            </div>
-            <div class="axis">
-                <div class="Xaxis">
-                    X
-                    <nobr>
-                        Axis
-                        <input type="checkbox" id="xVisible" checked>
-                        Grid
-                        <input type="checkbox" id="xGridVisible" checked>
-                        Ticks
-                        <input type="checkbox" id="xTicksVisible" checked>
-                        Title
-                        <input type="checkbox" id="xTitleVisible" checked>
-                    </nobr>
-                </div>
-                <div class="Yaxis">
-                    Y
-                    <nobr>
-                        Axis
-                        <input type="checkbox" id="yVisible" checked>
-                        Grid
-                        <input type="checkbox" id="yGridVisible" checked>
-                        Ticks
-                        <input type="checkbox" id="yTicksVisible" checked>
-                        Title
-                        <input type="checkbox" id="yTitleVisible" checked>
-                    </nobr>
+                <div class="axis">
+                    <div class="Xaxis d-flex">
+                        <div class="axis-lable">X-Axis</div>
+                        <div class="XaxisProps d-flex">
+                            <div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="xVisible" checked>Show
+                                </div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="xTicksVisible" checked>Names
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="xTitleVisible" checked>Title
+                                </div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="xGridVisible" checked>Grid
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Yaxis d-flex">
+                        <div class="axis-lable">Y-Axis</div>
+                        <div class="YaxisProps d-flex">
+                            <div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="yVisible" checked>Show
+                                </div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="yTicksVisible" checked>Names
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="yTitleVisible" checked>Title
+                                </div>
+                                <div>
+                                    <input class="axis-prop-input" type="checkbox" id="yGridVisible" checked>Grid
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </span>
