@@ -17,6 +17,7 @@ function copyObjectProperties(src, dest) {
 }
 
 class ChartConfig {
+    parents = [];
     static chart = null;
     static instance = null;
     static canvas = null;
@@ -105,6 +106,9 @@ class ChartConfig {
     }
 
     initOptions(options) {
+        this.parents.forEach(cls => {
+            cls.initOptions(options);
+        });
         if (!this.hasOwnProperty('config')) this.config = {};
         this.config.options = options;
     }
@@ -188,7 +192,7 @@ class BasicChartConfig extends ChartConfig {
 }
 
 class AxisChartConfig extends BasicChartConfig {
-    initOptions(options) {
+    static initOptions(options) {
         copyObjectProperties({
             scales: {
                 x: {
@@ -217,7 +221,6 @@ class AxisChartConfig extends BasicChartConfig {
                 }
             }
         }, options);
-        super.initOptions(options);
     }
 
     getAxisVisibility(axis) {
@@ -277,7 +280,7 @@ class AxisChartConfig extends BasicChartConfig {
 }
 
 class LegendChartConfig extends BasicChartConfig {
-    initOptions(options) {
+    static initOptions(options) {
         copyObjectProperties({
             plugins: {
                 legend: {
@@ -285,7 +288,6 @@ class LegendChartConfig extends BasicChartConfig {
                 }
             }
         }, options);
-        super.initOptions(options);
     }
 
     getLegendVisibility() {
@@ -299,7 +301,7 @@ class LegendChartConfig extends BasicChartConfig {
 }
 
 class MarkerChartConfig extends BasicChartConfig {
-    initOptions(options) {
+    static initOptions(options) {
         copyObjectProperties({
             elements: {
                 point: {
@@ -309,7 +311,6 @@ class MarkerChartConfig extends BasicChartConfig {
                 }
             }
         }, options);
-        super.initOptions(options);
     }
 
     getMarkerSize() {
@@ -335,6 +336,7 @@ class MarkerChartConfig extends BasicChartConfig {
 class BarChartConfig extends BasicChartConfig {
     constructor() {
         super('bar');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -355,6 +357,7 @@ class BarChartConfig extends BasicChartConfig {
 class PieChartConfig extends BasicChartConfig {
     constructor() {
         super('pie');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -372,6 +375,7 @@ class PieChartConfig extends BasicChartConfig {
 class LineChartConfig extends BasicChartConfig {
     constructor() {
         super('line');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -403,6 +407,7 @@ class LineChartConfig extends BasicChartConfig {
 class DoughnutChartConfig extends BasicChartConfig {
     constructor() {
         super('doughnut');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -420,11 +425,19 @@ class DoughnutChartConfig extends BasicChartConfig {
 class PolarAreaChartConfig extends BasicChartConfig {
     constructor() {
         super('polarArea');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
             layout: {
                 autoPadding: false
+            },
+            scales: {
+                r: {
+                    ticks: {
+                        backdropColor: '#0000'
+                    }
+                }
             }
         });
         this.hasLegend = true;
@@ -438,6 +451,7 @@ class PolarAreaChartConfig extends BasicChartConfig {
 class ScatterChartConfig extends BasicChartConfig {
     constructor() {
         super('scatter');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -459,6 +473,7 @@ class ScatterChartConfig extends BasicChartConfig {
 class BubbleChartConfig extends BasicChartConfig {
     constructor() {
         super('bubble');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -479,6 +494,7 @@ class BubbleChartConfig extends BasicChartConfig {
 class RadarChartConfig extends BasicChartConfig {
     constructor() {
         super('radar');
+        this.parents = this.constructor._parents;
         this.initOptions({
             maintainAspectRatio: false,
             responsive: true,
@@ -495,11 +511,6 @@ class RadarChartConfig extends BasicChartConfig {
                     display: false
                 },
                 r: {
-                    pointLabels: {
-                        font: {
-                            size: Chart.defaults.font.size
-                        }
-                    },
                     ticks: {
                         backdropColor: '#0000'
                     }
@@ -658,28 +669,34 @@ class IcicleChartConfig extends HierarchicalChartConfig {
 }
 
 [PieChartConfig, DoughnutChartConfig, PolarAreaChartConfig].forEach(cls => {
-    cls.prototype.initOptions = LegendChartConfig.prototype.initOptions;
-    cls.prototype.getLegendVisibility = LegendChartConfig.prototype.getLegendVisibility;
-    cls.prototype.setLegendVisibility = LegendChartConfig.prototype.setLegendVisibility;
+    const parent = LegendChartConfig;
+    if (typeof cls._parents == 'undefined') cls._parents = [];
+    cls._parents.push(parent);
+    cls.prototype.getLegendVisibility = parent.prototype.getLegendVisibility;
+    cls.prototype.setLegendVisibility = parent.prototype.setLegendVisibility;
 });
 
 [BarChartConfig, LineChartConfig, ScatterChartConfig, BubbleChartConfig].forEach(cls => {
-    cls.prototype.initOptions = AxisChartConfig.prototype.initOptions;
-    cls.prototype.getAxisVisibility = AxisChartConfig.prototype.getAxisVisibility;
-    cls.prototype.getGridVisibility = AxisChartConfig.prototype.getGridVisibility;
-    cls.prototype.getTicksVisibility = AxisChartConfig.prototype.getTicksVisibility;
-    cls.prototype.getTitleVisibility = AxisChartConfig.prototype.getTitleVisibility;
-    cls.prototype.setAxisVisibility = AxisChartConfig.prototype.setAxisVisibility;
-    cls.prototype.setGridVisibility = AxisChartConfig.prototype.setGridVisibility;
-    cls.prototype.setTicksVisibility = AxisChartConfig.prototype.setTicksVisibility;
-    cls.prototype.setTitleVisibility = AxisChartConfig.prototype.setTitleVisibility;
-    cls.prototype.setAxisTitle = AxisChartConfig.prototype.setAxisTitle;
+    const parent = AxisChartConfig;
+    if (typeof cls._parents == 'undefined') cls._parents = [];
+    cls._parents.push(parent);
+    cls.prototype.getAxisVisibility = parent.prototype.getAxisVisibility;
+    cls.prototype.getGridVisibility = parent.prototype.getGridVisibility;
+    cls.prototype.getTicksVisibility = parent.prototype.getTicksVisibility;
+    cls.prototype.getTitleVisibility = parent.prototype.getTitleVisibility;
+    cls.prototype.setAxisVisibility = parent.prototype.setAxisVisibility;
+    cls.prototype.setGridVisibility = parent.prototype.setGridVisibility;
+    cls.prototype.setTicksVisibility = parent.prototype.setTicksVisibility;
+    cls.prototype.setTitleVisibility = parent.prototype.setTitleVisibility;
+    cls.prototype.setAxisTitle = parent.prototype.setAxisTitle;
 });
 
 [LineChartConfig, ScatterChartConfig, BubbleChartConfig, RadarChartConfig].forEach(cls => {
-    cls.prototype.initOptions = MarkerChartConfig.prototype.initOptions;
-    cls.prototype.getMarkerSize = MarkerChartConfig.prototype.getMarkerSize;
-    cls.prototype.getMarkerStyle = MarkerChartConfig.prototype.getMarkerStyle;
-    cls.prototype.setMarkerSize = MarkerChartConfig.prototype.setMarkerSize;
-    cls.prototype.setMarkerStyle = MarkerChartConfig.prototype.setMarkerStyle;
+    const parent = MarkerChartConfig;
+    if (typeof cls._parents == 'undefined') cls._parents = [];
+    cls._parents.push(parent);
+    cls.prototype.getMarkerSize = parent.prototype.getMarkerSize;
+    cls.prototype.getMarkerStyle = parent.prototype.getMarkerStyle;
+    cls.prototype.setMarkerSize = parent.prototype.setMarkerSize;
+    cls.prototype.setMarkerStyle = parent.prototype.setMarkerStyle;
 });
