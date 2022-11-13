@@ -426,3 +426,10 @@ input:focus {
         left:41.5%;
     }
 }
+
+#nameSpan {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    max-width: fit-content;
+}
