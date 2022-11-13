@@ -89,7 +89,7 @@ changeNameBtn.onclick = e => {
         return;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('firstName', firstName);
@@ -104,31 +104,31 @@ changeNameBtn.onclick = e => {
                         switch (data['field']) {
                             case 'firstname':
                                 setErrorFor(firstNameInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'lastname':
                                 setErrorFor(lastNameInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Change name failed!');
+                    PopupMessage.showFailure('Change name failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Profile details updated.');
+            PopupMessage.showSuccess('Profile details updated.');
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 }
 
@@ -169,7 +169,7 @@ changePasswdBtn.onclick = e => {
         return;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('curPassword', curPasswd);
@@ -183,27 +183,27 @@ changePasswdBtn.onclick = e => {
                         switch (data['field']) {
                             case 'curPassword':
                                 setErrorFor(curPasswdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'newPassword':
                                 setErrorFor(newPasswdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Change password failed!');
+                    PopupMessage.showFailure('Change password failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Password updated.');
+            PopupMessage.showSuccess('Password updated.');
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 }
 
@@ -215,7 +215,7 @@ deleteBtn.onclick = e => {
         return;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
@@ -228,24 +228,24 @@ deleteBtn.onclick = e => {
                         switch (data['field']) {
                             case 'delPassword':
                                 setErrorFor(delPasswdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Delete account failed!');
+                    PopupMessage.showFailure('Delete account failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Account deactivated.', () => {
+            PopupMessage.showSuccess('Account deactivated.', () => {
                 window.location = '/';
             });
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 }

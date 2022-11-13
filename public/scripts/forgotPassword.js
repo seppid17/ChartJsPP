@@ -20,7 +20,7 @@ submitBtn.onclick = e => {
         return false;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
@@ -33,23 +33,23 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Password reset request failed!');
+                    PopupMessage.showFailure('Password reset request failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Password reset requested. Check your email');
+            PopupMessage.showSuccess('Password reset requested. Check your email');
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 }
 

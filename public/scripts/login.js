@@ -35,7 +35,7 @@ submitBtn.onclick = e => {
         return false;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
@@ -49,24 +49,24 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason'], false, () => {
+                        PopupMessage.showFailure(data['reason'], false, () => {
                             passwdInput.value = '';
                         });
                     }
                 } else {
-                    showFailure('Login failed!', false, () => {
+                    PopupMessage.showFailure('Login failed!', false, () => {
                         passwdInput.value = '';
                     });
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
             let target = '/dashboard';
@@ -75,11 +75,11 @@ submitBtn.onclick = e => {
             }
             window.location = target;
         } catch (error) {
-            showFailure('Something went wrong! Try again.', false, () => {
+            PopupMessage.showFailure('Something went wrong! Try again.', false, () => {
                 passwdInput.value = '';
             });
         }
-        hideLoader();
+        Loader.hide();
     });
 }
 

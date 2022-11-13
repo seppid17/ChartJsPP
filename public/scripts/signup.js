@@ -85,7 +85,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
@@ -101,35 +101,35 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 setErrorFor(emailInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'firstname':
                                 setErrorFor(firstNameInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'lastname':
                                 setErrorFor(lastNameInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Account creation failed!');
+                    PopupMessage.showFailure('Account creation failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Account created. Check your email.');
+            PopupMessage.showSuccess('Account created. Check your email.');
         } catch (error) {
-            showFailure('Something went wrong! Try again.');
+            PopupMessage.showFailure('Something went wrong! Try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 
 }

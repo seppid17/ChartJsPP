@@ -34,7 +34,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    showLoader();
+    Loader.show();
     
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
@@ -47,25 +47,25 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Password reset failed!');
+                    PopupMessage.showFailure('Password reset failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Account password reset successfull.', () => {
+            PopupMessage.showSuccess('Account password reset successfull.', () => {
                 window.location = '/login';
             });
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 }
 

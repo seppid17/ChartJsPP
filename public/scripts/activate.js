@@ -20,7 +20,7 @@ submitBtn.onclick = e => {
         return;
     }
 
-    showLoader();
+    Loader.show();
 
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
@@ -33,24 +33,24 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 setErrorFor(passwdInput, data['reason']);
-                                hideLoader();
+                                Loader.hide();
                                 break;
                         }
                     } else {
-                        showFailure(data['reason']);
+                        PopupMessage.showFailure(data['reason']);
                     }
                 } else {
-                    showFailure('Account activation failed!');
+                    PopupMessage.showFailure('Account activation failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
-            showSuccess('Account activated.', () => {
+            PopupMessage.showSuccess('Account activated.', () => {
                 window.location = '/login';
             });
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     });
 }

@@ -7,18 +7,18 @@ function showNoCharts() {
     cardsDiv.appendChild(p);
 }
 function setCards() {
-    showLoader();
+    Loader.show();
     var xhrSender = new XHRSender();
     xhrSender.send('/chart/list', xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !Array.isArray(resp.info)) {
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                    showFailure(resp['reason']);
+                    PopupMessage.showFailure(resp['reason']);
                 } else {
-                    showFailure('Chart list retrieving failed!');
+                    PopupMessage.showFailure('Chart list retrieving failed!');
                 }
-                hideLoader();
+                Loader.hide();
                 return;
             }
             if (resp.info.length == 0) {
@@ -87,8 +87,8 @@ function setCards() {
                 a.onclick = evt => {
                     evt.preventDefault();
                     evt.stopPropagation();
-                    promptConfirmation('Are you sure you want to delete ' + chart.name + '?', () => {
-                        showLoader();
+                    PopupMessage.promptConfirmation('Are you sure you want to delete ' + chart.name + '?', () => {
+                        Loader.show();
                         let xhrSender = new XHRSender();
                         xhrSender.addField('id', chart.id);
                         xhrSender.send('/chart/delete', xhr => {
@@ -96,11 +96,11 @@ function setCards() {
                                 let resp = JSON.parse(xhr.responseText);
                                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
                                     if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === "string") {
-                                        showFailure(resp['reason']);
+                                        PopupMessage.showFailure(resp['reason']);
                                     } else {
-                                        showFailure('Deleting chart failed!');
+                                        PopupMessage.showFailure('Deleting chart failed!');
                                     }
-                                    hideLoader();
+                                    Loader.hide();
                                     return;
                                 }
                                 cardsDiv.removeChild(cardColDiv);
@@ -108,9 +108,9 @@ function setCards() {
                                     showNoCharts();
                                 }
                             } catch (error) {
-                                showFailure('Delete failed!');
+                                PopupMessage.showFailure('Delete failed!');
                             }
-                            hideLoader();
+                            Loader.hide();
                         });
                     });
                 }
@@ -121,9 +121,9 @@ function setCards() {
                 a.appendChild(i);
             });
         } catch (error) {
-            showFailure('Loading saved charts failed!');
+            PopupMessage.showFailure('Loading saved charts failed!');
         }
-        hideLoader();
+        Loader.hide();
     });
 }
 

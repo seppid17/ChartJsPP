@@ -48,20 +48,20 @@ resizeFn = () => {
 window.onload = resizeFn;
 window.onresize = resizeFn;
 
-if (isDark) Chart.defaults.color = '#eee';
-else Chart.defaults.color = '#333';
-let themeClick = darkBtn.onclick;
-darkBtn.onclick = e => {
-    themeClick(e);
-    if (darkBtn.checked) Chart.defaults.color = '#eee';
-    else Chart.defaults.color = '#333';
-    ChartConfig.update('none');
-}
 Chart.defaults.font.size = 14;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
 Chart.defaults.borderColor = '#8e909280';
 Chart.defaults.plugins.legend.position = 'bottom';
+
+if (Theme.theme == Theme.DARK) Chart.defaults.color = '#eee';
+else Chart.defaults.color = '#333';
+
+Theme.addOnchangeTrigger(theme => {
+    if (theme == Theme.DARK) Chart.defaults.color = '#eee';
+    else Chart.defaults.color = '#333';
+    ChartConfig.update('none');
+});
 
 let chartID = '';
 let chartName = 'Untitled';
@@ -416,7 +416,7 @@ document.getElementById('downloadPdf').onclick = e => {
 document.getElementById('saveBtn').onclick = e => {
     let chartConfig = ChartConfig.instance;
     if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
-        showFailure('No chart to save');
+        PopupMessage.showFailure('No chart to save');
         return;
     }
 
@@ -470,24 +470,24 @@ document.getElementById('saveBtn').onclick = e => {
                             if (success) {
                                 xhrSender.send('/chart/save', cb);
                             } else {
-                                showFailure('Unauthorized');
+                                PopupMessage.showFailure('Unauthorized');
                             }
                         });
                         return;
                     }
-                    showFailure(resp['reason']);
+                    PopupMessage.showFailure(resp['reason']);
                 } else {
-                    showFailure('Chart saving failed!');
+                    PopupMessage.showFailure('Chart saving failed!');
                 }
                 return;
             }
-            showSuccess('Chart saved');
+            PopupMessage.showSuccess('Chart saved');
             body.classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
                 chartID = resp['id'];
             }
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
     }
     xhrSender.send('/chart/save', cb);
@@ -495,10 +495,10 @@ document.getElementById('saveBtn').onclick = e => {
 
 document.getElementById('deleteBtn').onclick = e => {
     if (chartID.length == 0) {
-        showFailure('Chart is not saved');
+        PopupMessage.showFailure('Chart is not saved');
         return;
     }
-    promptConfirmation('Are you sure you want to delete this chart?', () => {
+    PopupMessage.promptConfirmation('Are you sure you want to delete this chart?', () => {
         let xhrSender = new XHRSender();
         xhrSender.addField('id', chartID);
         let cb = xhr => {
@@ -511,22 +511,22 @@ document.getElementById('deleteBtn').onclick = e => {
                                 if (success) {
                                     xhrSender.send('/chart/delete', cb);
                                 } else {
-                                    showFailure('Unauthorized');
+                                    PopupMessage.showFailure('Unauthorized');
                                 }
                             });
                             return;
                         }
-                        showFailure(resp['reason']);
+                        PopupMessage.showFailure(resp['reason']);
                     } else {
-                        showFailure('Deleting chart failed!');
+                        PopupMessage.showFailure('Deleting chart failed!');
                     }
                     return;
                 }
-                showSuccess('Chart Deleted.', () => {
+                PopupMessage.showSuccess('Chart Deleted.', () => {
                     window.location = '/dashboard';
                 });
             } catch (error) {
-                showFailure('Delete failed!');
+                PopupMessage.showFailure('Delete failed!');
             }
         };
         xhrSender.send('/chart/delete', cb);
@@ -535,7 +535,7 @@ document.getElementById('deleteBtn').onclick = e => {
 
 document.getElementById('shareBtn').onclick = e => {
     if (chartID.length == 0) {
-        showFailure('Chart is not saved');
+        PopupMessage.showFailure('Chart is not saved');
         return;
     }
     let xhrSender = new XHRSender();
@@ -550,21 +550,21 @@ document.getElementById('shareBtn').onclick = e => {
                             if (success) {
                                 xhrSender.send('/chart/share', cb);
                             } else {
-                                showFailure('Unauthorized');
+                                PopupMessage.showFailure('Unauthorized');
                             }
                         });
                         return;
                     }
-                    showFailure(resp['reason']);
+                    PopupMessage.showFailure(resp['reason']);
                 } else {
-                    showFailure('Sharing chart failed!');
+                    PopupMessage.showFailure('Sharing chart failed!');
                 }
                 return;
             }
-            showSuccess('Chart shared');
+            PopupMessage.showSuccess('Chart shared');
             body.classList.remove('authOnly');
         } catch (error) {
-            showFailure('Share failed!');
+            PopupMessage.showFailure('Share failed!');
         }
     };
     xhrSender.send('/chart/share', cb);
@@ -820,7 +820,7 @@ function drawSavedChart(info, type, data, properties) {
 
 if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
     chartID = document.location.pathname.split('/')[2];
-    showLoader();
+    Loader.show();
     var xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
     let cb = xhr => {
@@ -831,7 +831,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                     if (resp['reason'] == 'Unauthorized') {
                         xhrSender.send('/chart/retrieveShared', cb);
-                        hideLoader();
+                        Loader.hide();
                         return;
                     }
                     if (resp['reason'] == 'NotShared') {
@@ -839,20 +839,20 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                             if (success) {
                                 xhrSender.send('/chart/retrieve', cb);
                             } else {
-                                showFailure('Unauthorized');
+                                PopupMessage.showFailure('Unauthorized');
                             }
                         });
-                        hideLoader();
+                        Loader.hide();
                         return;
                     }
                     errMsg = resp['reason'];
                 } else {
                     errMsg = 'Chart retrieving failed!';
                 }
-                showFailure(errMsg, () => {
+                PopupMessage.showFailure(errMsg, () => {
                     window.location = '/chart';
                 });
-                hideLoader();
+                Loader.hide();
                 return;
             }
             let info = resp.info;
@@ -864,9 +864,9 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             let properties = JSON.parse(data.properties);
             drawSavedChart(info, data.type, chartData, properties);
         } catch (error) {
-            showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        hideLoader();
+        Loader.hide();
     };
     xhrSender.send('/chart/retrieve', cb);
 }
@@ -975,37 +975,46 @@ legendVisible.onclick = e => {
     chart.setLegendVisibility(show);
 }
 
+/**
+ * Update settings view according to current chart settings
+ * 
+ * @returns {void}
+ */
 function updateSettings() {
-    let chart = ChartConfig.instance;
-    if (chart == null) return;
-    if (chart.hasMarker) {
+    let chartConfig = ChartConfig.instance;
+    if (chartConfig == null) return;
+
+    if (chartConfig.hasMarker) {
         body.classList.remove('noMarker');
-        markerStyleSelect.value = chart.getMarkerStyle();
+        markerStyleSelect.value = chartConfig.getMarkerStyle();
     } else {
         body.classList.add('noMarker');
     }
-    if (chart.hasMarkerSize) {
+
+    if (chartConfig.hasMarkerSize) {
         body.classList.remove('noMarkerSize');
-        markerSizeSelect.value = chart.getMarkerSize();
+        markerSizeSelect.value = chartConfig.getMarkerSize();
     } else {
         body.classList.add('noMarkerSize');
     }
-    if (chart.hasLegend) {
+
+    if (chartConfig.hasLegend) {
         body.classList.remove('noLegend');
-        legendVisible.checked = chart.getLegendVisibility();
+        legendVisible.checked = chartConfig.getLegendVisibility();
     } else {
         body.classList.add('noLegend');
     }
-    if (chart.hasAxis) {
+
+    if (chartConfig.hasAxis) {
         body.classList.remove('noAxis');
-        xVisible.checked = chart.getAxisVisibility('x');
-        xGridVisible.checked = chart.getGridVisibility('x');
-        xTicksVisible.checked = chart.getTicksVisibility('x');
-        xTitleVisible.checked = chart.getTitleVisibility('x');
-        yVisible.checked = chart.getAxisVisibility('y');
-        yGridVisible.checked = chart.getGridVisibility('y');
-        yTicksVisible.checked = chart.getTicksVisibility('y');
-        yTitleVisible.checked = chart.getTitleVisibility('y');
+        xVisible.checked = chartConfig.getAxisVisibility('x');
+        xGridVisible.checked = chartConfig.getGridVisibility('x');
+        xTicksVisible.checked = chartConfig.getTicksVisibility('x');
+        xTitleVisible.checked = chartConfig.getTitleVisibility('x');
+        yVisible.checked = chartConfig.getAxisVisibility('y');
+        yGridVisible.checked = chartConfig.getGridVisibility('y');
+        yTicksVisible.checked = chartConfig.getTicksVisibility('y');
+        yTitleVisible.checked = chartConfig.getTitleVisibility('y');
     } else {
         body.classList.add('noAxis');
     }

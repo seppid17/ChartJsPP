@@ -43,6 +43,275 @@ class XHRSender {
     }
 }
 
+class PopupMessage {
+    static closeBtn = document.getElementById("popupclose");
+    static confirmPopup = document.getElementById("popupconfirm");
+    static overlay = document.getElementById("overlay");
+    static popup = document.getElementById("msgPopup");
+    static msgSpan = document.getElementById("msgSpan");
+
+    /**
+     * Show a success, error, or confirm message.
+     * 
+     * @param {string} msg
+     * @param {boolean} [success]
+     * @param {boolean} [confirm]
+     * @param {function} [onclosed]
+     * @return {void}
+     */
+    static _display(msg, success = false, confirm = false, onclosed = () => { }) {
+        PopupMessage.msgSpan.innerText = msg;
+        if (!success) PopupMessage.msgSpan.style.color = 'red';
+        else PopupMessage.msgSpan.style.color = 'var(--text-primary)';
+
+        if (confirm) {
+            PopupMessage.confirmPopup.hidden = false;
+            PopupMessage.closeBtn.children[0].innerText = 'Cancel';
+        } else {
+            PopupMessage.confirmPopup.hidden = true;
+            PopupMessage.closeBtn.children[0].innerText = 'OK';
+        }
+
+        PopupMessage.overlay.style.display = 'block';
+        PopupMessage.popup.style.display = 'block';
+
+        let closePopup = () => {
+            PopupMessage.popup.style.display = 'none';
+            PopupMessage.overlay.style.display = 'none';
+            onclosed();
+        }
+
+        PopupMessage.overlay.onclick = e => {
+            e.preventDefault();
+            e.stopPropagation();
+            closePopup();
+        }
+
+        PopupMessage.popup.onclick = e => {
+            e.stopPropagation();
+        }
+
+        PopupMessage.closeBtn.onclick = function () {
+            closePopup();
+        };
+    }
+
+    /**
+     * Show a success or error message.
+     * 
+     * @param {string} msg
+     * @param {boolean} [success]
+     * @param {function} [onclosed]
+     * @return {void}
+     */
+    static _showMsg(msg, success = false, onclosed = () => { }) {
+        PopupMessage._display(msg, success, false, onclosed)
+    }
+
+    /**
+     * Show a success message.
+     * 
+     * @param {string} msg
+     * @param {function} [onclosed]
+     * @return {void}
+     */
+    static showSuccess(msg, onclosed = () => { }) {
+        PopupMessage._showMsg(msg, true, onclosed);
+    }
+
+    /**
+     * Show an error message.
+     * 
+     * @param {string} msg
+     * @param {function} [onclosed]
+     * @return {void}
+     */
+    static showFailure(msg, onclosed = () => { }) {
+        PopupMessage._showMsg(msg, false, onclosed);
+    }
+
+    /**
+     * Show a confirm message.
+     * 
+     * @param {string} msg
+     * @param {function} [onconfirm]
+     * @return {void}
+     */
+    static promptConfirmation(msg, onconfirm = () => { }) {
+        PopupMessage._display(msg, true, true);
+        document.getElementById('popupconfirm').onclick = e => {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('msgPopup').style.display = 'none';
+            onconfirm();
+        }
+    }
+}
+
+class Theme {
+    static LIGHT = false;
+    static DARK = true;
+    static theme = Theme.LIGHT;
+    static darkBtn = document.getElementById('darkBtn');
+    static root = document.querySelector(':root');
+    static _onchangeTriggers = [];
+
+    /**
+     * Set a cookie with given name, value and expiry date.
+     * 
+     * @param {*} name name of the cookie
+     * @param {*} value value of the cookie
+     * @param {number} expiryDays days to expiry of the cookie
+     * @return {void}
+     */
+    static _setCookie(name, value, expiryDays) {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/;samesite=strict";
+    }
+
+    /**
+     * Get the cookie with given name.
+     * 
+     * @param {*} name name of the cookie
+     * @return {string} value of the cookie if exists, otherwise an empty string
+     */
+    static _getCookie(name) {
+        name = name + "=";
+        let cookieList = document.cookie.split(';');
+        for (let i = 0; i < cookieList.length; i++) {
+            let cookie = cookieList[i];
+            let index = 0;
+            for (; index < cookie.length; index++) {
+                if (cookie.charAt(index) != ' ') break;
+            }
+            if (index > 0) {
+                cookie = cookie.substring(index);
+            }
+            if (cookie.startsWith(name)) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Set the theme to light or dark.
+     * Triggers Theme.onchange()
+     * 
+     * @param {boolean} is_dark
+     * @return {void}
+     */
+    static switchTheme(theme) {
+        if (theme == Theme.DARK) {
+            Theme.root.style.setProperty('--bg-primary', '#000000');
+            Theme.root.style.setProperty('--bg-wrapper', '#1d2226');
+            Theme.root.style.setProperty('--bg-opt-btn', '#1d2226');
+            Theme.root.style.setProperty('--bg-opt-btn-selected', '#e9e9ea');
+            Theme.root.style.setProperty('--bg-dropdiv', '#535353');
+            Theme.root.style.setProperty('--bg-crumb', '#f4f6fa');
+            Theme.root.style.setProperty('--text-primary', '#e9e9ea');
+            Theme.root.style.setProperty('--text-primary-h', '#ffffff');
+            Theme.root.style.setProperty('--text-secondary', '#e9e9ea');
+            Theme.root.style.setProperty('--text-opt-btn', '#ffffff');
+            Theme.root.style.setProperty('--color-trash', '#e9e9ea');
+            Theme.root.style.setProperty('--color-trash-h', '#ffffff');
+            Theme.root.style.setProperty('--color-icon-h', '#d8bbff');
+            Theme.root.style.setProperty('--color-icon-success-h', '#8bff8b');
+            Theme.root.style.setProperty('--color-icon-cancel-h', '#ff7b7b');
+            Theme.root.style.setProperty('--input-border', '#e9e9ea');
+        } else {
+            Theme.root.style.setProperty('--bg-primary', '#F9FCFF');
+            Theme.root.style.setProperty('--bg-wrapper', '#ffffff');
+            Theme.root.style.setProperty('--bg-opt-btn', '#ffffff');
+            Theme.root.style.setProperty('--bg-opt-btn-selected', '#e5e7eb');
+            Theme.root.style.setProperty('--bg-dropdiv', '#f7f7f7');
+            Theme.root.style.setProperty('--bg-crumb', '#f4f6fa');
+            Theme.root.style.setProperty('--text-primary', '#000000');
+            Theme.root.style.setProperty('--text-primary-h', '#000000');
+            Theme.root.style.setProperty('--text-secondary', '#808080');
+            Theme.root.style.setProperty('--text-opt-btn', '#000000');
+            Theme.root.style.setProperty('--color-trash', '#808080');
+            Theme.root.style.setProperty('--color-trash-h', '#000000');
+            Theme.root.style.setProperty('--color-icon-h', '#7a14ff');
+            Theme.root.style.setProperty('--color-icon-success-h', '#003400');
+            Theme.root.style.setProperty('--color-icon-cancel-h', '#410101');
+            Theme.root.style.setProperty('--input-border', '#f0f0f0');
+        }
+        Theme._onchangeTriggers.forEach(trigger => {
+            trigger(theme);
+        });
+    }
+
+    /**
+     * Check the saved theme and set it.
+     * Use the apporpriate brand image for the theme.
+     * 
+     * @return {void}
+     */
+    static checkTheme() {
+        let savedTheme = Theme._getCookie('theme')
+        if (savedTheme === 'dark') {
+            Theme.theme = Theme.DARK;
+            Theme.darkBtn.checked = true;
+            document.getElementById('navbarBrand').src = "/images/brandWhite.png";
+            Theme.switchTheme(true)
+        } else if (savedTheme === 'light') {
+            Theme.theme = Theme.LIGHT;
+            Theme.darkBtn.checked = false;
+            document.getElementById('navbarBrand').src = "/images/brandBlack.png";
+            Theme.switchTheme(false);
+        } else {
+            Theme.darkBtn.checked = false;
+            document.getElementById('navbarBrand').src = "/images/brandBlack.png";
+            Theme.switchTheme(false);
+            Theme._setCookie('theme', 'light', 365000);
+        }
+    }
+
+    static addOnchangeTrigger(trigger) {
+        Theme._onchangeTriggers.push(trigger);
+    }
+}
+
+class Loader {
+    static loadTimerID = 0;
+
+    /**
+     * Show or hide the loader
+     * 
+     * @param {string} type 'block' or 'none'
+     */
+    static _setLoaderDisplay(type) {
+        document.getElementById("overlayLoader").style.display = type;
+        document.getElementById("loader").style.display = type;
+    }
+
+    /**
+     * Show the loader
+     */
+    static show() {
+        if (Loader.loadTimerId != 0) {
+            clearTimeout(Loader.loadTimerId);
+            Loader.loadTimerId = 0;
+        }
+        Loader.loadTimerId = setTimeout(() => {
+            Loader._setLoaderDisplay('block');
+        }, 200);
+    }
+
+    /**
+     * Hide the loader
+     */
+    static hide() {
+        if (Loader.loadTimerId != 0) {
+            clearTimeout(Loader.loadTimerId);
+            Loader.loadTimerId = 0;
+        }
+        Loader._setLoaderDisplay('none');
+    }
+}
+
 const email_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const name_pattern = /^[A-Za-z]{2,30}$/;
 const password_pattern = /^[\x21-\x7E]{8,15}$/;
@@ -117,222 +386,6 @@ function setClear(input) {
 }
 
 /**
- * Show a success, error, or confirm message.
- * 
- * @param {string} msg
- * @param {boolean} [success]
- * @param {boolean} [confirm]
- * @param {function} [onclosed]
- * @return {void}
- */
-function displayMsgConfirm(msg, success = false, confirm = false, onclosed = () => { }) {
-    var closeBtn = document.getElementById("popupclose");
-    var confirmPopup = document.getElementById("popupconfirm");
-    var overlay = document.getElementById("overlay");
-    var popup = document.getElementById("msgPopup");
-    var msgSpan = document.getElementById("msgSpan");
-
-    msgSpan.innerText = msg;
-    if (!success) msgSpan.style.color = 'red';
-    else msgSpan.style.color = 'var(--text-primary)';
-
-    if (confirm) {
-        confirmPopup.hidden = false;
-        closeBtn.children[0].innerText = 'Cancel';
-    } else {
-        confirmPopup.hidden = true;
-        closeBtn.children[0].innerText = 'OK';
-    }
-
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
-
-    let closePopup = () => {
-        popup.style.display = 'none';
-        overlay.style.display = 'none';
-        onclosed();
-    }
-
-    overlay.onclick = e => {
-        e.preventDefault();
-        e.stopPropagation();
-        closePopup();
-    }
-
-    popup.onclick = e => {
-        e.stopPropagation();
-    }
-
-    closeBtn.onclick = function () {
-        closePopup();
-    };
-}
-
-/**
- * Show a success or error message.
- * 
- * @param {string} msg
- * @param {boolean} [success]
- * @param {function} [onclosed]
- * @return {void}
- */
-function showMsg(msg, success = false, onclosed = () => { }) {
-    displayMsgConfirm(msg, success, false, onclosed)
-}
-
-/**
- * Show a success message.
- * 
- * @param {string} msg
- * @param {function} [onclosed]
- * @return {void}
- */
-function showSuccess(msg, onclosed = () => { }) {
-    showMsg(msg, true, onclosed);
-}
-
-/**
- * Show an error message.
- * 
- * @param {string} msg
- * @param {function} [onclosed]
- * @return {void}
- */
-function showFailure(msg, onclosed = () => { }) {
-    showMsg(msg, false, onclosed);
-}
-
-/**
- * Show a confirm message.
- * 
- * @param {string} msg
- * @param {function} [onconfirm]
- * @return {void}
- */
-function promptConfirmation(msg, onconfirm = () => { }) {
-    displayMsgConfirm(msg, true, true);
-    document.getElementById('popupconfirm').onclick = e => {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('msgPopup').style.display = 'none';
-        onconfirm();
-    }
-}
-
-/**
- * Set a cookie with given name, value and expiry date.
- * 
- * @param {*} name name of the cookie
- * @param {*} value value of the cookie
- * @param {number} expiryDays days to expiry of the cookie
- * @return {void}
- */
-function setCookie(name, value, expiryDays) {
-    const date = new Date();
-    date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + date.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/;samesite=strict";
-}
-
-/**
- * Get the cookie with given name.
- * 
- * @param {*} name name of the cookie
- * @return {string} value of the cookie if exists, otherwise an empty string
- */
-function getCookie(name) {
-    name = name + "=";
-    let cookieList = document.cookie.split(';');
-    for (let i = 0; i < cookieList.length; i++) {
-        let cookie = cookieList[i];
-        let index = 0;
-        for (; index < cookie.length; index++) {
-            if (cookie.charAt(index) != ' ') break;
-        }
-        if (index > 0) {
-            cookie = cookie.substring(index);
-        }
-        if (cookie.startsWith(name)) {
-            return cookie.substring(name.length, cookie.length);
-        }
-    }
-    return "";
-}
-
-let isDark = false;
-const darkBtn = document.getElementById('darkBtn');
-var root = document.querySelector(':root');
-
-/**
- * Set the theme to light or dark
- * 
- * @param {boolean} is_dark
- * @return {void}
- */
-function switchTheme(is_dark) {
-    if (is_dark) {
-        root.style.setProperty('--bg-primary', '#000000');
-        root.style.setProperty('--bg-wrapper', '#1d2226');
-        root.style.setProperty('--bg-opt-btn', '#1d2226');
-        root.style.setProperty('--bg-opt-btn-selected', '#e9e9ea');
-        root.style.setProperty('--bg-dropdiv', '#535353');
-        root.style.setProperty('--bg-crumb', '#f4f6fa');
-        root.style.setProperty('--text-primary', '#e9e9ea');
-        root.style.setProperty('--text-primary-h', '#ffffff');
-        root.style.setProperty('--text-secondary', '#e9e9ea');
-        root.style.setProperty('--text-opt-btn', '#ffffff');
-        root.style.setProperty('--color-trash', '#e9e9ea');
-        root.style.setProperty('--color-trash-h', '#ffffff');
-        root.style.setProperty('--color-icon-h', '#d8bbff');
-        root.style.setProperty('--color-icon-success-h', '#8bff8b');
-        root.style.setProperty('--color-icon-cancel-h', '#ff7b7b');
-        root.style.setProperty('--input-border', '#e9e9ea');
-    } else {
-        root.style.setProperty('--bg-primary', '#F9FCFF');
-        root.style.setProperty('--bg-wrapper', '#ffffff');
-        root.style.setProperty('--bg-opt-btn', '#ffffff');
-        root.style.setProperty('--bg-opt-btn-selected', '#e5e7eb');
-        root.style.setProperty('--bg-dropdiv', '#f7f7f7');
-        root.style.setProperty('--bg-crumb', '#f4f6fa');
-        root.style.setProperty('--text-primary', '#000000');
-        root.style.setProperty('--text-primary-h', '#000000');
-        root.style.setProperty('--text-secondary', '#808080');
-        root.style.setProperty('--text-opt-btn', '#000000');
-        root.style.setProperty('--color-trash', '#808080');
-        root.style.setProperty('--color-trash-h', '#000000');
-        root.style.setProperty('--color-icon-h', '#7a14ff');
-        root.style.setProperty('--color-icon-success-h', '#003400');
-        root.style.setProperty('--color-icon-cancel-h', '#410101');
-        root.style.setProperty('--input-border', '#f0f0f0');
-    }
-}
-
-/**
- * Check the saved theme and set it.
- * Use the apporpriate brand image for the theme.
- * 
- * @return {void}
- */
-function checkTheme() {
-    let savedTheme = getCookie('theme')
-    if (savedTheme === 'dark') {
-        isDark = true;
-        darkBtn.checked = true;
-        document.getElementById('navbarBrand').src = "/images/brandWhite.png";
-        switchTheme(true)
-    } else if (savedTheme === 'light') {
-        isDark = false;
-        darkBtn.checked = false;
-        document.getElementById('navbarBrand').src = "/images/brandBlack.png";
-        switchTheme(false)
-    } else {
-        darkBtn.checked = false;
-        document.getElementById('navbarBrand').src = "/images/brandBlack.png";
-        switchTheme(false)
-        setCookie('theme', 'light', 365000);
-    }
-}
-
-/**
  * Check if the user is logged.
  * Show or hide navbar buttons depending on logged status.
  * 
@@ -360,13 +413,13 @@ function checkLogged() {
 /**
  * Change theme when theme switch button is pressed
  */
-darkBtn.onclick = e => {
-    darkBtn.innerText = isDark ? 'dark' : 'light'
-    switchTheme(!isDark)
-    isDark = !isDark;
-    if (isDark) document.getElementById('navbarBrand').src = "/images/brandWhite.png";
+Theme.darkBtn.onclick = e => {
+    Theme.darkBtn.innerText = Theme.theme == Theme.DARK ? 'dark' : 'light';
+    Theme.theme = Theme.theme == Theme.DARK ? Theme.LIGHT : Theme.DARK;
+    Theme.switchTheme(Theme.theme);
+    if (Theme.theme == Theme.DARK) document.getElementById('navbarBrand').src = "/images/brandWhite.png";
     else document.getElementById('navbarBrand').src = "/images/brandBlack.png";
-    setCookie('theme', isDark ? 'dark' : 'light', 365000);
+    Theme._setCookie('theme', Theme.theme == Theme.DARK ? 'dark' : 'light', 365000);
 }
 
 /**
@@ -375,45 +428,9 @@ darkBtn.onclick = e => {
 document.onvisibilitychange = e => {
     if (document.visibilityState == 'visible') {
         checkLogged();
-        checkTheme();
+        Theme.checkTheme();
     }
 }
 
 checkLogged();
-checkTheme();
-
-/**
- * Show or hide the loader
- * 
- * @param {string} type 'block' or 'none'
- */
-function getLoader(type) {
-    document.getElementById("overlayLoader").style.display = type;
-    document.getElementById("loader").style.display = type;
-}
-
-let loadTimerID = 0;
-
-/**
- * Show the loader
- */
-function showLoader() {
-    if (loadTimerID != 0) {
-        clearTimeout(loadTimerID);
-        loadTimerID = 0;
-    }
-    loadTimerID = setTimeout(() => {
-        getLoader('block');
-    }, 200);
-}
-
-/**
- * Hide the loader
- */
-function hideLoader() {
-    if (loadTimerID != 0) {
-        clearTimeout(loadTimerID);
-        loadTimerID = 0;
-    }
-    getLoader('none');
-}
+Theme.checkTheme();

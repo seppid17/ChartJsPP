@@ -54,7 +54,7 @@ function popupLogin(ondone) {
             return false;
         }
 
-        showLoader();
+        Loader.show();
 
         let xhrSender = new XHRSender();
         xhrSender.addField('email', email);
@@ -68,20 +68,20 @@ function popupLogin(ondone) {
                             switch (data['field']) {
                                 case 'email':
                                     setErrorFor(emailInput, data['reason']);
-                                    hideLoader();
+                                    Loader.hide();
                                     break;
                                 case 'password':
                                     setErrorFor(passwdInput, data['reason']);
-                                    hideLoader();
+                                    Loader.hide();
                                     break;
                             }
                         } else {
-                            showFailure(data['reason']);
+                            PopupMessage.showFailure(data['reason']);
                         }
                     } else {
-                        showFailure('Login failed!');
+                        PopupMessage.showFailure('Login failed!');
                     }
-                    hideLoader();
+                    Loader.hide();
                     return;
                 }
                 passwdInput.value = '';
@@ -90,9 +90,9 @@ function popupLogin(ondone) {
                 popup.style.display = 'none';
                 overlay.style.display = 'none';
             } catch (error) {
-                showFailure('Something went wrong! Try again.');
+                PopupMessage.showFailure('Something went wrong! Try again.');
             }
-            hideLoader();
+            Loader.hide();
         });
     }
 
