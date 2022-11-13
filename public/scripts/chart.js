@@ -112,9 +112,11 @@ function showChartView() {
     chartViewDiv.scrollIntoView();
 }
 
-const drawChart = (data) => {
+const drawChart = (json) => {
     chartViewDiv.style.display = 'none';
     selectChartType.className = 'chart-type';
+    let title = json.title;
+    let data = json.data;
     if (!(data instanceof Array) || data.length <= 0) {
         console.log('invalid data', data);
         return;
@@ -248,6 +250,7 @@ const drawChart = (data) => {
             break;
     }
     myChart.setName(chartName);
+    myChart.setTitle(title);
     myChart.setLabels(data);
     myChart.setData(values);
     showChartView();
@@ -458,10 +461,12 @@ document.getElementById('saveBtn').onclick = e => {
         properties.xGridVisible = chartConfig.getGridVisibility('x');
         properties.xTicksVisible = chartConfig.getTicksVisibility('x');
         properties.xTitleVisible = chartConfig.getTitleVisibility('x');
+        properties.xTitle = chartConfig.getAxisTitle('x');
         properties.yAxisVisible = chartConfig.getAxisVisibility('y');
         properties.yGridVisible = chartConfig.getGridVisibility('y');
         properties.yTicksVisible = chartConfig.getTicksVisibility('y');
         properties.yTitleVisible = chartConfig.getTitleVisibility('y');
+        properties.yTitle = chartConfig.getAxisTitle('y');
     }
     if (chartConfig.hasLegend) {
         properties.legendVisible = chartConfig.getLegendVisibility();
@@ -800,6 +805,9 @@ function drawSavedChart(info, type, data, properties) {
         if (typeof properties.xTitleVisible == 'boolean') {
             myChart.setTitleVisibility('x', properties.xTitleVisible);
         }
+        if (typeof properties.xTitle == 'string') {
+            myChart.setAxisTitle('x', properties.xTitle);
+        }
         if (typeof properties.yAxisVisible == 'boolean') {
             myChart.setAxisVisibility('y', properties.yAxisVisible);
         }
@@ -811,6 +819,9 @@ function drawSavedChart(info, type, data, properties) {
         }
         if (typeof properties.yTitleVisible == 'boolean') {
             myChart.setTitleVisibility('y', properties.yTitleVisible);
+        }
+        if (typeof properties.yTitle == 'string') {
+            myChart.setAxisTitle('y', properties.yTitle);
         }
     }
     if (myChart.hasLegend) {

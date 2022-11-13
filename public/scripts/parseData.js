@@ -1,13 +1,25 @@
 function extractCSV(csv) {
     try {
         let lines = csv.split(/\r?\n|\r|\n/g);
-        let json = {};
-        for (let i = 0; i < lines.length; i++) {
+        if (lines.length < 1 || (lines.length==1 && lines[0].trim()=='')) {
+            throw 'Empty data file';
+        }
+        let start = 1;
+        let head = lines[0].split(/\s*,\s*/);
+        let titles = [];
+        let body = {};
+        if (head.length > 2 && head[0].toLowerCase() == 'id') {
+            titles = head.slice(2);
+        } else {
+            start = 0;
+        }
+        for (let i = start; i < lines.length; i++) {
             const line = lines[i];
             if (/^\s*$/.test(line)) continue;
             let data = line.split(/\s*,\s*/);
-            if (data.length < 4) {
-                throw 'Insufficent data. Please check and upload again';
+            // length of data (without ID and parent fields) must be same as title
+            if ((titles.length > 0 && data.length - 2 !== titles.length) || (data.length < 4)) {
+                throw 'Invalid data. Please check and upload again';
             }
 
             let id = data[0].trim();
@@ -51,34 +63,34 @@ function extractCSV(csv) {
                 return true;
             })) throw null;
 
-            if (typeof json[id] !== 'undefined') {
+            if (typeof body[id] !== 'undefined') {
                 throw 'Duplicate ids. Please check and upload again';
             }
 
-            json[id] = { n: name, v: values, p: parent, c: {} };
+            body[id] = { n: name, v: values, p: parent, c: {} };
         }
 
-        ids = Object.keys(json);
-        if(ids.length==0){
-            throw 'Empty data file';
+        ids = Object.keys(body);
+        if (ids.length == 0) {
+            throw 'No data in file';
         }
         ids.sort(function (a, b) { return a - b });
         ids.reverse();
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-            let data = json[id];
+            let data = body[id];
             let parentId = data.p;
             delete data.p;
             if (parentId == 0) continue;
-            delete json[id];
-            let parent = json[parentId];
+            delete body[id];
+            let parent = body[parentId];
             if (!parent) {
                 throw 'Missing parent. Please check and upload again';
             }
             parent.c[id] = data;
         }
-        
-        return json;
+
+        return { title: titles, data: body };
     } catch (ex) {
         if (ex) {
             throw ex;
@@ -102,7 +114,8 @@ function parseCSV(csv) {
         let json = extractCSV(csv);
         if (json == null) { return null; }
         let dataList = [];
-        return removeIDs(json, dataList);
+        json.data = removeIDs(json.data, dataList);
+        return json;
     } catch (ex) {
         throw new Error(ex);
     }

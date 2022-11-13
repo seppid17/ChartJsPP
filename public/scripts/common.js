@@ -425,12 +425,12 @@ Theme.darkBtn.onclick = e => {
 /**
  * Check theme and logged status when navigating through pages
  */
-document.onvisibilitychange = e => {
+document.addEventListener('visibilitychange', e => {
     if (document.visibilityState == 'visible') {
         checkLogged();
         Theme.checkTheme();
     }
-}
+});
 
 checkLogged();
 Theme.checkTheme();

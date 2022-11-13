@@ -92,6 +92,13 @@ class ChartConfig {
         }
     }
 
+    setTitle(title) {
+        if (this.hasAxis) {
+            this.setAxisTitle('x', title[0]);
+            this.setAxisTitle('y', title[1]);
+        }
+    }
+
     setSavedData(data) {
         if (this.config) {
             this.config.data = data;
@@ -125,6 +132,12 @@ class ChartConfig {
     }
 
     _update() {
+        if (this.hasAxis) {
+            this.config.options.scales.x.ticks.color = Chart.defaults.color;
+            this.config.options.scales.y.ticks.color = Chart.defaults.color;
+            this.config.options.scales.x.title.color = Chart.defaults.color;
+            this.config.options.scales.y.title.color = Chart.defaults.color;
+        }
     }
 
     static update(mode) {
@@ -184,11 +197,6 @@ class BasicChartConfig extends ChartConfig {
             this.config.data.datasets[0].data = data;
         }
     }
-
-    _update() {
-        this.config.options.scales.x.ticks.color = Chart.defaults.color;
-        this.config.options.scales.y.ticks.color = Chart.defaults.color;
-    }
 }
 
 class AxisChartConfig extends BasicChartConfig {
@@ -198,7 +206,7 @@ class AxisChartConfig extends BasicChartConfig {
                 x: {
                     display: true,
                     title: {
-                        display: false
+                        display: true
                     },
                     ticks: {
                         display: true
@@ -210,7 +218,7 @@ class AxisChartConfig extends BasicChartConfig {
                 y: {
                     display: true,
                     title: {
-                        display: false
+                        display: true
                     },
                     ticks: {
                         display: true
@@ -243,6 +251,11 @@ class AxisChartConfig extends BasicChartConfig {
         return this.config.options.scales[axis].title.display;
     }
 
+    getAxisTitle(axis) {
+        if (axis !== 'x' && axis !== 'y') return;
+        return this.config.options.scales[axis].title.text;
+    }
+
     setAxisVisibility(axis, visible) {
         if (axis !== 'x' && axis !== 'y') return;
         this.config.options.scales[axis].display = visible;
@@ -273,8 +286,6 @@ class AxisChartConfig extends BasicChartConfig {
         this.config.options.scales[axis].title.text = title;
         if (title == '') {
             this.setTitleVisibility(axis, false);
-        } else {
-            this.setTitleVisibility(axis, true);
         }
     }
 }
@@ -684,6 +695,7 @@ class IcicleChartConfig extends HierarchicalChartConfig {
     cls.prototype.getGridVisibility = parent.prototype.getGridVisibility;
     cls.prototype.getTicksVisibility = parent.prototype.getTicksVisibility;
     cls.prototype.getTitleVisibility = parent.prototype.getTitleVisibility;
+    cls.prototype.getAxisTitle = parent.prototype.getAxisTitle;
     cls.prototype.setAxisVisibility = parent.prototype.setAxisVisibility;
     cls.prototype.setGridVisibility = parent.prototype.setGridVisibility;
     cls.prototype.setTicksVisibility = parent.prototype.setTicksVisibility;

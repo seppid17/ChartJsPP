@@ -6,8 +6,8 @@ function showNoCharts() {
     p.innerText = 'No saved charts';
     cardsDiv.appendChild(p);
 }
-function setCards() {
-    Loader.show();
+function setCards(showLoader = true) {
+    if (showLoader) Loader.show();
     var xhrSender = new XHRSender();
     xhrSender.send('/chart/list', xhr => {
         try {
@@ -23,6 +23,9 @@ function setCards() {
             }
             if (resp.info.length == 0) {
                 showNoCharts();
+            }
+            while (cardsDiv.hasChildNodes()) {
+                cardsDiv.removeChild(cardsDiv.firstChild);
             }
             resp.info.forEach(chart => {
                 let cardColDiv = document.createElement('div');
@@ -128,3 +131,8 @@ function setCards() {
 }
 
 document.body.onload = setCards;
+document.addEventListener('visibilitychange', e => {
+    if (document.visibilityState == 'visible') {
+        setCards(false);
+    }
+});
