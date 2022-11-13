@@ -1034,10 +1034,28 @@ function updateSettings() {
     if (chartConfig.hasAxis) {
         body.classList.remove('noAxis');
         xVisible.checked = chartConfig.getAxisVisibility('x');
+        if (xVisible.checked) {
+            [xGridVisible, xTicksVisible, xTitleVisible].forEach(element => {
+                element.disabled = false;
+            });
+        } else {
+            [xGridVisible, xTicksVisible, xTitleVisible].forEach(element => {
+                element.disabled = true;
+            });
+        }
         xGridVisible.checked = chartConfig.getGridVisibility('x');
         xTicksVisible.checked = chartConfig.getTicksVisibility('x');
         xTitleVisible.checked = chartConfig.getTitleVisibility('x');
         yVisible.checked = chartConfig.getAxisVisibility('y');
+        if (yVisible.checked) {
+            [yGridVisible, yTicksVisible, yTitleVisible].forEach(element => {
+                element.disabled = false;
+            });
+        } else {
+            [yGridVisible, yTicksVisible, yTitleVisible].forEach(element => {
+                element.disabled = true;
+            });
+        }
         yGridVisible.checked = chartConfig.getGridVisibility('y');
         yTicksVisible.checked = chartConfig.getTicksVisibility('y');
         yTitleVisible.checked = chartConfig.getTitleVisibility('y');
