@@ -1,7 +1,6 @@
 const body = document.getElementsByTagName('body')[0];
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
-ChartConfig.canvas = canvas;
 const chartBtn = document.getElementById('drawBtn');
 
 const uploadViewDiv = document.getElementById('uploadViewDiv');
@@ -23,6 +22,7 @@ const breadcrumb = document.getElementById('breadcrumbs');
 const chartEditPopup = document.getElementById('chartEditPopup');
 const saveNameBtn = document.getElementById('saveName');
 const chartTypes = document.getElementsByName('charttype');
+const selectChartType = document.getElementById('selectChartType');
 
 const xVisible = document.getElementById('xVisible');
 const xGridVisible = document.getElementById('xGridVisible');
@@ -48,6 +48,7 @@ resizeFn = () => {
 window.onload = resizeFn;
 window.onresize = resizeFn;
 
+ChartConfig.canvas = canvas;
 Chart.defaults.font.size = 14;
 Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
@@ -105,13 +106,27 @@ function setSelectedChartType(type) {
     }
 }
 
+function showChartView() {
+    chartViewDiv.style.display = 'block';
+    alertDiv.style.display = 'none';
+    chartViewDiv.scrollIntoView();
+}
+
 const drawChart = (data) => {
+    chartViewDiv.style.display = 'none';
+    selectChartType.className = 'chart-type';
     if (!(data instanceof Array) || data.length <= 0) {
         console.log('invalid data', data);
         return;
     }
     let type = getSelectedChartType();
-    if (type == null) return;
+    if (type == null) {
+        selectChartType.className = 'chart-type error';
+        alertDiv.style.display = 'block';
+        selectChartType.querySelector('small').innerText = "You have not selected a chart type";
+        document.getElementById('uploadViewDiv').scrollIntoView();
+        return;
+    }
     let myChart;
     let values = [];
     switch (type) {
@@ -235,6 +250,7 @@ const drawChart = (data) => {
     myChart.setName(chartName);
     myChart.setLabels(data);
     myChart.setData(values);
+    showChartView();
     myChart.draw();
 };
 
@@ -802,8 +818,7 @@ function drawSavedChart(info, type, data, properties) {
             myChart.setLegendVisibility(properties.legendVisible);
         }
     }
-    chartViewDiv.style.display = 'block';
-    alertDiv.style.display = 'none';
+    showChartView();
     myChart.draw();
     chartNameView.innerText = chartName;
     if (Chart.defaults.font.style == 'italic') {
@@ -1020,4 +1035,6 @@ function updateSettings() {
     }
 }
 
-setCallback(drawChart);
+document.getElementById('drawBtn').onclick = e => {
+    FileInputManager.draw(drawChart);
+}

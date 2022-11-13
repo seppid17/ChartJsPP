@@ -1,91 +1,23 @@
-let extractedData = null;
-let cb = (labels, values) => { };
-
-const setCallback = callback => {
-    cb = callback;
-}
+const dropArea = document.getElementById('dropDiv');
+const dropSpan = document.getElementById('dropSpan');
 
 function preventDefaults(e) {
     e.preventDefault();
     e.stopPropagation();
 }
 
-let dropArea = document.getElementById('dropDiv');
-let dropSpan = document.getElementById('dropSpan');
-
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false);
 });
-
-let fileSelectedNoError = false;
-
-const extractFile = file => {
-    let reader = new FileReader();
-    if (isCSV(file.name)) {
-        reader.readAsText(file);
-        reader.onloadend = function () {
-            extractedData = null;
-            let data = reader.result;
-            try {
-                let parsedData = parseCSV(data);
-                if (parsedData) {
-                    extractedData = parsedData;
-                    dropDivMsg('drop-span', 'File selected (' + file.name + '). You can draw chart or upload different file', true);
-                }
-            } catch (ex) {
-                setErrorMsg(ex);
-            }
-        }
-    } else {
-        dropDivMsg('drop-span error', 'Invalid file type. Submit a .csv file', false);
-    }
-}
-
-const handleFiles = files => {
-    files = [...files];
-    if (files.length != 1) {
-        dropDivMsg('drop-span error', 'Multiple files were selected. Please select only one file', false);
-        return;
-    }
-    extractFile(files[0]);
-}
 
 function handleDrop(e) {
     let dt = e.dataTransfer;
     let files = dt.files;
 
-    handleFiles(files);
+    FileInputManager.handleFiles(files);
 }
 
 dropArea.addEventListener('drop', handleDrop, false);
-
-let selectChartType = document.getElementById('selectChartType');
-document.getElementById('drawBtn').onclick = e => {
-    selectChartType.className = 'chart-type';
-    let found = false;
-    for (i = 0; i < chartTypes.length; i++) {
-        if (chartTypes[i].checked) {
-            found = true;
-        }
-    }
-    if (found) {
-        if (fileSelectedNoError) {
-            if (extractedData == null || extractedData.length == 0) return;
-            chartViewDiv.style.display = 'block';
-            alertDiv.style.display = 'none';
-            cb(extractedData);
-            document.getElementById('chartViewDiv').scrollIntoView();
-        } else {
-            alertDiv.style.display = 'none';
-            dropDivMsg('drop-span error', 'No file selected. Please upload a file first', false);
-        }
-    } else {
-        selectChartType.className = 'chart-type error';
-        alertDiv.style.display = 'block';
-        selectChartType.querySelector('small').innerText = "You didn't have selected a chart type";
-        document.getElementById('uploadViewDiv').scrollIntoView();
-    }
-}
 
 document.getElementById('selectFileBtn').onclick = e => {
     var input = document.createElement('input');
@@ -94,11 +26,7 @@ document.getElementById('selectFileBtn').onclick = e => {
 
     input.onchange = e => {
         var file = e.target.files[0];
-        if (isCSV(file.name)) {
-            extractFile(file);
-        } else {
-            dropDivMsg('drop-span error', 'Invalid file type. Please submit a .csv file', false);
-        }
+        FileInputManager.extractFile(file);
     }
 
     input.click();
@@ -108,20 +36,69 @@ document.getElementById("closeAlert").onclick = e => {
     alertDiv.style.display = 'none';
 }
 
-function isCSV(filename) {
-    var parts = filename.split('.');
-    var ext = parts[parts.length - 1];
-    switch (ext.toLowerCase()) {
-        case 'csv': return true;
-    } return false;
-}
+class FileInputManager {
 
-function setErrorMsg(msg) {
-    dropDivMsg('drop-span error', msg, false);
-}
+    static extractedData = null;
+    static fileSelectedNoError = false;
 
-function dropDivMsg(className, msg, isError) {
-    dropSpan.className = className;
-    dropSpan.innerText = msg;
-    fileSelectedNoError = isError;
+    static _isCSV(filename) {
+        var parts = filename.split('.');
+        var ext = parts[parts.length - 1];
+        return ext.toLowerCase() === 'csv';
+    }
+
+    static _dropDivMsg(msg, isError) {
+        if (isError) {
+            dropSpan.classList.add('error');
+        } else {
+            dropSpan.classList.remove('error');
+        }
+        dropSpan.innerText = msg;
+        FileInputManager.fileSelectedNoError = !isError;
+    }
+
+    static _setErrorMsg(msg) {
+        FileInputManager._dropDivMsg(msg, true);
+    }
+
+    static extractFile(file) {
+        let reader = new FileReader();
+        if (FileInputManager._isCSV(file.name)) {
+            reader.readAsText(file);
+            reader.onloadend = function () {
+                FileInputManager.extractedData = null;
+                let data = reader.result;
+                try {
+                    let parsedData = parseCSV(data);
+                    if (parsedData) {
+                        FileInputManager.extractedData = parsedData;
+                        FileInputManager._dropDivMsg('File selected (' + file.name + '). You can draw chart or upload different file', false);
+                    }
+                } catch (ex) {
+                    FileInputManager._setErrorMsg(ex);
+                }
+            }
+        } else {
+            FileInputManager._setErrorMsg('Invalid file type. Submit a .csv file');
+        }
+    }
+
+    static handleFiles(files) {
+        files = [...files];
+        if (files.length != 1) {
+            FileInputManager._setErrorMsg('Multiple files were selected. Please select only one file');
+            return;
+        }
+        FileInputManager.extractFile(files[0]);
+    }
+
+    static draw(callback) {
+        if (FileInputManager.fileSelectedNoError) {
+            if (FileInputManager.extractedData == null || FileInputManager.extractedData.length == 0) return;
+            callback(FileInputManager.extractedData);
+        } else {
+            alertDiv.style.display = 'none';
+            FileInputManager._setErrorMsg('No file selected. Please upload a file first');
+        }
+    }
 }
