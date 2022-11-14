@@ -12,7 +12,7 @@ This functions are also checked.
     Other data sets are used to test the invalid data inputs
  */
 const valid_data1 = 'ID,parent,letter,number\n1,0,A,5\n2,0,B,6\n3,0,A,5\n4,0,B,6';
-const output1 = { title: ['letter', 'number'], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }] };
+const output1 = { title: ['letter', 'number'], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }], properties: {} };
 test('Test 1: Valid data input', () => {
     expect(
         functions.parseCSV(valid_data1)).toEqual(output1);
@@ -82,22 +82,29 @@ test('Test 10: Empty data file', () => {
 });
 
 const valid_data2 = 'ID,parent,letter,number\n  \n1,0,A,5\n\n2,0,B,6\n\t  \n3,0,A,5\n4,0,B,6\n\n';
-const output2 = { title: ['letter', 'number'], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }] };
+const output2 = { title: ['letter', 'number'], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }], properties: {} };
 test('Test 11: Valid data with empty lines', () => {
     expect(
         functions.parseCSV(valid_data2)).toEqual(output2);
 });
 
 const valid_data3 = '\n  \n1,0,A,5\n\n2,0,B,6\n\t  \n3,0,A,5\n4,0,B,6\n\n';
-const output3 = { title: [], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }] };
-test('Test 11: Valid data without heading', () => {
+const output3 = { title: [], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }], properties: {} };
+test('Test 12: Valid data without heading', () => {
     expect(
         functions.parseCSV(valid_data3)).toEqual(output3);
 });
 
 const err_data10 = 'ID,parent,letter,number\n  \n'; // only heading with no data in file
-test('Test 12: No data in file', () => {
+test('Test 13: No data in file', () => {
     expect(() => {
         functions.parseCSV(err_data10)
     }).toThrow('No data in file');
+});
+
+const valid_data4 = 'ID,parent,letter,number\n  \n1,0,A,5\n\n2,0,B,6\n\t  \n3,0,A,5\n4,0,B,6\n\nprop, type, doughnut\n\n property, name,myChart';
+const output4 = { title: ['letter', 'number'], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }], properties: { type: 'doughnut', name: 'myChart' } };
+test('Test 11: Valid data with properties', () => {
+    expect(
+        functions.parseCSV(valid_data2)).toEqual(output2);
 });

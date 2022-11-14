@@ -2,7 +2,10 @@ const body = document.getElementsByTagName('body')[0];
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 const chartBtn = document.getElementById('drawBtn');
-
+const saveBtn = document.getElementById('saveBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const shareBtn = document.getElementById('shareBtn');
+const drawBtnDiv = document.getElementById('drawBtnDiv');
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
 const alertDiv = document.getElementById('alertPop');
@@ -23,7 +26,6 @@ const chartEditPopup = document.getElementById('chartEditPopup');
 const saveNameBtn = document.getElementById('saveName');
 const chartTypes = document.getElementsByName('charttype');
 const selectChartType = document.getElementById('selectChartType');
-
 const xVisible = document.getElementById('xVisible');
 const xGridVisible = document.getElementById('xGridVisible');
 const xTicksVisible = document.getElementById('xTicksVisible');
@@ -45,8 +47,38 @@ resizeFn = () => {
     }
 }
 
-window.onload = resizeFn;
-window.onresize = resizeFn;
+window.addEventListener('load', resizeFn);
+window.addEventListener('resize', resizeFn);
+
+/**
+ * Warn user before leaving the page if there are unsaved modifications
+ */
+window.onbeforeunload = function () {
+    if (ChartConfig.instance != null) {
+        if (ChartConfig.instance.modified) {
+            return '';
+        }
+    }
+};
+
+document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() == 's' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        saveBtn.click();
+    }
+    if (e.key.toLowerCase() == 's' && e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        shareBtn.click();
+    }
+    if (e.key == 'Delete' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        deleteBtn.click();
+    }
+    if (e.key.toLowerCase() == 'o' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        document.getElementById('selectFileBtn').click();
+    }
+});
 
 ChartConfig.canvas = canvas;
 Chart.defaults.font.size = 14;
@@ -88,6 +120,14 @@ Chart.register({
     }
 });
 
+for (i = 0; i < chartTypes.length; i++) {
+    chartTypes[i].onclick = e=>{
+        if (FileInputManager.extractedData!=null){
+            drawBtnDiv.hidden = false;
+        }
+    }
+}
+
 function getSelectedChartType() {
     let type = null;
     for (i = 0; i < chartTypes.length; i++) {
@@ -99,9 +139,14 @@ function getSelectedChartType() {
 }
 
 function setSelectedChartType(type) {
+    if (FileInputManager.extractedData!=null){
+        drawBtnDiv.hidden = false;
+    }
     for (i = 0; i < chartTypes.length; i++) {
         if (chartTypes[i].value == type) {
             chartTypes[i].checked = true;
+        } else {
+            chartTypes[i].checked = false;
         }
     }
 }
@@ -115,10 +160,9 @@ function showChartView() {
 const drawChart = (json) => {
     chartViewDiv.style.display = 'none';
     selectChartType.className = 'chart-type';
-    let title = json.title;
-    let data = json.data;
+    let { title, data, properties } = json;
+    if (properties.hasOwnProperty('name')) chartName = properties.name;
     if (!(data instanceof Array) || data.length <= 0) {
-        console.log('invalid data', data);
         return;
     }
     let type = getSelectedChartType();
@@ -432,7 +476,7 @@ document.getElementById('downloadPdf').onclick = e => {
     downloadPopup.classList.remove('show');
 };
 
-document.getElementById('saveBtn').onclick = e => {
+saveBtn.onclick = e => {
     let chartConfig = ChartConfig.instance;
     if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
         PopupMessage.showFailure('No chart to save');
@@ -502,6 +546,7 @@ document.getElementById('saveBtn').onclick = e => {
                 }
                 return;
             }
+            chartConfig.modified = false;
             PopupMessage.showSuccess('Chart saved');
             body.classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
@@ -514,7 +559,7 @@ document.getElementById('saveBtn').onclick = e => {
     xhrSender.send('/chart/save', cb);
 };
 
-document.getElementById('deleteBtn').onclick = e => {
+deleteBtn.onclick = e => {
     if (chartID.length == 0) {
         PopupMessage.showFailure('Chart is not saved');
         return;
@@ -543,8 +588,17 @@ document.getElementById('deleteBtn').onclick = e => {
                     }
                     return;
                 }
+                if (ChartConfig.instance) ChartConfig.instance.modified = false;
                 PopupMessage.showSuccess('Chart Deleted.', () => {
-                    window.location = '/dashboard';
+                    if (typeof (Storage) !== "undefined") {
+                        if (localStorage.opencount && Number(localStorage.opencount) > 1) {
+                            window.close();
+                        } else {
+                            window.location = '/dashboard';
+                        }
+                    } else {
+                        window.location = '/dashboard';
+                    }
                 });
             } catch (error) {
                 PopupMessage.showFailure('Delete failed!');
@@ -554,7 +608,7 @@ document.getElementById('deleteBtn').onclick = e => {
     });
 };
 
-document.getElementById('shareBtn').onclick = e => {
+shareBtn.onclick = e => {
     if (chartID.length == 0) {
         PopupMessage.showFailure('Chart is not saved');
         return;
@@ -598,7 +652,10 @@ document.getElementById('CloseEdit').onclick = e => {
 document.getElementById('editName').onclick = e => {
     nameView.style.display = 'none';
     nameEdit.style.display = 'block';
-    nameEdit.onkeypress = e => { keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn); };
+    nameEdit.onkeydown = e => {
+        e.stopImmediatePropagation();
+        FormUtils.keyPressFn(e, FormUtils.chart_name_pattern, null, null, saveNameBtn);
+    };
     let name = chartNameView.innerText
     nameInput.value = name;
     saveNameBtn.onclick = e => {
@@ -782,6 +839,7 @@ function drawSavedChart(info, type, data, properties) {
             return;
             break;
     }
+    myChart.modified = false;
     myChart.setSavedData(data);
     myChart.setName(chartName);
     if (myChart.hasMarker) {
@@ -1009,6 +1067,8 @@ legendVisible.onclick = e => {
 function updateSettings() {
     let chartConfig = ChartConfig.instance;
     if (chartConfig == null) return;
+
+    chartNameView.innerText = chartConfig.getName();
 
     if (chartConfig.hasMarker) {
         body.classList.remove('noMarker');

@@ -2,21 +2,21 @@ let submitBtn = document.getElementById('submitBtn');
 let emailInput = document.getElementById('email');
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, null, 'Invalid email', submitBtn);
+    FormUtils.keyPressFn(event, FormUtils.email_pattern, null, 'Invalid email', submitBtn);
 }
 
 submitBtn.onclick = e => {
     e.preventDefault();
     let email = emailInput.value.trim();
 
-    setClear(emailInput);
+    FormUtils.setClear(emailInput);
 
-    if (isEmpty(email)) {
-        setErrorFor(emailInput, 'Email cannot be empty');
+    if (FormUtils.isEmpty(email)) {
+        FormUtils.setErrorFor(emailInput, 'Email cannot be empty');
         return false;
     }
-    if (!email_pattern.test(email)) {
-        setErrorFor(emailInput, 'Invalid email format');
+    if (!FormUtils.email_pattern.test(email)) {
+        FormUtils.setErrorFor(emailInput, 'Invalid email format');
         return false;
     }
 
@@ -32,7 +32,7 @@ submitBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'email':
-                                setErrorFor(emailInput, data['reason']);
+                                FormUtils.setErrorFor(emailInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }

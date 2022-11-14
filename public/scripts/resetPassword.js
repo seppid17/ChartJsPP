@@ -3,10 +3,10 @@ let passwdInput = document.getElementById('password');
 let cnfPasswdInput = document.getElementById('cnfPassword');
 
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, cnfPasswdInput, 'Invalid Password');
+    FormUtils.keyPressFn(event, FormUtils.password_pattern, cnfPasswdInput, 'Invalid Password');
 }
 cnfPasswdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, 'Invalid Password', submitBtn);
+    FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid Password', submitBtn);
 }
 
 submitBtn.onclick = e => {
@@ -14,23 +14,23 @@ submitBtn.onclick = e => {
     let passwd = passwdInput.value.trim();
     let cnfPasswd = cnfPasswdInput.value.trim();
 
-    setClear(passwdInput);
-    setClear(cnfPasswdInput);
+    FormUtils.setClear(passwdInput);
+    FormUtils.setClear(cnfPasswdInput);
 
-    if (isEmpty(passwd)) {
-        setErrorFor(passwdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(passwd)) {
+        FormUtils.setErrorFor(passwdInput, "Password cannot be empty");
         return;
     }
-    if (!password_pattern.test(passwd)) {
-        setErrorFor(passwdInput, "Invalid password");
+    if (!FormUtils.password_pattern.test(passwd)) {
+        FormUtils.setErrorFor(passwdInput, "Invalid password");
         return;
     }
-    if (isEmpty(cnfPasswd)) {
-        setErrorFor(cnfPasswdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(cnfPasswd)) {
+        FormUtils.setErrorFor(cnfPasswdInput, "Password cannot be empty");
         return;
     }
     if (passwd !== cnfPasswd) {
-        setErrorFor(cnfPasswdInput, "Passwords doesn't match");
+        FormUtils.setErrorFor(cnfPasswdInput, "Passwords doesn't match");
         return;
     }
 
@@ -46,7 +46,7 @@ submitBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'password':
-                                setErrorFor(passwdInput, data['reason']);
+                                FormUtils.setErrorFor(passwdInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }

@@ -3,7 +3,7 @@ const Validator = require("../utils/validator");
 const bcrypt = require("bcrypt");
 
 const loginView = (req, res) => {
-    res.render("login", {});
+    res.render("login", {nonce: req.scriptNonce});
 }
 
 const logout = (req, res) => {

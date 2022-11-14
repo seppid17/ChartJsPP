@@ -2,21 +2,21 @@ let submitBtn = document.getElementById('submitBtn');
 let passwdInput = document.getElementById('password');
 
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, 'Invalid password', submitBtn);
+    FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid password', submitBtn);
 }
 
 submitBtn.onclick = e => {
     e.preventDefault();
     let passwd = passwdInput.value.trim();
 
-    setClear(passwdInput);
+    FormUtils.setClear(passwdInput);
 
-    if (isEmpty(passwd)) {
-        setErrorFor(passwdInput, 'Password cannot be empty');
+    if (FormUtils.isEmpty(passwd)) {
+        FormUtils.setErrorFor(passwdInput, 'Password cannot be empty');
         return;
     }
-    if (!password_pattern.test(passwd)) {
-        setErrorFor(passwdInput, 'Invalid password format');
+    if (!FormUtils.password_pattern.test(passwd)) {
+        FormUtils.setErrorFor(passwdInput, 'Invalid password format');
         return;
     }
 
@@ -32,7 +32,7 @@ submitBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'password':
-                                setErrorFor(passwdInput, data['reason']);
+                                FormUtils.setErrorFor(passwdInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }

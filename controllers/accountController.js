@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const accountView = (req, res) => {
     let user = req.session.user;
-    res.render("account", { "email": user.email, "firstName": user.firstName, "lastName": user.lastName });
+    res.render("account", { email: user.email, firstName: user.firstName, lastName: user.lastName, nonce: req.scriptNonce });
 }
 
 const changeName = async (req, res) => {

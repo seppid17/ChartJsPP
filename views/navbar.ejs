@@ -23,19 +23,17 @@
                     </li>
                 <% } %>
 
-
                 <% if (pageName !="chart" ) { %>
                     <li class="nav-item">
                         <a id="chart_link" class="nav-link" href="/chart">Chart</a>
                     </li>
                 <% } %>
 
-                <% if (pageName !="sample" ) { %>
+                <% if (pageName != "sample") { %>
                     <li class="nav-item">
-                        <a id="sample_link" class="nav-link" href="/sampleData">Sample</a>
+                        <a id="sample_link" class="nav-link" href="/sampleData" target="_blank">Sample</a>
                     </li>
                 <% } %>
-
             </ul>
 
             <ul class="navbar-nav ms-auto">
@@ -58,13 +56,13 @@
 
                 <% if (pageName !="login" ) { %>
                     <li class="nav-item notLoggedOnly">
-                        <nobr></nobr><a id="signin_link" class="nav-link" href="/login">Sign In</a></nobr>
+                        <a id="signin_link" class="nav-link" href="/login">Sign In</a>
                     </li>
                 <% } %>
 
                 <% if (pageName !="signup" ) { %>
                     <li class="nav-item notLoggedOnly">
-                        <nobr></nobr><a id="signup_link" class="nav-link" href="/signup">Sign Up</a></nobr>
+                        <a id="signup_link" class="nav-link" href="/signup">Sign Up</a>
                     </li>
                 <% } %>
             </ul>

@@ -1,14 +1,13 @@
-body {
-    background-color: var(--bg-primary);
-    font-family: "proxima-nova-soft", sans-serif;
-}
-
 body.authOnly .onlyAuth,
 body.noLegend .legend,
 body.noMarker .marker,
 body.noMarkerSize .marker-size,
 body.noAxis .axis {
     display: none;
+}
+
+a {
+    text-decoration: none !important;
 }
 
 i:not(.fa-user-gear) {
@@ -551,11 +550,37 @@ input:focus {
     font-size: 14px;
 }
 
-@media only screen and (min-width: 860px) {
+.text-size,
+.text-size,
+.marker,
+.marker-type,
+.legend,
+.axis-lable {
+    font-weight: bold;
+}
+
+.axis-prop-input {
+    width: 20px !important;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.axis-lable {
+    padding-top: 10px;
+}
+
+@media only screen and (min-width: 1450px) {
     .chart-props {
         display: flex;
         align-items: center;
-    } 
+    }
+}
+
+@media only screen and (min-width: 860px) {
+    .check-boxes,
+    .chart-related-props {
+        display: flex;
+    }
 }
 
 @media only screen and (min-width: 500px) {
@@ -567,5 +592,9 @@ input:focus {
     .text-props {
         display: flex;
         align-items: center;
-    } 
+    }
+
+    .axis {
+        display: flex;
+    }
 }

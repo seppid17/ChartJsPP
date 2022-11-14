@@ -6,19 +6,19 @@ let passwdInput = document.getElementById('password');
 let cnfpasswdInput = document.getElementById('cnfPassword');
 
 emailInput.onkeydown = event => {
-    keyPressFn(event, email_pattern, firstNameInput, 'Invalid email');
+    FormUtils.keyPressFn(event, FormUtils.email_pattern, firstNameInput, 'Invalid email');
 }
 firstNameInput.onkeydown = event => {
-    keyPressFn(event, name_pattern, lastNameInput, 'Invalid name');
+    FormUtils.keyPressFn(event, FormUtils.name_pattern, lastNameInput, 'Invalid name');
 }
 lastNameInput.onkeydown = event => {
-    keyPressFn(event, name_pattern, passwdInput, 'Invalid name');
+    FormUtils.keyPressFn(event, FormUtils.name_pattern, passwdInput, 'Invalid name');
 }
 passwdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, cnfpasswdInput, 'Invalid password');
+    FormUtils.keyPressFn(event, FormUtils.password_pattern, cnfpasswdInput, 'Invalid password');
 }
 cnfpasswdInput.onkeydown = event => {
-    keyPressFn(event, password_pattern, null, 'Invalid password', submitBtn);
+    FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid password', submitBtn);
 }
 
 submitBtn.onclick = e => {
@@ -29,59 +29,59 @@ submitBtn.onclick = e => {
     let passwd = passwdInput.value.trim();
     let cnfpasswd = cnfpasswdInput.value.trim();
 
-    setClear(emailInput);
-    setClear(firstNameInput);
-    setClear(lastNameInput);
-    setClear(passwdInput);
-    setClear(cnfpasswdInput);
+    FormUtils.setClear(emailInput);
+    FormUtils.setClear(firstNameInput);
+    FormUtils.setClear(lastNameInput);
+    FormUtils.setClear(passwdInput);
+    FormUtils.setClear(cnfpasswdInput);
 
-    if (isEmpty(email)) {
-        setErrorFor(emailInput, "Email cannot be empty");
+    if (FormUtils.isEmpty(email)) {
+        FormUtils.setErrorFor(emailInput, "Email cannot be empty");
         return;
     }
 
-    if (!email_pattern.test(email)) {
-        setErrorFor(emailInput, "Invalid email format");
+    if (!FormUtils.email_pattern.test(email)) {
+        FormUtils.setErrorFor(emailInput, "Invalid email format");
         return;
     }
 
-    if (isEmpty(firstName)) {
-        setErrorFor(firstNameInput, "Name cannot be empty");
+    if (FormUtils.isEmpty(firstName)) {
+        FormUtils.setErrorFor(firstNameInput, "Name cannot be empty");
         return;
     }
 
-    if (!name_pattern.test(firstName)) {
-        setErrorFor(firstNameInput, "Invalid name format");
+    if (!FormUtils.name_pattern.test(firstName)) {
+        FormUtils.setErrorFor(firstNameInput, "Invalid name format");
         return;
     }
 
-    if (isEmpty(lastName)) {
-        setErrorFor(lastNameInput, "Name cannot be empty");
+    if (FormUtils.isEmpty(lastName)) {
+        FormUtils.setErrorFor(lastNameInput, "Name cannot be empty");
         return;
     }
 
-    if (!name_pattern.test(lastName)) {
-        setErrorFor(lastNameInput, "Invalid name format");
+    if (!FormUtils.name_pattern.test(lastName)) {
+        FormUtils.setErrorFor(lastNameInput, "Invalid name format");
         return;
     }
 
-    if (isEmpty(passwd)) {
-        setErrorFor(passwdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(passwd)) {
+        FormUtils.setErrorFor(passwdInput, "Password cannot be empty");
         return;
     }
 
-    if (!password_pattern.test(passwd)) {
-        setErrorFor(passwdInput, "Invalid password format");
+    if (!FormUtils.password_pattern.test(passwd)) {
+        FormUtils.setErrorFor(passwdInput, "Invalid password format");
         return;
     }
 
-    if (isEmpty(cnfpasswd)) {
-        setErrorFor(cnfpasswdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(cnfpasswd)) {
+        FormUtils.setErrorFor(cnfpasswdInput, "Password cannot be empty");
         return;
     }
 
     if (passwd !== cnfpasswd) {
-        setErrorFor(cnfpasswdInput, "Passwords doesn't match");
+        FormUtils.setErrorFor(cnfpasswdInput, "Passwords doesn't match");
         return;
     }
 
@@ -100,19 +100,19 @@ submitBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'email':
-                                setErrorFor(emailInput, data['reason']);
+                                FormUtils.setErrorFor(emailInput, data['reason']);
                                 Loader.hide();
                                 break;
                             case 'firstname':
-                                setErrorFor(firstNameInput, data['reason']);
+                                FormUtils.setErrorFor(firstNameInput, data['reason']);
                                 Loader.hide();
                                 break;
                             case 'lastname':
-                                setErrorFor(lastNameInput, data['reason']);
+                                FormUtils.setErrorFor(lastNameInput, data['reason']);
                                 Loader.hide();
                                 break;
                             case 'password':
-                                setErrorFor(passwdInput, data['reason']);
+                                FormUtils.setErrorFor(passwdInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }

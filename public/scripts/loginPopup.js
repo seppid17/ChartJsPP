@@ -22,11 +22,11 @@ function popupLogin(ondone) {
     }
 
     emailInput.onkeydown = event => {
-        keyPressFn(event, email_pattern, passwdInput, 'Invalid email');
+        FormUtils.keyPressFn(event, FormUtils.email_pattern, passwdInput, 'Invalid email');
     }
 
     passwdInput.onkeydown = event => {
-        keyPressFn(event, password_pattern, null, 'Invalid Password', submitBtn);
+        FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid Password', submitBtn);
     }
 
     submitBtn.onclick = e => {
@@ -34,23 +34,23 @@ function popupLogin(ondone) {
         let email = emailInput.value.trim();
         let passwd = passwdInput.value.trim();
 
-        setClear(emailInput);
-        setClear(passwdInput);
+        FormUtils.setClear(emailInput);
+        FormUtils.setClear(passwdInput);
 
-        if (isEmpty(email)) {
-            setErrorFor(emailInput, 'Email cannot be empty');
+        if (FormUtils.isEmpty(email)) {
+            FormUtils.setErrorFor(emailInput, 'Email cannot be empty');
             return false;
         }
-        if (!email_pattern.test(email)) {
-            setErrorFor(emailInput, 'Invalid email');
+        if (!FormUtils.email_pattern.test(email)) {
+            FormUtils.setErrorFor(emailInput, 'Invalid email');
             return false;
         }
-        if (isEmpty(passwd)) {
-            setErrorFor(passwdInput, 'Password cannot be empty');
+        if (FormUtils.isEmpty(passwd)) {
+            FormUtils.setErrorFor(passwdInput, 'Password cannot be empty');
             return false;
         }
-        if (!password_pattern.test(passwd)) {
-            setErrorFor(passwdInput, 'Invalid Password');
+        if (!FormUtils.password_pattern.test(passwd)) {
+            FormUtils.setErrorFor(passwdInput, 'Invalid Password');
             return false;
         }
 
@@ -67,11 +67,11 @@ function popupLogin(ondone) {
                         if (data.hasOwnProperty('field')) {
                             switch (data['field']) {
                                 case 'email':
-                                    setErrorFor(emailInput, data['reason']);
+                                    FormUtils.setErrorFor(emailInput, data['reason']);
                                     Loader.hide();
                                     break;
                                 case 'password':
-                                    setErrorFor(passwdInput, data['reason']);
+                                    FormUtils.setErrorFor(passwdInput, data['reason']);
                                     Loader.hide();
                                     break;
                             }
@@ -85,7 +85,7 @@ function popupLogin(ondone) {
                     return;
                 }
                 passwdInput.value = '';
-                checkLogged();
+                AuthUtils.checkLogged();
                 ondone(true);
                 popup.style.display = 'none';
                 overlay.style.display = 'none';

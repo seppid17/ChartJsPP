@@ -6,11 +6,11 @@ const bcrypt = require("bcrypt");
 const crypto = require('crypto');
 
 const signupView = (req, res) => {
-    res.render("signup", {});
+    res.render("signup", {nonce: req.scriptNonce});
 }
 
 const activateView = (req, res) => {
-    res.render("activate", {});
+    res.render("activate", {nonce: req.scriptNonce});
 }
 
 const requestUser = async (req, res) => {

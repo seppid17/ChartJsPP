@@ -30,6 +30,7 @@ class ChartConfig {
         this.config = {};
         this.config.type = type;
         this.name = '';
+        this.modified = true;
         backDiv.style.display = 'none'
         clearBreadcrumb();
         ChartConfig.canvas.onclick = evt => {
@@ -86,6 +87,10 @@ class ChartConfig {
         ChartConfig.instance = this;
     }
 
+    getName() {
+        return this.name;
+    }
+
     setData(data) {
         if (this.config) {
             this.config.data = data;
@@ -110,6 +115,7 @@ class ChartConfig {
         if (this.config && this.config.data.datasets.length > 0) {
             this.config.data.datasets[0].label = name;
         }
+        updateSettings();
     }
 
     initOptions(options) {
@@ -132,6 +138,7 @@ class ChartConfig {
     }
 
     _update() {
+        this.modified = true;
         if (this.hasAxis) {
             this.config.options.scales.x.ticks.color = Chart.defaults.color;
             this.config.options.scales.y.ticks.color = Chart.defaults.color;
@@ -147,8 +154,8 @@ class ChartConfig {
         if (ChartConfig.chart instanceof Chart) {
             ChartConfig.instance._update();
             ChartConfig.chart.update(mode);
+            updateSettings();
         }
-        updateSettings();
     }
 
     getType() {
@@ -378,9 +385,6 @@ class PieChartConfig extends BasicChartConfig {
         });
         this.hasLegend = true;
     }
-
-    _update() {
-    }
 }
 
 class LineChartConfig extends BasicChartConfig {
@@ -428,9 +432,6 @@ class DoughnutChartConfig extends BasicChartConfig {
         });
         this.hasLegend = true;
     }
-
-    _update() {
-    }
 }
 
 class PolarAreaChartConfig extends BasicChartConfig {
@@ -455,6 +456,7 @@ class PolarAreaChartConfig extends BasicChartConfig {
     }
 
     _update() {
+        super._update();
         this.config.options.scales.r.ticks.color = Chart.defaults.color;
     }
 }
@@ -533,6 +535,7 @@ class RadarChartConfig extends BasicChartConfig {
     }
 
     _update() {
+        super._update();
         this.config.options.scales.r.ticks.color = Chart.defaults.color;
         this.config.options.scales.r.pointLabels.color = Chart.defaults.color;
         this.config.options.scales.r.pointLabels.font.size = Chart.defaults.font.size;

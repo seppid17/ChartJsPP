@@ -1,6 +1,8 @@
 const cardsDiv = document.getElementById('cardsDiv');
 const chartCount = document.getElementById("currentChartCount");
 
+AuthUtils.mustLogin();
+
 function showNoCharts() {
     let p = document.createElement('p');
     p.classList.add('text-no-chart');

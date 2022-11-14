@@ -6,11 +6,11 @@ const bcrypt = require("bcrypt");
 const crypto = require('crypto');
 
 const forgotPasswordView = (req, res) => {
-    res.render("forgotPassword", {});
+    res.render("forgotPassword", {nonce: req.scriptNonce});
 }
 
 const resetPasswordView = (req, res) => {
-    res.render("resetPassword", {});
+    res.render("resetPassword", {nonce: req.scriptNonce});
 }
 
 const forgotPassword = async (req, res) => {

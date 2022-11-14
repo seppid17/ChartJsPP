@@ -11,6 +11,8 @@ let changePasswdBtn = document.getElementById('changePasswdBtn');
 let delPasswdInput = document.getElementById('delPassword');
 let deleteBtn = document.getElementById('deleteBtn');
 
+AuthUtils.mustLogin();
+
 // this function changes the display style of given 3 inputs
 function AccountOperation(div1, div2, div3) {
     div1.style.display = 'none';
@@ -43,13 +45,13 @@ DeleteAccountBtn.onclick = e => {
     setSelect(DeleteAccountBtn, AccountDetailsBtn, ChangePasswordBtn);
 }
 
-firstNameInput.onkeydown = event => { keyPressFn(event, name_pattern, lastNameInput, 'Invalid name'); }
-lastNameInput.onkeydown = event => { keyPressFn(event, name_pattern, passwdInput, 'Invalid name'); }
-passwdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, 'Invalid password', changeNameBtn); }
-curPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, newPasswdInput, 'Invalid password'); }
-newPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, cnfPasswdInput, 'Invalid password'); }
-cnfPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, 'Invalid password', changePasswdBtn); }
-delPasswdInput.onkeydown = event => { keyPressFn(event, password_pattern, null, 'Invalid password', deleteBtn); }
+firstNameInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.name_pattern, lastNameInput, 'Invalid name'); }
+lastNameInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.name_pattern, passwdInput, 'Invalid name'); }
+passwdInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid password', changeNameBtn); }
+curPasswdInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.password_pattern, newPasswdInput, 'Invalid password'); }
+newPasswdInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.password_pattern, cnfPasswdInput, 'Invalid password'); }
+cnfPasswdInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid password', changePasswdBtn); }
+delPasswdInput.onkeydown = event => { FormUtils.keyPressFn(event, FormUtils.password_pattern, null, 'Invalid password', deleteBtn); }
 
 changeNameBtn.onclick = e => {
     e.preventDefault();
@@ -57,35 +59,35 @@ changeNameBtn.onclick = e => {
     let lastName = lastNameInput.value.trim();
     let passwd = passwdInput.value.trim();
 
-    setClear(firstNameInput);
-    setClear(lastNameInput);
-    setClear(passwdInput);
+    FormUtils.setClear(firstNameInput);
+    FormUtils.setClear(lastNameInput);
+    FormUtils.setClear(passwdInput);
 
     // fron-end validate first name
-    if (isEmpty(firstName)) {
-        setErrorFor(firstNameInput, "Name cannot be empty");
+    if (FormUtils.isEmpty(firstName)) {
+        FormUtils.setErrorFor(firstNameInput, "Name cannot be empty");
         return;
     }
-    if (!name_pattern.test(firstName)) {
-        setErrorFor(firstNameInput, "Invalid name format");
+    if (!FormUtils.name_pattern.test(firstName)) {
+        FormUtils.setErrorFor(firstNameInput, "Invalid name format");
         return;
     }
     // front-end validate last name
-    if (isEmpty(lastName)) {
-        setErrorFor(lastNameInput, "Name cannot be empty");
+    if (FormUtils.isEmpty(lastName)) {
+        FormUtils.setErrorFor(lastNameInput, "Name cannot be empty");
         return;
     }
-    if (!name_pattern.test(lastName)) {
-        setErrorFor(lastNameInput, "Invalid name format");
+    if (!FormUtils.name_pattern.test(lastName)) {
+        FormUtils.setErrorFor(lastNameInput, "Invalid name format");
         return;
     }
     // front-end validate password
-    if (isEmpty(passwd)) {
-        setErrorFor(passwdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(passwd)) {
+        FormUtils.setErrorFor(passwdInput, "Password cannot be empty");
         return;
     }
-    if (!password_pattern.test(passwd)) {
-        setErrorFor(passwdInput, "Invalid password format");
+    if (!FormUtils.password_pattern.test(passwd)) {
+        FormUtils.setErrorFor(passwdInput, "Invalid password format");
         return;
     }
 
@@ -103,15 +105,15 @@ changeNameBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'firstname':
-                                setErrorFor(firstNameInput, data['reason']);
+                                FormUtils.setErrorFor(firstNameInput, data['reason']);
                                 Loader.hide();
                                 break;
                             case 'lastname':
-                                setErrorFor(lastNameInput, data['reason']);
+                                FormUtils.setErrorFor(lastNameInput, data['reason']);
                                 Loader.hide();
                                 break;
                             case 'password':
-                                setErrorFor(passwdInput, data['reason']);
+                                FormUtils.setErrorFor(passwdInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }
@@ -138,34 +140,34 @@ changePasswdBtn.onclick = e => {
     let newPasswd = newPasswdInput.value.trim();
     let cnfPasswd = cnfPasswdInput.value.trim();
 
-    setClear(curPasswdInput);
-    setClear(newPasswdInput);
-    setClear(cnfPasswdInput);
+    FormUtils.setClear(curPasswdInput);
+    FormUtils.setClear(newPasswdInput);
+    FormUtils.setClear(cnfPasswdInput);
 
-    if (isEmpty(curPasswd)) {
-        setErrorFor(curPasswdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(curPasswd)) {
+        FormUtils.setErrorFor(curPasswdInput, "Password cannot be empty");
         return;
     }
-    if (!password_pattern.test(curPasswd)) {
-        setErrorFor(curPasswdInput, "Invalid password format");
-        return;
-    }
-
-    if (isEmpty(newPasswd)) {
-        setErrorFor(newPasswdInput, "Password cannot be empty");
-        return;
-    }
-    if (!password_pattern.test(newPasswd)) {
-        setErrorFor(newPasswdInput, "Invalid password format");
+    if (!FormUtils.password_pattern.test(curPasswd)) {
+        FormUtils.setErrorFor(curPasswdInput, "Invalid password format");
         return;
     }
 
-    if (isEmpty(cnfPasswd)) {
-        setErrorFor(cnfPasswdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(newPasswd)) {
+        FormUtils.setErrorFor(newPasswdInput, "Password cannot be empty");
+        return;
+    }
+    if (!FormUtils.password_pattern.test(newPasswd)) {
+        FormUtils.setErrorFor(newPasswdInput, "Invalid password format");
+        return;
+    }
+
+    if (FormUtils.isEmpty(cnfPasswd)) {
+        FormUtils.setErrorFor(cnfPasswdInput, "Password cannot be empty");
         return;
     }
     if (newPasswd !== cnfPasswd) {
-        setErrorFor(cnfPasswdInput, "Password dosen't match");
+        FormUtils.setErrorFor(cnfPasswdInput, "Password dosen't match");
         return;
     }
 
@@ -182,11 +184,11 @@ changePasswdBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'curPassword':
-                                setErrorFor(curPasswdInput, data['reason']);
+                                FormUtils.setErrorFor(curPasswdInput, data['reason']);
                                 Loader.hide();
                                 break;
                             case 'newPassword':
-                                setErrorFor(newPasswdInput, data['reason']);
+                                FormUtils.setErrorFor(newPasswdInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }
@@ -210,8 +212,8 @@ changePasswdBtn.onclick = e => {
 deleteBtn.onclick = e => {
     e.preventDefault();
     let passwd = delPasswdInput.value.trim();
-    if (isEmpty(passwd)) {
-        setErrorFor(delPasswdInput, "Password cannot be empty");
+    if (FormUtils.isEmpty(passwd)) {
+        FormUtils.setErrorFor(delPasswdInput, "Password cannot be empty");
         return;
     }
 
@@ -227,7 +229,7 @@ deleteBtn.onclick = e => {
                     if (data.hasOwnProperty('field')) {
                         switch (data['field']) {
                             case 'delPassword':
-                                setErrorFor(delPasswdInput, data['reason']);
+                                FormUtils.setErrorFor(delPasswdInput, data['reason']);
                                 Loader.hide();
                                 break;
                         }
