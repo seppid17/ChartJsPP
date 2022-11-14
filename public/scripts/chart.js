@@ -618,7 +618,7 @@ document.getElementById('CloseEdit').onclick = e => {
 document.getElementById('editName').onclick = e => {
     nameView.style.display = 'none';
     nameEdit.style.display = 'block';
-    nameEdit.onkeypress = e => { keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn); };
+    nameEdit.onkeypress = e => { FormUtils.keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn); };
     let name = chartNameView.innerText
     nameInput.value = name;
     saveNameBtn.onclick = e => {

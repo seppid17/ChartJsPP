@@ -1,5 +1,7 @@
 const cardsDiv = document.getElementById('cardsDiv');
 
+AuthUtils.mustLogin();
+
 function showNoCharts() {
     let p = document.createElement('p');
     p.classList.add('text-no-chart');

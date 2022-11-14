@@ -47,6 +47,9 @@ class XHRSender {
     }
 }
 
+/**
+ * Shows a popup for confirmation or to show information of an operation
+ */
 class PopupMessage {
     static closeBtn = document.getElementById("popupclose");
     static confirmPopup = document.getElementById("popupconfirm");
@@ -151,6 +154,9 @@ class PopupMessage {
     }
 }
 
+/**
+ * Setting the page theme to light or dark mode
+ */
 class Theme {
     static LIGHT = false;
     static DARK = true;
@@ -278,6 +284,9 @@ class Theme {
     }
 }
 
+/**
+ * Functions to show a loader when an operation takes long time
+ */
 class Loader {
     static loadTimerID = 0;
 
@@ -301,7 +310,7 @@ class Loader {
         }
         Loader.loadTimerId = setTimeout(() => {
             Loader._setLoaderDisplay('block');
-        }, 200);
+        }, 400);
     }
 
     /**
@@ -316,106 +325,128 @@ class Loader {
     }
 }
 
-const email_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const name_pattern = /^[A-Za-z]{2,30}$/;
-const password_pattern = /^[\x21-\x7E]{8,15}$/;
-
 /**
- * Prevents a form from submittiog when enter key is pressed. Instead,
- * it sets the keyboard focus to next form input field if the current field is valid.
- * If the field is the last input field of the form, triggers the onclick
- * of the submit button.
- * 
- * @param {KeyboardEvent} e the keypress event
- * @param {RegExp} pattern pattern to check the input
- * @param {HTMLElement} nextElem next element to set focus
- * @param {string} [errorMsg] error message to show on error
- * @param {HTMLElement} [btn] button to press on success
- * @return {void}
+ * Utilities for forms and input validation
  */
-function keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
-    if (e.keyCode === 13) {
-        if (errorMsg != null) setClear(e.target);
-        e.preventDefault();
-        e.stopPropagation();
-        let value = e.target.value.trim();
-        if (!pattern.test(value)) {
-            if (errorMsg != null) setErrorFor(e.target, errorMsg);
-            return;
-        }
-        if (nextElem == null) {
-            if (btn != null) btn.click();
-        } else {
-            if (nextElem) {
-                nextElem.focus();
+class FormUtils {
+
+    /**
+     * Patterns to validate inputs
+     */
+    static email_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    static name_pattern = /^[A-Za-z]{2,30}$/;
+    static password_pattern = /^[\x21-\x7E]{8,15}$/;
+
+    /**
+     * Prevents a form from submittiog when enter key is pressed. Instead,
+     * it sets the keyboard focus to next form input field if the current field is valid.
+     * If the field is the last input field of the form, triggers the onclick
+     * of the submit button.
+     * 
+     * @param {KeyboardEvent} e the keypress event
+     * @param {RegExp} pattern pattern to check the input
+     * @param {HTMLElement} nextElem next element to set focus
+     * @param {string} [errorMsg] error message to show on error
+     * @param {HTMLElement} [btn] button to press on success
+     * @return {void}
+     */
+    static keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
+        if (e.keyCode === 13) {
+            if (errorMsg != null) FormUtils.setClear(e.target);
+            e.preventDefault();
+            e.stopPropagation();
+            let value = e.target.value.trim();
+            if (!pattern.test(value)) {
+                if (errorMsg != null) FormUtils.setErrorFor(e.target, errorMsg);
+                return;
             }
-        }
-    }
-}
-
-/**
- * Check if a string is empty
- * 
- * @return {boolean} true if string is empty, and false otherwise.
- */
-function isEmpty(str) {
-    return (!str || str.length === 0);
-}
-
-/**
- * Set error message for a input field
- * 
- * @param {HTMLElement} input Input field
- * @param {string} message Error message
- * @return {void}
- */
-function setErrorFor(input, message) {
-    const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
-    if (small != null) {
-        formControl.classList.add('error');
-        small.innerText = message;
-    }
-}
-
-/**
- * Clear the error message for a input field
- * 
- * @param {HTMLElement} input Input field
- * @return {void}
- */
-function setClear(input) {
-    const formControl = input.parentElement;
-    formControl.classList.remove('error');
-}
-
-/**
- * Check if the user is logged.
- * Show or hide navbar buttons depending on logged status.
- * 
- * @return {void}
- */
-function checkLogged() {
-    if (!nav) return;
-    let xhrSender = new XHRSender();
-    if (nameSpan) nameSpan.innerText = '';
-    xhrSender.send('/isLogged', xhr => {
-        try {
-            let data = JSON.parse(xhr.responseText);
-            if (data.hasOwnProperty('logged') && data['logged'] == true) {
-                nav.classList.remove('notLogged');
-                nav.classList.add('logged');
-                if (data.hasOwnProperty('firstName') && data.hasOwnProperty('lastName')) {
-                    let name = data.firstName + ' ' + data.lastName;
-                    if (nameSpan) nameSpan.innerText = name;
-                }
+            if (nextElem == null) {
+                if (btn != null) btn.click();
             } else {
-                nav.classList.remove('logged');
-                nav.classList.add('notLogged');
+                if (nextElem) {
+                    nextElem.focus();
+                }
             }
-        } catch (error) {
         }
-    });
+    }
+
+    /**
+     * Check if a string is empty
+     * 
+     * @return {boolean} true if string is empty, and false otherwise.
+     */
+    static isEmpty(str) {
+        return (!str || str.length === 0);
+    }
+
+    /**
+     * Set error message for a input field
+     * 
+     * @param {HTMLElement} input Input field
+     * @param {string} message Error message
+     * @return {void}
+     */
+    static setErrorFor(input, message) {
+        const formControl = input.parentElement;
+        const small = formControl.querySelector('small');
+        if (small != null) {
+            formControl.classList.add('error');
+            small.innerText = message;
+        }
+    }
+
+    /**
+     * Clear the error message for a input field
+     * 
+     * @param {HTMLElement} input Input field
+     * @return {void}
+     */
+    static setClear(input) {
+        const formControl = input.parentElement;
+        formControl.classList.remove('error');
+    }
+}
+
+class AuthUtils {
+    static _mustLogin = false;
+
+    static mustLogin() {
+        AuthUtils.mustLogin = true;
+    }
+
+    /**
+     * Check if the user is logged.
+     * Show or hide navbar buttons depending on logged status.
+     * If the user must be logged in to stay on this page, and if the user has logged out,
+     * then reload the page
+     * 
+     * @return {void}
+     */
+    static checkLogged() {
+        if (!nav) return;
+        let xhrSender = new XHRSender();
+        if (nameSpan) nameSpan.innerText = '';
+        xhrSender.send('/isLogged', xhr => {
+            try {
+                let data = JSON.parse(xhr.responseText);
+                if (data.hasOwnProperty('logged') && data['logged'] == true) {
+                    nav.classList.remove('notLogged');
+                    nav.classList.add('logged');
+                    if (data.hasOwnProperty('firstName') && data.hasOwnProperty('lastName')) {
+                        let name = data.firstName + ' ' + data.lastName;
+                        if (nameSpan) nameSpan.innerText = name;
+                    }
+                } else {
+                    if (AuthUtils._mustLogin) {
+                        window.location = document.URL;
+                    }
+                    nav.classList.remove('logged');
+                    nav.classList.add('notLogged');
+                }
+            } catch (error) {
+            }
+        });
+    }
 }
 
 /**
@@ -435,7 +466,7 @@ Theme.darkBtn.onclick = e => {
  */
 document.addEventListener('visibilitychange', e => {
     if (document.visibilityState == 'visible') {
-        checkLogged();
+        AuthUtils.checkLogged();
         Theme.checkTheme();
     }
 });
@@ -456,7 +487,7 @@ window.addEventListener('load', e => {
 /**
  * decrement the number of open tabs
  */
-window.onunload = function() {
+window.onunload = function () {
     if (typeof (Storage) !== "undefined") {
         if (localStorage.opencount) {
             localStorage.opencount = Math.max(0, Number(localStorage.opencount) - 1);
@@ -464,5 +495,5 @@ window.onunload = function() {
     }
 }
 
-checkLogged();
+AuthUtils.checkLogged();
 Theme.checkTheme();
