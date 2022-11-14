@@ -77,6 +77,12 @@ class PopupMessage {
         } else {
             PopupMessage.confirmPopup.hidden = true;
             PopupMessage.closeBtn.children[0].innerText = 'OK';
+            document.addEventListener('keydown', e => {
+                if (e.key == 'Enter' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                    e.preventDefault();
+                    closePopup();
+                }
+            });
         }
 
         PopupMessage.overlay.style.display = 'block';
@@ -351,7 +357,7 @@ class FormUtils {
      * @return {void}
      */
     static keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
-        if (e.keyCode === 13) {
+        if (e.key === 'Enter') {
             if (errorMsg != null) FormUtils.setClear(e.target);
             e.preventDefault();
             e.stopPropagation();
@@ -407,6 +413,14 @@ class FormUtils {
     }
 }
 
+/**
+ * Check if the user is logged.
+ * Show or hide navbar buttons depending on logged status.
+ * If the user must be logged in to stay on this page, and if the user has logged out,
+ * then reload the page
+ * 
+ * @return {void}
+ */
 class AuthUtils {
     static _mustLogin = false;
 
@@ -414,14 +428,6 @@ class AuthUtils {
         AuthUtils.mustLogin = true;
     }
 
-    /**
-     * Check if the user is logged.
-     * Show or hide navbar buttons depending on logged status.
-     * If the user must be logged in to stay on this page, and if the user has logged out,
-     * then reload the page
-     * 
-     * @return {void}
-     */
     static checkLogged() {
         if (!nav) return;
         let xhrSender = new XHRSender();
@@ -468,6 +474,20 @@ document.addEventListener('visibilitychange', e => {
     if (document.visibilityState == 'visible') {
         AuthUtils.checkLogged();
         Theme.checkTheme();
+    }
+});
+
+/**
+ * Shortcut for change theme : Ctrl+T
+ */
+document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() == 'd' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        Theme.darkBtn.click();
+    }
+    if (e.key.toLowerCase() == 'n' && e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        window.open('/chart', '_blank');
     }
 });
 

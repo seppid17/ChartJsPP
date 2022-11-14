@@ -2,6 +2,9 @@ const body = document.getElementsByTagName('body')[0];
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 const chartBtn = document.getElementById('drawBtn');
+const saveBtn = document.getElementById('saveBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const shareBtn = document.getElementById('shareBtn');
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
 const alertDiv = document.getElementById('alertPop');
@@ -49,13 +52,32 @@ window.addEventListener('resize', resizeFn);
 /**
  * Warn user before leaving the page if there are unsaved modifications
  */
-window.onbeforeunload = function() {
-    if (ChartConfig.instance != null){
-        if (ChartConfig.instance.modified){
+window.onbeforeunload = function () {
+    if (ChartConfig.instance != null) {
+        if (ChartConfig.instance.modified) {
             return '';
         }
     }
 };
+
+document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() == 's' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        saveBtn.click();
+    }
+    if (e.key.toLowerCase() == 's' && e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        shareBtn.click();
+    }
+    if (e.key == 'Delete' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        deleteBtn.click();
+    }
+    if (e.key.toLowerCase() == 'o' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        document.getElementById('selectFileBtn').click();
+    }
+});
 
 ChartConfig.canvas = canvas;
 Chart.defaults.font.size = 14;
@@ -442,7 +464,7 @@ document.getElementById('downloadPdf').onclick = e => {
     downloadPopup.classList.remove('show');
 };
 
-document.getElementById('saveBtn').onclick = e => {
+saveBtn.onclick = e => {
     let chartConfig = ChartConfig.instance;
     if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
         PopupMessage.showFailure('No chart to save');
@@ -525,7 +547,7 @@ document.getElementById('saveBtn').onclick = e => {
     xhrSender.send('/chart/save', cb);
 };
 
-document.getElementById('deleteBtn').onclick = e => {
+deleteBtn.onclick = e => {
     if (chartID.length == 0) {
         PopupMessage.showFailure('Chart is not saved');
         return;
@@ -574,7 +596,7 @@ document.getElementById('deleteBtn').onclick = e => {
     });
 };
 
-document.getElementById('shareBtn').onclick = e => {
+shareBtn.onclick = e => {
     if (chartID.length == 0) {
         PopupMessage.showFailure('Chart is not saved');
         return;
@@ -618,7 +640,10 @@ document.getElementById('CloseEdit').onclick = e => {
 document.getElementById('editName').onclick = e => {
     nameView.style.display = 'none';
     nameEdit.style.display = 'block';
-    nameEdit.onkeypress = e => { FormUtils.keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn); };
+    nameEdit.onkeydown = e => {
+        e.stopImmediatePropagation();
+        FormUtils.keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn);
+    };
     let name = chartNameView.innerText
     nameInput.value = name;
     saveNameBtn.onclick = e => {
