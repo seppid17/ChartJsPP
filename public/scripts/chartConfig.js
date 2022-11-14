@@ -87,7 +87,7 @@ class ChartConfig {
         ChartConfig.instance = this;
     }
 
-    getName(){
+    getName() {
         return this.name;
     }
 
@@ -385,9 +385,6 @@ class PieChartConfig extends BasicChartConfig {
         });
         this.hasLegend = true;
     }
-
-    _update() {
-    }
 }
 
 class LineChartConfig extends BasicChartConfig {
@@ -435,9 +432,6 @@ class DoughnutChartConfig extends BasicChartConfig {
         });
         this.hasLegend = true;
     }
-
-    _update() {
-    }
 }
 
 class PolarAreaChartConfig extends BasicChartConfig {
@@ -462,6 +456,7 @@ class PolarAreaChartConfig extends BasicChartConfig {
     }
 
     _update() {
+        super._update();
         this.config.options.scales.r.ticks.color = Chart.defaults.color;
     }
 }
@@ -540,6 +535,7 @@ class RadarChartConfig extends BasicChartConfig {
     }
 
     _update() {
+        super._update();
         this.config.options.scales.r.ticks.color = Chart.defaults.color;
         this.config.options.scales.r.pointLabels.color = Chart.defaults.color;
         this.config.options.scales.r.pointLabels.font.size = Chart.defaults.font.size;
