@@ -5,6 +5,7 @@ const chartBtn = document.getElementById('drawBtn');
 const saveBtn = document.getElementById('saveBtn');
 const deleteBtn = document.getElementById('deleteBtn');
 const shareBtn = document.getElementById('shareBtn');
+const drawBtnDiv = document.getElementById('drawBtnDiv');
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
 const alertDiv = document.getElementById('alertPop');
@@ -119,6 +120,14 @@ Chart.register({
     }
 });
 
+for (i = 0; i < chartTypes.length; i++) {
+    chartTypes[i].onclick = e=>{
+        if (FileInputManager.extractedData!=null){
+            drawBtnDiv.hidden = false;
+        }
+    }
+}
+
 function getSelectedChartType() {
     let type = null;
     for (i = 0; i < chartTypes.length; i++) {
@@ -130,9 +139,14 @@ function getSelectedChartType() {
 }
 
 function setSelectedChartType(type) {
+    if (FileInputManager.extractedData!=null){
+        drawBtnDiv.hidden = false;
+    }
     for (i = 0; i < chartTypes.length; i++) {
         if (chartTypes[i].value == type) {
             chartTypes[i].checked = true;
+        } else {
+            chartTypes[i].checked = false;
         }
     }
 }
@@ -146,11 +160,9 @@ function showChartView() {
 const drawChart = (json) => {
     chartViewDiv.style.display = 'none';
     selectChartType.className = 'chart-type';
-    let title = json.title;
-    let data = json.data;
-    if (json.hasOwnProperty('name')) chartName = json.name;
+    let { title, data, properties } = json;
+    if (properties.hasOwnProperty('name')) chartName = properties.name;
     if (!(data instanceof Array) || data.length <= 0) {
-        console.log('invalid data', data);
         return;
     }
     let type = getSelectedChartType();
@@ -642,7 +654,7 @@ document.getElementById('editName').onclick = e => {
     nameEdit.style.display = 'block';
     nameEdit.onkeydown = e => {
         e.stopImmediatePropagation();
-        FormUtils.keyPressFn(e, /^[\x20-\x7e]{0,50}$/, null, null, saveNameBtn);
+        FormUtils.keyPressFn(e, FormUtils.chart_name_pattern, null, null, saveNameBtn);
     };
     let name = chartNameView.innerText
     nameInput.value = name;

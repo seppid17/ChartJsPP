@@ -70,12 +70,17 @@ class FileInputManager {
                 let data = reader.result;
                 try {
                     let parsedData = parseCSV(data);
-                    let nameList = file.name.split('.');
-                    nameList.pop();
-                    parsedData.name = nameList.join('.');
+                    if (parsedData && !parsedData.properties.hasOwnProperty('name')) {
+                        let nameList = file.name.split('.');
+                        nameList.pop();
+                        parsedData.properties.name = nameList.join('.');
+                    }
                     if (parsedData) {
                         FileInputManager.extractedData = parsedData;
                         FileInputManager._dropDivMsg('File selected (' + file.name + '). You can draw chart or upload different file', false);
+                        if (parsedData.properties.hasOwnProperty('type') && parsedData.properties.type.length > 0) {
+                            setSelectedChartType(parsedData.properties.type);
+                        }
                     }
                 } catch (ex) {
                     FileInputManager._setErrorMsg(ex);

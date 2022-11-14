@@ -1,7 +1,38 @@
+function extractProperties(lines) {
+    let properties = {};
+    while (lines.length > 2) {
+        let lastLine = lines.pop().trim();
+        if (lastLine.length == 0) continue;
+        let data = lastLine.split(/\s*,\s*/);
+        if (data.length >= 3 && data[0].trim().toLowerCase().startsWith('prop')) {
+            let propName = data[1].trim();
+            let propValue = data[2].trim();
+            switch (propName) {
+                case 'type':
+                    if (['bar', 'pie', 'line', 'doughnut', 'polarArea', 'radar', 'scatter', 'bubble', 'sunburst', 'treemap', 'icicle'].includes(propValue))
+                        properties.type = propValue;
+                    break;
+
+                case 'name':
+                    if (FormUtils.chart_name_pattern.test(propValue))
+                        properties.name = propValue;
+                    break;
+
+                default:
+                    break;
+            }
+        } else {
+            lines.push(lastLine); // restore last line since it is not a part of properties
+            return properties;
+        }
+    }
+}
+
 function extractCSV(csv) {
     try {
         let lines = csv.split(/\r?\n|\r|\n/g);
-        if (lines.length < 1 || (lines.length==1 && lines[0].trim()=='')) {
+        let properties = extractProperties(lines);
+        if (lines.length < 1 || (lines.length == 1 && lines[0].trim() == '')) {
             throw 'Empty data file';
         }
         let start = 1;
@@ -17,6 +48,7 @@ function extractCSV(csv) {
             const line = lines[i];
             if (/^\s*$/.test(line)) continue;
             let data = line.split(/\s*,\s*/);
+            if (data.length == 0 || data[0].trim().length == 0) continue;
             // length of data (without ID and parent fields) must be same as title
             if ((titles.length > 0 && data.length - 2 !== titles.length) || (data.length < 4)) {
                 throw 'Invalid data. Please check and upload again';
@@ -90,7 +122,7 @@ function extractCSV(csv) {
             parent.c[id] = data;
         }
 
-        return { title: titles, data: body };
+        return { title: titles, data: body, properties: properties };
     } catch (ex) {
         if (ex) {
             throw ex;

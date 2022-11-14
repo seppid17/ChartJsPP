@@ -342,7 +342,7 @@ class FormUtils {
     static email_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     static name_pattern = /^[A-Za-z]{2,30}$/;
     static password_pattern = /^[\x21-\x7E]{8,15}$/;
-
+    static chart_name_pattern = /^[\x20-\x7e]{0,40}$/;
     /**
      * Prevents a form from submittiog when enter key is pressed. Instead,
      * it sets the keyboard focus to next form input field if the current field is valid.
