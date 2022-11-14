@@ -2,10 +2,13 @@ require("dotenv").config({ path: "test/test.env" });
 const { json } = require("express");
 const superagent = require('superagent');
 const Imap = require('imap');
-const user1 = superagent.agent();
 
 const domain = 'http://localhost:' + process.env.PORT;
 const validPassword = 'password';
+
+const user1 = superagent.agent();
+const user2 = superagent.agent();
+const user3 = superagent.agent();
 
 const isJson = jsonstr => {
     try {
@@ -200,8 +203,84 @@ test('Test 11: activate new account', async () => {
     expect(done).toBeTruthy();
 }, 20000);
 
-test("Test 12: Delete account correct", async () => {
-    let user2 = superagent.agent();
+/**
+ * This testcases use to check the forgotPassword function of the PasswordResetController.js file
+ * This mainly considers about the validation of email and after validating the email ,password is reset
+ */
+test('Test 12: empty email', async () => {
+    let res = await user3.post(domain + "/forgotPassword").send({password: process.env.EMAIL});
+    let text = res.text;
+    expect(isJson(text)).toBeTruthy();
+    let obj = JSON.parse(text);
+    expect(obj.success).toBeFalsy();
+    expect(obj.reason).toEqual("Email cannot be empty.");
+});
+
+test('Test 13: Invalid email format', async () => {
+    let res = await user3.post(domain + "/forgotPassword").send({email:"invlaidEmail"});
+    let text = res.text;
+    expect(isJson(text)).toBeTruthy();
+    let obj = JSON.parse(text);
+    expect(obj.success).toBeFalsy();
+    expect(obj.reason).toEqual("Invalid email format");
+});
+
+test('Test 14: email not exist', async () => {
+    let res = await user3.post(domain + "/forgotPassword").send({email: "invalid"+process.env.EMAIL});
+    let text = res.text;
+    expect(isJson(text)).toBeTruthy();
+    let obj = JSON.parse(text);
+    expect(obj.success).toBeFalsy();
+    expect(obj.reason).toEqual("This email does not exist.");
+});
+
+test('Test 15: valid password reset request', async () => {
+    let res = await user3.post(domain + "/forgotPassword").send({email:process.env.GMAIL_SENDER});
+    let text = res.text;
+    expect(isJson(text)).toBeTruthy();
+    let obj = JSON.parse(text);
+    expect(obj.success).toBeTruthy();
+}, 20000);
+
+test('Test 16: reset password', async () => {
+    let done = false;
+    await receiveEmails(async buffer => {
+        let re = new RegExp(domain + '/resetPassword/' + process.env.GMAIL_SENDER + '/[0-9A-Za-z]{1,32}');
+        let match = re.exec(buffer);
+        if (match) {
+            let passwordResetLink = match[0];
+            {
+                let res = await user3.post(passwordResetLink).send({});
+                let text = res.text;
+                expect(isJson(text)).toBeTruthy();
+                let obj = JSON.parse(text);
+                expect(obj.success).toBeFalsy();
+                expect(obj.reason).toEqual('Password cannot be empty.');
+            }
+            {
+                let res = await user3.post(passwordResetLink).send({password:'1234'});
+                let text = res.text;
+                expect(isJson(text)).toBeTruthy();
+                let obj = JSON.parse(text);
+                expect(obj.success).toBeFalsy();
+                expect(obj.reason).toEqual('Invalid password format');
+            }
+            {   
+                let res = await user3.post(passwordResetLink).send({ password: validPassword });
+                let text = res.text;
+                expect(isJson(text)).toBeTruthy();
+                let obj = JSON.parse(text);
+                expect(obj.success).toBeTruthy();
+                done = true;
+                return true;
+            }
+        }
+        return false;
+    });
+    expect(done).toBeTruthy();
+}, 30000);
+
+test("Test 17: Delete account correct", async () => {
     let res1 = await user2.post(domain + "/login").send({ email: process.env.GMAIL_SENDER, password: validPassword });
     let text1 = res1.text;
     expect(isJson(text1)).toBeTruthy();
@@ -214,3 +293,4 @@ test("Test 12: Delete account correct", async () => {
     let obj2 = JSON.parse(text2);
     expect(obj2.success).toBeTruthy();
 });
+
