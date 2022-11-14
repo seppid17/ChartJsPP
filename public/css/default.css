@@ -5,7 +5,7 @@
     --bg-wrapper: #ffffff;
     --bg-gradient: linear-gradient(331deg, #9460db 0%, #a666fe 49%, #6ce6ff 100%);
     --bg-delete-area: #FFEBEB;
-    --bg-delete-btn: #E70E0E;
+    --bg-delete-btn: #ff4040;
     --bg-opt-btn: #ffffff;
     --bg-opt-btn-selected: #e5e7eb;
     --overlay-gray: #afafaf9c;
@@ -65,18 +65,16 @@
     color: var(--text-primary-h);
 }
 
-.fa-user-gear {
+.fa-user-gear,
+.fa-sign-out-alt {
     color: var(--text-primary);
-}
-
-.fa-user-gear:hover {
-    color: var(--text-primary-h);
 }
 
 .navbar {
     background-color: var(--bg-wrapper);
     box-shadow: 2px 2px 5px var(--wrapper-shadow-gray);
     padding-top: 4px;
+    z-index: 50;
 }
 
 .navbar-toggler {
@@ -312,6 +310,7 @@ input:focus {
 }
 
 .fa-user-gear:hover,
+.fa-sign-out-alt:hover,
 .account-icon:hover,
 .nav-link:hover {
     color: var(--primary-color);

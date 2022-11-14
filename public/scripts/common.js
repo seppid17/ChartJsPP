@@ -398,17 +398,12 @@ function setClear(input) {
 function checkLogged() {
     if (!nav) return;
     let xhrSender = new XHRSender();
-    if (nameSpan) nameSpan.innerText = '';
     xhrSender.send('/isLogged', xhr => {
         try {
             let data = JSON.parse(xhr.responseText);
             if (data.hasOwnProperty('logged') && data['logged'] == true) {
                 nav.classList.remove('notLogged');
                 nav.classList.add('logged');
-                if (data.hasOwnProperty('firstName') && data.hasOwnProperty('lastName')) {
-                    let name = data.firstName + ' ' + data.lastName;
-                    if (nameSpan) nameSpan.innerText = name;
-                }
             } else {
                 nav.classList.remove('logged');
                 nav.classList.add('notLogged');

@@ -30,25 +30,30 @@
                     </li>
                 <% } %>
 
+                <% if (pageName !="sample" ) { %>
+                    <li class="nav-item">
+                        <a id="sample_link" class="nav-link" href="/sampleData">Sample</a>
+                    </li>
+                <% } %>
+
             </ul>
 
             <ul class="navbar-nav ms-auto">
 
-                <li class="nav-item nav-link loggedOnly">
-                    <nobr><span id="nameSpan"></span></nobr>
-                </li>
-
                 <% if (pageName !="account" ) { %>
                     <li class="nav-item loggedOnly">
                         <a id="account_link" class="nav-link" href="/account">
-                            <span class="account-icon"><i class="fa-solid fa-user-gear"></i></span>
+                            <span class="account-icon" title="account"><i class="fa-solid fa-user-gear"></i></span>
                             <span class="account-link">Account</span>
                         </a>
                     </li>
                 <% } %>
 
                 <li class="nav-item loggedOnly">
-                    <nobr><a id="signout_link" class="nav-link" href="/logout">Sign Out</a></nobr>
+                    <a id="signout_link" class="nav-link" href="/logout">
+                        <span class="account-icon" title="signout"><i class="fas fa-sign-out-alt"></i></span>
+                        <span class="account-link">Sign Out</span>
+                    </a>
                 </li>
 
                 <% if (pageName !="login" ) { %>

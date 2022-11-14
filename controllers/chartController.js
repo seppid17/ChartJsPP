@@ -182,7 +182,8 @@ async function getChartsByOwner(owner) {
             id: chart.id,
             name: chart.name,
             lastModified: chart.lastModified,
-            thumbnail: chart.thumbnail
+            thumbnail: chart.thumbnail,
+            shared: chart.shared
         };
         charts.push(info);
     })

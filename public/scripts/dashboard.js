@@ -1,10 +1,12 @@
 const cardsDiv = document.getElementById('cardsDiv');
+const chartCount = document.getElementById("currentChartCount");
 
 function showNoCharts() {
     let p = document.createElement('p');
     p.classList.add('text-no-chart');
     p.innerText = 'No saved charts';
     cardsDiv.appendChild(p);
+    setChartCount(0);
 }
 function setCards(showLoader = true) {
     if (showLoader) Loader.show();
@@ -81,7 +83,8 @@ function setCards(showLoader = true) {
 
                 let p = document.createElement('p');
                 p.classList.add('text-details');
-                p.innerText = 'Last modified ' + chart.lastModified;
+                let shared = chart.shared?' · shared':'';
+                p.innerText = 'Last modified ' + chart.lastModified + shared;
                 rowDiv.appendChild(p);
 
                 let a = document.createElement('a');
@@ -107,6 +110,7 @@ function setCards(showLoader = true) {
                                     return;
                                 }
                                 cardsDiv.removeChild(cardColDiv);
+                                setChartCount(cardsDiv.childElementCount);
                                 if (cardsDiv.childElementCount == 0) {
                                     showNoCharts();
                                 }
@@ -123,11 +127,16 @@ function setCards(showLoader = true) {
                 i.title = 'delete'
                 a.appendChild(i);
             });
+            setChartCount(cardsDiv.childElementCount);
         } catch (error) {
             PopupMessage.showFailure('Loading saved charts failed!');
         }
         Loader.hide();
     });
+}
+
+function setChartCount(count) {
+    chartCount.innerText = count + "/5";
 }
 
 document.body.onload = setCards;

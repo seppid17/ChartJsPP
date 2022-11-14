@@ -43,7 +43,7 @@
                     <div>
                         <div class="row title-saved">
                             <div class="col">
-                                <h4 class="text-saved">Saved Charts</h4>
+                                <nobr><h4 id="nameSpan" class="text-saved">Welcome <%= firstName %> <%= lastName %>!</h4></nobr>
                             </div>
                             <div class="col text-end">
                                 <a class="btn btn-submit btn-cn" data-toggle="tab" href="/chart" target="_blank">
@@ -51,6 +51,13 @@
                                     <span>New</span>
                                 </a>
                             </div>
+                        </div>
+
+                        <div class="title-saved d-flex align-item-center">
+                            <h6 class="saved-text">Saved Charts</h6>
+                            <h6 id="chartCount">
+                                <span id="currentChartCount"></span>
+                            </h6>
                         </div>
 
                         <div class="row" id="cardsDiv">
