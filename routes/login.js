@@ -4,7 +4,7 @@ const wrap = require('../utils/controllerWrapper');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render("home", {});
+    res.render("home", {nonce: req.scriptNonce});
 });
 router.get('/logout', wrap(logout));
 router.all('/login', (req, res, next) => {

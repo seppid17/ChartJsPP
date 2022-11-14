@@ -80,6 +80,8 @@ class FileInputManager {
                         FileInputManager._dropDivMsg('File selected (' + file.name + '). You can draw chart or upload different file', false);
                         if (parsedData.properties.hasOwnProperty('type') && parsedData.properties.type.length > 0) {
                             setSelectedChartType(parsedData.properties.type);
+                        }else if (getSelectedChartType()!=null){
+                            drawBtnDiv.hidden = false;
                         }
                     }
                 } catch (ex) {

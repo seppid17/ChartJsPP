@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const fs = require('fs');
+const crypto = require('crypto');
 const Mailer = require('./utils/mail');
 
 // set path environment variables
@@ -46,10 +47,12 @@ app.use(express.static("public"));
 // set http headers for security
 app.disable('x-powered-by');
 app.use(function (req, res, next) {
+    let scriptNonce = crypto.randomBytes(16).toString('hex');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Content-Security-Policy', "script-src 'self' cdnjs.cloudflare.com cdn.jsdelivr.net kit.fontawesome.com; connect-src 'self' *.fontawesome.com; frame-src 'none'; form-action 'none'; object-src 'none';");
+    res.setHeader('Content-Security-Policy', "script-src 'strict-dynamic' 'nonce-" + scriptNonce + "'; connect-src 'self' *.fontawesome.com; frame-src 'none'; form-action 'none'; object-src 'none';");
     res.setHeader('X-Content-Type-Options', 'nosniff');
+    req.scriptNonce = scriptNonce;
     next();
 });
 
