@@ -86,6 +86,10 @@ class ChartConfig {
         ChartConfig.instance = this;
     }
 
+    getName(){
+        return this.name;
+    }
+
     setData(data) {
         if (this.config) {
             this.config.data = data;
@@ -110,6 +114,7 @@ class ChartConfig {
         if (this.config && this.config.data.datasets.length > 0) {
             this.config.data.datasets[0].label = name;
         }
+        updateSettings();
     }
 
     initOptions(options) {

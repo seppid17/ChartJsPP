@@ -70,6 +70,9 @@ class FileInputManager {
                 let data = reader.result;
                 try {
                     let parsedData = parseCSV(data);
+                    let nameList = file.name.split('.');
+                    nameList.pop();
+                    parsedData.name = nameList.join('.');
                     if (parsedData) {
                         FileInputManager.extractedData = parsedData;
                         FileInputManager._dropDivMsg('File selected (' + file.name + '). You can draw chart or upload different file', false);

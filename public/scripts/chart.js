@@ -2,7 +2,6 @@ const body = document.getElementsByTagName('body')[0];
 const chartDiv = document.getElementById('chartDiv');
 const canvas = document.getElementById('myChart');
 const chartBtn = document.getElementById('drawBtn');
-
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
 const alertDiv = document.getElementById('alertPop');
@@ -23,7 +22,6 @@ const chartEditPopup = document.getElementById('chartEditPopup');
 const saveNameBtn = document.getElementById('saveName');
 const chartTypes = document.getElementsByName('charttype');
 const selectChartType = document.getElementById('selectChartType');
-
 const xVisible = document.getElementById('xVisible');
 const xGridVisible = document.getElementById('xGridVisible');
 const xTicksVisible = document.getElementById('xTicksVisible');
@@ -117,6 +115,7 @@ const drawChart = (json) => {
     selectChartType.className = 'chart-type';
     let title = json.title;
     let data = json.data;
+    if (json.hasOwnProperty('name')) chartName = json.name;
     if (!(data instanceof Array) || data.length <= 0) {
         console.log('invalid data', data);
         return;
@@ -1009,6 +1008,8 @@ legendVisible.onclick = e => {
 function updateSettings() {
     let chartConfig = ChartConfig.instance;
     if (chartConfig == null) return;
+
+    chartNameView.innerText = chartConfig.getName();
 
     if (chartConfig.hasMarker) {
         body.classList.remove('noMarker');
