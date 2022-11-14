@@ -43,8 +43,19 @@ resizeFn = () => {
     }
 }
 
-window.onload = resizeFn;
-window.onresize = resizeFn;
+window.addEventListener('load', resizeFn);
+window.addEventListener('resize', resizeFn);
+
+/**
+ * Warn user before leaving the page if there are unsaved modifications
+ */
+window.onbeforeunload = function() {
+    if (ChartConfig.instance != null){
+        if (ChartConfig.instance.modified){
+            return '';
+        }
+    }
+};
 
 ChartConfig.canvas = canvas;
 Chart.defaults.font.size = 14;
@@ -501,6 +512,7 @@ document.getElementById('saveBtn').onclick = e => {
                 }
                 return;
             }
+            chartConfig.modified = false;
             PopupMessage.showSuccess('Chart saved');
             body.classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
@@ -542,8 +554,17 @@ document.getElementById('deleteBtn').onclick = e => {
                     }
                     return;
                 }
+                if (ChartConfig.instance) ChartConfig.instance.modified = false;
                 PopupMessage.showSuccess('Chart Deleted.', () => {
-                    window.location = '/dashboard';
+                    if (typeof (Storage) !== "undefined") {
+                        if (localStorage.opencount && Number(localStorage.opencount) > 1) {
+                            window.close();
+                        } else {
+                            window.location = '/dashboard';
+                        }
+                    } else {
+                        window.location = '/dashboard';
+                    }
                 });
             } catch (error) {
                 PopupMessage.showFailure('Delete failed!');
@@ -781,6 +802,7 @@ function drawSavedChart(info, type, data, properties) {
             return;
             break;
     }
+    myChart.modified = false;
     myChart.setSavedData(data);
     myChart.setName(chartName);
     if (myChart.hasMarker) {

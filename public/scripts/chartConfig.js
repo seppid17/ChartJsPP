@@ -30,6 +30,7 @@ class ChartConfig {
         this.config = {};
         this.config.type = type;
         this.name = '';
+        this.modified = true;
         backDiv.style.display = 'none'
         clearBreadcrumb();
         ChartConfig.canvas.onclick = evt => {
@@ -137,6 +138,7 @@ class ChartConfig {
     }
 
     _update() {
+        this.modified = true;
         if (this.hasAxis) {
             this.config.options.scales.x.ticks.color = Chart.defaults.color;
             this.config.options.scales.y.ticks.color = Chart.defaults.color;
@@ -152,8 +154,8 @@ class ChartConfig {
         if (ChartConfig.chart instanceof Chart) {
             ChartConfig.instance._update();
             ChartConfig.chart.update(mode);
+            updateSettings();
         }
-        updateSettings();
     }
 
     getType() {

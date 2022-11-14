@@ -141,8 +141,8 @@ class PopupMessage {
      * @param {function} [onconfirm]
      * @return {void}
      */
-    static promptConfirmation(msg, onconfirm = () => { }) {
-        PopupMessage._display(msg, true, true);
+    static promptConfirmation(msg, onconfirm = () => { }, onclosed = () => { }) {
+        PopupMessage._display(msg, true, true, onclosed);
         document.getElementById('popupconfirm').onclick = e => {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('msgPopup').style.display = 'none';
@@ -439,6 +439,30 @@ document.addEventListener('visibilitychange', e => {
         Theme.checkTheme();
     }
 });
+
+/**
+ * Increment the number of open tabs
+ */
+window.addEventListener('load', e => {
+    if (typeof (Storage) !== "undefined") {
+        if (localStorage.opencount) {
+            localStorage.opencount = Number(localStorage.opencount) + 1;
+        } else {
+            localStorage.opencount = 1;
+        }
+    }
+});
+
+/**
+ * decrement the number of open tabs
+ */
+window.onunload = function() {
+    if (typeof (Storage) !== "undefined") {
+        if (localStorage.opencount) {
+            localStorage.opencount = Math.max(0, Number(localStorage.opencount) - 1);
+        }
+    }
+}
 
 checkLogged();
 Theme.checkTheme();
