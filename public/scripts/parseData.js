@@ -18,6 +18,15 @@ function extractProperties(lines) {
                         properties.name = propValue;
                     break;
 
+                case 'simple':
+                    propValue = propValue.toLowerCase();
+                    if (propValue.startsWith('t') || propValue.startsWith('y')) {
+                        properties.simple = 1;
+                    } else if (propValue == 'force') {
+                        properties.simple = 2;
+                    }
+                    break;
+
                 default:
                     break;
             }
@@ -35,22 +44,50 @@ function extractCSV(csv) {
         if (lines.length < 1 || (lines.length == 1 && lines[0].trim() == '')) {
             throw 'Empty data file';
         }
+        let noParentColumn = false;
+        let forceNoParentColumn = false;
+        if (properties.hasOwnProperty('simple') && properties.simple > 0) {
+            noParentColumn = true;
+            if (properties.simple == 2) {
+                forceNoParentColumn = true;
+            }
+        }
+        let hasParentColumn = !noParentColumn;
+
         let start = 1;
-        let head = lines[0].split(/\s*,\s*/).map(x => { return x.trim(); });
         let titles = [];
         let body = {};
+
+        let head = lines[0].split(/\s*,\s*/).map(x => { return x.trim(); });
         if (head.length > 2 && head[0].toLowerCase() == 'id') {
-            titles = head.slice(2);
+            if (!noParentColumn || !forceNoParentColumn && head[1].toLowerCase() == 'parent') {
+                hasParentColumn = true;
+            }
+            if (hasParentColumn) {
+                titles = head.slice(2);
+            } else {
+                titles = head.slice(1);
+            }
         } else {
             start = 0;
         }
+    
         for (let i = start; i < lines.length; i++) {
             const line = lines[i];
             if (/^\s*$/.test(line)) continue;
             let data = line.split(/\s*,\s*/).map(x => { return x.trim(); });
             if (data.length == 0 || data[0].length == 0) continue;
+
+            if (!hasParentColumn) {
+                data.splice(1, 0, '0');
+            }
+
+            if (noParentColumn) {
+                data[1] = '0';
+            }
+
             // length of data (without ID and parent fields) must be same as title
-            if ((titles.length > 0 && data.length - 2 !== titles.length) || (data.length < 4)) {
+            if ((titles.length > 0 && data.length - 2 !== titles.length) || (data.length - 2 < 2)) {
                 throw 'Invalid data. Please check and upload again';
             }
 
