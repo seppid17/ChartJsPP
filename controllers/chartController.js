@@ -256,4 +256,25 @@ const shareChart = async (req, res) => {
     }
 };
 
-module.exports = { saveChart, retrieveSharedChart, retrieveChart, getChartList, deleteChart, shareChart };
+const unshareChart = async (req, res) => {
+    let { id } = req.body;
+    const user = req.session.user;
+    if (!id) {
+        res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
+        return;
+    }
+    if (!Validator.validate('id', id)) {
+        res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
+        return;
+    }
+    try {
+        let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: false });
+        let success = (doc != null);
+        res.json({ 'success': success });
+    } catch (err) {
+        console.log(err);
+        res.json({ 'success': false });
+    }
+};
+
+module.exports = { saveChart, retrieveSharedChart, retrieveChart, getChartList, deleteChart, shareChart, unshareChart };

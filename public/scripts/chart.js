@@ -5,6 +5,7 @@ const chartBtn = document.getElementById('drawBtn');
 const saveBtn = document.getElementById('saveBtn');
 const deleteBtn = document.getElementById('deleteBtn');
 const shareBtn = document.getElementById('shareBtn');
+const unshareBtn = document.getElementById('unshareBtn');
 const drawBtnDiv = document.getElementById('drawBtnDiv');
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
@@ -643,6 +644,39 @@ shareBtn.onclick = e => {
         }
     };
     xhrSender.send('/chart/share', cb);
+};
+
+unshareBtn.onclick = e => {
+    let xhrSender = new XHRSender();
+    xhrSender.addField('id', chartID);
+    let cb = xhr => {
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                    if (resp['reason'] == 'Unauthorized') {
+                        popupLogin(success => {
+                            if (success) {
+                                xhrSender.send('/chart/unshare', cb);
+                            } else {
+                                PopupMessage.showFailure('Unauthorized');
+                            }
+                        });
+                        return;
+                    }
+                    PopupMessage.showFailure(resp['reason']);
+                } else {
+                    PopupMessage.showFailure('Unsharing chart failed!');
+                }
+                return;
+            }
+            PopupMessage.showSuccess('Chart unshared');
+            body.classList.remove('authOnly');
+        } catch (error) {
+            PopupMessage.showFailure('Unshare failed!');
+        }
+    };
+    xhrSender.send('/chart/unshare', cb);
 };
 
 document.getElementById('CloseEdit').onclick = e => {

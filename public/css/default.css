@@ -66,6 +66,10 @@ body {
     font-weight: bold;
 }
 
+.nav-left-item {
+    margin-left: 15px;
+}
+
 .nav-link:hover {
     color: var(--text-primary-h);
 }
@@ -426,6 +430,10 @@ input:focus {
 
     .nav-link {
         margin-left: 10px;
+    }
+
+    .nav-left-item {
+        margin-left: 0;
     }
 
     .wrapper-loader {

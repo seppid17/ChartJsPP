@@ -18,19 +18,19 @@
             <ul class="navbar-nav ml-auto">
 
                 <% if (pageName !="dashboard" ) { %>
-                    <li class="nav-item loggedOnly">
+                    <li class="nav-item nav-left-item loggedOnly">
                         <a id="dashboard_link" class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                 <% } %>
 
                 <% if (pageName !="chart" ) { %>
-                    <li class="nav-item">
+                    <li class="nav-item nav-left-item">
                         <a id="chart_link" class="nav-link" href="/chart">Chart</a>
                     </li>
                 <% } %>
 
                 <% if (pageName != "sample") { %>
-                    <li class="nav-item">
+                    <li class="nav-item nav-left-item">
                         <a id="sample_link" class="nav-link" href="/sampleData" target="_blank">Sample</a>
                     </li>
                 <% } %>
