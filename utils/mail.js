@@ -19,7 +19,7 @@ class Mailer {
             from: Mailer.sender,
             to: to,
             subject: template.subject,
-            html: template.body.replaceAll("#LINK", link)
+            html: template.body.replace(/#LINK/g, link)
         };
         if (cb == null) { // return a promise
             return Mailer.transporter.sendMail(mailOptions);

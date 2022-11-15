@@ -31,7 +31,6 @@ const app = express();
 app.disable('x-powered-by');
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ limit: "5mb", extended: true, parameterLimit: 50000 }));
-let MemoryStore = session.MemoryStore;
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
@@ -39,7 +38,6 @@ app.use(session({
         maxAge: 3600000, // 1 hour
         sameSite: 'lax'
     },
-    store: new MemoryStore(),
     resave: false,
     rolling: true
 }));
