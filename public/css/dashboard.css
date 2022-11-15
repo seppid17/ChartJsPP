@@ -113,19 +113,19 @@
 }
 
 .form-control.error input {
-	border-color: var(--red-error);
+    border-color: var(--red-error);
 }
 
 .form-control small {
-	color: var(--red-error);
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	visibility: hidden;
+    color: var(--red-error);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
 }
 
 .form-control.error small {
-	visibility: visible;
+    visibility: visible;
 }
 
 .card {
@@ -180,4 +180,16 @@ li {
 
 .saved-text {
     padding: 3px 6px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .col-md-4 {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 770px) {
+    .col-md-4 {
+        width: 100%;
+    }
 }

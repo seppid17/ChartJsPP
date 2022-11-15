@@ -569,6 +569,14 @@ input:focus {
     padding-top: 10px;
 }
 
+.fa-sign-out-alt {
+    color: var(--text-primary);
+}
+
+.fa-sign-out-alt:hover{
+    color: var(--primary-color);
+}
+
 @media only screen and (min-width: 1450px) {
     .chart-props {
         display: flex;
