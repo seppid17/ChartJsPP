@@ -28,6 +28,7 @@ mongoose.connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
 // express app
 const app = express();
 app.set('view engine', 'ejs');
+let MemoryStore =session.MemoryStore;
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
@@ -35,6 +36,7 @@ app.use(session({
         maxAge: 3600000, // 1 hour
         sameSite: 'lax'
     },
+    store: new MemoryStore(),
     resave: false,
     rolling: true
 }));
