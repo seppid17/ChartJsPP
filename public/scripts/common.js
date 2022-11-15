@@ -67,9 +67,12 @@ class PopupMessage {
      * @return {void}
      */
     static _display(msg, success = false, confirm = false, onclosed = () => { }) {
+        Loader.hide();
         PopupMessage.msgSpan.innerText = msg;
         if (!success) PopupMessage.msgSpan.style.color = 'red';
         else PopupMessage.msgSpan.style.color = 'var(--text-primary)';
+
+        let isChartPage = typeof chartKeyListener != 'undefined';
 
         if (confirm) {
             PopupMessage.confirmPopup.hidden = false;
@@ -77,6 +80,7 @@ class PopupMessage {
         } else {
             PopupMessage.confirmPopup.hidden = true;
             PopupMessage.closeBtn.children[0].innerText = 'OK';
+            if (isChartPage) document.removeEventListener('keydown', chartKeyListener);
             document.addEventListener('keydown', e => {
                 if (e.key == 'Enter' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                     e.preventDefault();
@@ -91,6 +95,7 @@ class PopupMessage {
         let closePopup = () => {
             PopupMessage.popup.style.display = 'none';
             PopupMessage.overlay.style.display = 'none';
+            if (isChartPage) document.addEventListener('keydown', chartKeyListener);
             onclosed();
         }
 
@@ -425,7 +430,7 @@ class AuthUtils {
     static _mustLogin = false;
 
     static mustLogin() {
-        AuthUtils.mustLogin = true;
+        AuthUtils._mustLogin = true;
     }
 
     static checkLogged() {
@@ -443,6 +448,7 @@ class AuthUtils {
                     }
                     nav.classList.remove('logged');
                     nav.classList.add('notLogged');
+                    body.classList.add('authOnly');
                 }
             } catch (error) {
             }

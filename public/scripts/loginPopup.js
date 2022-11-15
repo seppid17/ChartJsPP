@@ -1,4 +1,5 @@
 function popupLogin(ondone) {
+    Loader.hide();
     var overlay = document.getElementById("loginOverlay");
     var popup = document.getElementById("loginPopup");
     var submitBtn = document.getElementById('login');
@@ -54,8 +55,6 @@ function popupLogin(ondone) {
             return false;
         }
 
-        Loader.show();
-
         let xhrSender = new XHRSender();
         xhrSender.addField('email', email);
         xhrSender.addField('password', passwd);
@@ -68,11 +67,9 @@ function popupLogin(ondone) {
                             switch (data['field']) {
                                 case 'email':
                                     FormUtils.setErrorFor(emailInput, data['reason']);
-                                    Loader.hide();
                                     break;
                                 case 'password':
                                     FormUtils.setErrorFor(passwdInput, data['reason']);
-                                    Loader.hide();
                                     break;
                             }
                         } else {
@@ -81,7 +78,6 @@ function popupLogin(ondone) {
                     } else {
                         PopupMessage.showFailure('Login failed!');
                     }
-                    Loader.hide();
                     return;
                 }
                 passwdInput.value = '';
@@ -92,7 +88,6 @@ function popupLogin(ondone) {
             } catch (error) {
                 PopupMessage.showFailure('Something went wrong! Try again.');
             }
-            Loader.hide();
         });
     }
 

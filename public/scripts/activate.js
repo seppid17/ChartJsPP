@@ -25,6 +25,7 @@ submitBtn.onclick = e => {
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
     xhrSender.send(document.URL, function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -33,7 +34,6 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'password':
                                 FormUtils.setErrorFor(passwdInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -42,7 +42,6 @@ submitBtn.onclick = e => {
                 } else {
                     PopupMessage.showFailure('Account activation failed!');
                 }
-                Loader.hide();
                 return;
             }
             PopupMessage.showSuccess('Account activated.', () => {
@@ -51,6 +50,5 @@ submitBtn.onclick = e => {
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        Loader.hide();
     });
 }

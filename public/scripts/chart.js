@@ -8,6 +8,7 @@ const shareBtn = document.getElementById('shareBtn');
 const copyLinkBtn = document.getElementById('copyLinkBtn');
 const unshareBtn = document.getElementById('unshareBtn');
 const drawBtnDiv = document.getElementById('drawBtnDiv');
+const drawBtn = document.getElementById('drawBtn')
 const uploadViewDiv = document.getElementById('uploadViewDiv');
 const chartViewDiv = document.getElementById('chartViewDiv');
 const alertDiv = document.getElementById('alertPop');
@@ -63,14 +64,19 @@ window.onbeforeunload = function () {
     }
 };
 
-document.addEventListener('keydown', e => {
+const chartKeyListener = e => {
     if (e.key.toLowerCase() == 's' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         saveBtn.click();
     }
     if (e.key.toLowerCase() == 's' && e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        if (body.classList.contains('authOnly')) return;
         e.preventDefault();
-        shareBtn.click();
+        if (shareBtn.hidden == false) {
+            shareBtn.click();
+        } else if (unshareBtn.hidden == false) {
+            unshareBtn.click();
+        }
     }
     if (e.key == 'Delete' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
@@ -80,7 +86,15 @@ document.addEventListener('keydown', e => {
         e.preventDefault();
         document.getElementById('selectFileBtn').click();
     }
-});
+    if (e.key == 'Enter' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        if (drawBtnDiv.hidden == false) {
+            drawBtn.click();
+        }
+    }
+}
+
+document.addEventListener('keydown', chartKeyListener);
 
 ChartConfig.canvas = canvas;
 Chart.defaults.font.size = 14;
@@ -479,86 +493,94 @@ document.getElementById('downloadPdf').onclick = e => {
 };
 
 saveBtn.onclick = e => {
-    let chartConfig = ChartConfig.instance;
-    if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
-        PopupMessage.showFailure('No chart to save');
-        return;
-    }
-
-    let type = chartConfig.getType();
-    if (type == null) return;
-
-    let data = chartConfig.getData();
-    if (data == null) return;
-
-    let properties = {
-        fontSize: Chart.defaults.font.size,
-        fontStyle: Chart.defaults.font.style,
-        fontWeight: Chart.defaults.font.weight,
-    };
-
-    if (chartConfig.hasMarker) {
-        properties.markerSize = chartConfig.getMarkerSize();
-        properties.markerStyle = chartConfig.getMarkerStyle();
-    }
-
-    if (chartConfig.hasAxis) {
-        properties.xAxisVisible = chartConfig.getAxisVisibility('x');
-        properties.xGridVisible = chartConfig.getGridVisibility('x');
-        properties.xTicksVisible = chartConfig.getTicksVisibility('x');
-        properties.xTitleVisible = chartConfig.getTitleVisibility('x');
-        properties.xTitle = chartConfig.getAxisTitle('x');
-        properties.yAxisVisible = chartConfig.getAxisVisibility('y');
-        properties.yGridVisible = chartConfig.getGridVisibility('y');
-        properties.yTicksVisible = chartConfig.getTicksVisibility('y');
-        properties.yTitleVisible = chartConfig.getTitleVisibility('y');
-        properties.yTitle = chartConfig.getAxisTitle('y');
-    }
-    if (chartConfig.hasLegend) {
-        properties.legendVisible = chartConfig.getLegendVisibility();
-    }
-
-    var thumb = make_thumb(ChartConfig.canvas, 400, 300);
-
-    var xhrSender = new XHRSender();
-    if (chartID.length > 0) xhrSender.addField('id', chartID);
-    xhrSender.addField('name', chartName);
-    xhrSender.addField('type', type);
-    xhrSender.addField('thumbnail', thumb);
-    xhrSender.addField('data', JSON.stringify(data));
-    xhrSender.addField('properties', JSON.stringify(properties));
-    let cb = xhr => {
-        try {
-            let resp = JSON.parse(xhr.responseText);
-            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
-                    if (resp['reason'] == 'Unauthorized') {
-                        popupLogin(success => {
-                            if (success) {
-                                xhrSender.send('/chart/save', cb);
-                            } else {
-                                PopupMessage.showFailure('Unauthorized');
-                            }
-                        });
-                        return;
-                    }
-                    PopupMessage.showFailure(resp['reason']);
-                } else {
-                    PopupMessage.showFailure('Chart saving failed!');
-                }
-                return;
-            }
-            chartConfig.modified = false;
-            PopupMessage.showSuccess('Chart saved.');
-            body.classList.remove('authOnly');
-            if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
-                chartID = resp['id'];
-            }
-        } catch (error) {
-            PopupMessage.showFailure('Something went wrong! Please try again.');
+    try {
+        let chartConfig = ChartConfig.instance;
+        if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
+            PopupMessage.showFailure('No chart to save');
+            return;
         }
+
+        let type = chartConfig.getType();
+        if (type == null) return;
+
+        let data = chartConfig.getData();
+        if (data == null) return;
+
+        Loader.show();
+
+        let properties = {
+            fontSize: Chart.defaults.font.size,
+            fontStyle: Chart.defaults.font.style,
+            fontWeight: Chart.defaults.font.weight,
+        };
+
+        if (chartConfig.hasMarker) {
+            properties.markerSize = chartConfig.getMarkerSize();
+            properties.markerStyle = chartConfig.getMarkerStyle();
+        }
+
+        if (chartConfig.hasAxis) {
+            properties.xAxisVisible = chartConfig.getAxisVisibility('x');
+            properties.xGridVisible = chartConfig.getGridVisibility('x');
+            properties.xTicksVisible = chartConfig.getTicksVisibility('x');
+            properties.xTitleVisible = chartConfig.getTitleVisibility('x');
+            properties.xTitle = chartConfig.getAxisTitle('x');
+            properties.yAxisVisible = chartConfig.getAxisVisibility('y');
+            properties.yGridVisible = chartConfig.getGridVisibility('y');
+            properties.yTicksVisible = chartConfig.getTicksVisibility('y');
+            properties.yTitleVisible = chartConfig.getTitleVisibility('y');
+            properties.yTitle = chartConfig.getAxisTitle('y');
+        }
+        if (chartConfig.hasLegend) {
+            properties.legendVisible = chartConfig.getLegendVisibility();
+        }
+
+        var thumb = make_thumb(ChartConfig.canvas, 400, 300);
+
+        var xhrSender = new XHRSender();
+        if (chartID.length > 0) xhrSender.addField('id', chartID);
+        xhrSender.addField('name', chartName);
+        xhrSender.addField('type', type);
+        xhrSender.addField('thumbnail', thumb);
+        xhrSender.addField('data', JSON.stringify(data));
+        xhrSender.addField('properties', JSON.stringify(properties));
+        let cb = xhr => {
+            Loader.hide();
+            try {
+                let resp = JSON.parse(xhr.responseText);
+                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                        if (resp['reason'] == 'Unauthorized') {
+                            popupLogin(success => {
+                                if (success) {
+                                    Loader.show();
+                                    xhrSender.send('/chart/save', cb);
+                                } else {
+                                    PopupMessage.showFailure('Unauthorized');
+                                }
+                            });
+                            return;
+                        }
+                        PopupMessage.showFailure(resp['reason']);
+                    } else {
+                        PopupMessage.showFailure('Chart saving failed!');
+                    }
+                    return;
+                }
+                chartConfig.modified = false;
+                PopupMessage.showSuccess('Chart saved.');
+                body.classList.remove('authOnly');
+                if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
+                    chartID = resp['id'];
+                }
+            } catch (error) {
+                PopupMessage.showFailure('Something went wrong! Please try again.');
+            }
+        }
+        xhrSender.send('/chart/save', cb);
+    } catch (e) {
+        Loader.hide();
     }
-    xhrSender.send('/chart/save', cb);
 };
 
 deleteBtn.onclick = e => {
@@ -567,9 +589,11 @@ deleteBtn.onclick = e => {
         return;
     }
     PopupMessage.promptConfirmation('Are you sure you want to delete this chart?', () => {
+        Loader.show();
         let xhrSender = new XHRSender();
         xhrSender.addField('id', chartID);
         let cb = xhr => {
+            Loader.hide()
             try {
                 let resp = JSON.parse(xhr.responseText);
                 if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
@@ -577,6 +601,7 @@ deleteBtn.onclick = e => {
                         if (resp['reason'] == 'Unauthorized') {
                             popupLogin(success => {
                                 if (success) {
+                                    Loader.show();
                                     xhrSender.send('/chart/delete', cb);
                                 } else {
                                     PopupMessage.showFailure('Unauthorized');
@@ -615,9 +640,11 @@ shareBtn.onclick = e => {
         PopupMessage.showFailure('Chart is not saved');
         return;
     }
+    Loader.show();
     let xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
-    let cb = xhr => {
+    let cb = async xhr => {
+        Loader.hide();
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
@@ -625,6 +652,7 @@ shareBtn.onclick = e => {
                     if (resp['reason'] == 'Unauthorized') {
                         popupLogin(success => {
                             if (success) {
+                                Loader.show();
                                 xhrSender.send('/chart/share', cb);
                             } else {
                                 PopupMessage.showFailure('Unauthorized');
@@ -638,8 +666,13 @@ shareBtn.onclick = e => {
                 }
                 return;
             }
-            PopupMessage.showSuccess('Chart shared. Link copied to the clipboard.');
-            copyLinkToClipboard();
+            let copySuccess = await copyLinkToClipboard();
+            if (copySuccess) {
+                PopupMessage.showSuccess('Chart shared. Link copied to the clipboard.');
+            } else {
+                let link = location.protocol + '//' + location.host + '/chart/' + chartID;
+                PopupMessage.showSuccess('Chart shared' + "\n" + link);
+            }
             showHideShareUnshare(true)
             body.classList.remove('authOnly');
         } catch (error) {
@@ -650,9 +683,16 @@ shareBtn.onclick = e => {
 };
 
 unshareBtn.onclick = e => {
+    if (chartID.length == 0) {
+        PopupMessage.showFailure('Chart is not saved');
+        return;
+    }
+
+    Loader.show();
     let xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
     let cb = xhr => {
+        Loader.hide();
         try {
             let resp = JSON.parse(xhr.responseText);
             if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
@@ -660,6 +700,7 @@ unshareBtn.onclick = e => {
                     if (resp['reason'] == 'Unauthorized') {
                         popupLogin(success => {
                             if (success) {
+                                Loader.show();
                                 xhrSender.send('/chart/unshare', cb);
                             } else {
                                 PopupMessage.showFailure('Unauthorized');
@@ -683,10 +724,15 @@ unshareBtn.onclick = e => {
     xhrSender.send('/chart/unshare', cb);
 };
 
-copyLinkBtn.onclick = e => {
+copyLinkBtn.onclick = async e => {
     e.preventDefault();
-    copyLinkToClipboard();
-    PopupMessage.showSuccess('Link copied to the clipboard.');
+    let copySuccess = await copyLinkToClipboard();
+    if (copySuccess) {
+        PopupMessage.showSuccess('Link copied to the clipboard.');
+    } else {
+        let link = location.protocol + '//' + location.host + '/chart/' + chartID;
+        PopupMessage.showSuccess('Link copying failed' + "\n" + link);
+    }
 };
 
 document.getElementById('CloseEdit').onclick = e => {
@@ -714,6 +760,11 @@ document.getElementById('editName').onclick = e => {
         nameView.style.display = 'block';
         nameEdit.style.display = 'none';
     };
+};
+
+fontSizeSelect.onkeydown = e => {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
 };
 
 fontSizeSelect.onchange = e => {
@@ -960,12 +1011,12 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                 if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
                     if (resp['reason'] == 'Unauthorized') {
                         xhrSender.send('/chart/retrieveShared', cb);
-                        Loader.hide();
                         return;
                     }
                     if (resp['reason'] == 'NotShared') {
                         popupLogin(success => {
                             if (success) {
+                                Loader.show();
                                 xhrSender.send('/chart/retrieve', cb);
                             } else {
                                 PopupMessage.showFailure('Unauthorized');
@@ -989,6 +1040,7 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             let data = resp.data;
             let chartData = JSON.parse(data.data);
             let properties = JSON.parse(data.properties);
+            Loader.hide();
             drawSavedChart(info, data.type, chartData, properties);
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Please try again.');
@@ -1167,17 +1219,22 @@ function updateSettings() {
     }
 }
 
-document.getElementById('drawBtn').onclick = e => {
+drawBtn.onclick = e => {
     FileInputManager.draw(drawChart);
 }
 
-function copyLinkToClipboard() {
-    let link = location.protocol + '//' + location.host + '/chart/' + chartID;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(link).catch(reason => { console.log("You should allow clipboard access"); });
-    } else {
-        console.log("navigator.clipboard.writeText is false or not available");
+async function copyLinkToClipboard() {
+    try {
+        let link = location.protocol + '//' + location.host + '/chart/' + chartID;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(link);
+            return true;
+        } else {
+            console.log("navigator.clipboard.writeText is false or not available");
+        }
+    } catch (e) {
     }
+    return false;
 }
 
 function showHideShareUnshare(isShared) {

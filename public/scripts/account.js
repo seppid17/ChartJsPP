@@ -19,12 +19,14 @@ function AccountOperation(div1, div2, div3) {
     div2.style.display = 'none';
     div3.style.display = 'block';
 }
+
 // this function and the selected class to the first inptut and remove it from 2nd and 3rd inputs
 function setSelect(btn1, btn2, btn3) {
     btn1.className = 'btn btn-opt btn-opt-selected';
     btn2.className = 'btn btn-opt';
     btn3.className = 'btn btn-opt';
 }
+
 // Display relevent account details and operations to the user and change the color of relevent btn
 let AccountDetailsDiv = document.getElementById('AccountDetailsDiv');
 let ChangePasswordDiv = document.getElementById('ChangePasswordDiv');
@@ -32,14 +34,17 @@ let DeleteAccountDiv = document.getElementById('DeleteAccountDiv');
 let AccountDetailsBtn = document.getElementById('AccountDetails');
 let ChangePasswordBtn = document.getElementById('ChangePassword');
 let DeleteAccountBtn = document.getElementById('DeleteAccount');
+
 AccountDetailsBtn.onclick = e => {
     AccountOperation(ChangePasswordDiv, DeleteAccountDiv, AccountDetailsDiv);
     setSelect(AccountDetailsBtn, ChangePasswordBtn, DeleteAccountBtn);
 }
+
 ChangePasswordBtn.onclick = e => {
     AccountOperation(DeleteAccountDiv, AccountDetailsDiv, ChangePasswordDiv);
     setSelect(ChangePasswordBtn, DeleteAccountBtn, AccountDetailsBtn);
 }
+
 DeleteAccountBtn.onclick = e => {
     AccountOperation(ChangePasswordDiv, AccountDetailsDiv, DeleteAccountDiv);
     setSelect(DeleteAccountBtn, AccountDetailsBtn, ChangePasswordBtn);
@@ -98,6 +103,7 @@ changeNameBtn.onclick = e => {
     xhrSender.addField('lastName', lastName);
     xhrSender.addField('password', passwd);
     xhrSender.send('/account/name', function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -106,15 +112,12 @@ changeNameBtn.onclick = e => {
                         switch (data['field']) {
                             case 'firstname':
                                 FormUtils.setErrorFor(firstNameInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'lastname':
                                 FormUtils.setErrorFor(lastNameInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'password':
                                 FormUtils.setErrorFor(passwdInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -123,14 +126,12 @@ changeNameBtn.onclick = e => {
                 } else {
                     PopupMessage.showFailure('Change name failed!');
                 }
-                Loader.hide();
                 return;
             }
             PopupMessage.showSuccess('Profile details updated.');
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        Loader.hide();
     });
 }
 
@@ -177,6 +178,7 @@ changePasswdBtn.onclick = e => {
     xhrSender.addField('curPassword', curPasswd);
     xhrSender.addField('newPassword', newPasswd);
     xhrSender.send('/account/password', function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -185,11 +187,9 @@ changePasswdBtn.onclick = e => {
                         switch (data['field']) {
                             case 'curPassword':
                                 FormUtils.setErrorFor(curPasswdInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'newPassword':
                                 FormUtils.setErrorFor(newPasswdInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -198,14 +198,12 @@ changePasswdBtn.onclick = e => {
                 } else {
                     PopupMessage.showFailure('Change password failed!');
                 }
-                Loader.hide();
                 return;
             }
             PopupMessage.showSuccess('Password updated.');
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        Loader.hide();
     });
 }
 
@@ -222,6 +220,7 @@ deleteBtn.onclick = e => {
     let xhrSender = new XHRSender();
     xhrSender.addField('password', passwd);
     xhrSender.send('/account/delete', function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -230,7 +229,6 @@ deleteBtn.onclick = e => {
                         switch (data['field']) {
                             case 'delPassword':
                                 FormUtils.setErrorFor(delPasswdInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -239,7 +237,6 @@ deleteBtn.onclick = e => {
                 } else {
                     PopupMessage.showFailure('Delete account failed!');
                 }
-                Loader.hide();
                 return;
             }
             PopupMessage.showSuccess('Account deactivated.', () => {
@@ -248,6 +245,5 @@ deleteBtn.onclick = e => {
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        Loader.hide();
     });
 }

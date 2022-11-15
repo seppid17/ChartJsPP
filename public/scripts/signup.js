@@ -93,6 +93,7 @@ submitBtn.onclick = e => {
     xhrSender.addField('lastName', lastName);
     xhrSender.addField('password', passwd);
     xhrSender.send(document.URL, function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -101,19 +102,15 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 FormUtils.setErrorFor(emailInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'firstname':
                                 FormUtils.setErrorFor(firstNameInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'lastname':
                                 FormUtils.setErrorFor(lastNameInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'password':
                                 FormUtils.setErrorFor(passwdInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -122,14 +119,12 @@ submitBtn.onclick = e => {
                 } else {
                     PopupMessage.showFailure('Account creation failed!');
                 }
-                Loader.hide();
                 return;
             }
             PopupMessage.showSuccess('Account created. Check your email.');
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Try again.');
         }
-        Loader.hide();
     });
 
 }

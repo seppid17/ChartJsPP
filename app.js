@@ -28,7 +28,9 @@ mongoose.connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
 
 // express app
 const app = express();
+app.disable('x-powered-by');
 app.set('view engine', 'ejs');
+app.use(express.urlencoded({ limit: "5mb", extended: true, parameterLimit: 50000 }));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,

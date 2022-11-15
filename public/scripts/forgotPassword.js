@@ -25,6 +25,7 @@ submitBtn.onclick = e => {
     let xhrSender = new XHRSender();
     xhrSender.addField('email', email);
     xhrSender.send(document.URL, function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -33,7 +34,6 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 FormUtils.setErrorFor(emailInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -42,14 +42,12 @@ submitBtn.onclick = e => {
                 } else {
                     PopupMessage.showFailure('Password reset request failed!');
                 }
-                Loader.hide();
                 return;
             }
             PopupMessage.showSuccess('Password reset requested. Check your email');
         } catch (error) {
             PopupMessage.showFailure('Something went wrong! Please try again.');
         }
-        Loader.hide();
     });
 }
 

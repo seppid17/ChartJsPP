@@ -41,6 +41,7 @@ submitBtn.onclick = e => {
     xhrSender.addField('email', email);
     xhrSender.addField('password', passwd);
     xhrSender.send('/login', function (xhr) {
+        Loader.hide();
         try {
             let data = JSON.parse(xhr.responseText);
             if (!data.hasOwnProperty('success') || data['success'] !== true) {
@@ -49,11 +50,9 @@ submitBtn.onclick = e => {
                         switch (data['field']) {
                             case 'email':
                                 FormUtils.setErrorFor(emailInput, data['reason']);
-                                Loader.hide();
                                 break;
                             case 'password':
                                 FormUtils.setErrorFor(passwdInput, data['reason']);
-                                Loader.hide();
                                 break;
                         }
                     } else {
@@ -66,7 +65,6 @@ submitBtn.onclick = e => {
                         passwdInput.value = '';
                     });
                 }
-                Loader.hide();
                 return;
             }
             let target = '/dashboard';
@@ -79,7 +77,6 @@ submitBtn.onclick = e => {
                 passwdInput.value = '';
             });
         }
-        Loader.hide();
     });
 }
 

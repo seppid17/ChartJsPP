@@ -3,10 +3,10 @@ function extractProperties(lines) {
     while (lines.length > 2) {
         let lastLine = lines.pop().trim();
         if (lastLine.length == 0) continue;
-        let data = lastLine.split(/\s*,\s*/);
-        if (data.length >= 3 && data[0].trim().toLowerCase().startsWith('prop')) {
-            let propName = data[1].trim();
-            let propValue = data[2].trim();
+        let data = lastLine.split(/\s*,\s*/).map(x => { return x.trim(); });
+        if (data.length >= 3 && data[0].toLowerCase().startsWith('prop')) {
+            let propName = data[1];
+            let propValue = data[2];
             switch (propName) {
                 case 'type':
                     if (['bar', 'pie', 'line', 'doughnut', 'polarArea', 'radar', 'scatter', 'bubble', 'sunburst', 'treemap', 'icicle'].includes(propValue))
@@ -36,7 +36,7 @@ function extractCSV(csv) {
             throw 'Empty data file';
         }
         let start = 1;
-        let head = lines[0].split(/\s*,\s*/);
+        let head = lines[0].split(/\s*,\s*/).map(x => { return x.trim(); });
         let titles = [];
         let body = {};
         if (head.length > 2 && head[0].toLowerCase() == 'id') {
@@ -47,14 +47,14 @@ function extractCSV(csv) {
         for (let i = start; i < lines.length; i++) {
             const line = lines[i];
             if (/^\s*$/.test(line)) continue;
-            let data = line.split(/\s*,\s*/);
-            if (data.length == 0 || data[0].trim().length == 0) continue;
+            let data = line.split(/\s*,\s*/).map(x => { return x.trim(); });
+            if (data.length == 0 || data[0].length == 0) continue;
             // length of data (without ID and parent fields) must be same as title
             if ((titles.length > 0 && data.length - 2 !== titles.length) || (data.length < 4)) {
                 throw 'Invalid data. Please check and upload again';
             }
 
-            let id = data[0].trim();
+            let id = data[0];
             if (!/^\d+$/.test(id)) {
                 throw 'Invalid id. Please check and upload again';
             }
@@ -64,7 +64,7 @@ function extractCSV(csv) {
                 throw 'Invalid id. Please check and upload again';
             }
 
-            let parent = data[1].trim();
+            let parent = data[1];
             if (!/^\d+$/.test(parent)) {
                 throw 'Invalid parent. Please check and upload again';
             }
@@ -74,7 +74,7 @@ function extractCSV(csv) {
                 throw 'Parent id equal or greater than its own id. Please check and upload again';
             }
 
-            let name = data[2].trim();
+            let name = data[2];
             if (!/^[^\s]{1,32}$/.test(name)) {
                 throw 'Invalid name. Please check and upload again';
             }
@@ -86,7 +86,6 @@ function extractCSV(csv) {
 
             let values = new Array();
             if (!vals.every(val => {
-                val = val.trim();
                 if (val == '' || isNaN(val)) {
                     throw 'Invalid values. Please check and upload again';
                 }
