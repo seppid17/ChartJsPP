@@ -68,6 +68,7 @@ class ChartConfig {
                     colors[point.index] = ColorInput.value;
 
                     ChartConfig.update('none');
+                    ChartConfig.setDirty();
                 }
                 if (ChartConfig.instance instanceof HierarchicalChartConfig) {
                     let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
@@ -80,6 +81,7 @@ class ChartConfig {
                         popup.classList.remove('show');
                         backDiv.style.display = 'block'
                         ChartConfig.update('expand ' + point.index);
+                        ChartConfig.setDirty();
                     }
                 }
             }
@@ -138,12 +140,17 @@ class ChartConfig {
     }
 
     _update() {
-        this.modified = true;
         if (this.hasAxis) {
             this.config.options.scales.x.ticks.color = Chart.defaults.color;
             this.config.options.scales.y.ticks.color = Chart.defaults.color;
             this.config.options.scales.x.title.color = Chart.defaults.color;
             this.config.options.scales.y.title.color = Chart.defaults.color;
+        }
+    }
+
+    static setDirty(){
+        if (ChartConfig.chart instanceof Chart) {
+            ChartConfig.instance.modified = true;
         }
     }
 
@@ -267,24 +274,28 @@ class AxisChartConfig extends BasicChartConfig {
         if (axis !== 'x' && axis !== 'y') return;
         this.config.options.scales[axis].display = visible;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 
     setGridVisibility(axis, visible) {
         if (axis !== 'x' && axis !== 'y') return;
         this.config.options.scales[axis].grid.display = visible;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 
     setTicksVisibility(axis, visible) {
         if (axis !== 'x' && axis !== 'y') return;
         this.config.options.scales[axis].ticks.display = visible;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 
     setTitleVisibility(axis, visible) {
         if (axis !== 'x' && axis !== 'y') return;
         this.config.options.scales[axis].title.display = visible;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 
     setAxisTitle(axis, title) {
@@ -315,6 +326,7 @@ class LegendChartConfig extends BasicChartConfig {
     setLegendVisibility(visible) {
         this.config.options.plugins.legend.display = visible;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 }
 
@@ -343,11 +355,13 @@ class MarkerChartConfig extends BasicChartConfig {
         this.config.options.elements.point.radius = radius;
         this.config.options.elements.point.hoverRadius = radius + 3;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 
     setMarkerStyle(style) {
         this.config.options.elements.point.pointStyle = style;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 }
 

@@ -448,7 +448,6 @@ class AuthUtils {
                     }
                     nav.classList.remove('logged');
                     nav.classList.add('notLogged');
-                    body.classList.add('authOnly');
                 }
             } catch (error) {
             }

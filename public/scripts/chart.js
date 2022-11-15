@@ -780,6 +780,7 @@ fontSizeSelect.onchange = e => {
         fontSizeSelect.value = size;
         Chart.defaults.font.size = size;
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 };
 
@@ -793,6 +794,7 @@ fontStyleBtn.onclick = e => {
         fontStyleBtn.classList.remove('btn-icon-selected');
     }
     ChartConfig.update('none');
+    ChartConfig.setDirty();
 };
 
 fontWeightBtn.onclick = e => {
@@ -805,6 +807,7 @@ fontWeightBtn.onclick = e => {
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
     ChartConfig.update('none');
+    ChartConfig.setDirty();
 };
 
 function rgb2hex(rgb) {
@@ -825,6 +828,7 @@ function clearBreadcrumb() {
 
 document.getElementById('backBtn').onclick = e => {
     ChartConfig.update('parent');
+    ChartConfig.setDirty();
     var first = ChartConfig.chart._metasets[0].controller.pointers[0];
     if (first == undefined || first.p == undefined || first.p == null) return;
     var parent = first.p;
@@ -1076,6 +1080,7 @@ markerSizeSelect.onchange = e => {
         markerSizeSelect.value = radius;
         chart.setMarkerSize(radius);
         ChartConfig.update('none');
+        ChartConfig.setDirty();
     }
 };
 
@@ -1089,6 +1094,7 @@ markerStyleSelect.onchange = e => {
     }
     chart.setMarkerStyle(style);
     ChartConfig.update('none');
+    ChartConfig.setDirty();
 };
 
 xVisible.onclick = e => {
@@ -1223,7 +1229,7 @@ drawBtn.onclick = e => {
     FileInputManager.draw(drawChart);
 }
 
-async function copyLinkToClipboard() {
+async function copyLinkToClipboard(retry = true) {
     try {
         let link = location.protocol + '//' + location.host + '/chart/' + chartID;
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1233,6 +1239,9 @@ async function copyLinkToClipboard() {
             console.log("navigator.clipboard.writeText is false or not available");
         }
     } catch (e) {
+        if (retry) {
+            return await copyLinkToClipboard(false);
+        }
     }
     return false;
 }
