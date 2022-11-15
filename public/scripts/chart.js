@@ -5,6 +5,7 @@ const chartBtn = document.getElementById('drawBtn');
 const saveBtn = document.getElementById('saveBtn');
 const deleteBtn = document.getElementById('deleteBtn');
 const shareBtn = document.getElementById('shareBtn');
+const copyLinkBtn = document.getElementById('copyLinkBtn');
 const unshareBtn = document.getElementById('unshareBtn');
 const drawBtnDiv = document.getElementById('drawBtnDiv');
 const uploadViewDiv = document.getElementById('uploadViewDiv');
@@ -122,8 +123,8 @@ Chart.register({
 });
 
 for (i = 0; i < chartTypes.length; i++) {
-    chartTypes[i].onclick = e=>{
-        if (FileInputManager.extractedData!=null){
+    chartTypes[i].onclick = e => {
+        if (FileInputManager.extractedData != null) {
             drawBtnDiv.hidden = false;
         }
     }
@@ -140,7 +141,7 @@ function getSelectedChartType() {
 }
 
 function setSelectedChartType(type) {
-    if (FileInputManager.extractedData!=null){
+    if (FileInputManager.extractedData != null) {
         drawBtnDiv.hidden = false;
     }
     for (i = 0; i < chartTypes.length; i++) {
@@ -548,7 +549,7 @@ saveBtn.onclick = e => {
                 return;
             }
             chartConfig.modified = false;
-            PopupMessage.showSuccess('Chart saved');
+            PopupMessage.showSuccess('Chart saved.');
             body.classList.remove('authOnly');
             if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
                 chartID = resp['id'];
@@ -637,7 +638,9 @@ shareBtn.onclick = e => {
                 }
                 return;
             }
-            PopupMessage.showSuccess('Chart shared');
+            PopupMessage.showSuccess('Chart shared. Link copied to the clipboard.');
+            copyLinkToClipboard();
+            showHideShareUnshare(true)
             body.classList.remove('authOnly');
         } catch (error) {
             PopupMessage.showFailure('Share failed!');
@@ -671,12 +674,19 @@ unshareBtn.onclick = e => {
                 return;
             }
             PopupMessage.showSuccess('Chart unshared');
+            showHideShareUnshare(false)
             body.classList.remove('authOnly');
         } catch (error) {
             PopupMessage.showFailure('Unshare failed!');
         }
     };
     xhrSender.send('/chart/unshare', cb);
+};
+
+copyLinkBtn.onclick = e => {
+    e.preventDefault();
+    copyLinkToClipboard();
+    PopupMessage.showSuccess('Link copied to the clipboard.');
 };
 
 document.getElementById('CloseEdit').onclick = e => {
@@ -934,6 +944,7 @@ function drawSavedChart(info, type, data, properties) {
     } else {
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
+    showHideShareUnshare(info.shared);
 }
 
 if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
@@ -960,7 +971,6 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                                 PopupMessage.showFailure('Unauthorized');
                             }
                         });
-                        Loader.hide();
                         return;
                     }
                     errMsg = resp['reason'];
@@ -970,7 +980,6 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                 PopupMessage.showFailure(errMsg, () => {
                     window.location = '/chart';
                 });
-                Loader.hide();
                 return;
             }
             let info = resp.info;
@@ -1160,4 +1169,19 @@ function updateSettings() {
 
 document.getElementById('drawBtn').onclick = e => {
     FileInputManager.draw(drawChart);
+}
+
+function copyLinkToClipboard() {
+    let link = location.protocol + '//' + location.host + '/chart/' + chartID;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).catch(reason => { console.log("You should allow clipboard access"); });
+    } else {
+        console.log("navigator.clipboard.writeText is false or not available");
+    }
+}
+
+function showHideShareUnshare(isShared) {
+    shareBtn.hidden = isShared;
+    copyLinkBtn.hidden = !isShared;
+    unshareBtn.hidden = !isShared;
 }
