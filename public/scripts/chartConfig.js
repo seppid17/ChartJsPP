@@ -481,6 +481,13 @@ class ScatterChartConfig extends BasicChartConfig {
         this.hasMarker = true;
         this.hasMarkerSize = true;
     }
+
+    setTitle(title) {
+        if (this.hasAxis) {
+            this.setAxisTitle('x', title[1]);
+            this.setAxisTitle('y', title[2]);
+        }
+    }
 }
 
 class BubbleChartConfig extends BasicChartConfig {
@@ -501,6 +508,13 @@ class BubbleChartConfig extends BasicChartConfig {
         });
         this.hasAxis = true;
         // this.hasMarker = true;
+    }
+
+    setTitle(title) {
+        if (this.hasAxis) {
+            this.setAxisTitle('x', title[1]);
+            this.setAxisTitle('y', title[2]);
+        }
     }
 }
 
