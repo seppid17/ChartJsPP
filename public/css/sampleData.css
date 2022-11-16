@@ -155,10 +155,10 @@
 
 hr {
     color: var(--text-secondary) !important;
-    height: 2px !important;
+    height: 1px !important;
     margin-top: 2px;
     margin-bottom: 2px;
-    width: 100%;
+    width: 90%;
     margin: auto;
 }
 

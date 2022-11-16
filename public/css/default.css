@@ -43,6 +43,9 @@
     --red-error: #e74c3c;
     --middle-purple: #800080;
     --loader-shadow: rgba(0, 0, 0, .5);
+    --btn-blue: #36a2eb;
+    --btn-red: #ff6384;
+    --btn-green: #4bc0c0;
 }
 
 @font-face {
