@@ -6,15 +6,23 @@ function popupLogin(ondone) {
     var emailInput = document.getElementById('email');
     var passwdInput = document.getElementById('password');
 
+    let isChartPage = typeof chartKeyListener != 'undefined';
+    if (isChartPage) document.removeEventListener('keydown', chartKeyListener);
+
     overlay.style.display = 'block';
     popup.style.display = 'block';
+
+    let closePopup = () => {
+        if (isChartPage) document.addEventListener('keydown', chartKeyListener);
+        passwdInput.value = '';
+        popup.style.display = 'none';
+        overlay.style.display = 'none';
+    }
 
     overlay.onclick = e => {
         e.preventDefault();
         e.stopPropagation();
-        passwdInput.value = '';
-        popup.style.display = 'none';
-        overlay.style.display = 'none';
+        closePopup();
         ondone(false);
     }
 
@@ -80,11 +88,9 @@ function popupLogin(ondone) {
                     }
                     return;
                 }
-                passwdInput.value = '';
+                closePopup();
                 AuthUtils.checkLogged();
                 ondone(true);
-                popup.style.display = 'none';
-                overlay.style.display = 'none';
             } catch (error) {
                 PopupMessage.showFailure('Something went wrong! Try again.');
             }

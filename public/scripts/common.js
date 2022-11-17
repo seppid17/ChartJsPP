@@ -73,6 +73,7 @@ class PopupMessage {
         else PopupMessage.msgSpan.style.color = 'var(--text-primary)';
 
         let isChartPage = typeof chartKeyListener != 'undefined';
+        if (isChartPage) document.removeEventListener('keydown', chartKeyListener);
 
         if (confirm) {
             PopupMessage.confirmPopup.hidden = false;
@@ -80,7 +81,6 @@ class PopupMessage {
         } else {
             PopupMessage.confirmPopup.hidden = true;
             PopupMessage.closeBtn.children[0].innerText = 'OK';
-            if (isChartPage) document.removeEventListener('keydown', chartKeyListener);
             document.addEventListener('keydown', e => {
                 if (e.key == 'Enter' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                     e.preventDefault();
