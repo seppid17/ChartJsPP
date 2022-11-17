@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/forgotPassword', wrap(forgotPasswordView));
 router.get(/\/resetPassword\/.*\/.*/, wrap(resetPasswordView));
-router.post('/forgotPassword', wrap(forgotPassword, 15000));
-router.post('/resetPassword/:email/:token', wrap(resetPassword));
+router.post('/forgotPassword', wrap(forgotPassword, 20000));
+router.post('/resetPassword/:email/:token', wrap(resetPassword, 15000));
 
 module.exports = router;

@@ -15,6 +15,6 @@ router.all('/login', (req, res, next) => {
     }
 })
 router.get('/login', wrap(loginView));
-router.post('/login', wrap(loginUser));
+router.post('/login', wrap(loginUser, 15000));
 
 module.exports = router;
