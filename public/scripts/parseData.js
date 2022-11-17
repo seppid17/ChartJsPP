@@ -18,6 +18,21 @@ function extractProperties(lines) {
                         properties.name = propValue;
                     break;
 
+                case 'fontSize':
+                    if (/^\d{1,3}$/.test(propValue))
+                        properties.fontSize = propValue;
+                    break;
+
+                case 'fontStyle':
+                    if (['normal', 'italic'].includes(propValue))
+                        properties.fontStyle = propValue;
+                    break;
+
+                case 'fontWeight':
+                    if (['normal', 'bold'].includes(propValue))
+                        properties.fontWeight = propValue;
+                    break;
+
                 case 'simple':
                     propValue = propValue.toLowerCase();
                     if (propValue.startsWith('t') || propValue.startsWith('y')) {

@@ -177,7 +177,6 @@ const drawChart = (json) => {
     chartViewDiv.style.display = 'none';
     selectChartType.className = 'chart-type';
     let { title, data, properties } = json;
-    if (properties.hasOwnProperty('name')) chartName = properties.name;
     if (!(data instanceof Array) || data.length <= 0) {
         return;
     }
@@ -196,7 +195,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
@@ -208,7 +206,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
@@ -220,7 +217,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
@@ -232,7 +228,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
@@ -244,7 +239,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
@@ -256,7 +250,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 2) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push({ x: val[0], y: val[1] });
@@ -268,7 +261,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 3) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push({ x: val[0], y: val[1], r: val[2] });
@@ -280,7 +272,6 @@ const drawChart = (json) => {
             data.forEach(item => {
                 var val = item.v;
                 if (val.length !== 1) {
-                    console.log('invalid data for', type);
                     return;
                 }
                 values.push(val[0]);
@@ -307,14 +298,17 @@ const drawChart = (json) => {
         }
         default:
             return;
-            break;
     }
+    if (properties.hasOwnProperty('name')) chartName = properties.name;
     myChart.setName(chartName);
     myChart.setTitle(title);
     myChart.setLabels(data);
     myChart.setData(values);
     showChartView();
     myChart.draw();
+    if (properties.hasOwnProperty('fontSize')) setFontSize(properties.fontSize);
+    if (properties.hasOwnProperty('fontStyle')) setFontStyle(properties.fontStyle);
+    if (properties.hasOwnProperty('fontWeight')) setFontWeight(properties.fontWeight);
 };
 
 function getCroppedCanvas(canvas) {
@@ -767,9 +761,8 @@ fontSizeSelect.onkeydown = e => {
     e.stopPropagation();
 };
 
-fontSizeSelect.onchange = e => {
-    var size = fontSizeSelect.value;
-    if (/^\d{1,3}$/.test(size)) {
+function setFontSize(size) {
+    if (typeof size == 'number' || /^\d{1,3}$/.test(size)) {
         size = parseInt(size);
         if (size < 8) {
             size = 8;
@@ -782,32 +775,53 @@ fontSizeSelect.onchange = e => {
         ChartConfig.update('none');
         ChartConfig.setDirty();
     }
+}
+
+fontSizeSelect.onchange = e => {
+    var size = fontSizeSelect.value;
+    setFontSize(size);
 };
 
-fontStyleBtn.onclick = e => {
-    var style = Chart.defaults.font.style;
-    if (style == 'normal') {
+function setFontStyle(style) {
+    if (style == 'italic') {
         Chart.defaults.font.style = 'italic';
         fontStyleBtn.classList.add('btn-icon-selected');
-    } else if (style == 'italic') {
+    } else if (style == 'normal') {
         Chart.defaults.font.style = 'normal';
         fontStyleBtn.classList.remove('btn-icon-selected');
     }
     ChartConfig.update('none');
     ChartConfig.setDirty();
+}
+
+fontStyleBtn.onclick = e => {
+    var style = Chart.defaults.font.style;
+    if (style == 'normal') {
+        setFontStyle('italic');
+    } else {
+        setFontStyle('normal');
+    }
 };
 
-fontWeightBtn.onclick = e => {
-    var weight = Chart.defaults.font.weight;
-    if (weight == 'normal') {
+function setFontWeight(weight) {
+    if (weight == 'bold') {
         Chart.defaults.font.weight = 'bold';
         fontWeightBtn.classList.add('btn-icon-selected');
-    } else if (weight == 'bold') {
+    } else if (weight == 'normal') {
         Chart.defaults.font.weight = 'normal';
         fontWeightBtn.classList.remove('btn-icon-selected');
     }
     ChartConfig.update('none');
     ChartConfig.setDirty();
+}
+
+fontWeightBtn.onclick = e => {
+    var weight = Chart.defaults.font.weight;
+    if (weight == 'normal') {
+        setFontWeight('bold')
+    } else {
+        setFontWeight('normal');
+    }
 };
 
 function rgb2hex(rgb) {
@@ -875,16 +889,13 @@ function setDivPos(d, x, y, mid) {
 function drawSavedChart(info, type, data, properties) {
     if (typeof info.name != 'undefined') chartName = info.name;
     if (typeof properties.fontSize != 'undefined') {
-        fontSizeSelect.value = properties.fontSize;
-        fontSizeSelect.onchange(null);
+        setFontSize(properties.fontSize);
     }
     if (typeof properties.fontStyle != 'undefined') {
-        if (['normal', 'italic'].includes(properties.fontStyle))
-            Chart.defaults.font.style = properties.fontStyle;
+        setFontStyle(properties.fontStyle);
     }
     if (typeof properties.fontWeight != 'undefined') {
-        if (['normal', 'bold'].includes(properties.fontWeight))
-            Chart.defaults.font.weight = properties.fontWeight;
+        setFontWeight(properties.fontWeight);
     }
     let myChart;
     switch (type) {
@@ -1169,7 +1180,9 @@ function updateSettings() {
     let chartConfig = ChartConfig.instance;
     if (chartConfig == null) return;
 
-    chartNameView.innerText = chartConfig.getName();
+    chartName = chartConfig.getName();
+    chartNameView.innerText = chartName;
+    document.title = 'Chart - ' + chartName;
 
     if (chartConfig.hasMarker) {
         body.classList.remove('noMarker');
