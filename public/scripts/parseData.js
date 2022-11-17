@@ -32,9 +32,10 @@ function extractProperties(lines) {
             }
         } else {
             lines.push(lastLine); // restore last line since it is not a part of properties
-            return properties;
+            break;
         }
     }
+    return properties;
 }
 
 function extractCSV(csv) {
@@ -71,7 +72,7 @@ function extractCSV(csv) {
         } else {
             start = 0;
         }
-    
+
         for (let i = start; i < lines.length; i++) {
             const line = lines[i];
             if (/^\s*$/.test(line)) continue;
