@@ -26,7 +26,7 @@ const forgotPassword = async (req, res) => {
         }
         let user = await User.findOne({ email: email, active: true });
         if (!user) {
-            res.json({ 'success': false, 'reason': "This email does not exist.", 'field': 'email' });
+            res.json({ 'success': false, 'reason': "This email does not have an account.", 'field': 'email' });
             return;
         }
         let token = crypto.randomBytes(16).toString('hex');
