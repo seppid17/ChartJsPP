@@ -4,6 +4,8 @@ function extractProperties(lines) {
         let lastLine = lines.pop().trim();
         if (lastLine.length == 0) continue;
         let data = lastLine.split(/\s*,\s*/).map(x => { return x.trim(); });
+        if (data.length == 0 || data[0].length == 0) continue;
+
         if (data.length >= 3 && data[0].toLowerCase().startsWith('prop')) {
             let propName = data[1];
             let propValue = data[2];
@@ -70,22 +72,38 @@ function extractCSV(csv) {
         }
         let hasParentColumn = !noParentColumn;
 
-        let start = 1;
+        let start = 0;
         let titles = [];
         let body = {};
 
-        let head = lines[0].split(/\s*,\s*/).map(x => { return x.trim(); });
-        if (head.length > 2 && head[0].toLowerCase() == 'id') {
-            if (!noParentColumn || !forceNoParentColumn && head[1].toLowerCase() == 'parent') {
-                hasParentColumn = true;
+        // remove empty lines from the begining
+        while (true) {
+            if (start >= lines.length) {
+                throw 'No data table found. Please check the file.';
             }
-            if (hasParentColumn) {
-                titles = head.slice(2);
-            } else {
-                titles = head.slice(1);
+            let row = lines[start].split(/\s*,\s*/).map(x => { return x.trim(); });
+            if (row.length > 1 && row[0].length > 0) {
+                break;
             }
-        } else {
-            start = 0;
+            start++;
+        }
+
+        // extract heading row if exists
+        {
+            let head = lines[start].split(/\s*,\s*/).map(x => { return x.trim(); });
+
+            if (head.length > 2 && head[0].toLowerCase() == 'id') {
+                if (!noParentColumn || !forceNoParentColumn && head[1].toLowerCase() == 'parent') {
+                    hasParentColumn = true;
+                }
+                if (hasParentColumn) {
+                    titles = head.slice(2);
+                } else {
+                    titles = head.slice(1);
+                }
+                while (titles[titles.length - 1] == '') titles.pop();
+                start++;
+            }
         }
 
         for (let i = start; i < lines.length; i++) {
@@ -101,6 +119,8 @@ function extractCSV(csv) {
             if (noParentColumn) {
                 data[1] = '0';
             }
+
+            while (data[data.length - 1] == '') data.pop();
 
             // length of data (without ID and parent fields) must be same as title
             if ((titles.length > 0 && data.length - 2 !== titles.length) || (data.length - 2 < 2)) {
