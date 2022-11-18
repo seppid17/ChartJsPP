@@ -515,11 +515,11 @@ document.addEventListener('visibilitychange', e => {
  * Shortcut for change theme : Ctrl+T
  */
 document.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() == 'd' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key.toLowerCase() == 'k' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         Theme.darkBtn.click();
     }
-    if (e.key.toLowerCase() == 'n' && e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key.toLowerCase() == 'e' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         window.open('/chart', '_blank');
     }
