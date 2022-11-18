@@ -87,6 +87,7 @@ class PopupMessage {
                     closePopup();
                 }
             });
+            PopupMessage.popup.focus();
         }
 
         PopupMessage.overlay.style.display = 'block';
@@ -512,14 +513,14 @@ document.addEventListener('visibilitychange', e => {
 });
 
 /**
- * Shortcut for change theme : Ctrl+T
+ * Common keyboard shortcuts
  */
 document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() == 'd' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         Theme.darkBtn.click();
     }
-    if (e.key.toLowerCase() == 'n' && e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key.toLowerCase() == 'm' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         window.open('/chart', '_blank');
     }
