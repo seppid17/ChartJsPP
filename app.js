@@ -41,7 +41,7 @@ async function startServer() {
     let sessionStore = null;
     if (mongoConnected) {
         sessionStore = MongoStore.create({
-            client: mongoose.connection.getClient(),autoRemove: 'interval',
+            client: mongoose.connection.getClient(), autoRemove: 'interval',
             autoRemoveInterval: 120,
             crypto: {
                 secret: process.env.MONGOSTORE_SECRET
@@ -87,6 +87,7 @@ async function startServer() {
     app.use('/', require('./routes/passwordReset'));
     app.use('/chart', require('./routes/chart'));
     app.use('/sampleData', require('./routes/sampleData'));
+    app.use('/userManual', require('./routes/userManual'));// routes for any user (login not required)
 
     // authenticate user
     app.use('/', require('./routes/auth'));

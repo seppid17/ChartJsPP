@@ -516,11 +516,11 @@ document.addEventListener('visibilitychange', e => {
  * Common keyboard shortcuts
  */
 document.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() == 'd' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key.toLowerCase() == 'k' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         Theme.darkBtn.click();
     }
-    if (e.key.toLowerCase() == 'm' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key.toLowerCase() == 'e' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         window.open('/chart', '_blank');
     }

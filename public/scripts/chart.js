@@ -78,7 +78,8 @@ const chartKeyListener = e => {
             unshareBtn.click();
         }
     }
-    if (e.key == 'Delete' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key == (navigator.platform.match("Mac") ? 'Backspace' : 'Delete') && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        if (body.classList.contains('authOnly')) return;
         e.preventDefault();
         deleteBtn.click();
     }
@@ -614,12 +615,9 @@ deleteBtn.onclick = e => {
                     if (typeof (Storage) !== "undefined") {
                         if (localStorage.opencount && Number(localStorage.opencount) > 1) {
                             window.close();
-                        } else {
-                            window.location = '/dashboard';
                         }
-                    } else {
-                        window.location = '/dashboard';
                     }
+                    window.location = '/dashboard';
                 });
             } catch (error) {
                 PopupMessage.showFailure('Delete failed!');
@@ -1034,7 +1032,9 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
                                 Loader.show();
                                 xhrSender.send('/chart/retrieve', cb);
                             } else {
-                                PopupMessage.showFailure('Unauthorized');
+                                PopupMessage.showFailure('Unauthorized', () => {
+                                    window.location = '/chart';
+                                });
                             }
                         });
                         return;
@@ -1051,6 +1051,8 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             let info = resp.info;
             if (info.owner == null) {
                 body.classList.add('authOnly');
+            } else {
+                body.classList.remove('authOnly');
             }
             let data = resp.data;
             let chartData = JSON.parse(data.data);
@@ -1058,11 +1060,15 @@ if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
             Loader.hide();
             drawSavedChart(info, data.type, chartData, properties);
         } catch (error) {
-            PopupMessage.showFailure('Something went wrong! Please try again.');
+            PopupMessage.showFailure('Something went wrong! Please try again.', () => {
+                window.location = '/chart';
+            });
         }
         Loader.hide();
     };
     xhrSender.send('/chart/retrieve', cb);
+} else {
+    body.classList.remove('authOnly');
 }
 
 document.getElementById('downloadBtn').onclick = e => {
