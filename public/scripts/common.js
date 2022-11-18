@@ -73,6 +73,7 @@ class PopupMessage {
         else PopupMessage.msgSpan.style.color = 'var(--text-primary)';
 
         let isChartPage = typeof chartKeyListener != 'undefined';
+        if (isChartPage) document.removeEventListener('keydown', chartKeyListener);
 
         if (confirm) {
             PopupMessage.confirmPopup.hidden = false;
@@ -80,7 +81,6 @@ class PopupMessage {
         } else {
             PopupMessage.confirmPopup.hidden = true;
             PopupMessage.closeBtn.children[0].innerText = 'OK';
-            if (isChartPage) document.removeEventListener('keydown', chartKeyListener);
             document.addEventListener('keydown', e => {
                 if (e.key == 'Enter' && !e.shiftKey && !e.altKey && !(navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                     e.preventDefault();
@@ -165,28 +165,17 @@ class PopupMessage {
     }
 }
 
-/**
- * Setting the page theme to light or dark mode
- */
-class Theme {
-    static LIGHT = false;
-    static DARK = true;
-    static theme = Theme.LIGHT;
-    static darkBtn = document.getElementById('darkBtn');
-    static root = document.querySelector(':root');
-    static _onchangeTriggers = [];
-
+class StorageUtils {
     /**
-     * Set a cookie with given name, value and expiry date.
+     * Set a cookie with given name and value.
      * 
      * @param {*} name name of the cookie
      * @param {*} value value of the cookie
-     * @param {number} expiryDays days to expiry of the cookie
      * @return {void}
      */
-    static _setCookie(name, value, expiryDays) {
+    static _setCookie(name, value) {
         const date = new Date();
-        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        date.setTime(date.getTime() + 3153600000000);
         let expires = "expires=" + date.toUTCString();
         document.cookie = name + "=" + value + ";" + expires + ";path=/;samesite=strict";
     }
@@ -195,7 +184,7 @@ class Theme {
      * Get the cookie with given name.
      * 
      * @param {*} name name of the cookie
-     * @return {string} value of the cookie if exists, otherwise an empty string
+     * @return {string|null} value of the cookie if exists, otherwise null
      */
     static _getCookie(name) {
         name = name + "=";
@@ -213,8 +202,53 @@ class Theme {
                 return cookie.substring(name.length, cookie.length);
             }
         }
-        return "";
+        return null;
     }
+
+    /**
+     * Store a value with name in localStorage.
+     * If localStorage is not available, save in cookies.
+     * 
+     * @param {*} name name as the key
+     * @param {*} value value to be stored
+     * @return {void}
+     */
+    static store(name, value) {
+        if (typeof (Storage) !== "undefined") {
+            localStorage[name] = value;
+        } else {
+            StorageUtils._setCookie(name, value);
+        }
+    }
+
+    /**
+     * Retrieve the value with given name from localStorage.
+     * If localStorage is not available, search in cookies.
+     * 
+     * @param {*} name name as the key
+     * @return {string|null} retrieved value from storage if exists, otherwise null
+     */
+    static retrieve(name) {
+        if (typeof (Storage) !== "undefined") {
+            if (localStorage.hasOwnProperty(name))
+                return localStorage[name];
+        } else {
+            return StorageUtils._getCookie(name, value);
+        }
+        return null;
+    }
+}
+
+/**
+ * Setting the page theme to light or dark mode
+ */
+class Theme {
+    static LIGHT = false;
+    static DARK = true;
+    static theme = Theme.LIGHT;
+    static darkBtn = document.getElementById('darkBtn');
+    static root = document.querySelector(':root');
+    static _onchangeTriggers = [];
 
     /**
      * Set the theme to light or dark.
@@ -271,12 +305,12 @@ class Theme {
      * @return {void}
      */
     static checkTheme() {
-        let savedTheme = Theme._getCookie('theme')
+        let savedTheme = StorageUtils.retrieve('theme');
         if (savedTheme === 'dark') {
             Theme.theme = Theme.DARK;
             Theme.darkBtn.checked = true;
             navbarBrand.src = "/images/brandWhite.png";
-            Theme.switchTheme(true)
+            Theme.switchTheme(true);
         } else if (savedTheme === 'light') {
             Theme.theme = Theme.LIGHT;
             Theme.darkBtn.checked = false;
@@ -286,7 +320,7 @@ class Theme {
             Theme.darkBtn.checked = false;
             navbarBrand.src = "/images/brandBlack.png";
             Theme.switchTheme(false);
-            Theme._setCookie('theme', 'light', 365000);
+            StorageUtils.store('theme', 'light');
         }
     }
 
@@ -464,7 +498,7 @@ Theme.darkBtn.onclick = e => {
     Theme.switchTheme(Theme.theme);
     if (Theme.theme == Theme.DARK) document.getElementById('navbarBrand').src = "/images/brandWhite.png";
     else document.getElementById('navbarBrand').src = "/images/brandBlack.png";
-    Theme._setCookie('theme', Theme.theme == Theme.DARK ? 'dark' : 'light', 365000);
+    StorageUtils.store('theme', Theme.theme == Theme.DARK ? 'dark' : 'light');
 }
 
 /**
@@ -492,26 +526,30 @@ document.addEventListener('keydown', e => {
 });
 
 /**
- * Increment the number of open tabs
+ * Increment the number of open tabs count
  */
 window.addEventListener('load', e => {
-    if (typeof (Storage) !== "undefined") {
-        if (localStorage.opencount) {
-            localStorage.opencount = Number(localStorage.opencount) + 1;
+    try {
+        let opencount = StorageUtils.retrieve('opencount');
+        if (opencount !== null) {
+            opencount = Number(opencount);
+            opencount++;
+            StorageUtils.store('opencount', opencount);
         } else {
-            localStorage.opencount = 1;
+            StorageUtils.store('opencount', 1);
         }
-    }
+    } catch (e) { }
 });
 
 /**
- * decrement the number of open tabs
+ * decrement the number of open tabs count
  */
 window.onunload = function () {
-    if (typeof (Storage) !== "undefined") {
-        if (localStorage.opencount) {
-            localStorage.opencount = Math.max(0, Number(localStorage.opencount) - 1);
-        }
+    let opencount = StorageUtils.retrieve('opencount');
+    if (opencount !== null) {
+        opencount = Number(opencount);
+        opencount = Math.max(0, opencount - 1);
+        StorageUtils.store('opencount', opencount);
     }
 }
 

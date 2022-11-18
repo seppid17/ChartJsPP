@@ -231,7 +231,7 @@ test('Test 14: email not exist', async () => {
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
     expect(obj.success).toBeFalsy();
-    expect(obj.reason).toEqual("This email does not exist.");
+    expect(obj.reason).toEqual("This email does not have an account.");
 });
 
 test('Test 15: valid password reset request', async () => {

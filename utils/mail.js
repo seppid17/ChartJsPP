@@ -19,7 +19,12 @@ class Mailer {
             from: Mailer.sender,
             to: to,
             subject: template.subject,
-            html: template.body.replace(/#LINK/g, link)
+            html: template.body.replace(/#LINK/g, link),
+            attachments: [{
+                filename: 'logo.png',
+                path: 'public/images/logo.png',
+                cid: 'logo'
+            }]
         };
         if (cb == null) { // return a promise
             return Mailer.transporter.sendMail(mailOptions);

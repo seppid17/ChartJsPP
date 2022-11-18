@@ -235,7 +235,7 @@ const deleteChart = async (req, res) => {
     }
 };
 
-const shareChart = async (req, res) => {
+async function setShareStatus(share, req, res) {
     let { id } = req.body;
     const user = req.session.user;
     if (!id) {
@@ -247,34 +247,21 @@ const shareChart = async (req, res) => {
         return;
     }
     try {
-        let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: true });
+        let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: share });
         let success = (doc != null);
         res.json({ 'success': success });
     } catch (err) {
         console.log(err);
         res.json({ 'success': false });
     }
+}
+
+const shareChart = (req, res) => {
+    return setShareStatus(true, req, res);
 };
 
-const unshareChart = async (req, res) => {
-    let { id } = req.body;
-    const user = req.session.user;
-    if (!id) {
-        res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
-        return;
-    }
-    if (!Validator.validate('id', id)) {
-        res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
-        return;
-    }
-    try {
-        let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: false });
-        let success = (doc != null);
-        res.json({ 'success': success });
-    } catch (err) {
-        console.log(err);
-        res.json({ 'success': false });
-    }
+const unshareChart = (req, res) => {
+    return setShareStatus(false, req, res);
 };
 
 module.exports = { saveChart, retrieveSharedChart, retrieveChart, getChartList, deleteChart, shareChart, unshareChart };
