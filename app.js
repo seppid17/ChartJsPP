@@ -75,7 +75,7 @@ async function startServer() {
         let scriptNonce = crypto.randomBytes(16).toString('hex');
         res.setHeader('X-Frame-Options', 'DENY');
         res.setHeader('X-XSS-Protection', '1; mode=block');
-        res.setHeader('Content-Security-Policy', "script-src 'strict-dynamic' 'nonce-" + scriptNonce + "'; connect-src 'self' *.fontawesome.com; frame-src 'none'; form-action 'none'; object-src 'none';");
+        res.setHeader('Content-Security-Policy', "script-src 'strict-dynamic' 'nonce-" + scriptNonce + "'; base-uri 'self'; connect-src 'self' *.fontawesome.com; frame-src 'none'; form-action 'none'; object-src 'none';");
         res.setHeader('X-Content-Type-Options', 'nosniff');
         req.scriptNonce = scriptNonce;
         next();

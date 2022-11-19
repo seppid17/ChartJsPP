@@ -545,7 +545,7 @@ window.addEventListener('load', e => {
 /**
  * decrement the number of open tabs count
  */
-window.onunload = function () {
+window.onpagehide = function () {
     let opencount = StorageUtils.retrieve('opencount');
     if (opencount !== null) {
         opencount = Number(opencount);

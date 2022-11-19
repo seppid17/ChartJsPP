@@ -476,6 +476,7 @@ document.getElementById('downloadImg').onclick = e => {
 };
 
 document.getElementById('downloadPdf').onclick = e => {
+    loadScript();
     // create image
     let croppedCanvas = getCroppedCanvas(canvas);
     const canvasImage = croppedCanvas.toDataURL();
@@ -1254,8 +1255,6 @@ async function copyLinkToClipboard(retry = true) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             await navigator.clipboard.writeText(link);
             return true;
-        } else {
-            console.log("navigator.clipboard.writeText is false or not available");
         }
     } catch (e) {
         if (retry) {
@@ -1270,3 +1269,21 @@ function showHideShareUnshare(isShared) {
     copyLinkBtn.hidden = !isShared;
     unshareBtn.hidden = !isShared;
 }
+
+let loadedScripts = [];
+function loadScript(src, hash = null) {
+    if (loadedScripts.includes(src)) return;
+    let scriptElem = document.createElement('script');
+    scriptElem.src = src;
+    if (hash != null) {
+        scriptElem.integrity = hash;
+        scriptElem.crossOrigin = 'anonymous';
+    }
+    document.body.appendChild(scriptElem);
+    jspdfLoaded = true;
+}
+
+setTimeout(() => {
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'sha256-mMzxeqEMILsTAXYmGPzJtqs6Tn8mtgcdZNC0EVTfOHU=');
+    loadScript('https://kit.fontawesome.com/8d62299fba.js');
+}, 1000);

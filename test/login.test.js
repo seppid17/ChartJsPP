@@ -15,7 +15,7 @@ let isJson = jsonstr => {
 }
 
 test('Test 1: empty email', async () => {
-    let res = await user1.post(domain + "/login").send({password: process.env.PASSWORD});
+    let res = await user1.post(domain + "/login").send({ password: process.env.PASSWORD });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
@@ -24,8 +24,8 @@ test('Test 1: empty email', async () => {
 
 });
 
-test('Test 2: Invalid email format', async () => {
-    let res = await user1.post(domain + "/login").send({email:"invlaidEmail",password: process.env.PASSWORD});
+test('Test 2: invalid email format', async () => {
+    let res = await user1.post(domain + "/login").send({ email: "invlaidEmail", password: process.env.PASSWORD });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
@@ -35,7 +35,7 @@ test('Test 2: Invalid email format', async () => {
 });
 
 test('Test 3: empty password', async () => {
-    let res = await user1.post(domain + "/login").send({email: process.env.EMAIL});
+    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
@@ -44,8 +44,8 @@ test('Test 3: empty password', async () => {
 
 });
 
-test('Test 4: invalid password type', async () => {
-    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL,password: 1234 });
+test('Test 4: invalid password format', async () => {
+    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL, password: '1234' });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
@@ -54,8 +54,8 @@ test('Test 4: invalid password type', async () => {
 
 });
 
-test('Test 5: incorrect email', async () => {
-    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL,password: process.env.PASSWORD + "invalid" });
+test('Test 5: incorrect password', async () => {
+    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL, password: process.env.PASSWORD + "invalid" });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
@@ -65,11 +65,11 @@ test('Test 5: incorrect email', async () => {
 });
 
 test('Test 6: successfully loging ', async () => {
-    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL,password: process.env.PASSWORD });
+    let res = await user1.post(domain + "/login").send({ email: process.env.EMAIL, password: process.env.PASSWORD });
     let text = res.text;
     expect(isJson(text)).toBeTruthy();
     let obj = JSON.parse(text);
     expect(obj.success).toBeTruthy();
-    
+
 
 });

@@ -104,7 +104,7 @@ test('Test 13: No data in file', () => {
 
 const valid_data4 = 'ID,parent,letter,number\n  \n1,0,A,5\n\n2,0,B,6\n\t  \n3,0,A,5\n4,0,B,6\n\nprop, type, doughnut\n\n property, name,myChart';
 const output4 = { title: ['letter', 'number'], data: [{ n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }, { n: 'A', v: [5], c: [] }, { n: 'B', v: [6], c: [] }], properties: { type: 'doughnut', name: 'myChart' } };
-test('Test 11: Valid data with properties', () => {
+test('Test 14: Valid data with properties', () => {
     expect(
         functions.parseCSV(valid_data2)).toEqual(output2);
 });

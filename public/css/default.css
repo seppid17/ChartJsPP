@@ -49,12 +49,14 @@
 }
 
 @font-face {
+    font-display: swap;
     font-family: "proxima-nova-soft";
     src: url('/fonts/Proxima_Nova_Soft_W03_Regular.ttf');
     font-weight: normal;
 }
 
 @font-face {
+    font-display: swap;
     font-family: "proxima-nova-soft";
     src: url('/fonts/Proxima_Nova_Soft_W03_Bold.ttf');
     font-weight: bold;
