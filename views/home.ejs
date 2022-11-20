@@ -29,132 +29,112 @@
     <!-- Navbar -->
     <%- include('navbar.ejs', {"pageName":"home"}) %>
 
-    <!-- popup to display success and error messages -->
-    <%- include('showMsg.ejs') %>
+        <!-- popup to display success and error messages -->
+        <%- include('showMsg.ejs') %>
 
-    <!-- loader -->
-    <%- include('loader.ejs') %>
+            <!-- loader -->
+            <%- include('loader.ejs') %>
 
-    <!-- dark mode switch -->
-    <%- include('dark.ejs') %>
+                <!-- dark mode switch -->
+                <%- include('dark.ejs') %>
 
-    <div class="wrapper">
-        <div class="row">
-            <div class="col">
-                <div class="row text-center">
-                    <img src="/images/icon.webp" alt="logo" class="pill">
-                </div>
-                <div class="row text-center">
-                    <h1 class="chart-title">Chart.js++</h1>
-                </div>
-                <div class="row text-center">
-                    <h2 class="chart-subtitle">Easy-to-use web interface of Chart.js with advanced
-                        hierarchical chart types for scientists &
-                        researchers
-                    </h2>
-                </div>
-            </div>
-        </div>
+                    <div class="wrapper">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row text-center">
+                                    <img src="/images/icon.webp" alt="logo" class="pill">
+                                </div>
+                                <div class="row text-center">
+                                    <h1 class="chart-title">Chart.js++</h1>
+                                </div>
+                                <div class="row text-center">
+                                    <h2 class="chart-subtitle">Easy-to-use web interface of Chart.js with advanced
+                                        hierarchical chart types for scientists &
+                                        researchers
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="row text-center mb-3">
-            <div>
-                <a class="btn btn-green" href="/userManual" target="_blank">
-                    <i class="fas fa-file-alt"></i>
-                    User Manual
-                </a>
-                <a class="btn btn-blue" href="/sampleData">
-                    <i class="fas fa-database"></i>
-                    Samples
-                </a>
-                <a class="btn btn-red" href="/chart">
-                    <i class="fas fa-chart-pie"></i>
-                    Chart
-                </a>
-            </div>
-        </div>
+                        <div class="row text-center mb-3">
+                            <div>
+                                <a class="btn btn-green" href="/userManual" target="_blank">
+                                    <i class="fas fa-file-alt"></i>
+                                    User Manual
+                                </a>
+                                <a class="btn btn-blue" href="/sampleData">
+                                    <i class="fas fa-database"></i>
+                                    Samples
+                                </a>
+                                <a class="btn btn-red" href="/chart">
+                                    <i class="fas fa-chart-pie"></i>
+                                    Chart
+                                </a>
+                            </div>
+                        </div>
 
-        <hr>
+                        <hr>
 
-        <div class="feature">
-            <div class="feature-text feature-text__pull-right">
-                <h3 class="subtitle">
-                    <span class="pill_1">8 Basic Chart Types</span>
-                </h3>
-                <p class="description">
-                    Visualize your data in 8 different ways. Each of them are customisable.   
-                </p>
-            </div>
-            <div class="chart-img feature-chart feature-chart__left feature-chart__pull-right">
-                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-            </div>
-        </div>
+                        <div class="feature">
+                            <div class="feature-text feature-text__pull-right">
+                                <h3 class="subtitle">
+                                    <span class="pill_1">8 Basic Chart Types</span>
+                                </h3>
+                                <p class="description">
+                                    Chartjs++ supports all the 8 basic charts Chart.js currently supporting. Which are
+                                    <b>Bar</b>, <b>Pie</b>, <b>Line</b>, <b>Radar</b>, <b>Doughnut</b>, <b>Polar</b>,
+                                    <b>Scatter</b>, and <b>Bubble</b>. Each of them are customisable and expandable.
+                                </p>
+                            </div>
+                            <div class="chart-img feature-chart feature-chart__left feature-chart__pull-right">
+                                <img class="image-labal" src="/images/8basic.png" alt="Card image cap">
+                            </div>
+                        </div>
 
-        <div class="feature">
-            <div class="feature-text">
-                <h3 class="subtitle">
-                    <span class="pill_1">3 Advanced Hierarchical Chart Types</span>
-                </h3>
-                <p class="description">
-                    Visualize your data in 3 different hierarchical ways. Each of them are customisable.
-                </p>
-            </div>
-            <div class="chart-img feature-chart feature-chart__right">
-                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-            </div>
-        </div>
+                        <div class="feature">
+                            <div class="feature-text">
+                                <h3 class="subtitle">
+                                    <span class="pill_1">3 Advanced Hierarchical Chart Types</span>
+                                </h3>
+                                <p class="description">
+                                    Chartjs++ supports 3 advanced hierarchical chart types which are <b>Sunburst</b>,
+                                    <b>Treemap</b>,
+                                    and <b>Icicle</b>. Each of them are customisable and expandable. Visualize your data
+                                    in
+                                    hierarchical way.
+                                </p>
+                            </div>
+                            <div class="chart-img feature-chart feature-chart__right">
+                                <img class="image-labal" src="/images/3advanced.png" alt="Card image cap">
+                            </div>
+                        </div>
 
-        <div class="feature">
-            <div class="feature-text feature-text__pull-right">
-                <h3 class="subtitle">
-                    <span class="pill_1">Download Charts</span>
-                </h3>
-                <p class="description">
-                    Download your charts as pdf or png.   
-                </p>
-            </div>
-            <div class="chart-img feature-chart feature-chart__left feature-chart__pull-right">
-                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-            </div>
-        </div>
+                        <div class="feature">
+                            <div class="feature-text feature-text__pull-right">
+                                <h3 class="subtitle">
+                                    <span class="pill_1">Download, Save, & Share Charts</span>
+                                </h3>
+                                <p class="description">
+                                    Users can download, save, and share their charts. Charts can be downloaded in
+                                    <b>.pdf</b> or <b>.png</b> format with high quality. Saved charts can be shared and
+                                    can be accessed anytime.
+                                </p>
+                            </div>
+                            <div class="chart-img feature-chart feature-chart__left feature-chart__pull-right">
+                                <img class="image-labal" src="/images/DownloadSaveDhare.png" alt="Card image cap">
+                            </div>
+                        </div>
 
-        <div class="feature">
-            <div class="feature-text">
-                <h3 class="subtitle">
-                    <span class="pill_1">Save Charts</span>
-                </h3>
-                <p class="description">
-                    Save your work and access them later.
-                </p>
-            </div>
-            <div class="chart-img feature-chart feature-chart__right">
-                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-            </div>
-        </div>
+                    </div>
 
-        <div class="feature">
-            <div class="feature-text feature-text__pull-right">
-                <h3 class="subtitle">
-                    <span class="pill_1">Share Charts</span>
-                </h3>
-                <p class="description">
-                    Share your saved charts with others.   
-                </p>
-            </div>
-            <div class="chart-img feature-chart feature-chart__left feature-chart__pull-right">
-                <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-            </div>
-        </div>
+                    <script src="/scripts/common.js" nonce="<%= nonce %>"></script>
 
-    </div>
-
-    <script src="/scripts/common.js" nonce="<%= nonce %>"></script>
-
-    <!-- Bootstrap js-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" nonce="<%= nonce %>"
-        integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
-        crossorigin="anonymous" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        nonce="<%= nonce %>"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous" defer></script>
+                    <!-- Bootstrap js-->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" nonce="<%= nonce %>"
+                        integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+                        crossorigin="anonymous" defer></script>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                        nonce="<%= nonce %>"
+                        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                        crossorigin="anonymous" defer></script>
 </body>

@@ -28,253 +28,273 @@
     <!-- Navbar -->
     <%- include('navbar.ejs', {"pageName":"sample"}) %>
 
-    <!-- popup to display success and error messages -->
-    <!-- <%- include('showMsg.ejs') %> -->
+        <!-- popup to display success and error messages -->
+        <!-- <%- include('showMsg.ejs') %> -->
 
-    <!-- loader -->
-    <%- include('loader.ejs') %>
+        <!-- loader -->
+        <%- include('loader.ejs') %>
 
-    <!-- dark mode switch -->
-    <%- include('dark.ejs') %>
+            <!-- dark mode switch -->
+            <%- include('dark.ejs') %>
 
-        <div class="container">
-            <div class="wrapper">
+                <div class="container">
+                    <div class="wrapper">
 
-                <div class="btn-type-row">
-                    <button class="btn btn-type" id="SampleBarChart">Bar Chart</button>
-                    <button class="btn btn-type" id="SamplePieChart">Pie Chart</button>
-                    <button class="btn btn-type" id="SampleDoughnutChart">Doughnut Chart</button>
-                    <button class="btn btn-type" id="SampleLineChart">Line Chart</button>
-                    <button class="btn btn-type" id="SamplePolarChart">Polar Chart</button>
-                    <button class="btn btn-type" id="SampleScatterChart">Scatter Chart</button>
-                    <button class="btn btn-type" id="SampleBubbleChart">Bubble Chart</button>
-                    <button class="btn btn-type" id="SampleSunburstChart">Sunburst Chart</button>
-                    <button class="btn btn-type" id="SampleIcicleChart">Icicle Chart</button>
-                    <button class="btn btn-type" id="SampleTreemapChart">Treemap Chart</button>
+                        <div class="btn-type-row">
+                            <button class="btn btn-type" id="SampleBarChart">Bar Chart</button>
+                            <button class="btn btn-type" id="SamplePieChart">Pie Chart</button>
+                            <button class="btn btn-type" id="SampleDoughnutChart">Doughnut Chart</button>
+                            <button class="btn btn-type" id="SampleLineChart">Line Chart</button>
+                            <button class="btn btn-type" id="SamplePolarChart">Polar Chart</button>
+                            <button class="btn btn-type" id="SampleScatterChart">Scatter Chart</button>
+                            <button class="btn btn-type" id="SampleBubbleChart">Bubble Chart</button>
+                            <button class="btn btn-type" id="SampleRadarChart">Radar Chart</button>
+                            <button class="btn btn-type" id="SampleSunburstChart">Sunburst Chart</button>
+                            <button class="btn btn-type" id="SampleIcicleChart">Icicle Chart</button>
+                            <button class="btn btn-type" id="SampleTreemapChart">Treemap Chart</button>
+                        </div>
+
+                        <div class="chart-container">
+
+                            <div class="card-chart" id="cardBarChart">
+                                <div class="chart-text chart-text__pull-right p-4">
+                                    <h5 class="chart-title">Bar Chart</h5>
+                                    <p class="chart-details">
+                                        A bar chart is a graph with rectangular bars.
+                                        They are useful to compare different categorical or discrete variables as long
+                                        as there
+                                        are not too many categories to compare. They are also very useful for time
+                                        series data.
+                                    </p>
+                                    <button id="barDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__left">
+                                    <img class="image-labal" src="/images/BarChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardPieChart">
+                                <div class="chart-text p-4">
+                                    <h5 class="chart-title">Pie Chart</h5>
+                                    <p class="chart-details">
+                                        A pie chart is a circular statistical graphic,
+                                        which is divided into slices to illustrate numerical proportion.
+                                        Pie charts can be used to show percentages of a whole,
+                                        and represents percentages at a set point in time.
+                                    </p>
+                                    <button id="pieDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__right">
+                                    <img class="image-labal" src="/images/PieChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardDoughnutChart">
+                                <div class="chart-text chart-text__pull-right p-4">
+                                    <h5 class="chart-title">Doughnut Chart</h5>
+                                    <p class="chart-details">
+                                        Just like a pie chart, a doughnut chart shows the relationship
+                                        of parts to a whole,
+                                        but a doughnut chart can contain more than one data series.</p>
+                                    <button id="doughnutDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__left chart-img__pull-right">
+                                    <img class="image-labal" src="/images/DoughnutChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardLineChart">
+                                <div class="chart-text p-4">
+                                    <h5 class="chart-title">Line Chart</h5>
+                                    <p class="chart-details">
+                                        A line chart is a type of chart used to show information that
+                                        changes over time.
+                                        Line charts are used to track changes over short and long periods.
+                                    </p>
+                                    <button id="lineDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__right">
+                                    <img class="image-labal" src="/images/LineChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardPolarChart">
+                                <div class="chart-text chart-text__pull-right p-4">
+                                    <h5 class="chart-title">Polar Chart</h5>
+                                    <p class="chart-details">
+                                        A Polar Chart can be used to display
+                                        different data points on a radial axis. It's plotted in a Cartesian plane where
+                                        the x-axis
+                                        is wrapped around the perimeter
+                                    </p>
+                                    <button id="polarDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__left chart-img__pull-right">
+                                    <img class="image-labal" src="/images/PolarChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardScatterChart">
+                                <div class="chart-text p-4">
+                                    <h5 class="chart-title">Scatter Chart</h5>
+                                    <p class="chart-details">
+                                        A scatter plot uses dots to represent values for two different
+                                        numeric variables.
+                                        These charts are useful to show the relationships among the numeric values in
+                                        several data series
+                                    </p>
+                                    <button id="scatterDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__right">
+                                    <img class="image-labal" src="/images/ScatterChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardBubbleChart">
+                                <div class="chart-text chart-text__pull-right p-4">
+                                    <h5 class="chart-title">Bubble Chart</h5>
+                                    <p class="chart-details">
+                                        A bubble chart is a data visualization that displays multiple
+                                        circles in a two-dimensional plot. Bubble charts are often used to present
+                                        financial data.
+                                    </p>
+                                    <button id="bubbleDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__left chart-img__pull-right">
+                                    <img class="image-labal" src="/images/BubbleChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardRadarChart">
+                                <div class="chart-text p-4">
+                                    <h5 class="chart-title">Radar Chart</h5>
+                                    <p class="chart-details">
+                                        A radar chart is a graphical method of displaying multivariate data in the form
+                                        of a two-dimensional chart of three or more quantitative variables represented
+                                        on axes starting from the same point.
+                                    </p>
+                                    <button id="radarDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__right">
+                                    <img class="image-labal" src="/images/RadarChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardSunburstChart">
+                                <div class="chart-text chart-text__pull-right p-4">
+                                    <h5 class="chart-title">Sunburst Chart</h5>
+                                    <p class="chart-details">
+                                        Sunburst chart is ideal for displaying hierarchical data. Items
+                                        in the hierarchy are laid out radially, with the top of the hierarchy at the
+                                        center
+                                        and deeper levels farther away from the center.
+                                    </p>
+                                    <button id="sunburstDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__left chart-img__pull-right">
+                                    <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardIcicleChart">
+                                <div class="chart-text p-4">
+                                    <h5 class="chart-title">Icicle Chart</h5>
+                                    <p class="chart-details">
+                                        Icicle charts are used to visualize hierarchical data, and
+                                        offer a way to easily spot clusters and understand to which level of a hierarchy
+                                        they belong.
+                                    </p>
+                                    <button id="icicleDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__right">
+                                    <img class="image-labal" src="/images/IcicleChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="card-chart" id="cardTreemapChart">
+                                <div class="chart-text chart-text__pull-right p-4">
+                                    <h5 class="chart-title">Treemap Chart</h5>
+                                    <p class="chart-details">
+                                        Treemaps are often used for sales data, as they capture
+                                        relative sizes of data categories, allowing for quick perception of the items
+                                        that
+                                        are large contributors to each category.
+                                    </p>
+                                    <button id="treemapDownload" class="btn btn-dwn"><i
+                                            class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
+                                        Data</button>
+                                </div>
+
+                                <div class="chart-img chart-img__left chart-img__pull-right">
+                                    <img class="image-labal" src="/images/TreemapChart.png" alt="Card image cap">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="chart-container">
-
-                    <div class="card-chart" id="cardBarChart">
-                        <div class="chart-text chart-text__pull-right p-4">
-                            <h5 class="chart-title">Bar Chart</h5>
-                            <p class="chart-details">
-                                A bar chart is a graph with rectangular bars. 
-                                They are useful to compare different categorical or discrete variables as long as there 
-                                are not too many categories to compare. They are also very useful for time series data.
-                            </p>
-                            <button id="barDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__left">
-                            <img class="image-labal" src="/images/BarChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardPieChart">
-                        <div class="chart-text p-4">
-                            <h5 class="chart-title">Pie Chart</h5>
-                            <p class="chart-details">
-                                A pie chart is a circular statistical graphic,
-                                which is divided into slices to illustrate numerical proportion.
-                                Pie charts can be used to show percentages of a whole,
-                                and represents percentages at a set point in time.
-                            </p>
-                            <button id="pieDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__right">
-                            <img class="image-labal" src="/images/PieChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardDoughnutChart">
-                        <div class="chart-text chart-text__pull-right p-4">
-                            <h5 class="chart-title">Doughnut Chart</h5>
-                            <p class="chart-details">
-                                Just like a pie chart, a doughnut chart shows the relationship
-                                of parts to a whole,
-                                but a doughnut chart can contain more than one data series.</p>
-                            <button id="doughnutDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__left chart-img__pull-right">
-                            <img class="image-labal" src="/images/DoughnutChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardLineChart">
-                        <div class="chart-text p-4">
-                            <h5 class="chart-title">Line Chart</h5>
-                            <p class="chart-details">
-                                A line chart is a type of chart used to show information that
-                                changes over time.
-                                Line charts are used to track changes over short and long periods.
-                            </p>
-                            <button id="lineDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__right">
-                            <img class="image-labal" src="/images/LineChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardPolarChart">
-                        <div class="chart-text chart-text__pull-right p-4">
-                            <h5 class="chart-title">Polar Chart</h5>
-                            <p class="chart-details">
-                                A Polar Chart can be used to display
-                                different data points on a radial axis. It's plotted in a Cartesian plane where the x-axis
-                                is wrapped around the perimeter
-                            </p>
-                            <button id="polarDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__left chart-img__pull-right">
-                            <img class="image-labal" src="/images/PolarChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardScatterChart">
-                        <div class="chart-text p-4">
-                            <h5 class="chart-title">Scatter Chart</h5>
-                            <p class="chart-details">
-                                A scatter plot uses dots to represent values for two different
-                                numeric variables.
-                                These charts are useful to show the relationships among the numeric values in several data series
-                            </p>
-                            <button id="scatterDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__right">
-                            <img class="image-labal" src="/images/ScatterChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardBubbleChart">
-                        <div class="chart-text chart-text__pull-right p-4">
-                            <h5 class="chart-title">Bubble Chart</h5>
-                            <p class="chart-details">
-                                A bubble chart is a data visualization that displays multiple
-                                circles in a two-dimensional plot. Bubble charts are often used to present financial data.
-                            </p>
-                            <button id="bubbleDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__left chart-img__pull-right">
-                            <img class="image-labal" src="/images/BubbleChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardRadarChart">
-                        <div class="chart-text p-4">
-                            <h5 class="chart-title">Radar Chart</h5>
-                            <p class="chart-details">
-                                Sunburst chart is ideal for displaying hierarchical data. Items
-                                in the hierarchy are laid out radially, with the top of the hierarchy at the center
-                                and deeper levels farther away from the center.
-                            </p>
-                            <button id="radarDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__right">
-                            <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardSunburstChart">
-                        <div class="chart-text chart-text__pull-right p-4">
-                            <h5 class="chart-title">Sunburst Chart</h5>
-                            <p class="chart-details">
-                                Sunburst chart is ideal for displaying hierarchical data. Items
-                                in the hierarchy are laid out radially, with the top of the hierarchy at the center
-                                and deeper levels farther away from the center.
-                            </p>
-                            <button id="sunburstDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__left chart-img__pull-right">
-                            <img class="image-labal" src="/images/SunburstChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardIcicleChart">
-                        <div class="chart-text p-4">
-                            <h5 class="chart-title">Icicle Chart</h5>
-                            <p class="chart-details">
-                                Icicle charts are used to visualize hierarchical data, and
-                                offer a way to easily spot clusters and understand to which level of a hierarchy
-                                they belong.
-                            </p>
-                            <button id="icicleDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__right">
-                            <img class="image-labal" src="/images/IcicleChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="card-chart" id="cardTreemapChart">
-                        <div class="chart-text chart-text__pull-right p-4">
-                            <h5 class="chart-title">Treemap Chart</h5>
-                            <p class="chart-details">
-                                Treemaps are often used for sales data, as they capture
-                                relative sizes of data categories, allowing for quick perception of the items that
-                                are large contributors to each category.
-                            </p>
-                            <button id="treemapDownload" class="btn btn-dwn"><i class="fa-solid fa-download Don-icon"></i>&nbsp;Sample
-                                Data</button>
-                        </div>
-
-                        <div class="chart-img chart-img__left chart-img__pull-right">
-                            <img class="image-labal" src="/images/TreemapChart.png" alt="Card image cap">
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-        <script src="/scripts/common.js" nonce="<%= nonce %>"></script>
-        <script src="/scripts/sampleData.js" nonce="<%= nonce %>"></script>
-        <!-- Bootstrap js-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" nonce="<%= nonce %>"
-            integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
-            crossorigin="anonymous" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" nonce="<%= nonce %>"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-            crossorigin="anonymous" defer></script>
+                <script src="/scripts/common.js" nonce="<%= nonce %>"></script>
+                <script src="/scripts/sampleData.js" nonce="<%= nonce %>"></script>
+                <!-- Bootstrap js-->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" nonce="<%= nonce %>"
+                    integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+                    crossorigin="anonymous" defer></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                    nonce="<%= nonce %>"
+                    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                    crossorigin="anonymous" defer></script>
 </body>
 
 </html>
