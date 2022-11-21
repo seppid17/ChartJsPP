@@ -16,6 +16,6 @@ ID,Labal,Count
 15,O,7
 16,P,6
 ,,
-prop,type,polar
+prop,type,polarArea
 prop,name,Polar chart
 prop,simple,TRUE
