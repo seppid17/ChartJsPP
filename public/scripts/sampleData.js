@@ -8,6 +8,7 @@ const bubbleChartSectionBtn = document.getElementById('SampleBubbleChart');
 const sunburstChartSectionBtn = document.getElementById('SampleSunburstChart');
 const icicleChartSectionBtn = document.getElementById('SampleIcicleChart');
 const treemapChartSectionBtn = document.getElementById('SampleTreemapChart');
+const radarChartSectionBtn = document.getElementById('SampleRadarChart');
 
 const barDownloadBtn = document.getElementById('barDownload');
 const pieDownloadBtn = document.getElementById('pieDownload');
@@ -19,6 +20,7 @@ const bubbleDownloadBtn = document.getElementById('bubbleDownload');
 const sunburstDownloadBtn = document.getElementById('sunburstDownload');
 const icicleDownloadBtn = document.getElementById('icicleDownload');
 const treemapDownloadBtn = document.getElementById('treemapDownload');
+const radarDownloadBtn = document.getElementById('radarDownload');
 
 barChartSectionBtn.onclick = e => {
     document.getElementById("cardBarChart").scrollIntoView();
@@ -49,6 +51,9 @@ icicleChartSectionBtn.onclick = e => {
 }
 treemapChartSectionBtn.onclick = e => {
     document.getElementById("cardTreemapChart").scrollIntoView();
+}
+radarChartSectionBtn.onclick = e => {
+    document.getElementById("cardRadarChart").scrollIntoView();
 }
 
 function download(name) {
@@ -93,4 +98,8 @@ icicleDownloadBtn.onclick = e => {
 }
 treemapDownloadBtn.onclick = e => {
     handleClick(e, 'treemap');
+}
+
+radarDownloadBtn.onclick = e => {
+    handleClick(e, 'radar');
 }
