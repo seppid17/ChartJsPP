@@ -1,10 +1,10 @@
 function popupLogin(ondone) {
     Loader.hide();
-    var overlay = document.getElementById("loginOverlay");
-    var popup = document.getElementById("loginPopup");
-    var submitBtn = document.getElementById('login');
-    var emailInput = document.getElementById('email');
-    var passwdInput = document.getElementById('password');
+    let overlay = document.getElementById("loginOverlay");
+    let popup = document.getElementById("loginPopup");
+    let submitBtn = document.getElementById('login');
+    let emailInput = document.getElementById('email');
+    let passwdInput = document.getElementById('password');
 
     let isChartPage = typeof chartKeyListener != 'undefined';
     if (isChartPage) document.removeEventListener('keydown', chartKeyListener);

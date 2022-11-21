@@ -20,12 +20,12 @@ function handleDrop(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 document.getElementById('selectFileBtn').onclick = e => {
-    var input = document.createElement('input');
+    let input = document.createElement('input');
     input.type = 'file';
     input.accept = '.csv';
 
     input.onchange = e => {
-        var file = e.target.files[0];
+        let file = e.target.files[0];
         FileInputManager.extractFile(file);
     }
 
@@ -42,8 +42,8 @@ class FileInputManager {
     static fileSelectedNoError = false;
 
     static _isCSV(filename) {
-        var parts = filename.split('.');
-        var ext = parts[parts.length - 1];
+        let parts = filename.split('.');
+        let ext = parts[parts.length - 1];
         return ext.toLowerCase() === 'csv';
     }
 

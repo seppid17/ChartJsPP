@@ -48,7 +48,7 @@ class ChartConfig {
                 return;
             }
             let points = myChart.getActiveElements(evt);
-            var colors = myChart.data.datasets[0].backgroundColor;
+            let colors = myChart.data.datasets[0].backgroundColor;
             if (points.length) {
                 const point = points[points.length - 1];
                 setDivPos(popup, evt.offsetX, evt.offsetY, ChartConfig.canvas.width / 2.5)
@@ -177,7 +177,7 @@ class ChartConfig {
 class BasicChartConfig extends ChartConfig {
     constructor(type) {
         super(type);
-        var colors = [];
+        let colors = [];
         this.config.data = {
             labels: [],
             datasets: [{
@@ -202,7 +202,7 @@ class BasicChartConfig extends ChartConfig {
 
     setData(data) {
         if (this.config && this.config.data.datasets.length > 0) {
-            var clr = [];
+            let clr = [];
             data.forEach((d, i) => {
                 clr.push(genColor(i));
             });
@@ -580,8 +580,8 @@ class RadarChartConfig extends BasicChartConfig {
 class HierarchicalChartConfig extends ChartConfig {
     constructor(type, maxLevels) {
         super(type);
-        var colors = [];
-        var dataConf = {
+        let colors = [];
+        let dataConf = {
             labels: [],
             datasets: [{
                 label: this.name,
@@ -610,7 +610,7 @@ class HierarchicalChartConfig extends ChartConfig {
     }
 
     _unlinkTree(tree) {
-        var unlinked = [];
+        let unlinked = [];
         tree.c.forEach(item => {
             let newItem = {
                 n: item.n,

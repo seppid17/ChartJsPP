@@ -1,8 +1,15 @@
 class DataFormatHelper {
+    /**
+     * Recursively traverse through nodes and replace
+     * the value array with the value in it.
+     * @param {Array} list input list of nodes
+     * @param {Array} out output list of nodes
+     * @returns {void}
+     */
     static _recursiveUnlist(list, out) {
-        var success = true;
+        let success = true;
         list.forEach(item => {
-            var unlistC = [];
+            let unlistC = [];
             if (!DataFormatHelper._recursiveUnlist(item.c, unlistC)) {
                 success = false;
                 return;
@@ -12,29 +19,42 @@ class DataFormatHelper {
                 console.log('invalid list', item);
                 return;
             }
-            var unlistItem = { n: item.n, v: item.v[0], c: unlistC };
+            let unlistItem = { n: item.n, v: item.v[0], c: unlistC };
             out.push(unlistItem);
         });
         return success;
     }
 
+    /**
+     * Traverse through nodes and replace
+     * the value array with the value in it.
+     * @param {Array} list input list of nodes
+     * @returns {Array}
+     */
     static unlist(list) {
-        var processedList = [];
+        let processedList = [];
         if (!DataFormatHelper._recursiveUnlist(list, processedList)) return null;
         return processedList;
     }
 
+    /**
+     * Recursively traverse through nodes and calculate the
+     * weights of nodes relative to thier sibling nodes.
+     * @param {Array} data array of nodes
+     * @param {object} parent parent node
+     * @returns {object}
+     */
     static _recursiveProcess(data, parent) {
-        var processedData = [];
-        var maxDepth = 0;
+        let processedData = [];
+        let maxDepth = 0;
         data.forEach(item => {
-            var newItem = {
+            let newItem = {
                 v: item.v,
                 n: item.n,
                 p: parent
             }
             if (typeof item.clr != 'undefined') newItem.clr = item.clr;
-            var children, depth, childSum;
+            let children, depth, childSum;
             [children, depth, childSum] = DataFormatHelper._recursiveProcess(item.c, newItem);
             newItem.d = depth - 1;
             newItem.c = children;
@@ -46,7 +66,7 @@ class DataFormatHelper {
             }
             processedData.push(newItem);
         });
-        var total = 0;
+        let total = 0;
         processedData.forEach(item => { total += item.v; });
         processedData.forEach(item => {
             item.w = total != 0 ? item.v / total : 0;
@@ -54,9 +74,15 @@ class DataFormatHelper {
         return [processedData, maxDepth + 1, total];
     }
 
+    /**
+     * Traverse through nodes and calculate the
+     * weights of nodes relative to thier sibling nodes.
+     * @param {Array} data array of nodes
+     * @returns {object}
+     */
     static preProcess(data) {
-        var processedData, maxDepth, total;
-        var root = { n: '/', v: 1, w: 1 };
+        let processedData, maxDepth, total;
+        let root = { n: '/', v: 1, w: 1 };
         [processedData, maxDepth, total] = this._recursiveProcess(data, root);
         root.d = maxDepth - 1;
         root.c = processedData;

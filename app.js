@@ -87,7 +87,7 @@ async function startServer() {
     app.use('/', require('./routes/passwordReset'));
     app.use('/chart', require('./routes/chart'));
     app.use('/sampleData', require('./routes/sampleData'));
-    app.use('/userManual', require('./routes/userManual'));// routes for any user (login not required)
+    app.use('/userManual', require('./routes/userManual'));
 
     // authenticate user
     app.use('/', require('./routes/auth'));

@@ -1,14 +1,22 @@
+/**
+ * Common interface for hierarchical chart controllers
+ */
 class HierarchicalController extends Chart.PieController {
+    // Index of the next element to draw
     _drawIndex = 0;
 
+    /**
+     * Set the starting and ending coordinates of the canvas
+     * @returns {void}
+     */
     _setAreaCoordinates() {
-        var ctx = this.chart.ctx;
-        var canvas = ctx.canvas;
+        let ctx = this.chart.ctx;
+        let canvas = ctx.canvas;
         this.startX = 0;
         this.startY = 0;
         this.endX = parseFloat(canvas.style.width);
         this.endY = parseFloat(canvas.style.height);
-        var legend = this.chart.legend;
+        let legend = this.chart.legend;
         if (!legend) return;
         if (legend.position == 'top') {
             this.startY = legend.bottom;
@@ -21,10 +29,15 @@ class HierarchicalController extends Chart.PieController {
         }
     }
 
+    /**
+     * Update the chart when the configuration or data changes
+     * @param {string|undefined} mode 
+     * @returns {void}
+     */
     update(mode) {
         if (typeof mode != 'undefined') {
             if (mode.startsWith('expand ')) {
-                var index = mode.split(' ')[1];
+                let index = mode.split(' ')[1];
                 index = parseInt(index);
                 this.draw(index);
                 return;
@@ -46,11 +59,17 @@ class HierarchicalController extends Chart.PieController {
             this.draw();
     }
 
+    /**
+     * Set the properties and draw the chart.
+     * If an index is specified, it starts drawing the subtree rooted at the index
+     * @param {number|undefined} index index of the root of the subtree
+     * @returns {void}
+     */
     draw(index = -1) {
         if (typeof this.endX == 'undefined' || this.endX == 0) {
             this._setAreaCoordinates();
         }
-        var meta = this.getMeta();
+        let meta = this.getMeta();
         if (typeof this.tree == 'undefined') {
             this.tree = meta._dataset.tree;
         }

@@ -1,3 +1,6 @@
+/**
+ * Rectangular chart element
+ */
 class RectangleElement extends Chart.Element {
     static id = 'rectangle'
 
@@ -14,7 +17,7 @@ class RectangleElement extends Chart.Element {
         this.text = typeof cfg.text != 'undefined' ? cfg.text : null;
         if (typeof this.options == 'undefined') this.options = {};
 
-        var options = cfg.options;
+        let options = cfg.options;
         this.options.backgroundColor = typeof options.backgroundColor != 'undefined' ? options.backgroundColor : 'black';
         this.options.hAlign = typeof options.hAlign != 'undefined' ? options.hAlign : 'left'; // 'left' | 'center' | 'right'
         this.options.vAlign = typeof options.vAlign != 'undefined' ? options.vAlign : 'top'; // 'top' | 'middle' | 'bottom'
@@ -22,7 +25,7 @@ class RectangleElement extends Chart.Element {
         this.options.verticalText = typeof options.verticalText != 'undefined' ? options.verticalText : false;
         this.options.font = {};
 
-        var font = typeof options.font != 'undefined' ? options.font : {};
+        let font = typeof options.font != 'undefined' ? options.font : {};
         this.options.font.style = typeof font.style != 'undefined' ? font.style : Chart.defaults.font.style; // 'normal' | 'italic' | 'oblique'
         this.options.font.weight = typeof font.weight != 'undefined' ? font.weight : Chart.defaults.font.weight; // 'normal' | 'bold' | 'bolder' | 'lighter'
         this.options.font.size = typeof font.size != 'undefined' ? font.size : Chart.defaults.font.size;
@@ -34,9 +37,8 @@ class RectangleElement extends Chart.Element {
 
     /**
      * Add text to the rectangle element if sufficient space is available.
-     * 
      * @param {CanvasRenderingContext2D} ctx 
-     * @return {void}
+     * @returns {void}
      */
     _addText(ctx) {
         if (this.text == null) return; // no text
@@ -44,8 +46,8 @@ class RectangleElement extends Chart.Element {
         // set text position and properties
         ctx.fillStyle = this.options.textColor;
         ctx.font = this.options.font.style + ' ' + this.options.font.weight + ' ' + this.options.font.size + 'px' + ' ' + this.options.font.family;
-        var textHeight = this.options.font.size * 0.8 + this.options.padding * 2;
-        var textWidth = ctx.measureText(this.text).width + this.options.padding * 2;
+        let textHeight = this.options.font.size * 0.8 + this.options.padding * 2;
+        let textWidth = ctx.measureText(this.text).width + this.options.padding * 2;
         if (this.options.verticalText && textHeight < textWidth) { // try to add text rotated
             if (textHeight > this.width) return; // not enough space to add text
             if (textWidth > this.height) return; // not enough space to add text
@@ -53,8 +55,8 @@ class RectangleElement extends Chart.Element {
             // set text position
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
-            var textX = this.x + this.options.padding;
-            var textY = this.y + this.height - this.options.padding;
+            let textX = this.x + this.options.padding;
+            let textY = this.y + this.height - this.options.padding;
             ctx.translate(textX, textY);
 
             // rotate to draw text vertically
@@ -74,8 +76,8 @@ class RectangleElement extends Chart.Element {
             if (textWidth > this.width) return; // not enough space to add text
 
             // set text position
-            var textX = this.x + this.options.padding;
-            var textY = this.y + this.options.padding;
+            let textX = this.x + this.options.padding;
+            let textY = this.y + this.options.padding;
             if (this.options.hAlign == 'center') {
                 textX = this.x + this.width / 2;
             } else if (this.options.hAlign == 'right') {
@@ -97,9 +99,8 @@ class RectangleElement extends Chart.Element {
 
     /**
      * Draw the rectangle element.
-     * 
      * @param {CanvasRenderingContext2D} ctx
-     * @return {void}
+     * @returns {void}
      */
     draw(ctx) {
         ctx.save();
@@ -115,7 +116,6 @@ class RectangleElement extends Chart.Element {
 
     /**
      * Get the center point of the rectangle
-     * 
      * @param {boolean} useFinalPosition unused
      * @returns {Object} {x:Xcoordinate, y:Ycoordinate}
      */
@@ -129,7 +129,6 @@ class RectangleElement extends Chart.Element {
     /**
      * Position to show tooltip.
      * At the center of the top or left side bar
-     * 
      * @returns {Object} {x:Xcoordinate, y:Ycoordinate}
      */
     tooltipPosition() {
@@ -152,7 +151,6 @@ class RectangleElement extends Chart.Element {
     /**
      * Checks of the mouse is in the rectangle,
      * but not in any of its inner rectangle
-     * 
      * @param {Number} mouseX
      * @param {Number} mouseY
      * @param {boolean} useFinalPosition unused
@@ -181,7 +179,6 @@ class RectangleElement extends Chart.Element {
     /**
      * Checks of the mouse is in the X range of the rectangle,
      * but not in any of its inner rectangle
-     * 
      * @param {Number} mouseX
      * @param {boolean} useFinalPosition unused
      * @returns {boolean}
@@ -195,7 +192,6 @@ class RectangleElement extends Chart.Element {
     /**
      * Checks of the mouse is in the Y range of the rectangle,
      * but not in any of its inner rectangle
-     * 
      * @param {Number} mouseY
      * @param {boolean} useFinalPosition unused
      * @returns {boolean}
@@ -207,10 +203,18 @@ class RectangleElement extends Chart.Element {
         return true;
     }
 
+    /**
+     * Range of the element along the axis
+     * @param {string} axis name of the axis (x or y)
+     * @returns {number}
+     */
     getRange(axis) {
         return axis === 'x' ? this.width / 2 : this.height / 2;
     }
 
+    /**
+     * Specifies that this rectangle contains other rectangles in it
+     */
     setChild() {
         this.hasChild = true;
     }

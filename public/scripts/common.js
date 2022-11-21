@@ -13,10 +13,9 @@ class XHRSender {
 
     /**
      * Add a new field to request as a key-value pair
-     * 
      * @param {string} fieldName
      * @param {*} value
-     * @return {void}
+     * @returns {void}
      */
     addField(fieldName, value) {
         this.fields[fieldName] = value;
@@ -25,10 +24,9 @@ class XHRSender {
     /**
      * Send the request.
      * Callback function is called when response OK is received.
-     * 
      * @param {string} url URL to send the request
      * @param {function} callback
-     * @return {void}
+     * @returns {void}
      */
     send(url, callback) {
         let encoded = Object.keys(this.fields).map((index) => {
@@ -59,12 +57,11 @@ class PopupMessage {
 
     /**
      * Show a success, error, or confirm message.
-     * 
      * @param {string} msg
      * @param {boolean} [success]
      * @param {boolean} [confirm]
      * @param {function} [onclosed]
-     * @return {void}
+     * @returns {void}
      */
     static _display(msg, success = false, confirm = false, onclosed = () => { }) {
         Loader.hide();
@@ -117,11 +114,10 @@ class PopupMessage {
 
     /**
      * Show a success or error message.
-     * 
      * @param {string} msg
      * @param {boolean} [success]
      * @param {function} [onclosed]
-     * @return {void}
+     * @returns {void}
      */
     static _showMsg(msg, success = false, onclosed = () => { }) {
         PopupMessage._display(msg, success, false, onclosed)
@@ -129,10 +125,9 @@ class PopupMessage {
 
     /**
      * Show a success message.
-     * 
      * @param {string} msg
      * @param {function} [onclosed]
-     * @return {void}
+     * @returns {void}
      */
     static showSuccess(msg, onclosed = () => { }) {
         PopupMessage._showMsg(msg, true, onclosed);
@@ -140,10 +135,9 @@ class PopupMessage {
 
     /**
      * Show an error message.
-     * 
      * @param {string} msg
      * @param {function} [onclosed]
-     * @return {void}
+     * @returns {void}
      */
     static showFailure(msg, onclosed = () => { }) {
         PopupMessage._showMsg(msg, false, onclosed);
@@ -151,10 +145,9 @@ class PopupMessage {
 
     /**
      * Show a confirm message.
-     * 
      * @param {string} msg
      * @param {function} [onconfirm]
-     * @return {void}
+     * @returns {void}
      */
     static promptConfirmation(msg, onconfirm = () => { }, onclosed = () => { }) {
         PopupMessage._display(msg, true, true, onclosed);
@@ -169,10 +162,9 @@ class PopupMessage {
 class StorageUtils {
     /**
      * Set a cookie with given name and value.
-     * 
      * @param {*} name name of the cookie
      * @param {*} value value of the cookie
-     * @return {void}
+     * @returns {void}
      */
     static _setCookie(name, value) {
         const date = new Date();
@@ -183,9 +175,8 @@ class StorageUtils {
 
     /**
      * Get the cookie with given name.
-     * 
      * @param {*} name name of the cookie
-     * @return {string|null} value of the cookie if exists, otherwise null
+     * @returns {string|null} value of the cookie if exists, otherwise null
      */
     static _getCookie(name) {
         name = name + "=";
@@ -209,10 +200,9 @@ class StorageUtils {
     /**
      * Store a value with name in localStorage.
      * If localStorage is not available, save in cookies.
-     * 
      * @param {*} name name as the key
      * @param {*} value value to be stored
-     * @return {void}
+     * @returns {void}
      */
     static store(name, value) {
         if (typeof (Storage) !== "undefined") {
@@ -225,9 +215,8 @@ class StorageUtils {
     /**
      * Retrieve the value with given name from localStorage.
      * If localStorage is not available, search in cookies.
-     * 
      * @param {*} name name as the key
-     * @return {string|null} retrieved value from storage if exists, otherwise null
+     * @returns {string|null} retrieved value from storage if exists, otherwise null
      */
     static retrieve(name) {
         if (typeof (Storage) !== "undefined") {
@@ -254,9 +243,8 @@ class Theme {
     /**
      * Set the theme to light or dark.
      * Triggers Theme.onchange()
-     * 
      * @param {boolean} is_dark
-     * @return {void}
+     * @returns {void}
      */
     static switchTheme(theme) {
         if (theme == Theme.DARK) {
@@ -302,8 +290,7 @@ class Theme {
     /**
      * Check the saved theme and set it.
      * Use the apporpriate brand image for the theme.
-     * 
-     * @return {void}
+     * @returns {void}
      */
     static checkTheme() {
         let savedTheme = StorageUtils.retrieve('theme');
@@ -338,7 +325,6 @@ class Loader {
 
     /**
      * Show or hide the loader
-     * 
      * @param {string} type 'block' or 'none'
      */
     static _setLoaderDisplay(type) {
@@ -388,13 +374,12 @@ class FormUtils {
      * it sets the keyboard focus to next form input field if the current field is valid.
      * If the field is the last input field of the form, triggers the onclick
      * of the submit button.
-     * 
      * @param {KeyboardEvent} e the keypress event
      * @param {RegExp} pattern pattern to check the input
      * @param {HTMLElement} nextElem next element to set focus
      * @param {string} [errorMsg] error message to show on error
      * @param {HTMLElement} [btn] button to press on success
-     * @return {void}
+     * @returns {void}
      */
     static keyPressFn(e, pattern, nextElem, errorMsg = null, btn = null) {
         if (e.key === 'Enter') {
@@ -418,8 +403,7 @@ class FormUtils {
 
     /**
      * Check if a string is empty
-     * 
-     * @return {boolean} true if string is empty, and false otherwise.
+     * @returns {boolean} true if string is empty, and false otherwise.
      */
     static isEmpty(str) {
         return (!str || str.length === 0);
@@ -427,10 +411,9 @@ class FormUtils {
 
     /**
      * Set error message for a input field
-     * 
      * @param {HTMLElement} input Input field
      * @param {string} message Error message
-     * @return {void}
+     * @returns {void}
      */
     static setErrorFor(input, message) {
         const formControl = input.parentElement;
@@ -443,9 +426,8 @@ class FormUtils {
 
     /**
      * Clear the error message for a input field
-     * 
      * @param {HTMLElement} input Input field
-     * @return {void}
+     * @returns {void}
      */
     static setClear(input) {
         const formControl = input.parentElement;
@@ -458,8 +440,7 @@ class FormUtils {
  * Show or hide navbar buttons depending on logged status.
  * If the user must be logged in to stay on this page, and if the user has logged out,
  * then reload the page
- * 
- * @return {void}
+ * @returns {void}
  */
 class AuthUtils {
     static _mustLogin = false;

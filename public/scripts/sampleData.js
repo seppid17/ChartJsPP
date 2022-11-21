@@ -57,7 +57,7 @@ radarChartSectionBtn.onclick = e => {
 }
 
 function download(name) {
-    var element = document.createElement('a');
+    let element = document.createElement('a');
     element.setAttribute('href', `/data/${name}.csv`);
     element.setAttribute('download', `${name}.csv`);
     element.click()

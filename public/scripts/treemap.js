@@ -1,9 +1,25 @@
+/**
+ * Chart controller for treemap chart
+ */
 class TreemapController extends HierarchicalController {
-    _drawRect(ctx, x0, y0, width, height, backgroundColor = 'black', text = null) {
-        var textOptions = this.textOptions;
-        var rect = new RectangleElement({
-            x: x0,
-            y: y0,
+
+    /**
+     * Draw a rectangle of the chart.
+     * This draws a rectangle element.
+     * @param {CanvasRenderingContext2D} ctx canvas context
+     * @param {number} startX starting X coordinate
+     * @param {number} startY starting Y coordinate
+     * @param {number} width width of rectangle
+     * @param {number} height height of rectangle
+     * @param {string|undefined} backgroundColor color of rectangle
+     * @param {string|null|undefined} text label of rectangle
+     * @returns 
+     */
+    _drawRect(ctx, startX, startY, width, height, backgroundColor = 'black', text = null) {
+        let textOptions = this.textOptions;
+        let rect = new RectangleElement({
+            x: startX,
+            y: startY,
             width: width,
             height: height,
             text: text,
@@ -27,25 +43,34 @@ class TreemapController extends HierarchicalController {
         return rect;
     }
 
-    _recurseTree(ctx, data, startX, startY, endX, endY) {
-        var width = endX - startX;
-        var height = endY - startY;
-        var bgcols = this.chart.$context.chart.data.datasets[0].backgroundColor;
-        var labels = this.chart.$context.chart.data.labels;
-        var chartData = this.getMeta()._parsed;
+    /**
+     * Recursively traverse through data and draw rectangles.
+     * @param {CanvasRenderingContext2D} ctx canvas context
+     * @param {Array} dataArray chart data
+     * @param {number} startX starting X coordinate
+     * @param {number} startY starting Y coordinate
+     * @param {number} endX ending X coordinate
+     * @param {number} endY ending Y coordinate
+     */
+    _recurseTree(ctx, dataArray, startX, startY, endX, endY) {
+        let width = endX - startX;
+        let height = endY - startY;
+        let bgcols = this.chart.$context.chart.data.datasets[0].backgroundColor;
+        let labels = this.chart.$context.chart.data.labels;
+        let chartData = this.getMeta()._parsed;
         if (width > height) {
-            var x0 = startX;
-            data.forEach(item => {
+            let x0 = startX;
+            dataArray.forEach(item => {
                 let n = this._drawIndex;
-                var myWidth = width * item.w;
+                let myWidth = width * item.w;
                 chartData[n] = item.v;
                 labels[n] = item.n;
                 this.pointers[n] = item;
                 if (item.clr == undefined) item.clr = genColor(n);
                 let color = item.clr;
                 bgcols[n] = color;
-                var rect = this._drawRect(ctx, x0, startY, myWidth, height, color, labels[n]);
-                var childStartX, childStartY, childEndX, childEndY;
+                let rect = this._drawRect(ctx, x0, startY, myWidth, height, color, labels[n]);
+                let childStartX, childStartY, childEndX, childEndY;
                 if (myWidth > height) {
                     childStartX = x0 + this.textOptions.font.size * 0.8 + rect.options.padding * 2;
                     childStartY = startY + rect.options.padding;
@@ -62,18 +87,18 @@ class TreemapController extends HierarchicalController {
                 x0 += myWidth;
             });
         } else {
-            var y0 = startY;
-            data.forEach(item => {
+            let y0 = startY;
+            dataArray.forEach(item => {
                 let n = this._drawIndex;
-                var myHeight = height * item.w;
+                let myHeight = height * item.w;
                 chartData[n] = item.v;
                 labels[n] = item.n;
                 this.pointers[n] = item;
                 if (item.clr == undefined) item.clr = genColor(n);
                 let color = item.clr;
                 bgcols[n] = color;
-                var rect = this._drawRect(ctx, startX, y0, width, myHeight, color, labels[n]);
-                var childStartX, childStartY, childEndX, childEndY;
+                let rect = this._drawRect(ctx, startX, y0, width, myHeight, color, labels[n]);
+                let childStartX, childStartY, childEndX, childEndY;
                 if (myHeight < width) {
                     childStartX = startX + this.textOptions.font.size + rect.options.padding * 2;
                     childStartY = y0 + rect.options.padding;
@@ -92,10 +117,16 @@ class TreemapController extends HierarchicalController {
         }
     }
 
+    /**
+     * Draw the chart.
+     * If an index is specified, it starts drawing the subtree rooted at the index
+     * @param {number|undefined} index index of the root of the subtree
+     * @returns {void}
+     */
     draw(index = -1) {
         super.draw(index);
-        var data = this.tree;
-        var ctx = this.chart.ctx;
+        let data = this.tree;
+        let ctx = this.chart.ctx;
         this.textOptions = this.chart.$context.chart.config._config.options.text;
         if (typeof this.textOptions.font == 'undefined') this.textOptions.font = {};
         this.textOptions.font.size = Chart.defaults.font.size;
@@ -104,6 +135,7 @@ class TreemapController extends HierarchicalController {
     }
 }
 
+// register the new chart type
 TreemapController.id = 'treemap';
 TreemapController.defaults = Chart.PieController.defaults;
 Chart.register(TreemapController, RectangleElement);

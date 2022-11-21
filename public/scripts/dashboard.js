@@ -12,7 +12,7 @@ function showNoCharts() {
 }
 function setCards(showLoader = true) {
     if (showLoader) Loader.show();
-    var xhrSender = new XHRSender();
+    let xhrSender = new XHRSender();
     xhrSender.send('/chart/list', xhr => {
         try {
             let resp = JSON.parse(xhr.responseText);

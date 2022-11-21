@@ -129,8 +129,8 @@ if (Chart.defaults.font.weight == 'bold') {
 Chart.register({
     id: 'legendColorUpdate',
     afterRender: function (c) {
-        var legends = c.legend.legendItems;
-        var colors = c.data.datasets[0].backgroundColor;
+        let legends = c.legend.legendItems;
+        let colors = c.data.datasets[0].backgroundColor;
         legends.forEach((e, i) => {
             e.fillStyle = colors[i % colors.length];
         });
@@ -194,7 +194,7 @@ const drawChart = (json) => {
     switch (type) {
         case 'bar': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 1) {
                     return;
                 }
@@ -205,7 +205,7 @@ const drawChart = (json) => {
         }
         case 'pie': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 1) {
                     return;
                 }
@@ -216,7 +216,7 @@ const drawChart = (json) => {
         }
         case 'line': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 1) {
                     return;
                 }
@@ -227,7 +227,7 @@ const drawChart = (json) => {
         }
         case 'doughnut': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 1) {
                     return;
                 }
@@ -238,7 +238,7 @@ const drawChart = (json) => {
         }
         case 'polarArea': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 1) {
                     return;
                 }
@@ -249,7 +249,7 @@ const drawChart = (json) => {
         }
         case 'scatter': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 2) {
                     return;
                 }
@@ -260,7 +260,7 @@ const drawChart = (json) => {
         }
         case 'bubble': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 3) {
                     return;
                 }
@@ -271,7 +271,7 @@ const drawChart = (json) => {
         }
         case 'radar': {
             data.forEach(item => {
-                var val = item.v;
+                let val = item.v;
                 if (val.length !== 1) {
                     return;
                 }
@@ -313,17 +313,17 @@ const drawChart = (json) => {
 };
 
 function getCroppedCanvas(canvas) {
-    var width_source = canvas.width;
-    var height_source = canvas.height;
+    let width_source = canvas.width;
+    let height_source = canvas.height;
 
-    var ctx = canvas.getContext('2d');
-    var img = ctx.getImageData(0, 0, width_source, height_source);
-    var data = img.data;
+    let ctx = canvas.getContext('2d');
+    let img = ctx.getImageData(0, 0, width_source, height_source);
+    let data = img.data;
 
-    var left = width_source;
-    var top = height_source;
-    var right = 0;
-    var bottom = 0;
+    let left = width_source;
+    let top = height_source;
+    let right = 0;
+    let bottom = 0;
 
     for (let i = 0; i < height_source; i++) {
         for (let j = 0; j < width_source; j++) {
@@ -343,8 +343,8 @@ function getCroppedCanvas(canvas) {
             }
         }
     }
-    var width = right - left + 1;
-    var height = bottom - top + 1;
+    let width = right - left + 1;
+    let height = bottom - top + 1;
     if (width < 0) {
         width = 0;
         right = left - 1;
@@ -354,8 +354,8 @@ function getCroppedCanvas(canvas) {
         bottom = top - 1;
     }
 
-    var img2 = ctx.createImageData(width, height);
-    var data2 = img2.data;
+    let img2 = ctx.createImageData(width, height);
+    let data2 = img2.data;
     for (let i = 0; i < height; i++) {
         for (let j = 0; j < width; j++) {
             let x = left + j;
@@ -378,56 +378,56 @@ function getCroppedCanvas(canvas) {
 
 function make_thumb(canvas, width, height) {
     canvas = getCroppedCanvas(canvas);
-    var width_source = canvas.width;
-    var height_source = canvas.height;
+    let width_source = canvas.width;
+    let height_source = canvas.height;
     width = Math.round(width);
     height = Math.round(height);
 
-    var ratio_w = width_source / width;
-    var ratio_h = height_source / height;
-    var ratio_max = Math.max(ratio_h, ratio_w);
-    var ratio_w_half = Math.ceil(ratio_max / 2);
-    var ratio_h_half = Math.ceil(ratio_max / 2);
-    var x_off = (width_source - width * ratio_max) / 2;
-    var y_off = (height_source - height * ratio_max) / 2;
+    let ratio_w = width_source / width;
+    let ratio_h = height_source / height;
+    let ratio_max = Math.max(ratio_h, ratio_w);
+    let ratio_w_half = Math.ceil(ratio_max / 2);
+    let ratio_h_half = Math.ceil(ratio_max / 2);
+    let x_off = (width_source - width * ratio_max) / 2;
+    let y_off = (height_source - height * ratio_max) / 2;
 
-    var ctx = canvas.getContext('2d');
-    var img = ctx.getImageData(0, 0, width_source, height_source);
-    var img2 = ctx.createImageData(width, height);
-    var data = img.data;
-    var data2 = img2.data;
+    let ctx = canvas.getContext('2d');
+    let img = ctx.getImageData(0, 0, width_source, height_source);
+    let img2 = ctx.createImageData(width, height);
+    let data = img.data;
+    let data2 = img2.data;
 
-    for (var j = 0; j < height; j++) {
-        for (var i = 0; i < width; i++) {
-            var x2 = (i + j * width) * 4;
-            var weight = 0;
-            var weights = 0;
-            var weights_alpha = 0;
-            var gx_r = 0;
-            var gx_g = 0;
-            var gx_b = 0;
-            var gx_a = 0;
-            var center_y = y_off + (j + 0.5) * ratio_max;
-            var yy_start = Math.floor(y_off + j * ratio_max);
-            var yy_stop = Math.ceil(y_off + (j + 1) * ratio_max);
-            for (var yy = yy_start; yy < yy_stop; yy++) {
+    for (let j = 0; j < height; j++) {
+        for (let i = 0; i < width; i++) {
+            let x2 = (i + j * width) * 4;
+            let weight = 0;
+            let weights = 0;
+            let weights_alpha = 0;
+            let gx_r = 0;
+            let gx_g = 0;
+            let gx_b = 0;
+            let gx_a = 0;
+            let center_y = y_off + (j + 0.5) * ratio_max;
+            let yy_start = Math.floor(y_off + j * ratio_max);
+            let yy_stop = Math.ceil(y_off + (j + 1) * ratio_max);
+            for (let yy = yy_start; yy < yy_stop; yy++) {
                 let inRange = (0 <= yy && yy <= height_source);
-                var dy = Math.abs(center_y - (yy + 0.5)) / ratio_h_half;
-                var center_x = x_off + (i + 0.5) * ratio_max;
-                var w0 = dy * dy; //pre-calc part of w
-                var xx_start = Math.floor(x_off + i * ratio_max);
-                var xx_stop = Math.ceil(x_off + (i + 1) * ratio_max);
-                for (var xx = xx_start; xx < xx_stop; xx++) {
+                let dy = Math.abs(center_y - (yy + 0.5)) / ratio_h_half;
+                let center_x = x_off + (i + 0.5) * ratio_max;
+                let w0 = dy * dy; //pre-calc part of w
+                let xx_start = Math.floor(x_off + i * ratio_max);
+                let xx_stop = Math.ceil(x_off + (i + 1) * ratio_max);
+                for (let xx = xx_start; xx < xx_stop; xx++) {
                     if (inRange) inRange = (0 <= xx && xx <= width_source)
-                    var dx = Math.abs(center_x - (xx + 0.5)) / ratio_w_half;
-                    var w = Math.sqrt(w0 + dx * dx);
+                    let dx = Math.abs(center_x - (xx + 0.5)) / ratio_w_half;
+                    let w = Math.sqrt(w0 + dx * dx);
                     if (w >= 1) {
                         //pixel too far
                         continue;
                     }
                     //hermite filter
                     weight = 2 * w * w * w - 3 * w * w + 1;
-                    var pos_x = 4 * (xx + yy * width_source);
+                    let pos_x = 4 * (xx + yy * width_source);
                     //alpha
                     let alpSrc = inRange ? data[pos_x + 3] : 0;
                     gx_a += weight * alpSrc;
@@ -531,9 +531,9 @@ saveBtn.onclick = e => {
             properties.legendVisible = chartConfig.getLegendVisibility();
         }
 
-        var thumb = make_thumb(ChartConfig.canvas, 400, 300);
+        let thumb = make_thumb(ChartConfig.canvas, 400, 300);
 
-        var xhrSender = new XHRSender();
+        let xhrSender = new XHRSender();
         if (chartID.length > 0) xhrSender.addField('id', chartID);
         xhrSender.addField('name', chartName);
         xhrSender.addField('type', type);
@@ -777,7 +777,7 @@ function setFontSize(size) {
 }
 
 fontSizeSelect.onchange = e => {
-    var size = fontSizeSelect.value;
+    let size = fontSizeSelect.value;
     setFontSize(size);
 };
 
@@ -794,7 +794,7 @@ function setFontStyle(style) {
 }
 
 fontStyleBtn.onclick = e => {
-    var style = Chart.defaults.font.style;
+    let style = Chart.defaults.font.style;
     if (style == 'normal') {
         setFontStyle('italic');
     } else {
@@ -815,7 +815,7 @@ function setFontWeight(weight) {
 }
 
 fontWeightBtn.onclick = e => {
-    var weight = Chart.defaults.font.weight;
+    let weight = Chart.defaults.font.weight;
     if (weight == 'normal') {
         setFontWeight('bold')
     } else {
@@ -842,9 +842,9 @@ function clearBreadcrumb() {
 document.getElementById('backBtn').onclick = e => {
     ChartConfig.update('parent');
     ChartConfig.setDirty();
-    var first = ChartConfig.chart._metasets[0].controller.pointers[0];
+    let first = ChartConfig.chart._metasets[0].controller.pointers[0];
     if (first == undefined || first.p == undefined || first.p == null) return;
-    var parent = first.p;
+    let parent = first.p;
     if (parent.p == undefined || parent.p == null) {
         backDiv.style.display = 'none';
     } else {
@@ -1015,7 +1015,7 @@ function drawSavedChart(info, type, data, properties) {
 if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
     chartID = document.location.pathname.split('/')[2];
     Loader.show();
-    var xhrSender = new XHRSender();
+    let xhrSender = new XHRSender();
     xhrSender.addField('id', chartID);
     let cb = xhr => {
         try {
@@ -1086,7 +1086,7 @@ document.onclick = e => {
 markerSizeSelect.onchange = e => {
     let chart = ChartConfig.instance;
     if (!chart.hasMarkerSize) return;
-    var radius = markerSizeSelect.value;
+    let radius = markerSizeSelect.value;
     if (/^\d{1,2}$/.test(radius)) {
         radius = parseInt(radius);
         if (radius < 1) {
@@ -1105,7 +1105,7 @@ markerSizeSelect.onchange = e => {
 markerStyleSelect.onchange = e => {
     let chart = ChartConfig.instance;
     if (!chart.hasMarker) return;
-    var style = markerStyleSelect.value;
+    let style = markerStyleSelect.value;
     if (!['circle', 'cross', 'crossRot', 'dash', 'line', 'rect', 'rectRounded', 'rectRot', 'star', 'triangle'].includes(style)) {
         markerStyleSelect.value = 'circle';
         style = markerStyleSelect.value;
@@ -1180,7 +1180,6 @@ legendVisible.onclick = e => {
 
 /**
  * Update settings view according to current chart settings
- * 
  * @returns {void}
  */
 function updateSettings() {
