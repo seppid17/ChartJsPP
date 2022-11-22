@@ -23,7 +23,11 @@ class Validator {
     // valid chart types
     static _chartTypes = ['bar', 'pie', 'line', 'doughnut', 'polarArea', 'radar', 'scatter', 'bubble', 'sunburst', 'treemap', 'icicle'];
 
-    // checks if a string is a valid json encoded object
+    /**
+     * Check if a string is a valid json encoded object.
+     * @param {string} jsonstr string to be checked
+     * @returns {boolean}
+     */
     static _isJson(jsonstr) {
         try {
             if (!jsonstr) return false;
@@ -34,7 +38,12 @@ class Validator {
         }
     }
 
-    // validates the value according to the type
+    /**
+     * Validates the value according to the type.
+     * @param {string} type type of the string
+     * @param {string} value value to be checked
+     * @returns {boolean}
+     */
     static validate(type, value) {
         try {
             if (typeof value !== 'string') return false;

@@ -147,6 +147,17 @@ function showChartView() {
 }
 
 /**
+ * Show an error message about chart type
+ * @param {string} message error message
+ */
+function showChartError(message) {
+    selectChartType.classList.add('error');
+    alertDiv.style.display = 'block';
+    selectChartType.querySelector('small').innerText = message;
+    uploadViewDiv.scrollIntoView();
+}
+
+/**
  * Draw the chart with given data and selected chart type.
  * @param {object} json chart data, titles, and properties
  * @returns {void}
@@ -160,10 +171,7 @@ function drawChart(json) {
     }
     let type = getSelectedChartType();
     if (type == null) {
-        selectChartType.className = 'chart-type error';
-        alertDiv.style.display = 'block';
-        selectChartType.querySelector('small').innerText = "You have not selected a chart type";
-        document.getElementById('uploadViewDiv').scrollIntoView();
+        showChartError("You have not selected a chart type");
         return;
     }
     let myChart;
