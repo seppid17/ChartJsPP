@@ -95,11 +95,8 @@ class ChartConfig {
                     let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
                     if (clicked.c.length == 0) expandBtnDiv.style.display = 'none'; // hide expand button if the selected element dosent have child
                     document.getElementById('expandBtn').onclick = e => {
-                        path = getPath(clicked);
-                        clearBreadcrumb();
-                        path.forEach(createBreadcrumb);
+                        updateBreadcrumb(clicked);
                         popup.classList.remove('show');
-                        backDiv.style.display = 'block';
                         ChartConfig.update('expand ' + point.index);
                     }
                 }

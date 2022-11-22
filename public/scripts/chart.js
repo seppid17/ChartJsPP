@@ -39,8 +39,6 @@ const yTicksVisible = document.getElementById('yTicksVisible');
 const yTitleVisible = document.getElementById('yTitleVisible');
 const legendVisible = document.getElementById('legendVisible');
 
-let path = [];
-
 /**
  * Resize chart div on page resize and load
  */
@@ -551,24 +549,24 @@ function createBreadcrumb(child) {
 }
 
 /**
- * Get the path of nodes from a given first node to the root
- * @param {object} first first node where path should be created
- * @returns {Array}
+ * Update the bradcrumbs with new root of the subtree.
+ * @param {object} start root node of the subtree
+ * @returns {void}
  */
-function getPath(first) {
-    let path = [];
-    if (first == undefined || first.p == undefined || first.p == null) return null;
-    let parent = first;
-    let hasParent = true;
-    while (hasParent) {
-        path.push(parent.n);
-        parent = parent.p;
-        if (parent.p == undefined || parent.p == null) {
-            hasParent = false;
-        }
+function updateBreadcrumb(start) {
+    clearBreadcrumb();
+    // check if the start is the root
+    if (start == undefined || start.p == undefined || start.p == null) {
+        backDiv.style.display = 'none';
+        return;
     }
-    path.push('/')
-    return path;
+    let parent = start;
+    while (typeof parent.p != 'undefined' && parent.p != null) {
+        createBreadcrumb(parent.n);
+        parent = parent.p;
+    }
+    createBreadcrumb('/');
+    backDiv.style.display = 'block';
 }
 
 /**
@@ -808,6 +806,10 @@ async function copyLinkToClipboard(retry = true) {
 /**
  * Set event listeners for elements
  */
+
+/**
+ * Download chart as a png image
+ */
 document.getElementById('downloadImg').onclick = function () {
     let croppedCanvas = getCroppedCanvas(canvas);
     let canvasUrl = croppedCanvas.toDataURL();
@@ -821,6 +823,9 @@ document.getElementById('downloadImg').onclick = function () {
     downloadPopup.classList.remove('show');
 };
 
+/**
+ * Download chart as a PDF
+ */
 document.getElementById('downloadPdf').onclick = function () {
     loadScript();
     // create image
@@ -1134,13 +1139,7 @@ document.getElementById('backBtn').onclick = function () {
     let first = ChartConfig.chart._metasets[0].controller.pointers[0];
     if (first == undefined || first.p == undefined || first.p == null) return;
     let parent = first.p;
-    if (parent.p == undefined || parent.p == null) {
-        backDiv.style.display = 'none';
-    } else {
-        path.shift();
-        clearBreadcrumb();
-        path.forEach(createBreadcrumb);
-    }
+    updateBreadcrumb(parent);
 }
 
 document.getElementById('downloadBtn').onclick = function (e) {
