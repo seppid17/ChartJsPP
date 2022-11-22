@@ -32,10 +32,6 @@ document.getElementById('selectFileBtn').onclick = e => {
     input.click();
 }
 
-document.getElementById("closeAlert").onclick = e => {
-    alertDiv.style.display = 'none';
-}
-
 class FileInputManager {
 
     static extractedData = null;

@@ -178,72 +178,113 @@ function drawChart(json) {
     let values = [];
     switch (type) {
         case 'bar': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 1) {
-                    return;
+                if (val.length !== 1 || item.c && item.c.length > 0) {
+                    return false;
                 }
                 values.push(val[0]);
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new BarChartConfig();
             break;
         }
+
         case 'pie': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 1) {
-                    return;
+                if (val.length !== 1 || item.c && item.c.length > 0) {
+                    return false;
                 }
                 values.push(val[0]);
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new PieChartConfig();
             break;
         }
+
         case 'line': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 1) {
-                    return;
+                if (val.length !== 1 || item.c && item.c.length > 0) {
+                    return false;
                 }
                 values.push(val[0]);
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new LineChartConfig();
             break;
         }
+
         case 'doughnut': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 1) {
-                    return;
+                if (val.length !== 1 || item.c && item.c.length > 0) {
+                    return false;
                 }
                 values.push(val[0]);
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new DoughnutChartConfig();
             break;
         }
+
         case 'polarArea': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 1) {
-                    return;
+                if (val.length !== 1 || item.c && item.c.length > 0) {
+                    return false;
                 }
                 values.push(val[0]);
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new PolarAreaChartConfig();
             break;
         }
+
         case 'scatter': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 2) {
+                if (val.length !== 2 || item.c && item.c.length > 0) {
                     return;
                 }
                 values.push({ x: val[0], y: val[1] });
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new ScatterChartConfig();
             break;
         }
+
         case 'bubble': {
+            if (!data.every(item => {
+                let val = item.v;
+                if (val.length !== 3 || item.c && item.c.length > 0) {
+                    return;
+                }
+                values.push({ x: val[0], y: val[1], r: val[2] });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             data.forEach(item => {
                 let val = item.v;
                 if (val.length !== 3) {
@@ -254,34 +295,53 @@ function drawChart(json) {
             myChart = new BubbleChartConfig();
             break;
         }
+
         case 'radar': {
-            data.forEach(item => {
+            if (!data.every(item => {
                 let val = item.v;
-                if (val.length !== 1) {
-                    return;
+                if (val.length !== 1 || item.c && item.c.length > 0) {
+                    return false;
                 }
                 values.push(val[0]);
-            });
+                return true;
+            })) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             myChart = new RadarChartConfig();
             break;
         }
+
         case 'sunburst': {
+            if (data.length <= 0 || data[0].v.length !== 1) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             values = DataFormatHelper.unlist(data);
             myChart = new SunburstChartConfig();
             break;
         }
 
         case 'treemap': {
+            if (data.length <= 0 || data[0].v.length !== 1) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             values = DataFormatHelper.unlist(data);
             myChart = new TreemapChartConfig();
             break;
         }
 
         case 'icicle': {
+            if (data.length <= 0 || data[0].v.length !== 1) {
+                showChartError('This chart type is not compatible with this dataset');
+                return;
+            }
             values = DataFormatHelper.unlist(data);
             myChart = new IcicleChartConfig();
             break;
         }
+
         default:
             return;
     }
@@ -1113,6 +1173,10 @@ document.getElementById('editName').onclick = function () {
         nameEdit.style.display = 'none';
     };
 };
+
+document.getElementById("closeAlert").onclick = function () {
+    alertDiv.style.display = 'none';
+}
 
 fontSizeSelect.onkeydown = function (e) {
     e.stopImmediatePropagation();
