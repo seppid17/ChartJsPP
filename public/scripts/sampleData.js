@@ -26,7 +26,6 @@ const treemapDownloadBtn = document.getElementById('treemapDownload');
 const radarDownloadBtn = document.getElementById('radarDownload');
 
 /**
- * 
  * when clicking chart name button,the relevent chart description is scrolled up.
  */
 barChartSectionBtn.onclick = e => {
@@ -64,10 +63,9 @@ radarChartSectionBtn.onclick = e => {
 }
 
 /**
- * @param {*string} name
- * Download the  relevent chart data CSV file.
+ * Download the relevent chart data CSV file.
+ * @param {string} name
  */
-
 function download(name) {
     let element = document.createElement('a');
     element.setAttribute('href', `/data/${name}.csv`);
@@ -76,10 +74,9 @@ function download(name) {
 }
 
 /**
- * 
- * @param {*} e 
- * @param {*string} name 
  * calling the download function after button onlick event
+ * @param {Event} e 
+ * @param {string} name 
  */
 
 function handleClick(e, name) {
@@ -89,7 +86,6 @@ function handleClick(e, name) {
 }
 
 /**
- * 
  * According to the chart name and button onclick, calling the handleClick function
  */
 barDownloadBtn.onclick = e => {
@@ -122,7 +118,6 @@ icicleDownloadBtn.onclick = e => {
 treemapDownloadBtn.onclick = e => {
     handleClick(e, 'treemap');
 }
-
 radarDownloadBtn.onclick = e => {
     handleClick(e, 'radar');
 }

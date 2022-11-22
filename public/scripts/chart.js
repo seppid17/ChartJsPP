@@ -39,7 +39,12 @@ const yTicksVisible = document.getElementById('yTicksVisible');
 const yTitleVisible = document.getElementById('yTitleVisible');
 const legendVisible = document.getElementById('legendVisible');
 
-resizeFn = () => {
+let path = [];
+
+/**
+ * Resize chart div on page resize and load
+ */
+function resizeFn() {
     let height = window.innerHeight;
     let width = window.innerWidth;
     chartDiv.style.width = width + 'px';
@@ -64,7 +69,12 @@ window.onbeforeunload = function () {
     }
 };
 
-const chartKeyListener = e => {
+/**
+ * Set keyboard shortcuts for chart page
+ * @param {KeyboardEvent} e event
+ * @returns {void}
+ */
+function chartKeyListener(e) {
     if (e.key.toLowerCase() == 's' && !e.shiftKey && !e.altKey && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         saveBtn.click();
@@ -97,54 +107,10 @@ const chartKeyListener = e => {
 
 document.addEventListener('keydown', chartKeyListener);
 
-ChartConfig.canvas = canvas;
-Chart.defaults.font.size = 14;
-Chart.defaults.font.style = 'normal';
-Chart.defaults.font.weight = 'normal';
-Chart.defaults.borderColor = '#8e909280';
-Chart.defaults.plugins.legend.position = 'bottom';
-
-if (Theme.theme == Theme.DARK) Chart.defaults.color = '#eee';
-else Chart.defaults.color = '#333';
-
-Theme.addOnchangeTrigger(theme => {
-    if (theme == Theme.DARK) Chart.defaults.color = '#eee';
-    else Chart.defaults.color = '#333';
-    ChartConfig.update('none');
-});
-
-let chartID = '';
-let chartName = 'Untitled';
-fontSizeSelect.value = Chart.defaults.font.size;
-markerSizeSelect.value = Chart.defaults.elements.point.radius;
-markerStyleSelect.value = Chart.defaults.elements.point.pointStyle;
-
-if (Chart.defaults.font.style == 'italic') {
-    fontStyleBtn.classList.add('btn-icon-selected');
-}
-if (Chart.defaults.font.weight == 'bold') {
-    fontWeightBtn.classList.add('btn-icon-selected');
-}
-
-Chart.register({
-    id: 'legendColorUpdate',
-    afterRender: function (c) {
-        let legends = c.legend.legendItems;
-        let colors = c.data.datasets[0].backgroundColor;
-        legends.forEach((e, i) => {
-            e.fillStyle = colors[i % colors.length];
-        });
-    }
-});
-
-for (i = 0; i < chartTypes.length; i++) {
-    chartTypes[i].onclick = e => {
-        if (FileInputManager.extractedData != null) {
-            drawBtnDiv.hidden = false;
-        }
-    }
-}
-
+/**
+ * Get the selected chart type
+ * @returns {string|null}
+ */
 function getSelectedChartType() {
     let type = null;
     for (i = 0; i < chartTypes.length; i++) {
@@ -155,6 +121,10 @@ function getSelectedChartType() {
     return type;
 }
 
+/**
+ * Set the selected chart type
+ * @param {string} type chart type
+ */
 function setSelectedChartType(type) {
     if (FileInputManager.extractedData != null) {
         drawBtnDiv.hidden = false;
@@ -168,13 +138,22 @@ function setSelectedChartType(type) {
     }
 }
 
+/**
+ * Show chart canvas and hide alert message.
+ * Scroll the view into chart.
+ */
 function showChartView() {
     chartViewDiv.style.display = 'block';
     alertDiv.style.display = 'none';
     chartViewDiv.scrollIntoView();
 }
 
-const drawChart = (json) => {
+/**
+ * Draw the chart with given data and selected chart type.
+ * @param {object} json chart data, titles, and properties
+ * @returns {void}
+ */
+function drawChart(json) {
     chartViewDiv.style.display = 'none';
     selectChartType.className = 'chart-type';
     let { title, data, properties } = json;
@@ -312,12 +291,30 @@ const drawChart = (json) => {
     if (properties.hasOwnProperty('fontWeight')) setFontWeight(properties.fontWeight);
 };
 
-function getCroppedCanvas(canvas) {
+/**
+ * Get a new canvas element having the same content as the input canvas but the
+ * unfilled borders are cropped out.
+ * @param {HTMLCanvasElement} canvas the canvas having the chart
+ * @returns {HTMLCanvasElement}
+ */
+function getCroppedCanvas(canvas, setLightTheme = true) {
+    let savedColor = Chart.defaults.color;
+    if (setLightTheme) {
+        Chart.defaults.color = '#333';
+        ChartConfig.update('none');
+    }
+
     let width_source = canvas.width;
     let height_source = canvas.height;
 
     let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, width_source, height_source);
+
+    if (setLightTheme) {
+        Chart.defaults.color = savedColor;
+        ChartConfig.update('none');
+    }
+
     let data = img.data;
 
     let left = width_source;
@@ -376,8 +373,15 @@ function getCroppedCanvas(canvas) {
     return canvas2;
 }
 
+/**
+ * Get a thumbnail of a given canvas in given resolution as a png image data URL.
+ * @param {HTMLCanvasElement} canvas the canvas containing the chart
+ * @param {number} width width of thumbnail
+ * @param {number} height height of thumbnail
+ * @returns {string}
+ */
 function make_thumb(canvas, width, height) {
-    canvas = getCroppedCanvas(canvas);
+    canvas = getCroppedCanvas(canvas, false);
     let width_source = canvas.width;
     let height_source = canvas.height;
     width = Math.round(width);
@@ -462,304 +466,10 @@ function make_thumb(canvas, width, height) {
     return canvas2.toDataURL('image/png', 0.8);
 }
 
-document.getElementById('downloadImg').onclick = e => {
-    let croppedCanvas = getCroppedCanvas(canvas);
-    let canvasUrl = croppedCanvas.toDataURL();
-
-    const downLinkTmp = document.createElement('a');
-    downLinkTmp.href = canvasUrl;
-    downLinkTmp.download = chartName;
-
-    downLinkTmp.click();
-    downLinkTmp.remove();
-    downloadPopup.classList.remove('show');
-};
-
-document.getElementById('downloadPdf').onclick = e => {
-    loadScript();
-    // create image
-    let croppedCanvas = getCroppedCanvas(canvas);
-    const canvasImage = croppedCanvas.toDataURL();
-    window.jsPDF = window.jspdf.jsPDF;
-    const padding = 15;
-    const doc = new jsPDF(croppedCanvas.width < croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width + padding * 2, croppedCanvas.height + padding * 2]);
-    doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
-    doc.save(chartName + '.pdf');
-    downloadPopup.classList.remove('show');
-};
-
-saveBtn.onclick = e => {
-    try {
-        let chartConfig = ChartConfig.instance;
-        if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
-            PopupMessage.showFailure('No chart to save');
-            return;
-        }
-
-        let type = chartConfig.getType();
-        if (type == null) return;
-
-        let data = chartConfig.getData();
-        if (data == null) return;
-
-        Loader.show();
-
-        let properties = {
-            fontSize: Chart.defaults.font.size,
-            fontStyle: Chart.defaults.font.style,
-            fontWeight: Chart.defaults.font.weight,
-        };
-
-        if (chartConfig.hasMarker) {
-            properties.markerSize = chartConfig.getMarkerSize();
-            properties.markerStyle = chartConfig.getMarkerStyle();
-        }
-
-        if (chartConfig.hasAxis) {
-            properties.xAxisVisible = chartConfig.getAxisVisibility('x');
-            properties.xGridVisible = chartConfig.getGridVisibility('x');
-            properties.xTicksVisible = chartConfig.getTicksVisibility('x');
-            properties.xTitleVisible = chartConfig.getTitleVisibility('x');
-            properties.xTitle = chartConfig.getAxisTitle('x');
-            properties.yAxisVisible = chartConfig.getAxisVisibility('y');
-            properties.yGridVisible = chartConfig.getGridVisibility('y');
-            properties.yTicksVisible = chartConfig.getTicksVisibility('y');
-            properties.yTitleVisible = chartConfig.getTitleVisibility('y');
-            properties.yTitle = chartConfig.getAxisTitle('y');
-        }
-        if (chartConfig.hasLegend) {
-            properties.legendVisible = chartConfig.getLegendVisibility();
-        }
-
-        let thumb = make_thumb(ChartConfig.canvas, 400, 300);
-
-        let xhrSender = new XHRSender();
-        if (chartID.length > 0) xhrSender.addField('id', chartID);
-        xhrSender.addField('name', chartName);
-        xhrSender.addField('type', type);
-        xhrSender.addField('thumbnail', thumb);
-        xhrSender.addField('data', JSON.stringify(data));
-        xhrSender.addField('properties', JSON.stringify(properties));
-        let cb = xhr => {
-            Loader.hide();
-            try {
-                let resp = JSON.parse(xhr.responseText);
-                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
-                        if (resp['reason'] == 'Unauthorized') {
-                            popupLogin(success => {
-                                if (success) {
-                                    Loader.show();
-                                    xhrSender.send('/chart/save', cb);
-                                } else {
-                                    PopupMessage.showFailure('Unauthorized');
-                                }
-                            });
-                            return;
-                        }
-                        PopupMessage.showFailure(resp['reason']);
-                    } else {
-                        PopupMessage.showFailure('Chart saving failed!');
-                    }
-                    return;
-                }
-                chartConfig.modified = false;
-                PopupMessage.showSuccess('Chart saved.');
-                body.classList.remove('authOnly');
-                if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
-                    chartID = resp['id'];
-                }
-            } catch (error) {
-                PopupMessage.showFailure('Something went wrong! Please try again.');
-            }
-        }
-        xhrSender.send('/chart/save', cb);
-    } catch (e) {
-        Loader.hide();
-    }
-};
-
-deleteBtn.onclick = e => {
-    if (chartID.length == 0) {
-        PopupMessage.showFailure('Chart is not saved');
-        return;
-    }
-    PopupMessage.promptConfirmation('Are you sure you want to delete this chart?', () => {
-        Loader.show();
-        let xhrSender = new XHRSender();
-        xhrSender.addField('id', chartID);
-        let cb = xhr => {
-            Loader.hide()
-            try {
-                let resp = JSON.parse(xhr.responseText);
-                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
-                        if (resp['reason'] == 'Unauthorized') {
-                            popupLogin(success => {
-                                if (success) {
-                                    Loader.show();
-                                    xhrSender.send('/chart/delete', cb);
-                                } else {
-                                    PopupMessage.showFailure('Unauthorized');
-                                }
-                            });
-                            return;
-                        }
-                        PopupMessage.showFailure(resp['reason']);
-                    } else {
-                        PopupMessage.showFailure('Deleting chart failed!');
-                    }
-                    return;
-                }
-                if (ChartConfig.instance) ChartConfig.instance.modified = false;
-                PopupMessage.showSuccess('Chart Deleted.', () => {
-                    if (typeof (Storage) !== "undefined") {
-                        if (localStorage.opencount && Number(localStorage.opencount) > 1) {
-                            window.close();
-                        }
-                    }
-                    window.location = '/dashboard';
-                });
-            } catch (error) {
-                PopupMessage.showFailure('Delete failed!');
-            }
-        };
-        xhrSender.send('/chart/delete', cb);
-    });
-};
-
-shareBtn.onclick = e => {
-    if (chartID.length == 0) {
-        PopupMessage.showFailure('Chart is not saved');
-        return;
-    }
-    Loader.show();
-    let xhrSender = new XHRSender();
-    xhrSender.addField('id', chartID);
-    let cb = async xhr => {
-        Loader.hide();
-        try {
-            let resp = JSON.parse(xhr.responseText);
-            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
-                    if (resp['reason'] == 'Unauthorized') {
-                        popupLogin(success => {
-                            if (success) {
-                                Loader.show();
-                                xhrSender.send('/chart/share', cb);
-                            } else {
-                                PopupMessage.showFailure('Unauthorized');
-                            }
-                        });
-                        return;
-                    }
-                    PopupMessage.showFailure(resp['reason']);
-                } else {
-                    PopupMessage.showFailure('Sharing chart failed!');
-                }
-                return;
-            }
-            let copySuccess = await copyLinkToClipboard();
-            if (copySuccess) {
-                PopupMessage.showSuccess('Chart shared. Link copied to the clipboard.');
-            } else {
-                let link = location.protocol + '//' + location.host + '/chart/' + chartID;
-                PopupMessage.showSuccess('Chart shared' + "\n" + link);
-            }
-            showHideShareUnshare(true)
-            body.classList.remove('authOnly');
-        } catch (error) {
-            PopupMessage.showFailure('Share failed!');
-        }
-    };
-    xhrSender.send('/chart/share', cb);
-};
-
-unshareBtn.onclick = e => {
-    if (chartID.length == 0) {
-        PopupMessage.showFailure('Chart is not saved');
-        return;
-    }
-
-    Loader.show();
-    let xhrSender = new XHRSender();
-    xhrSender.addField('id', chartID);
-    let cb = xhr => {
-        Loader.hide();
-        try {
-            let resp = JSON.parse(xhr.responseText);
-            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
-                    if (resp['reason'] == 'Unauthorized') {
-                        popupLogin(success => {
-                            if (success) {
-                                Loader.show();
-                                xhrSender.send('/chart/unshare', cb);
-                            } else {
-                                PopupMessage.showFailure('Unauthorized');
-                            }
-                        });
-                        return;
-                    }
-                    PopupMessage.showFailure(resp['reason']);
-                } else {
-                    PopupMessage.showFailure('Unsharing chart failed!');
-                }
-                return;
-            }
-            PopupMessage.showSuccess('Chart unshared');
-            showHideShareUnshare(false)
-            body.classList.remove('authOnly');
-        } catch (error) {
-            PopupMessage.showFailure('Unshare failed!');
-        }
-    };
-    xhrSender.send('/chart/unshare', cb);
-};
-
-copyLinkBtn.onclick = async e => {
-    e.preventDefault();
-    let copySuccess = await copyLinkToClipboard();
-    if (copySuccess) {
-        PopupMessage.showSuccess('Link copied to the clipboard.');
-    } else {
-        let link = location.protocol + '//' + location.host + '/chart/' + chartID;
-        PopupMessage.showSuccess('Link copying failed' + "\n" + link);
-    }
-};
-
-document.getElementById('CloseEdit').onclick = e => {
-    chartEditPopup.classList.remove('show');
-};
-
-document.getElementById('editName').onclick = e => {
-    nameView.style.display = 'none';
-    nameEdit.style.display = 'block';
-    nameEdit.onkeydown = e => {
-        e.stopImmediatePropagation();
-        FormUtils.keyPressFn(e, FormUtils.chart_name_pattern, null, null, saveNameBtn);
-    };
-    let name = chartNameView.innerText
-    nameInput.value = name;
-    saveNameBtn.onclick = e => {
-        nameView.style.display = 'block';
-        nameEdit.style.display = 'none';
-        name = nameInput.value;
-        chartNameView.innerText = name;
-        chartName = name;
-        ChartConfig.instance.setName(chartName);
-    };
-    document.getElementById('cancelEditName').onclick = e => {
-        nameView.style.display = 'block';
-        nameEdit.style.display = 'none';
-    };
-};
-
-fontSizeSelect.onkeydown = e => {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-};
-
+/**
+ * Set the chart font size and update the font size selection setting
+ * @param {number|string} size font size
+ */
 function setFontSize(size) {
     if (typeof size == 'number' || /^\d{1,3}$/.test(size)) {
         size = parseInt(size);
@@ -776,32 +486,10 @@ function setFontSize(size) {
     }
 }
 
-fontSizeSelect.onchange = e => {
-    let size = fontSizeSelect.value;
-    setFontSize(size);
-};
-
-function setFontStyle(style) {
-    if (style == 'italic') {
-        Chart.defaults.font.style = 'italic';
-        fontStyleBtn.classList.add('btn-icon-selected');
-    } else if (style == 'normal') {
-        Chart.defaults.font.style = 'normal';
-        fontStyleBtn.classList.remove('btn-icon-selected');
-    }
-    ChartConfig.update('none');
-    ChartConfig.setDirty();
-}
-
-fontStyleBtn.onclick = e => {
-    let style = Chart.defaults.font.style;
-    if (style == 'normal') {
-        setFontStyle('italic');
-    } else {
-        setFontStyle('normal');
-    }
-};
-
+/**
+ * Set the chart font weight and update the settings button
+ * @param {string} weight font weight
+ */
 function setFontWeight(weight) {
     if (weight == 'bold') {
         Chart.defaults.font.weight = 'bold';
@@ -814,15 +502,27 @@ function setFontWeight(weight) {
     ChartConfig.setDirty();
 }
 
-fontWeightBtn.onclick = e => {
-    let weight = Chart.defaults.font.weight;
-    if (weight == 'normal') {
-        setFontWeight('bold')
-    } else {
-        setFontWeight('normal');
+/**
+ * Set the chart font style and update the settings button
+ * @param {string} style font style
+ */
+function setFontStyle(style) {
+    if (style == 'italic') {
+        Chart.defaults.font.style = 'italic';
+        fontStyleBtn.classList.add('btn-icon-selected');
+    } else if (style == 'normal') {
+        Chart.defaults.font.style = 'normal';
+        fontStyleBtn.classList.remove('btn-icon-selected');
     }
-};
+    ChartConfig.update('none');
+    ChartConfig.setDirty();
+}
 
+/**
+ * Convert color string from rgba(r,g,b,a) format to #rrggbb format
+ * @param {string} rgb rgba color string
+ * @returns {string}
+ */
 function rgb2hex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
     return (rgb && rgb.length === 4) ? '#' +
@@ -831,29 +531,30 @@ function rgb2hex(rgb) {
         ('0' + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
 }
 
-let path = [];
-
+/**
+ * Clear the breadcrumbs if it is shown
+ */
 function clearBreadcrumb() {
     while (breadcrumb.hasChildNodes()) {
         breadcrumb.removeChild(breadcrumb.firstChild);
     }
 }
 
-document.getElementById('backBtn').onclick = e => {
-    ChartConfig.update('parent');
-    ChartConfig.setDirty();
-    let first = ChartConfig.chart._metasets[0].controller.pointers[0];
-    if (first == undefined || first.p == undefined || first.p == null) return;
-    let parent = first.p;
-    if (parent.p == undefined || parent.p == null) {
-        backDiv.style.display = 'none';
-    } else {
-        path.shift();
-        clearBreadcrumb();
-        path.forEach(createBreadcrumb);
-    }
+/**
+ * Add a breadcrumb item
+ * @param {string} child lable of the child node
+ */
+function createBreadcrumb(child) {
+    let x = document.createElement('li');
+    x.innerText = child;
+    breadcrumb.prepend(x);
 }
 
+/**
+ * Get the path of nodes from a given first node to the root
+ * @param {object} first first node where path should be created
+ * @returns {Array}
+ */
 function getPath(first) {
     let path = [];
     if (first == undefined || first.p == undefined || first.p == null) return null;
@@ -870,21 +571,14 @@ function getPath(first) {
     return path;
 }
 
-function createBreadcrumb(child) {
-    let x = document.createElement('li');
-    x.innerText = child;
-    breadcrumb.prepend(x);
-}
-
-function setDivPos(d, x, y, mid) {
-    if (x > mid) {
-        d.style.left = (x - 221) + 'px';
-    } else {
-        d.style.left = x + 'px';
-    }
-    d.style.top = y + 'px';
-}
-
+/**
+ * Draw a chart from saved data
+ * @param {object} info chart information
+ * @param {string} type chart type
+ * @param {object} data chart data
+ * @param {object} properties chart properties
+ * @returns {void}
+ */
 function drawSavedChart(info, type, data, properties) {
     if (typeof info.name != 'undefined') chartName = info.name;
     if (typeof properties.fontSize != 'undefined') {
@@ -1012,172 +706,6 @@ function drawSavedChart(info, type, data, properties) {
     showHideShareUnshare(info.shared);
 }
 
-if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
-    chartID = document.location.pathname.split('/')[2];
-    Loader.show();
-    let xhrSender = new XHRSender();
-    xhrSender.addField('id', chartID);
-    let cb = xhr => {
-        try {
-            let resp = JSON.parse(xhr.responseText);
-            if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !resp.hasOwnProperty('data')) {
-                let errMsg;
-                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
-                    if (resp['reason'] == 'Unauthorized') {
-                        xhrSender.send('/chart/retrieveShared', cb);
-                        return;
-                    }
-                    if (resp['reason'] == 'NotShared') {
-                        popupLogin(success => {
-                            if (success) {
-                                Loader.show();
-                                xhrSender.send('/chart/retrieve', cb);
-                            } else {
-                                PopupMessage.showFailure('Unauthorized', () => {
-                                    window.location = '/chart';
-                                });
-                            }
-                        });
-                        return;
-                    }
-                    errMsg = resp['reason'];
-                } else {
-                    errMsg = 'Chart retrieving failed!';
-                }
-                PopupMessage.showFailure(errMsg, () => {
-                    window.location = '/chart';
-                });
-                return;
-            }
-            let info = resp.info;
-            if (info.owner == null) {
-                body.classList.add('authOnly');
-            } else {
-                body.classList.remove('authOnly');
-            }
-            let data = resp.data;
-            let chartData = JSON.parse(data.data);
-            let properties = JSON.parse(data.properties);
-            Loader.hide();
-            drawSavedChart(info, data.type, chartData, properties);
-        } catch (error) {
-            PopupMessage.showFailure('Something went wrong! Please try again.', () => {
-                window.location = '/chart';
-            });
-        }
-        Loader.hide();
-    };
-    xhrSender.send('/chart/retrieve', cb);
-} else {
-    body.classList.remove('authOnly');
-}
-
-document.getElementById('downloadBtn').onclick = e => {
-    e.stopImmediatePropagation(); // prevents document.onclick()
-    downloadPopup.classList.toggle('show');
-    chartEditPopup.classList.remove('show');
-}
-
-document.onclick = e => {
-    downloadPopup.classList.remove('show');
-    chartEditPopup.classList.remove('show');
-}
-
-markerSizeSelect.onchange = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasMarkerSize) return;
-    let radius = markerSizeSelect.value;
-    if (/^\d{1,2}$/.test(radius)) {
-        radius = parseInt(radius);
-        if (radius < 1) {
-            radius = 1;
-        }
-        if (radius > 12) {
-            radius = 12;
-        }
-        markerSizeSelect.value = radius;
-        chart.setMarkerSize(radius);
-        ChartConfig.update('none');
-        ChartConfig.setDirty();
-    }
-};
-
-markerStyleSelect.onchange = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasMarker) return;
-    let style = markerStyleSelect.value;
-    if (!['circle', 'cross', 'crossRot', 'dash', 'line', 'rect', 'rectRounded', 'rectRot', 'star', 'triangle'].includes(style)) {
-        markerStyleSelect.value = 'circle';
-        style = markerStyleSelect.value;
-    }
-    chart.setMarkerStyle(style);
-    ChartConfig.update('none');
-    ChartConfig.setDirty();
-};
-
-xVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = xVisible.checked;
-    chart.setAxisVisibility('x', show);
-}
-
-xGridVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = xGridVisible.checked;
-    chart.setGridVisibility('x', show);
-}
-
-xTicksVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = xTicksVisible.checked;
-    chart.setTicksVisibility('x', show);
-}
-
-xTitleVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = xTitleVisible.checked;
-    chart.setTitleVisibility('x', show);
-}
-
-yVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = yVisible.checked;
-    chart.setAxisVisibility('y', show);
-}
-
-yGridVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = yGridVisible.checked;
-    chart.setGridVisibility('y', show);
-}
-
-yTicksVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = yTicksVisible.checked;
-    chart.setTicksVisibility('y', show);
-}
-
-yTitleVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasAxis) return;
-    let show = yTitleVisible.checked;
-    chart.setTitleVisibility('y', show);
-}
-
-legendVisible.onclick = e => {
-    let chart = ChartConfig.instance;
-    if (!chart.hasLegend) return;
-    let show = legendVisible.checked;
-    chart.setLegendVisibility(show);
-}
-
 /**
  * Update settings view according to current chart settings
  * @returns {void}
@@ -1215,11 +743,11 @@ function updateSettings() {
         body.classList.remove('noAxis');
         xVisible.checked = chartConfig.getAxisVisibility('x');
         if (xVisible.checked) {
-            [xGridVisible, xTicksVisible, xTitleVisible].forEach(element => {
+            [xGridVisible, xTicksVisible, xTitleVisible].forEach(function (element) {
                 element.disabled = false;
             });
         } else {
-            [xGridVisible, xTicksVisible, xTitleVisible].forEach(element => {
+            [xGridVisible, xTicksVisible, xTitleVisible].forEach(function (element) {
                 element.disabled = true;
             });
         }
@@ -1228,11 +756,11 @@ function updateSettings() {
         xTitleVisible.checked = chartConfig.getTitleVisibility('x');
         yVisible.checked = chartConfig.getAxisVisibility('y');
         if (yVisible.checked) {
-            [yGridVisible, yTicksVisible, yTitleVisible].forEach(element => {
+            [yGridVisible, yTicksVisible, yTitleVisible].forEach(function (element) {
                 element.disabled = false;
             });
         } else {
-            [yGridVisible, yTicksVisible, yTitleVisible].forEach(element => {
+            [yGridVisible, yTicksVisible, yTitleVisible].forEach(function (element) {
                 element.disabled = true;
             });
         }
@@ -1244,10 +772,23 @@ function updateSettings() {
     }
 }
 
-drawBtn.onclick = e => {
-    FileInputManager.draw(drawChart);
+/**
+ * Show or hide share and unshare buttons depending on whether the
+ * chart is shared or not.
+ * @param {boolean} isShared whether the chart is shared
+ */
+function showHideShareUnshare(isShared) {
+    shareBtn.hidden = isShared;
+    copyLinkBtn.hidden = !isShared;
+    unshareBtn.hidden = !isShared;
 }
 
+/**
+ * Try to copy a text to the clipboard.
+ * Return true on success. Otherwise return false.
+ * @param {boolean} retry try again
+ * @returns {boolean}
+ */
 async function copyLinkToClipboard(retry = true) {
     try {
         let link = location.protocol + '//' + location.host + '/chart/' + chartID;
@@ -1263,13 +804,589 @@ async function copyLinkToClipboard(retry = true) {
     return false;
 }
 
-function showHideShareUnshare(isShared) {
-    shareBtn.hidden = isShared;
-    copyLinkBtn.hidden = !isShared;
-    unshareBtn.hidden = !isShared;
+
+/**
+ * Set event listeners for elements
+ */
+document.getElementById('downloadImg').onclick = function () {
+    let croppedCanvas = getCroppedCanvas(canvas);
+    let canvasUrl = croppedCanvas.toDataURL();
+
+    const downLinkTmp = document.createElement('a');
+    downLinkTmp.href = canvasUrl;
+    downLinkTmp.download = chartName;
+
+    downLinkTmp.click();
+    downLinkTmp.remove();
+    downloadPopup.classList.remove('show');
+};
+
+document.getElementById('downloadPdf').onclick = function () {
+    loadScript();
+    // create image
+    let croppedCanvas = getCroppedCanvas(canvas);
+    const canvasImage = croppedCanvas.toDataURL();
+    window.jsPDF = window.jspdf.jsPDF;
+    const padding = 15;
+    const doc = new jsPDF(croppedCanvas.width < croppedCanvas.height ? 'p' : 'l', 'mm', [croppedCanvas.width + padding * 2, croppedCanvas.height + padding * 2]);
+    doc.addImage(canvasImage, 'PNG', padding, padding, croppedCanvas.width, croppedCanvas.height);
+    doc.save(chartName + '.pdf');
+    downloadPopup.classList.remove('show');
+};
+
+saveBtn.onclick = function () {
+    try {
+        let chartConfig = ChartConfig.instance;
+        if (typeof chartConfig == 'undefined' || !(chartConfig instanceof ChartConfig)) {
+            PopupMessage.showFailure('No chart to save');
+            return;
+        }
+
+        let type = chartConfig.getType();
+        if (type == null) return;
+
+        let data = chartConfig.getData();
+        if (data == null) return;
+
+        Loader.show();
+
+        let properties = {
+            fontSize: Chart.defaults.font.size,
+            fontStyle: Chart.defaults.font.style,
+            fontWeight: Chart.defaults.font.weight,
+        };
+
+        if (chartConfig.hasMarker) {
+            properties.markerSize = chartConfig.getMarkerSize();
+            properties.markerStyle = chartConfig.getMarkerStyle();
+        }
+
+        if (chartConfig.hasAxis) {
+            properties.xAxisVisible = chartConfig.getAxisVisibility('x');
+            properties.xGridVisible = chartConfig.getGridVisibility('x');
+            properties.xTicksVisible = chartConfig.getTicksVisibility('x');
+            properties.xTitleVisible = chartConfig.getTitleVisibility('x');
+            properties.xTitle = chartConfig.getAxisTitle('x');
+            properties.yAxisVisible = chartConfig.getAxisVisibility('y');
+            properties.yGridVisible = chartConfig.getGridVisibility('y');
+            properties.yTicksVisible = chartConfig.getTicksVisibility('y');
+            properties.yTitleVisible = chartConfig.getTitleVisibility('y');
+            properties.yTitle = chartConfig.getAxisTitle('y');
+        }
+        if (chartConfig.hasLegend) {
+            properties.legendVisible = chartConfig.getLegendVisibility();
+        }
+
+        let thumb = make_thumb(ChartConfig.canvas, 400, 300);
+
+        let xhrSender = new XHRSender();
+        if (chartID.length > 0) xhrSender.addField('id', chartID);
+        xhrSender.addField('name', chartName);
+        xhrSender.addField('type', type);
+        xhrSender.addField('thumbnail', thumb);
+        xhrSender.addField('data', JSON.stringify(data));
+        xhrSender.addField('properties', JSON.stringify(properties));
+        let cb = function (xhr) {
+            Loader.hide();
+            try {
+                let resp = JSON.parse(xhr.responseText);
+                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                        if (resp['reason'] == 'Unauthorized') {
+                            popupLogin(function (success) {
+                                if (success) {
+                                    Loader.show();
+                                    xhrSender.send('/chart/save', cb);
+                                } else {
+                                    PopupMessage.showFailure('Unauthorized');
+                                }
+                            });
+                            return;
+                        }
+                        PopupMessage.showFailure(resp['reason']);
+                    } else {
+                        PopupMessage.showFailure('Chart saving failed!');
+                    }
+                    return;
+                }
+                chartConfig.modified = false;
+                PopupMessage.showSuccess('Chart saved.');
+                body.classList.remove('authOnly');
+                if (resp.hasOwnProperty('id') || typeof resp['id'] == 'string') {
+                    chartID = resp['id'];
+                }
+            } catch (error) {
+                PopupMessage.showFailure('Something went wrong! Please try again.');
+            }
+        }
+        xhrSender.send('/chart/save', cb);
+    } catch (e) {
+        Loader.hide();
+    }
+};
+
+deleteBtn.onclick = function () {
+    if (chartID.length == 0) {
+        PopupMessage.showFailure('Chart is not saved');
+        return;
+    }
+    PopupMessage.promptConfirmation('Are you sure you want to delete this chart?', function () {
+        Loader.show();
+        let xhrSender = new XHRSender();
+        xhrSender.addField('id', chartID);
+        let cb = function (xhr) {
+            Loader.hide()
+            try {
+                let resp = JSON.parse(xhr.responseText);
+                if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                    if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                        if (resp['reason'] == 'Unauthorized') {
+                            popupLogin(function (success) {
+                                if (success) {
+                                    Loader.show();
+                                    xhrSender.send('/chart/delete', cb);
+                                } else {
+                                    PopupMessage.showFailure('Unauthorized');
+                                }
+                            });
+                            return;
+                        }
+                        PopupMessage.showFailure(resp['reason']);
+                    } else {
+                        PopupMessage.showFailure('Deleting chart failed!');
+                    }
+                    return;
+                }
+                if (ChartConfig.instance) ChartConfig.instance.modified = false;
+                PopupMessage.showSuccess('Chart Deleted.', function () {
+                    if (typeof (Storage) !== "undefined") {
+                        if (localStorage.opencount && Number(localStorage.opencount) > 1) {
+                            window.close();
+                        }
+                    }
+                    window.location = '/dashboard';
+                });
+            } catch (error) {
+                PopupMessage.showFailure('Delete failed!');
+            }
+        };
+        xhrSender.send('/chart/delete', cb);
+    });
+};
+
+shareBtn.onclick = function () {
+    if (chartID.length == 0) {
+        PopupMessage.showFailure('Chart is not saved');
+        return;
+    }
+    Loader.show();
+    let xhrSender = new XHRSender();
+    xhrSender.addField('id', chartID);
+    let cb = async function (xhr) {
+        Loader.hide();
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                    if (resp['reason'] == 'Unauthorized') {
+                        popupLogin(function (success) {
+                            if (success) {
+                                Loader.show();
+                                xhrSender.send('/chart/share', cb);
+                            } else {
+                                PopupMessage.showFailure('Unauthorized');
+                            }
+                        });
+                        return;
+                    }
+                    PopupMessage.showFailure(resp['reason']);
+                } else {
+                    PopupMessage.showFailure('Sharing chart failed!');
+                }
+                return;
+            }
+            let copySuccess = await copyLinkToClipboard();
+            if (copySuccess) {
+                PopupMessage.showSuccess('Chart shared. Link copied to the clipboard.');
+            } else {
+                let link = location.protocol + '//' + location.host + '/chart/' + chartID;
+                PopupMessage.showSuccess('Chart shared' + "\n" + link);
+            }
+            showHideShareUnshare(true)
+            body.classList.remove('authOnly');
+        } catch (error) {
+            PopupMessage.showFailure('Share failed!');
+        }
+    };
+    xhrSender.send('/chart/share', cb);
+};
+
+unshareBtn.onclick = function () {
+    if (chartID.length == 0) {
+        PopupMessage.showFailure('Chart is not saved');
+        return;
+    }
+
+    Loader.show();
+    let xhrSender = new XHRSender();
+    xhrSender.addField('id', chartID);
+    let cb = function (xhr) {
+        Loader.hide();
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true) {
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                    if (resp['reason'] == 'Unauthorized') {
+                        popupLogin(function (success) {
+                            if (success) {
+                                Loader.show();
+                                xhrSender.send('/chart/unshare', cb);
+                            } else {
+                                PopupMessage.showFailure('Unauthorized');
+                            }
+                        });
+                        return;
+                    }
+                    PopupMessage.showFailure(resp['reason']);
+                } else {
+                    PopupMessage.showFailure('Unsharing chart failed!');
+                }
+                return;
+            }
+            PopupMessage.showSuccess('Chart unshared');
+            showHideShareUnshare(false)
+            body.classList.remove('authOnly');
+        } catch (error) {
+            PopupMessage.showFailure('Unshare failed!');
+        }
+    };
+    xhrSender.send('/chart/unshare', cb);
+};
+
+copyLinkBtn.onclick = async function (e) {
+    e.preventDefault();
+    let copySuccess = await copyLinkToClipboard();
+    if (copySuccess) {
+        PopupMessage.showSuccess('Link copied to the clipboard.');
+    } else {
+        let link = location.protocol + '//' + location.host + '/chart/' + chartID;
+        PopupMessage.showSuccess('Link copying failed' + "\n" + link);
+    }
+};
+
+document.getElementById('CloseEdit').onclick = function () {
+    chartEditPopup.classList.remove('show');
+};
+
+document.getElementById('editName').onclick = function () {
+    nameView.style.display = 'none';
+    nameEdit.style.display = 'block';
+    nameEdit.onkeydown = function (e) {
+        e.stopImmediatePropagation();
+        FormUtils.keyPressFn(e, FormUtils.chart_name_pattern, null, null, saveNameBtn);
+    };
+    let name = chartNameView.innerText
+    nameInput.value = name;
+    saveNameBtn.onclick = function () {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+        name = nameInput.value;
+        chartNameView.innerText = name;
+        chartName = name;
+        ChartConfig.instance.setName(chartName);
+    };
+    document.getElementById('cancelEditName').onclick = function () {
+        nameView.style.display = 'block';
+        nameEdit.style.display = 'none';
+    };
+};
+
+fontSizeSelect.onkeydown = function (e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+};
+
+fontSizeSelect.onchange = function () {
+    let size = fontSizeSelect.value;
+    setFontSize(size);
+};
+
+fontStyleBtn.onclick = function () {
+    let style = Chart.defaults.font.style;
+    if (style == 'normal') {
+        setFontStyle('italic');
+    } else {
+        setFontStyle('normal');
+    }
+};
+
+fontWeightBtn.onclick = function () {
+    let weight = Chart.defaults.font.weight;
+    if (weight == 'normal') {
+        setFontWeight('bold')
+    } else {
+        setFontWeight('normal');
+    }
+};
+
+document.getElementById('backBtn').onclick = function () {
+    ChartConfig.update('parent');
+    let first = ChartConfig.chart._metasets[0].controller.pointers[0];
+    if (first == undefined || first.p == undefined || first.p == null) return;
+    let parent = first.p;
+    if (parent.p == undefined || parent.p == null) {
+        backDiv.style.display = 'none';
+    } else {
+        path.shift();
+        clearBreadcrumb();
+        path.forEach(createBreadcrumb);
+    }
+}
+
+document.getElementById('downloadBtn').onclick = function (e) {
+    e.stopImmediatePropagation(); // prevents document.onclick()
+    downloadPopup.classList.toggle('show');
+    chartEditPopup.classList.remove('show');
+}
+
+document.onclick = function () {
+    downloadPopup.classList.remove('show');
+    chartEditPopup.classList.remove('show');
+}
+
+markerSizeSelect.onchange = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasMarkerSize) return;
+    let radius = markerSizeSelect.value;
+    if (/^\d{1,2}$/.test(radius)) {
+        radius = parseInt(radius);
+        if (radius < 1) {
+            radius = 1;
+        }
+        if (radius > 12) {
+            radius = 12;
+        }
+        markerSizeSelect.value = radius;
+        chart.setMarkerSize(radius);
+        ChartConfig.update('none');
+        ChartConfig.setDirty();
+    }
+};
+
+markerStyleSelect.onchange = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasMarker) return;
+    let style = markerStyleSelect.value;
+    if (!['circle', 'cross', 'crossRot', 'dash', 'line', 'rect', 'rectRounded', 'rectRot', 'star', 'triangle'].includes(style)) {
+        markerStyleSelect.value = 'circle';
+        style = markerStyleSelect.value;
+    }
+    chart.setMarkerStyle(style);
+    ChartConfig.update('none');
+    ChartConfig.setDirty();
+};
+
+xVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = xVisible.checked;
+    chart.setAxisVisibility('x', show);
+}
+
+xGridVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = xGridVisible.checked;
+    chart.setGridVisibility('x', show);
+}
+
+xTicksVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = xTicksVisible.checked;
+    chart.setTicksVisibility('x', show);
+}
+
+xTitleVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = xTitleVisible.checked;
+    chart.setTitleVisibility('x', show);
+}
+
+yVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = yVisible.checked;
+    chart.setAxisVisibility('y', show);
+}
+
+yGridVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = yGridVisible.checked;
+    chart.setGridVisibility('y', show);
+}
+
+yTicksVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = yTicksVisible.checked;
+    chart.setTicksVisibility('y', show);
+}
+
+yTitleVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasAxis) return;
+    let show = yTitleVisible.checked;
+    chart.setTitleVisibility('y', show);
+}
+
+legendVisible.onclick = function () {
+    let chart = ChartConfig.instance;
+    if (!chart.hasLegend) return;
+    let show = legendVisible.checked;
+    chart.setLegendVisibility(show);
+}
+
+drawBtn.onclick = function () {
+    FileInputManager.draw(drawChart);
+}
+
+
+/**
+ * Update legend color after rendering
+ */
+Chart.register({
+    id: 'legendColorUpdate',
+    afterRender: function (c) {
+        let legends = c.legend.legendItems;
+        let colors = c.data.datasets[0].backgroundColor;
+        legends.forEach((e, i) => {
+            e.fillStyle = colors[i % colors.length];
+        });
+    }
+});
+
+
+/**
+ * Initialize chart properties and configurations
+ */
+ChartConfig.canvas = canvas;
+Chart.defaults.font.size = 14;
+Chart.defaults.font.style = 'normal';
+Chart.defaults.font.weight = 'normal';
+Chart.defaults.borderColor = '#8e909280';
+Chart.defaults.plugins.legend.position = 'bottom';
+
+if (Theme.theme == Theme.DARK) Chart.defaults.color = '#eee';
+else Chart.defaults.color = '#333';
+
+/**
+ * Set the text and line colors to match the theme
+ */
+Theme.addOnchangeTrigger(function (theme) {
+    if (theme == Theme.DARK) Chart.defaults.color = '#eee';
+    else Chart.defaults.color = '#333';
+    ChartConfig.update('none');
+});
+
+/**
+ * Set settings according to chart defaults
+ */
+let chartID = '';
+let chartName = 'Untitled';
+fontSizeSelect.value = Chart.defaults.font.size;
+markerSizeSelect.value = Chart.defaults.elements.point.radius;
+markerStyleSelect.value = Chart.defaults.elements.point.pointStyle;
+
+if (Chart.defaults.font.style == 'italic') {
+    fontStyleBtn.classList.add('btn-icon-selected');
+}
+if (Chart.defaults.font.weight == 'bold') {
+    fontWeightBtn.classList.add('btn-icon-selected');
+}
+
+/**
+ * Set click listeners for chart type selection buttons to show the
+ * Generate button if there is valid extracted data.
+ */
+for (i = 0; i < chartTypes.length; i++) {
+    chartTypes[i].onclick = function (e) {
+        if (FileInputManager.extractedData != null) {
+            drawBtnDiv.hidden = false;
+        }
+    }
+}
+
+if (/^\/chart\/[0-9a-fA-F]{16,32}$/.test(document.location.pathname)) {
+    chartID = document.location.pathname.split('/')[2];
+    Loader.show();
+    let xhrSender = new XHRSender();
+    xhrSender.addField('id', chartID);
+    let cb = function (xhr) {
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (!resp.hasOwnProperty('success') || resp['success'] !== true || !resp.hasOwnProperty('info') || !resp.hasOwnProperty('data')) {
+                let errMsg;
+                if (resp.hasOwnProperty('reason') && typeof (resp['reason']) === 'string') {
+                    if (resp['reason'] == 'Unauthorized') {
+                        xhrSender.send('/chart/retrieveShared', cb);
+                        return;
+                    }
+                    if (resp['reason'] == 'NotShared') {
+                        popupLogin(function (success) {
+                            if (success) {
+                                Loader.show();
+                                xhrSender.send('/chart/retrieve', cb);
+                            } else {
+                                PopupMessage.showFailure('Unauthorized', function () {
+                                    window.location = '/chart';
+                                });
+                            }
+                        });
+                        return;
+                    }
+                    errMsg = resp['reason'];
+                } else {
+                    errMsg = 'Chart retrieving failed!';
+                }
+                PopupMessage.showFailure(errMsg, function () {
+                    window.location = '/chart';
+                });
+                return;
+            }
+            let info = resp.info;
+            if (info.owner == null) {
+                body.classList.add('authOnly');
+            } else {
+                body.classList.remove('authOnly');
+            }
+            let data = resp.data;
+            let chartData = JSON.parse(data.data);
+            let properties = JSON.parse(data.properties);
+            Loader.hide();
+            drawSavedChart(info, data.type, chartData, properties);
+        } catch (error) {
+            PopupMessage.showFailure('Something went wrong! Please try again.', function () {
+                window.location = '/chart';
+            });
+        }
+        Loader.hide();
+    };
+    xhrSender.send('/chart/retrieve', cb);
+} else {
+    body.classList.remove('authOnly');
 }
 
 let loadedScripts = [];
+/**
+ * Load a script from the given source.
+ * Check the integrity if provided.
+ * @param {string} src URL of the script source
+ * @param {string|undefines} hash integrity
+ * @returns {void}
+ */
 function loadScript(src, hash = null) {
     if (loadedScripts.includes(src)) return;
     let scriptElem = document.createElement('script');
@@ -1279,10 +1396,13 @@ function loadScript(src, hash = null) {
         scriptElem.crossOrigin = 'anonymous';
     }
     document.body.appendChild(scriptElem);
-    jspdfLoaded = true;
 }
 
-setTimeout(() => {
+/**
+ * Load the remaining optional javascript libraries after a delay
+ * to prevent them blocking the page rendering
+ */
+setTimeout(function () {
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'sha256-mMzxeqEMILsTAXYmGPzJtqs6Tn8mtgcdZNC0EVTfOHU=');
     loadScript('https://kit.fontawesome.com/8d62299fba.js');
 }, 1000);

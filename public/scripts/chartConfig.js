@@ -4,6 +4,11 @@ function genColor(n) {
     return `rgba(${(121 * n + 51) % 192 + 48},${(52 * n + 203) % 192 + 48},${(165 * n + 67) % 192 + 48},1)`
 }
 
+/**
+ * Deep copy from source to destination
+ * @param {object} src source object
+ * @param {object} dest destination object
+ */
 function copyObjectProperties(src, dest) {
     Object.keys(src).forEach(key => {
         let value = src[key];
@@ -14,6 +19,22 @@ function copyObjectProperties(src, dest) {
             if (!dest.hasOwnProperty(key)) dest[key] = value;
         }
     });
+}
+
+/**
+ * Set the position of the chart settings popup
+ * @param {HTMLElement} d popup div
+ * @param {number} x X coordinate
+ * @param {number} y Y coordinate
+ * @param {number} mid X coordinate of the center of the canvas
+ */
+function setDivPos(d, x, y, mid) {
+    if (x > mid) {
+        d.style.left = (x - 221) + 'px';
+    } else {
+        d.style.left = x + 'px';
+    }
+    d.style.top = y + 'px';
 }
 
 class ChartConfig {
@@ -74,14 +95,12 @@ class ChartConfig {
                     let clicked = ChartConfig.chart._metasets[0].controller.pointers[point.index];
                     if (clicked.c.length == 0) expandBtnDiv.style.display = 'none'; // hide expand button if the selected element dosent have child
                     document.getElementById('expandBtn').onclick = e => {
-
                         path = getPath(clicked);
                         clearBreadcrumb();
                         path.forEach(createBreadcrumb);
                         popup.classList.remove('show');
-                        backDiv.style.display = 'block'
+                        backDiv.style.display = 'block';
                         ChartConfig.update('expand ' + point.index);
-                        ChartConfig.setDirty();
                     }
                 }
             }
@@ -148,7 +167,7 @@ class ChartConfig {
         }
     }
 
-    static setDirty(){
+    static setDirty() {
         if (ChartConfig.chart instanceof Chart) {
             ChartConfig.instance.modified = true;
         }
