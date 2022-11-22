@@ -1,9 +1,9 @@
-require("dotenv").config({ path: "test/test.env" });
+require("dotenv").config({ path: "test/.env" });
 const { json } = require("express");
 const superagent = require('superagent');
 const Imap = require('imap');
 
-const domain = 'http://localhost:' + process.env.PORT;
+const domain = process.env.SERVER_DOMAIN;
 const validPassword = 'password';
 
 const user1 = superagent.agent();

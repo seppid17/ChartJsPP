@@ -1,9 +1,10 @@
 const dotenv = require("dotenv");
 const { json } = require("express");
-dotenv.config({ path: "test/test.env" });
+dotenv.config({ path: "test/.env" });
 const superagent = require('superagent');
+
 const user1 = superagent.agent();
-const domain = 'http://localhost:' + process.env.PORT;
+const domain = process.env.SERVER_DOMAIN;
 
 let firstName = '', lastName = '';
 

@@ -4,6 +4,7 @@ node_modules/
 .trash/
 .env
 test/test.env
+test/.env
 package-lock.json
 TODO.txt
 startmongo.sh
