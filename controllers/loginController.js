@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const Validator = require("../utils/validator");
+const Validator = require("../public/scripts/validator");
 const bcrypt = require("bcrypt");
 
 const loginView = (req, res) => {

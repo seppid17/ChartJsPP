@@ -1,4 +1,4 @@
-const Validator = require('../utils/validator');
+const Validator = require('../public/scripts/validator');
 /*
 Unit testing for user data validator class
 */

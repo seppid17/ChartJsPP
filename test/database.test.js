@@ -4,7 +4,7 @@ const database = process.env.MONGO_URI;
 const { ChartInfo, ChartData } = require("../models/Chart");
 const User = require("../models/User");
 const SignupRequest = require("../models/SignupRequest");
-const Validator = require('../utils/validator');
+const Validator = require('../public/scripts/validator');
 
 let chartInfo, chartData, users, signupRequests
 

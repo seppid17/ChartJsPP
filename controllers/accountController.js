@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const { ChartInfo, ChartData } = require("../models/Chart");
-const Validator = require("../utils/validator");
+const Validator = require("../public/scripts/validator");
 const bcrypt = require("bcrypt");
 
 const accountView = (req, res) => {

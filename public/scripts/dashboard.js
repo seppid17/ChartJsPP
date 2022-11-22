@@ -10,6 +10,11 @@ function showNoCharts() {
     cardsDiv.appendChild(p);
     setChartCount(0);
 }
+
+/**
+ * Sets the cards for charts on the dashboard.
+ * @param {boolean} showLoader whether or not to show the loader
+ */
 function setCards(showLoader = true) {
     if (showLoader) Loader.show();
     let xhrSender = new XHRSender();
@@ -32,11 +37,13 @@ function setCards(showLoader = true) {
                 cardsDiv.removeChild(cardsDiv.firstChild);
             }
             resp.info.forEach(chart => {
+                if (!Validator.validate('id', chart.id)) {
+                    return;
+                }
                 let cardColDiv = document.createElement('div');
                 cardColDiv.id = chart.id;
                 cardColDiv.classList.add('col-md-4');
                 cardColDiv.classList.add('card-col');
-                cardsDiv.appendChild(cardColDiv);
 
                 let cardDiv = document.createElement('div');
                 cardDiv.classList.add('card');
@@ -74,6 +81,9 @@ function setCards(showLoader = true) {
                 cardTextDiv.classList.add('card-text');
                 cardBodyDiv.appendChild(cardTextDiv);
 
+                if (!Validator.validate('chartName', chart.name)) {
+                    return;
+                }
                 let h6 = document.createElement('h6');
                 h6.classList.add('text-chart-name');
                 h6.innerText = chart.name;
@@ -83,9 +93,12 @@ function setCards(showLoader = true) {
                 rowDiv.classList.add('row');
                 cardTextDiv.appendChild(rowDiv);
 
+                if (!Validator.validate('date', chart.lastModified)) {
+                    return;
+                }
                 let p = document.createElement('p');
                 p.classList.add('text-details');
-                let shared = chart.shared?' · shared':'';
+                let shared = chart.shared ? ' · shared' : '';
                 p.innerText = 'Last modified ' + chart.lastModified + shared;
                 rowDiv.appendChild(p);
 
@@ -128,6 +141,8 @@ function setCards(showLoader = true) {
                 i.classList.add('fa-trash-can');
                 i.title = 'delete'
                 a.appendChild(i);
+
+                cardsDiv.appendChild(cardColDiv);
             });
             setChartCount(cardsDiv.childElementCount);
         } catch (error) {

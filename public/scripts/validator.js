@@ -7,7 +7,8 @@ class Validator {
         name: 30,
         chartName: 40,
         token: 32,
-        id: 32
+        id: 32,
+        date: 10
     }
 
     // regex patterns for the fields
@@ -17,7 +18,8 @@ class Validator {
         name: /^[A-Za-z]{2,30}$/,
         chartName: /^[\x20-\x7e]{1,40}$/,
         token: /^[0-9a-fA-F]{1,32}$/,
-        id: /^[0-9a-fA-F]{1,32}$/
+        id: /^[0-9a-fA-F]{1,32}$/,
+        date: /^[1-3]?[0-9]\/(?:1[0-2]|[1-9])\/[0-9]{4}$/
     };
 
     // valid chart types
@@ -62,4 +64,6 @@ class Validator {
     }
 }
 
-module.exports = Validator;
+if (typeof module !== 'undefined') {
+    module.exports = Validator;
+}

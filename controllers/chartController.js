@@ -1,10 +1,18 @@
 const { ChartInfo, ChartData } = require("../models/Chart");
-const Validator = require("../utils/validator");
+const Validator = require("../public/scripts/validator");
 const crypto = require('crypto');
 
+/**
+ * Save a chart
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const saveChart = async (req, res) => {
     try {
         let { name, thumbnail, type, data, properties, id } = req.body;
+
+        // Validate the request parameters
         if (!name) {
             res.json({ 'success': false, 'reason': 'Name cannot be empty', 'field': 'name' });
             return;
@@ -41,22 +49,32 @@ const saveChart = async (req, res) => {
             res.json({ 'success': false, 'reason': 'Thumbnail cannot be empty', 'field': 'thumbnail' });
             return;
         }
+
         const user = req.session.user;
+
+        // set last modified date
         var date = new Date();
         var dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
+        // if id is undefined, save as new chart
         if (id == undefined) {
             let count = await ChartInfo.countDocuments({ owner: user.email });
+            // a user account can have only upto 5 charts saved
             if (count >= 5) {
                 res.json({ 'success': false, 'reason': 'You cannot save more than 5 charts' });
                 return;
             }
+
+            // generate a new id for the chart
             id = crypto.randomBytes(16).toString('hex');
+
             let chartInfo = { id: id, owner: user.email, name: name, shared: false, lastModified: dateStr, thumbnail: thumbnail };
             let infoDoc = await ChartInfo.findOneAndUpdate({ id: id }, { $setOnInsert: chartInfo }, { upsert: true });
             if (infoDoc && !infoDoc.isNew) {
                 res.json({ 'success': false });
                 return;
             }
+
             let chartData = { id: id, type: type, data: data, properties: properties };
             let dataDoc = await ChartData.findOneAndUpdate({ id: id }, { $setOnInsert: chartData }, { upsert: true });
             if (dataDoc && !dataDoc.isNew) {
@@ -65,6 +83,8 @@ const saveChart = async (req, res) => {
             }
             res.json({ 'success': true, 'id': id });
         } else {
+            // if id is defined, update that id
+            // validate id
             if (!id) {
                 res.json({ 'success': false, 'reason': 'Id cannot be empty', 'field': 'id' });
                 return;
@@ -80,6 +100,7 @@ const saveChart = async (req, res) => {
                 res.json({ 'success': false });
                 return;
             }
+
             let chartData = { id: id, type: type, data: data, properties: properties };
             let doc = await ChartData.findOneAndUpdate({ id: id }, chartData);
             if (!doc) {
@@ -94,21 +115,31 @@ const saveChart = async (req, res) => {
     }
 };
 
+/**
+ * Get the name, owner and shared info of the chart.
+ * Returns null if a chart is not found.
+ * @param {string} id chart ID
+ * @returns {object|null}
+ */
 async function getChartInfo(id) {
-    var filters = { id: id };
-    var chartInfo = await ChartInfo.findOne(filters);
+    var chartInfo = await ChartInfo.findOne({ id: id }, { thumbnail: 0, lastModified: 0 });
     if (!chartInfo) {
         return null;
     }
     var info = {
         name: chartInfo.name,
-        thumbnail: chartInfo.thumbnail,
         shared: chartInfo.shared,
         owner: chartInfo.owner
     }
     return info;
 }
 
+/**
+ * Get the type, data and properties of the chart.
+ * Returns null if a chart is not found.
+ * @param {string} id chart ID
+ * @returns {object|null}
+ */
 async function getChartData(id) {
     var chartData = await ChartData.findOne({ id: id });
     if (!chartData) {
@@ -122,8 +153,15 @@ async function getChartData(id) {
     return data;
 }
 
+/**
+ * Get the type, data and properties of the chart.
+ * Sends failure if a chart is not found.
+ * @param {string} id chart ID
+ * @returns {void}
+ */
 const retrieveChartCommon = async (req, res, owner) => {
     let { id } = req.body;
+    // validate id
     if (!id) {
         res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
         return;
@@ -132,23 +170,29 @@ const retrieveChartCommon = async (req, res, owner) => {
         res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
         return;
     }
+
     try {
         let chartInfo = await getChartInfo(id);
         if (chartInfo == null) {
             res.json({ 'success': false, 'reason': 'Chart not found' });
             return;
         }
+        // cannot get without login
         if (!chartInfo.shared && owner == null) {
             res.json({ 'success': false, 'reason': 'NotShared' });
             return;
         }
+        // not the owner and not shared
         if (!chartInfo.shared && chartInfo.owner !== owner) {
             res.json({ 'success': false, 'reason': 'You are not the owner of this chart' });
             return;
         }
+
+        // don't show the owner's email to others
         if (owner == null || chartInfo.owner !== owner) {
             chartInfo.owner = null;
         }
+
         let chartData = await getChartData(id);
         if (chartData == null) {
             res.json({ 'success': false });
@@ -161,18 +205,34 @@ const retrieveChartCommon = async (req, res, owner) => {
     }
 };
 
-const retrieveSharedChart = async (req, res) => {
-    return await retrieveChartCommon(req, res, null);
+/**
+ * Get a shared chart
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
+const retrieveSharedChart = (req, res) => {
+    return retrieveChartCommon(req, res, null);
 };
 
-const retrieveChart = async (req, res) => {
+/**
+ * Get a chart by the owner
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
+const retrieveChart = (req, res) => {
     const user = req.session.user;
-    return await retrieveChartCommon(req, res, user.email);
+    return retrieveChartCommon(req, res, user.email);
 };
 
+/**
+ * Get a list of charts owned by the owner
+ * @param {string} owner owner's email
+ * @returns {Array|null}
+ */
 async function getChartsByOwner(owner) {
-    var filters = { owner: owner };
-    var chartInfo = await ChartInfo.find(filters);
+    var chartInfo = await ChartInfo.find({ owner: owner });
     if (!chartInfo) {
         return null;
     }
@@ -190,6 +250,12 @@ async function getChartsByOwner(owner) {
     return charts;
 }
 
+/**
+ * Get a list of charts owned by the owner
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const getChartList = async (req, res) => {
     const user = req.session.user;
     try {
@@ -206,9 +272,16 @@ const getChartList = async (req, res) => {
     }
 };
 
+/**
+ * Delete a chart by id
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const deleteChart = async (req, res) => {
     let { id } = req.body;
     const user = req.session.user;
+    // validate id
     if (!id) {
         res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
         return;
@@ -217,6 +290,7 @@ const deleteChart = async (req, res) => {
         res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
         return;
     }
+
     try {
         let infoResult = await ChartInfo.deleteOne({ id: id, owner: user.email });
         if (infoResult.acknowledged !== true || infoResult.deletedCount <= 0) {
@@ -235,9 +309,17 @@ const deleteChart = async (req, res) => {
     }
 };
 
+/**
+ * set a chart shared or unshared
+ * @param {boolean} share whether the chart is shared or not
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 async function setShareStatus(share, req, res) {
     let { id } = req.body;
     const user = req.session.user;
+    // validate id
     if (!id) {
         res.json({ 'success': false, 'reason': 'No chart ID provided', 'field': 'id' });
         return;
@@ -246,6 +328,7 @@ async function setShareStatus(share, req, res) {
         res.json({ 'success': false, 'reason': 'Invalid id', 'field': 'id' });
         return;
     }
+
     try {
         let doc = await ChartInfo.findOneAndUpdate({ id: id, owner: user.email }, { shared: share });
         let success = (doc != null);
@@ -256,10 +339,22 @@ async function setShareStatus(share, req, res) {
     }
 }
 
+/**
+ * set a chart shared
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const shareChart = (req, res) => {
     return setShareStatus(true, req, res);
 };
 
+/**
+ * set a chart unshared
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const unshareChart = (req, res) => {
     return setShareStatus(false, req, res);
 };

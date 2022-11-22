@@ -646,6 +646,10 @@ function updateBreadcrumb(start) {
  * @returns {void}
  */
 function drawSavedChart(info, type, data, properties) {
+    if (!Validator.validate('chartName', info.name) || !Validator.validate('type', type)) {
+        window.location = '/chart';
+        return;
+    }
     if (typeof info.name != 'undefined') chartName = info.name;
     if (typeof properties.fontSize != 'undefined') {
         setFontSize(properties.fontSize);

@@ -1,5 +1,10 @@
 const expandBtnDiv = document.getElementById('expandBtnDiv');
 
+/**
+ * Generate a color by a number
+ * @param {number} n any number
+ * @returns {string}
+ */
 function genColor(n) {
     return `rgba(${(121 * n + 51) % 192 + 48},${(52 * n + 203) % 192 + 48},${(165 * n + 67) % 192 + 48},1)`
 }
@@ -37,23 +42,41 @@ function setDivPos(d, x, y, mid) {
     d.style.top = y + 'px';
 }
 
+/**
+ * Super class for all chart configurations
+ */
 class ChartConfig {
     parents = [];
+    // Chart object
     static chart = null;
+    // instance of this class
     static instance = null;
+    // HTML canvas element
     static canvas = null;
+
+    /**
+     * constructor of Chart configuration
+     * @param {string} type chart type
+     */
     constructor(type) {
         if (ChartConfig.canvas == null) throw new Error('No canvas selected');
+        // whether this chart has an axis
         this.hasAxis = false;
+        // whether this chart has a legend
         this.hasLegend = false;
+        // whether this chart has a marker
         this.hasMarker = false;
+        // whether this chart has a marker with changable size
         this.hasMarkerSize = false;
+
+        // chart configuration
         this.config = {};
         this.config.type = type;
         this.name = '';
         this.modified = true;
         backDiv.style.display = 'none'
         clearBreadcrumb();
+
         ChartConfig.canvas.onclick = evt => {
             evt.stopImmediatePropagation(); // prevents document.onclick()
             if (this instanceof HierarchicalChartConfig) { // display expand button only for hierarchical charts
@@ -61,6 +84,7 @@ class ChartConfig {
             } else {
                 expandBtnDiv.style.display = 'none';
             }
+            // show the popup
             let popup = document.getElementById('chartEditPopup');
             popup.classList.remove('show');
             downloadPopup.classList.remove('show');
@@ -105,29 +129,65 @@ class ChartConfig {
         ChartConfig.instance = this;
     }
 
+    /**
+     * Getter for name
+     * @returns {string}
+     */
     getName() {
         return this.name;
     }
 
+    /**
+     * Getter for chart type
+     * @returns {string}
+     */
+    getType() {
+        return this.config.type;
+    }
+
+    /**
+     * Getter for chart options
+     * @returns {object}
+     */
+    getData() {
+        return this.config.data;
+    }
+
+    /**
+     * Setter for data. Sub classes can override this.
+     * @param {object} data chart data
+     */
     setData(data) {
         if (this.config) {
             this.config.data = data;
         }
     }
 
-    setTitle(title) {
+    /**
+     * Setter for axis titles
+     * @param {Array} titles chart axis titles
+     */
+    setTitle(titles) {
         if (this.hasAxis) {
-            this.setAxisTitle('x', title[0]);
-            this.setAxisTitle('y', title[1]);
+            this.setAxisTitle('x', titles[0]);
+            this.setAxisTitle('y', titles[1]);
         }
     }
 
+    /**
+     * Setter for data. Accepts already processed data.
+     * @param {object} data chart data
+     */
     setSavedData(data) {
         if (this.config) {
             this.config.data = data;
         }
     }
 
+    /**
+     * Setter for chart name
+     * @param {string} name chart name
+     */
     setName(name) {
         this.name = name;
         if (this.config && this.config.data.datasets.length > 0) {
@@ -136,6 +196,10 @@ class ChartConfig {
         updateSettings();
     }
 
+    /**
+     * Initialize options for all parent classes
+     * @param {object} options chart options
+     */
     initOptions(options) {
         this.parents.forEach(cls => {
             cls.initOptions(options);
@@ -144,6 +208,10 @@ class ChartConfig {
         this.config.options = options;
     }
 
+    /**
+     * Draw the chart and update the settings
+     * @returns {void}
+     */
     draw() {
         if (this.config == null || ChartConfig.canvas == null) {
             return;
@@ -155,6 +223,9 @@ class ChartConfig {
         updateSettings();
     }
 
+    /**
+     * If this has an axis, set color of its ticks and title
+     */
     _update() {
         if (this.hasAxis) {
             this.config.options.scales.x.ticks.color = Chart.defaults.color;
@@ -164,12 +235,21 @@ class ChartConfig {
         }
     }
 
+    /**
+     * Set that the chart has unsaved changes
+     */
     static setDirty() {
         if (ChartConfig.chart instanceof Chart) {
             ChartConfig.instance.modified = true;
         }
     }
 
+    /**
+     * Update the chart after options or data change.
+     * Update the settings after that.
+     * @param {string|undefined} mode update mode
+     * @returns {void}
+     */
     static update(mode) {
         if (ChartConfig.canvas == null) {
             return;
@@ -180,16 +260,11 @@ class ChartConfig {
             updateSettings();
         }
     }
-
-    getType() {
-        return this.config.type;
-    }
-
-    getData() {
-        return this.config.data;
-    }
 }
 
+/**
+ * Superclass for all basic chart configurations
+ */
 class BasicChartConfig extends ChartConfig {
     constructor(type) {
         super(type);
@@ -206,6 +281,11 @@ class BasicChartConfig extends ChartConfig {
         };
     }
 
+    /**
+     * Overrides the super class method
+     * Pre-process chart data and extract labels before setting chart labels.
+     * @param {object} data chart data
+     */
     setLabels(data) {
         if (this.config) {
             let labels = [];
@@ -216,6 +296,11 @@ class BasicChartConfig extends ChartConfig {
         }
     }
 
+    /**
+     * Overrides the super class method
+     * Pre-process chart data before setting them as the chart data.
+     * @param {object} data chart data
+     */
     setData(data) {
         if (this.config && this.config.data.datasets.length > 0) {
             let clr = [];
@@ -229,6 +314,9 @@ class BasicChartConfig extends ChartConfig {
     }
 }
 
+/**
+ * Super class for chart configurations having an axis
+ */
 class AxisChartConfig extends BasicChartConfig {
     static initOptions(options) {
         copyObjectProperties({
@@ -324,6 +412,9 @@ class AxisChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Super class for chart configurations having a legend
+ */
 class LegendChartConfig extends BasicChartConfig {
     static initOptions(options) {
         copyObjectProperties({
@@ -346,6 +437,9 @@ class LegendChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Super class for chart configurations having a marker
+ */
 class MarkerChartConfig extends BasicChartConfig {
     static initOptions(options) {
         copyObjectProperties({
@@ -381,6 +475,9 @@ class MarkerChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of bar chart
+ */
 class BarChartConfig extends BasicChartConfig {
     constructor() {
         super('bar');
@@ -402,6 +499,9 @@ class BarChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of pie chart
+ */
 class PieChartConfig extends BasicChartConfig {
     constructor() {
         super('pie');
@@ -417,6 +517,9 @@ class PieChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of line chart
+ */
 class LineChartConfig extends BasicChartConfig {
     constructor() {
         super('line');
@@ -449,6 +552,9 @@ class LineChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of doughnut chart
+ */
 class DoughnutChartConfig extends BasicChartConfig {
     constructor() {
         super('doughnut');
@@ -464,6 +570,9 @@ class DoughnutChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of polar area chart
+ */
 class PolarAreaChartConfig extends BasicChartConfig {
     constructor() {
         super('polarArea');
@@ -491,6 +600,9 @@ class PolarAreaChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of scatter chart
+ */
 class ScatterChartConfig extends BasicChartConfig {
     constructor() {
         super('scatter');
@@ -520,6 +632,9 @@ class ScatterChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of bubble chart
+ */
 class BubbleChartConfig extends BasicChartConfig {
     constructor() {
         super('bubble');
@@ -548,6 +663,9 @@ class BubbleChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Configuration of radar chart
+ */
 class RadarChartConfig extends BasicChartConfig {
     constructor() {
         super('radar');
@@ -593,6 +711,9 @@ class RadarChartConfig extends BasicChartConfig {
     }
 }
 
+/**
+ * Superclass for all hierarchical chart configurations
+ */
 class HierarchicalChartConfig extends ChartConfig {
     constructor(type, maxLevels) {
         super(type);
@@ -649,6 +770,9 @@ class HierarchicalChartConfig extends ChartConfig {
     }
 }
 
+/**
+ * Configuration of sunburst chart
+ */
 class SunburstChartConfig extends HierarchicalChartConfig {
     constructor() {
         super('sunburst', 4);
@@ -670,6 +794,9 @@ class SunburstChartConfig extends HierarchicalChartConfig {
     }
 }
 
+/**
+ * Configuration of treemap chart
+ */
 class TreemapChartConfig extends HierarchicalChartConfig {
     constructor() {
         super('treemap', 5);
@@ -697,6 +824,9 @@ class TreemapChartConfig extends HierarchicalChartConfig {
     }
 }
 
+/**
+ * Configuration of icicle chart
+ */
 class IcicleChartConfig extends HierarchicalChartConfig {
     constructor() {
         super('icicle', 5);
@@ -726,6 +856,9 @@ class IcicleChartConfig extends HierarchicalChartConfig {
     }
 }
 
+/**
+ * Register LegendChartConfig as a parent class for the PieChartConfig, DoughnutChartConfig, and PolarAreaChartConfig classes.
+ */
 [PieChartConfig, DoughnutChartConfig, PolarAreaChartConfig].forEach(cls => {
     const parent = LegendChartConfig;
     if (typeof cls._parents == 'undefined') cls._parents = [];
@@ -734,6 +867,9 @@ class IcicleChartConfig extends HierarchicalChartConfig {
     cls.prototype.setLegendVisibility = parent.prototype.setLegendVisibility;
 });
 
+/**
+ * Register AxisChartConfig as a parent class for the BarChartConfig, LineChartConfig, ScatterChartConfig, and BubbleChartConfig classes.
+ */
 [BarChartConfig, LineChartConfig, ScatterChartConfig, BubbleChartConfig].forEach(cls => {
     const parent = AxisChartConfig;
     if (typeof cls._parents == 'undefined') cls._parents = [];
@@ -750,6 +886,9 @@ class IcicleChartConfig extends HierarchicalChartConfig {
     cls.prototype.setAxisTitle = parent.prototype.setAxisTitle;
 });
 
+/**
+ * Register MarkerChartConfig as a parent class for the LineChartConfig, ScatterChartConfig, BubbleChartConfig, and RadarChartConfig classes.
+ */
 [LineChartConfig, ScatterChartConfig, BubbleChartConfig, RadarChartConfig].forEach(cls => {
     const parent = MarkerChartConfig;
     if (typeof cls._parents == 'undefined') cls._parents = [];

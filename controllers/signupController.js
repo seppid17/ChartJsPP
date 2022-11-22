@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const SignupRequest = require("../models/SignupRequest");
 const Mailer = require("../utils/mail");
-const Validator = require("../utils/validator");
+const Validator = require("../public/scripts/validator");
 const bcrypt = require("bcrypt");
 const crypto = require('crypto');
 

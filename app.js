@@ -38,6 +38,7 @@ async function startServer() {
     app.set('view engine', 'ejs');
     app.use(express.urlencoded({ limit: "5mb", extended: true, parameterLimit: 50 }));
 
+    // use mongo store for session storage when possible
     let sessionStore = null;
     if (mongoConnected) {
         sessionStore = MongoStore.create({
