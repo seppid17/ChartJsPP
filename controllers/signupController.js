@@ -13,9 +13,17 @@ const activateView = (req, res) => {
     res.render("activate", {nonce: req.scriptNonce});
 }
 
+/**
+ * Requests for a user account.
+ * Sends an email containing the signup link
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const requestUser = async (req, res) => {
     try {
         const { email, password, firstName, lastName } = req.body;
+        // validate inputs
         if (!email) {
             res.json({ 'success': false, 'reason': 'Email cannot be empty', 'field': 'email' });
             return;
@@ -48,9 +56,11 @@ const requestUser = async (req, res) => {
             res.json({ 'success': false, 'reason': 'Invalid password', 'field': 'password' });
             return;
         }
+
+        // check if the email has an active account
         {
             let user;
-            if (email.endsWith('@gmail.com')) {
+            if (email.endsWith('@gmail.com')) { // gmail addresses with dots are not considered different
                 let emailName = email.replace(/@gmail\.com$/, '');
                 let regexName = '\\.?' + Array.from(emailName).filter(c => { return c != '.'; }).join('\\.?') + '\\.?@gmail\\.com';
                 let re = new RegExp(regexName);
@@ -63,6 +73,8 @@ const requestUser = async (req, res) => {
                 return;
             }
         }
+
+        // generate a token
         let token = crypto.randomBytes(16).toString('hex');
         let timestamp = Math.floor(Date.now() / 1000) + 3600;
         //Password Hashing
@@ -80,9 +92,13 @@ const requestUser = async (req, res) => {
             used: false
         });
         await signupRequest.save();
+
+        // generate the link
         const proxyHost = req.headers["x-forwarded-host"];
         const host = proxyHost ? proxyHost : req.headers.host;
         let link = req.protocol + '://' + host + '/activate/' + email + '/' + token;
+
+        // send email
         try {
             await Mailer.sendMail("activate", email, link);
             res.json({ 'success': true });
@@ -96,10 +112,18 @@ const requestUser = async (req, res) => {
     };
 };
 
+/**
+ * Activate the account
+ * @param {object} req request
+ * @param {object} res response
+ * @returns {void}
+ */
 const activateAccount = async (req, res) => {
     try {
         const { password } = req.body;
         const { email, token } = req.params;
+
+        // validate
         if (!email || !token) {
             res.json({ 'success': false, 'reason': 'Some required fields are empty' });
             return;
@@ -130,6 +154,8 @@ const activateAccount = async (req, res) => {
             res.json({ 'success': false, 'reason': 'Account activation failed! Token is expired.' });
             return;
         }
+
+        // check if the password is correct
         let matching = await bcrypt.compare(password, requestUser.password);
         if (matching === true) {
             const user = new User({

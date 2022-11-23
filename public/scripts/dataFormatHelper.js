@@ -16,7 +16,6 @@ class DataFormatHelper {
             }
             if (item.v.length !== 1) {
                 success = false;
-                console.log('invalid list', item);
                 return;
             }
             let unlistItem = { n: item.n, v: item.v[0], c: unlistC };
